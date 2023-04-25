@@ -1,10 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.WebAPI.Results;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.API.Controllers
 {
+  /// <summary>
+  /// Autenticação de usuários
+  /// </summary>
   [Route("api/auth")]
   [ApiController]
   public class AuthController : ControllerBase
   {
+    /// <summary>
+    /// Endpoint para verificar se o usuário está autorizado
+    /// </summary>
+    // GET api/auth
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public Result GetAsync() => Result.NoContent();
   }
 }
