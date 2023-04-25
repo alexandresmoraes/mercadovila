@@ -87,8 +87,7 @@ namespace Common.WebAPI.Auth
         TokenType = "refreshtoken"
       });
       await UpdateLastRefreshToken(jti, user);
-      var encodedJwt = handler.WriteToken(securityToken);
-      return encodedJwt;
+      return handler.WriteToken(securityToken);
     }
 
     public async Task<bool> ValidateRefreshToken(string refreshToken)
