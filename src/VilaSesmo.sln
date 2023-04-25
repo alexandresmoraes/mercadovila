@@ -33,7 +33,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{25F0A564-843C-44A6-BCFA-4B0FA095214C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WebAPI", "..\common.WebAPI\Common.WebAPI.csproj", "{D12D0472-2392-444A-8268-9192D1DD1771}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WebAPI", "..\src\common\Common.WebAPI\Common.WebAPI.csproj", "{D12D0472-2392-444A-8268-9192D1DD1771}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
