@@ -2,8 +2,8 @@
 {
   public interface IJwtService
   {
-    Task<string> BuildToken(string username);
-    Task<string> BuildRefreshToken(string username);
+    Task<string> GenerateToken(string username);
+    Task<string> GenerateRefreshToken(string username);
     Task<bool> ValidateRefreshToken(string refreshToken);
   }
 }

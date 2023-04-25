@@ -26,7 +26,7 @@ namespace Common.WebAPI.Auth
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
     }
 
-    public async Task<string> BuildToken(string username)
+    public async Task<string> GenerateToken(string username)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = GetCurrentKey();
@@ -60,7 +60,7 @@ namespace Common.WebAPI.Auth
       return tokenHandler.WriteToken(token);
     }
 
-    public async Task<string> BuildRefreshToken(string username)
+    public async Task<string> GenerateRefreshToken(string username)
     {
       var jti = Guid.NewGuid().ToString();
       var key = GetCurrentKey();
