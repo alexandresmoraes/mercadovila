@@ -20,7 +20,7 @@
 
     public static Result NoContent() => new ResultNoContent();
 
-    public static Result<TDataResponse> Fail<TDataResponse>(IList<ErrorResult> errors)
+    public static Result<TDataResponse> Fail<TDataResponse>(ErrorResult[] errors)
     {
       var result = new Result<TDataResponse>();
 
@@ -95,6 +95,13 @@
     {
       Code = code ?? "Error";
       Property = property;
+      Message = message;
+    }
+
+    public ErrorResult(string message)
+    {
+      Code = "Error";
+      Property = null;
       Message = message;
     }
   }

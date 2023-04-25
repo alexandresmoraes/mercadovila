@@ -17,9 +17,9 @@ namespace Common.WebAPI.Auth
 
     private readonly UserManager<TIdentityUser> _userManager;
     private readonly IOptions<AuthSettings> _settings;
-    private readonly IAuthService<TIdentityUser, TKey> _authService;
+    private readonly IAuthService<TIdentityUser> _authService;
 
-    public JwtService(UserManager<TIdentityUser> userManager, IOptions<AuthSettings> settings, IAuthService<TIdentityUser, TKey> authService)
+    public JwtService(UserManager<TIdentityUser> userManager, IOptions<AuthSettings> settings, IAuthService<TIdentityUser> authService)
     {
       _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
       _settings = settings ?? throw new ArgumentNullException(nameof(settings));

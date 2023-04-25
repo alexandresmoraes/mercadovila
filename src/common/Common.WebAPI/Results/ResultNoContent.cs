@@ -2,5 +2,5 @@
 {
   public interface IResultNoContent { }
 
-  public class ResultNoContent : Result, IResultNotFound { }
+  public class ResultNoContent : Result, IResultNoContent { }
 }

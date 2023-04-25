@@ -2,7 +2,7 @@
 
 namespace Common.WebAPI.Auth
 {
-  public class AuthService<TIdentityUser, TKey> : IAuthService<TIdentityUser, TKey>
+  public class AuthService<TIdentityUser, TKey> : IAuthService<TIdentityUser>
     where TIdentityUser : IdentityUser<TKey>
     where TKey : IEquatable<TKey>
   {
