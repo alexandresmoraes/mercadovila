@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Auth.API.Data
 {
@@ -17,10 +16,7 @@ namespace Auth.API.Data
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-      options.UseNpgsql(_configuration.GetConnectionString("Default"))
-      .ReplaceService<ISqlGenerationHelper, NpgsqlSqlGenerationLowercasingHelper>();
-
-      AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+      options.UseNpgsql(_configuration);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
