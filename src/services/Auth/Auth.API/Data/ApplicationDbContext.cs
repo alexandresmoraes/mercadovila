@@ -17,10 +17,7 @@ namespace Auth.API.Data
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-      options.UseNpgsql(_configuration.GetConnectionString("Default"), opt =>
-      {
-        opt.SetPostgresVersion(new Version("9.6"));
-      })
+      options.UseNpgsql(_configuration.GetConnectionString("Default"))
       .ReplaceService<ISqlGenerationHelper, NpgsqlSqlGenerationLowercasingHelper>();
 
       AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
