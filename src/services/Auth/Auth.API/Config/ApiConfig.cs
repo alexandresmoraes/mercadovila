@@ -27,13 +27,15 @@ namespace Auth.API.Config
         options.SuppressModelStateInvalidFilter = true;
       });
       services.AddDbContext<ApplicationDbContext>();
+      services.AddScoped<IUnitOfWork<ApplicationDbContext>, UnitOfWork<ApplicationDbContext>>();
+      services.AddUnitOfWork<ApplicationDbContext>();
 
       return services;
     }
 
     public static IApplicationBuilder UseApiConfiguration(this WebApplication app)
     {
-      app.ApplyMigrations<ApplicationDbContext>();
+      app.RunMigrations<ApplicationDbContext>();
 
       if (app.Environment.IsDevelopment())
       {

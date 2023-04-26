@@ -25,11 +25,13 @@ namespace Auth.API.Data
 
       modelBuilder.Entity<IdentityUser>(b =>
       {
-        b.Property(u => u.UserName).HasMaxLength(128);
-        b.Property(u => u.NormalizedUserName).HasMaxLength(128);
-        b.Property(u => u.Email).HasMaxLength(128);
-        b.Property(u => u.NormalizedEmail).HasMaxLength(128);
-        b.Property(u => u.ConcurrencyStamp).HasMaxLength(100);
+        b.HasKey(e => e.Id);
+        b.Property(e => e.Id).HasMaxLength(36);
+        b.Property(e => e.UserName).HasMaxLength(128);
+        b.Property(e => e.NormalizedUserName).HasMaxLength(128);
+        b.Property(e => e.Email).HasMaxLength(128);
+        b.Property(e => e.NormalizedEmail).HasMaxLength(128);
+        b.Property(e => e.ConcurrencyStamp).HasMaxLength(100);
 
         b.ToTable("users");
       });

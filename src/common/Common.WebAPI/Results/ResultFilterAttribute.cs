@@ -12,7 +12,7 @@ namespace Common.WebAPI.Results
 
       if (context.Result is ObjectResult objectResult)
       {
-        if (objectResult.Value is Result result && result.GetType().IsGenericType)
+        if (objectResult.Value is Result result && result.GetType().IsGenericType && result.IsValid)
         {
           var data = result.GetType().GetProperty(nameof(Result<object>.Data))?.GetValue(result, null);
           context.Result = new OkObjectResult(data);

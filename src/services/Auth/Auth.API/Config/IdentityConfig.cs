@@ -5,15 +5,8 @@ namespace Auth.API.Config;
 
 public static class IdentityConfig
 {
-  public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
+  public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
   {
-    //services.AddMemoryCache()
-    //        .AddDataProtection();
-
-    //services.AddJwtConfiguration(configuration, "AppSettings")
-    //        .AddNetDevPackIdentity<IdentityUser>()
-    //        .PersistKeysToDatabaseStore<ApplicationDbContext>();
-
     services.AddIdentity<IdentityUser, IdentityRole>(o =>
     {
       o.Password.RequireDigit = false;

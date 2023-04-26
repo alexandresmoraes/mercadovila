@@ -12,6 +12,7 @@ namespace Common.WebAPI.Results
         opt.Filters.Add<ResultBadRequestFilterAttribute>();
         opt.Filters.Add<ResultNotFoundFilterAttribute>();
         opt.Filters.Add<ResultNoContentFilterAttribute>();
+        opt.Filters.Add<ValidationFilterAttribute>();
       });
 
       return services;

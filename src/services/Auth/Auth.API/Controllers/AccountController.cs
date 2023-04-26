@@ -30,14 +30,6 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccessTokenDto>> Post([FromBody] NovoUsuario novoUsuario, CancellationToken cancellationToken = default)
     {
-      if (!ModelState.IsValid)
-      {
-        return Result.Fail<AccessTokenDto>(
-          ModelState.Values
-          .SelectMany(e => e.Errors)
-          .Select(e => new ErrorResult(e.ErrorMessage)).ToArray());
-      }
-
       var user = new IdentityUser
       {
         UserName = novoUsuario.Username,
