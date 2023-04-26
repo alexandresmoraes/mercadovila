@@ -5,7 +5,7 @@ namespace Auth.API.Config;
 
 public static class IdentityConfig
 {
-  public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
+  public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
   {
     services.AddIdentity<IdentityUser, IdentityRole>(o =>
     {
@@ -21,4 +21,3 @@ public static class IdentityConfig
     return services;
   }
 }
-

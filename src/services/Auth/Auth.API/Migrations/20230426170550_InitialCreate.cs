@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Auth.API.Migrations
 {
-    public partial class Initial_Create : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,10 +14,10 @@ namespace Auth.API.Migrations
                 name: "roles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,16 +28,16 @@ namespace Auth.API.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     UserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     Email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PasswordHash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    SecurityStamp = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -53,11 +53,11 @@ namespace Auth.API.Migrations
                 name: "role_claims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", maxLength: 36, nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    RoleId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    ClaimType = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    ClaimValue = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,11 +74,11 @@ namespace Auth.API.Migrations
                 name: "user_claims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", maxLength: 36, nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    ClaimType = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    ClaimValue = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,10 +95,10 @@ namespace Auth.API.Migrations
                 name: "user_logins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
+                    UserId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,8 +115,8 @@ namespace Auth.API.Migrations
                 name: "user_roles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    RoleId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -139,10 +139,10 @@ namespace Auth.API.Migrations
                 name: "user_tokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    Value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,8 +160,8 @@ namespace Auth.API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "c0349076-8f56-4ef9-a2f3-5bd88c837d03", "d56bede1-9a08-4d5f-a2c9-ba3b5c1f4de8", "user", "USER" },
-                    { "c14fe2f8-1961-4e32-b4c1-6ed7b24fbf8b", "a4b5f48a-301c-4cf3-9a99-ee9de30f1f77", "admin", "ADMIN" }
+                    { "6c995f31-0dcb-4a67-941f-98e798ab1769", "9a961646-44fc-4c14-b253-9ff054a06abe", "user", "USER" },
+                    { "94d533c7-0c9f-4cf9-89f6-cbf5cdfd9502", "9e6bbb90-cc49-4333-ab64-d5abcdcc19ec", "admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -12,10 +12,10 @@ namespace Auth.API.Models
     public string? Email { get; set; }
 
     [Required(ErrorMessage = "Password está vazio.")]
-    [StringLength(100, ErrorMessage = "Senha deve ter entra 4 a 100 caracteres.", MinimumLength = 4)]
+    [StringLength(50, ErrorMessage = "Senha deve ter entra 4 a 50 caracteres.", MinimumLength = 4)]
     public string? Password { get; set; }
 
-    [Compare("Password", ErrorMessage = "The password must match.")]
+    [Compare("Password", ErrorMessage = "Confirmação de senha não confere.")]
     public string? ConfirmPassword { get; set; }
   }
 }

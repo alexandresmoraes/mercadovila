@@ -53,7 +53,7 @@ namespace Common.WebAPI.Results
       {
         if (objectResult.Value is Result result && result is IResultNoContent)
         {
-          context.Result = new NotFoundObjectResult(new Result(result.Errors));
+          context.Result = new NoContentResult();
         }
       }
 

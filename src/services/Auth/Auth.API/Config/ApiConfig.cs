@@ -12,7 +12,7 @@ namespace Auth.API.Config
   {
     public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-      var authSettings = configuration.GetSection("AuthSettings");
+      var authSettings = configuration.GetSection(nameof(AuthSettings));
       services.Configure<AuthSettings>(authSettings);
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddPostgresHealthCheck(configuration);

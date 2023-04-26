@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.API.Controllers
 {
-  /// <summary>
-  /// Autenticação de usuários
-  /// </summary>
   [Route("api/auth")]
   [ApiController]
   public class AuthController : ControllerBase
