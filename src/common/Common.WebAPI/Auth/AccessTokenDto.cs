@@ -1,6 +1,6 @@
 ﻿namespace Common.WebAPI.Auth
 {
-  public class AccessTokenDto
+  public record AccessTokenDto
   {
     public string AccessToken { get; private set; }
     public int ExpiresIn { get; private set; }

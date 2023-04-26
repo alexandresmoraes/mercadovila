@@ -2,5 +2,5 @@
 {
   public interface IResultNotFound { }
 
-  public class ResultNotFound<T> : Result<T>, IResultNotFound { }
+  public record ResultNotFound<T> : Result<T>, IResultNotFound { }
 }

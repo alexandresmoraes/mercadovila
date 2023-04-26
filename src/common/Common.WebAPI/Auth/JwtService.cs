@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,7 @@ namespace Common.WebAPI.Auth
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
     }
 
-    public async Task<string> GenerateToken(string username)
+    public async Task<AccessTokenDto> GenerateToken(string username)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = GetCurrentKey();
@@ -57,7 +58,12 @@ namespace Common.WebAPI.Auth
         TokenType = "jwt"
       });
 
-      return tokenHandler.WriteToken(token);
+      return new AccessTokenDto(
+        accessToken: tokenHandler.WriteToken(token),
+        expiresIn: _settings.Value.ExpiresIn,
+        tokenType: JwtBearerDefaults.AuthenticationScheme,
+        refreshToken: await GenerateRefreshToken(username)
+      );
     }
 
     public async Task<string> GenerateRefreshToken(string username)

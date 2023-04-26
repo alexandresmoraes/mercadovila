@@ -12,10 +12,12 @@ namespace Auth.API.Controllers
   public class AccountController : ControllerBase
   {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IJwtService _jwtService;
 
-    public AccountController(UserManager<IdentityUser> userManager)
+    public AccountController(UserManager<IdentityUser> userManager, IJwtService jwtService)
     {
       _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+      _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
     }
 
     /// <summary>
@@ -47,12 +49,7 @@ namespace Auth.API.Controllers
 
       if (result.Succeeded)
       {
-        return Result.Ok(new AccessTokenDto(
-          accessToken: "",
-          expiresIn: 1,
-          tokenType: "",
-          refreshToken: ""
-        ));
+        return Result.Ok(await _jwtService.GenerateToken(user.UserName!));
       }
 
       return Result.Fail<AccessTokenDto>(

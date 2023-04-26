@@ -4,6 +4,7 @@ using Common.WebAPI.Data;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.API.Config
 {
@@ -11,6 +12,8 @@ namespace Auth.API.Config
   {
     public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
+      var authSettings = configuration.GetSection("AuthSettings");
+      services.Configure<AuthSettings>(authSettings);
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddPostgresHealthCheck(configuration);
       services.AddDefaultHealthCheckUI();
@@ -19,7 +22,10 @@ namespace Auth.API.Config
       services.AddSwaggerGen();
       services.AddDataProtection();
       services.AddAuthServices<IdentityUser, string>();
-
+      services.Configure<ApiBehaviorOptions>(options =>
+      {
+        options.SuppressModelStateInvalidFilter = true;
+      });
       services.AddDbContext<ApplicationDbContext>();
 
       return services;

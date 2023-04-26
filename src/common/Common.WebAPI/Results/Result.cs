@@ -1,6 +1,6 @@
 ﻿namespace Common.WebAPI.Results
 {
-  public class Result
+  public record Result
   {
     public static Result<TDataResponse> Ok<TDataResponse>(TDataResponse data) =>
       new Result<TDataResponse>(data);
@@ -67,7 +67,7 @@
       AddError(new ErrorResult(code, property, message));
   }
 
-  public class Result<TDataResponse> : Result
+  public record Result<TDataResponse> : Result
   {
     public TDataResponse Data { get; private set; } = default!;
 
@@ -85,7 +85,7 @@
     }
   }
 
-  public class ErrorResult
+  public record ErrorResult
   {
     public string? Code { get; set; }
     public string? Property { get; set; }
