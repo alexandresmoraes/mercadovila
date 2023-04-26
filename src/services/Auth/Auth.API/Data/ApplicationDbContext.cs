@@ -25,17 +25,21 @@ namespace Auth.API.Data
 
       modelBuilder.Entity<IdentityUser>(b =>
       {
-        b.ToTable("users");
         b.Property(u => u.UserName).HasMaxLength(128);
         b.Property(u => u.NormalizedUserName).HasMaxLength(128);
         b.Property(u => u.Email).HasMaxLength(128);
         b.Property(u => u.NormalizedEmail).HasMaxLength(128);
-
         b.Property(u => u.ConcurrencyStamp).HasMaxLength(100);
+
+        b.ToTable("users");
       });
 
       modelBuilder.Entity<IdentityRole>(b =>
       {
+        b.HasData(
+          new IdentityRole("admin") { NormalizedName = "ADMIN" },
+          new IdentityRole("user") { NormalizedName = "USER" });
+
         b.ToTable("roles");
       });
 
