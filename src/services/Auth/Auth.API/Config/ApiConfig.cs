@@ -19,7 +19,7 @@ namespace Auth.API.Config
       services.AddDefaultHealthCheckUI();
       services.AddControllers();
       services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
+      services.AddOpenApi();
       services.AddDataProtection();
       services.AddAuthServices<IdentityUser, string>();
       services.Configure<ApiBehaviorOptions>(options =>
@@ -39,11 +39,7 @@ namespace Auth.API.Config
 
       if (app.Environment.IsDevelopment())
       {
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
-        {
-          options.DefaultModelsExpandDepth(-1);
-        });
+        app.UseOpenApi();
         app.UseDeveloperExceptionPage();
       }
 
