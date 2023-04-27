@@ -20,7 +20,6 @@ namespace Auth.API.Config
       services.AddControllers();
       services.AddEndpointsApiExplorer();
       services.AddOpenApi();
-      services.AddDataProtection();
       services.AddAuthServices<IdentityUser, string>();
       services.Configure<ApiBehaviorOptions>(options =>
       {
