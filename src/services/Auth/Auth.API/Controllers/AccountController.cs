@@ -24,8 +24,11 @@ namespace Auth.API.Controllers
     /// Criação de novos usuários
     /// </summary>
     // POST api/account
+#if DEBUG
     [AllowAnonymous]
-    //[Authorize(Roles = "admin")]
+#else
+    [Authorize(Roles = "admin")]
+#endif
     [HttpPost]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -42,7 +45,9 @@ namespace Auth.API.Controllers
 
       if (result.Succeeded)
       {
-        //await _userManager.AddToRoleAsync(user, "admin");
+#if DEBUG
+        await _userManager.AddToRoleAsync(user, "admin");
+#endif
 
         return Result.Ok(await _jwtService.GenerateToken(user.UserName!));
       }
