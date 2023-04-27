@@ -24,7 +24,7 @@ namespace Auth.API.Config
       services.AddAuthServices<IdentityUser, string>();
       services.Configure<ApiBehaviorOptions>(options =>
       {
-        options.SuppressModelStateInvalidFilter = true;
+        options.SuppressModelStateInvalidFilter = false;
       });
       services.AddDbContext<ApplicationDbContext>();
       services.AddScoped<IUnitOfWork<ApplicationDbContext>, UnitOfWork<ApplicationDbContext>>();
