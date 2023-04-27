@@ -72,7 +72,7 @@ namespace Common.WebAPI.Results
       {
         if (objectResult.Value is Result result && result.HasError)
         {
-          context.Result = new NotFoundObjectResult(new Result(result.Errors));
+          context.Result = new BadRequestObjectResult(new Result(result.Errors));
         }
       }
 
