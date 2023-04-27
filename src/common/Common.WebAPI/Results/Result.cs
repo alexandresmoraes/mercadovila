@@ -11,8 +11,9 @@
     public static Result<TDataResponse> Fail<TDataResponse>(string code, string message) =>
       new Result<TDataResponse>(code, message);
 
-    public static Result<TDataResponse> NotFound<TDataResponse>() =>
-      new ResultNotFound<TDataResponse>();
+    public static Result NotFound() => new ResultNotFound();
+
+    public static Result<TDataResponse> NotFound<TDataResponse>() => new ResultNotFound<TDataResponse>();
 
     public static Result Fail(string message) => new Result(message);
 

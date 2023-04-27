@@ -3,5 +3,8 @@
   public interface IAuthService<TIdentityUser>
   {
     Task<TIdentityUser?> GetUserByUsernameOrEmail(string usernameOrEmail);
+    string GetUserId();
+    string GetUserEmail();
+    bool IsAuthenticated();
   }
 }
