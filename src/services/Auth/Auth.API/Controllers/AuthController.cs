@@ -13,6 +13,6 @@ namespace Auth.API.Controllers
     // GET api/auth
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public Result GetAsync() => Result.NoContent();
+    public Result GetAsync() => Result.Ok();
   }
 }

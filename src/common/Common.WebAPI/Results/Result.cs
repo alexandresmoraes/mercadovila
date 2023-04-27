@@ -19,7 +19,7 @@
 
     public static Result Fail(string code, string message) => new Result(code, message);
 
-    public static Result NoContent() => new ResultNoContent();
+    public static Result Ok() => new ResultNoContent();
 
     public static Result<TDataResponse> Fail<TDataResponse>(ErrorResult[] errors)
     {

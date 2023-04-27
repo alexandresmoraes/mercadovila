@@ -89,7 +89,9 @@ namespace Auth.API.Controllers
         return Result.NotFound();
       }
 
-      return Result.NoContent();
+      await _userManager.AddToRoleAsync(authUser, role);
+
+      return Result.Ok();
     }
   }
 }
