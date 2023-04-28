@@ -44,7 +44,7 @@ namespace Auth.API.Controllers
 
       if (user is null)
       {
-        Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
+        return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
       }
 
       var resultSign = await _signInManager.CheckPasswordSignInAsync(user!, login.Password, false);
