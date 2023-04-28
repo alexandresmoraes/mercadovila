@@ -6,6 +6,7 @@ using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Auth.API.Controllers
 {
@@ -17,17 +18,20 @@ namespace Auth.API.Controllers
     private readonly IJwtService _jwtService;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+    private readonly ILogger<AuthController> _logger;
 
     public AuthController(
       IAuthService<IdentityUser> authService,
       IJwtService jwtService,
       SignInManager<IdentityUser> signInManager,
-      IUnitOfWork<ApplicationDbContext> unitOfWork)
+      IUnitOfWork<ApplicationDbContext> unitOfWork,
+      ILogger<AuthController> logger)
     {
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
       _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
       _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
@@ -48,10 +52,13 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccessTokenDto>> LoginAsync([FromBody] LoginModel login, CancellationToken cancellationToken = default)
     {
+      _logger.LogInformation($"Login started {JsonSerializer.Serialize(login)}.");
+
       var user = await _authService.GetUserByUsernameOrEmail(login.UsernameOrEmail!);
 
       if (user is null)
       {
+        _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
         return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
       }
 
@@ -61,13 +68,16 @@ namespace Auth.API.Controllers
 
       if (resultSign.Succeeded)
       {
+        _logger.LogInformation($"Login succeeded {login.UsernameOrEmail}.");
         return Result.Ok(await _jwtService.GenerateToken(user!.UserName));
       }
       else if (resultSign.IsLockedOut)
       {
+        _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
         return Result.Fail<AccessTokenDto>("Usuário bloqueado.");
       }
 
+      _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
       return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {await _authService.GetFailedAccessAttempts(user)} tentativas.");
     }
   }
