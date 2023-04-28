@@ -2,6 +2,13 @@ version: '3'
 
 services:
 
+  seq:
+      image: datalust/seq:latest
+      ports:
+          - 5341:80
+      environment:
+          ACCEPT_EULA: "Y"
+
   postgres:
     image: postgres:15.2
     volumes:
