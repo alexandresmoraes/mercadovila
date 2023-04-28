@@ -1,9 +1,12 @@
-﻿using Auth.API.Models;
+﻿using Auth.API.Data;
+using Auth.API.Models;
 using Common.WebAPI.Auth;
+using Common.WebAPI.Data;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Auth.API.Controllers
 {
@@ -14,12 +17,21 @@ namespace Auth.API.Controllers
     private readonly IAuthService<IdentityUser> _authService;
     private readonly IJwtService _jwtService;
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+    private readonly IOptions<AuthSettings> _settings;
 
-    public AuthController(IAuthService<IdentityUser> authService, IJwtService jwtService, SignInManager<IdentityUser> signInManager)
+    public AuthController(
+      IAuthService<IdentityUser> authService,
+      IJwtService jwtService,
+      SignInManager<IdentityUser> signInManager,
+      IUnitOfWork<ApplicationDbContext> unitOfWork,
+      IOptions<AuthSettings> settings)
     {
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
       _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+      _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+      _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
     /// <summary>
@@ -47,7 +59,9 @@ namespace Auth.API.Controllers
         return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
       }
 
-      var resultSign = await _signInManager.CheckPasswordSignInAsync(user!, login.Password, false);
+      var resultSign = await _signInManager.CheckPasswordSignInAsync(user!, login.Password, true);
+
+      await _unitOfWork.CommitAsync(cancellationToken);
 
       if (resultSign.Succeeded)
       {
@@ -58,7 +72,9 @@ namespace Auth.API.Controllers
         return Result.Fail<AccessTokenDto>("Usuário bloqueado.");
       }
 
-      return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
+      var accessFailedCount = _settings.Value.MaxFailedAccessAttempts - await _signInManager.UserManager.GetAccessFailedCountAsync(user);
+
+      return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {accessFailedCount} tentativas.");
     }
   }
 }

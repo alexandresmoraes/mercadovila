@@ -8,5 +8,6 @@
     public int ExpiresIn { get; set; } = 3600;
     public DateTime IssuedAt => DateTime.UtcNow;
     public int RefreshTokenExpiration { get; set; } = 7;
+    public int MaxFailedAccessAttempts { get; set; } = 5;
   }
 }

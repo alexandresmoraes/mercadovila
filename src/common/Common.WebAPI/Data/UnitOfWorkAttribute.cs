@@ -32,17 +32,20 @@ namespace Common.WebAPI.Data
 
       try
       {
-        var objectResult = result.Result as ObjectResult;
-        if (objectResult != null && objectResult.Value is Result resultValue)
+        if (_uow.IsActive)
         {
-          if (resultValue.IsValid)
-            await _uow.CommitAsync(cancellationToken);
+          var objectResult = result.Result as ObjectResult;
+          if (objectResult != null && objectResult.Value is Result resultValue)
+          {
+            if (resultValue.IsValid)
+              await _uow.CommitAsync(cancellationToken);
+            else
+              await _uow.RollbackAsync(cancellationToken);
+          }
           else
+          {
             await _uow.RollbackAsync(cancellationToken);
-        }
-        else
-        {
-          await _uow.RollbackAsync(cancellationToken);
+          }
         }
       }
       catch (OperationCanceledException)
@@ -72,7 +75,7 @@ namespace Common.WebAPI.Data
 
       var result = await next();
 
-      if (result.Exception is not null)
+      if (result.Exception is not null && _uow.IsActive)
       {
         await _uow.RollbackAsync(cancellationToken);
         _logger.LogInformation("Roolback exception");

@@ -22,6 +22,7 @@ public static class AuthConfig
       o.Password.RequireUppercase = false;
       o.Password.RequiredUniqueChars = 0;
       o.Password.RequiredLength = 4;
+      o.Lockout.MaxFailedAccessAttempts = 5;
     }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
