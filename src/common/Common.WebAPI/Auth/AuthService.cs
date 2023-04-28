@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace Common.WebAPI.Auth
 {
@@ -9,12 +10,17 @@ namespace Common.WebAPI.Auth
   {
     private readonly UserManager<TIdentityUser> _userManager;
     private readonly IHttpContextAccessor _accessor;
+    private readonly IOptions<AuthSettings> _settings;
 
-    public AuthService(UserManager<TIdentityUser> userManager, IHttpContextAccessor accessor)
+    public AuthService(UserManager<TIdentityUser> userManager, IHttpContextAccessor accessor, IOptions<AuthSettings> settings)
     {
       _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
       _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
+      _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
+
+    public async Task<int> GetFailedAccessAttempts(TIdentityUser user)
+      => _settings.Value.MaxFailedAccessAttempts - await _userManager.GetAccessFailedCountAsync(user);
 
     public async Task<TIdentityUser?> GetUserByUsernameOrEmail(string usernameOrEmail)
       => (await _userManager.FindByEmailAsync(usernameOrEmail)

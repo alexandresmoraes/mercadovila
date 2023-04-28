@@ -6,5 +6,6 @@
     string GetUserId();
     string GetUserEmail();
     bool IsAuthenticated();
+    Task<int> GetFailedAccessAttempts(TIdentityUser user);
   }
 }

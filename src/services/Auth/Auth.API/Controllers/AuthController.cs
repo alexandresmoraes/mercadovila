@@ -6,7 +6,6 @@ using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Auth.API.Controllers
 {
@@ -18,20 +17,17 @@ namespace Auth.API.Controllers
     private readonly IJwtService _jwtService;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
-    private readonly IOptions<AuthSettings> _settings;
 
     public AuthController(
       IAuthService<IdentityUser> authService,
       IJwtService jwtService,
       SignInManager<IdentityUser> signInManager,
-      IUnitOfWork<ApplicationDbContext> unitOfWork,
-      IOptions<AuthSettings> settings)
+      IUnitOfWork<ApplicationDbContext> unitOfWork)
     {
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
       _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
       _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-      _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
     /// <summary>
@@ -72,9 +68,7 @@ namespace Auth.API.Controllers
         return Result.Fail<AccessTokenDto>("Usuário bloqueado.");
       }
 
-      var accessFailedCount = _settings.Value.MaxFailedAccessAttempts - await _signInManager.UserManager.GetAccessFailedCountAsync(user);
-
-      return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {accessFailedCount} tentativas.");
+      return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {await _authService.GetFailedAccessAttempts(user)} tentativas.");
     }
   }
 }
