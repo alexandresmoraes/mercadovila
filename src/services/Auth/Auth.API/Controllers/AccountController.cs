@@ -36,7 +36,7 @@ namespace Auth.API.Controllers
     [HttpPost]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result<AccessTokenDto>> Post([FromBody] NovoUsuario novoUsuario, CancellationToken cancellationToken = default)
+    public async Task<Result<AccessTokenDto>> Post([FromBody] NovoUsuarioModel novoUsuario, CancellationToken cancellationToken = default)
     {
       var user = new IdentityUser
       {
