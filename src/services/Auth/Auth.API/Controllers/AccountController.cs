@@ -78,7 +78,7 @@ namespace Auth.API.Controllers
     {
       if (!await _roleManager.RoleExistsAsync(role))
       {
-        return Result.NotFound();
+        return Result.NotFound("Role não encontrada.");
       }
 
       var authUser = await _authService.GetUserByUsernameOrEmail(user)
@@ -86,7 +86,7 @@ namespace Auth.API.Controllers
 
       if (authUser is null)
       {
-        return Result.NotFound();
+        return Result.NotFound("Usuário não encontrado.");
       }
 
       await _userManager.AddToRoleAsync(authUser, role);

@@ -2,6 +2,6 @@
 {
   public interface IResultNotFound { }
 
-  public record ResultNotFound : Result, IResultNotFound { }
-  public record ResultNotFound<T> : Result<T>, IResultNotFound { }
+  public record ResultNotFound(string message) : Result(message), IResultNotFound { }
+  public record ResultNotFound<T>(string message) : Result<T>(message), IResultNotFound { }
 }
