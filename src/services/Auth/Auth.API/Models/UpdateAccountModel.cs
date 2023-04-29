@@ -2,7 +2,7 @@
 
 namespace Auth.API.Models
 {
-  public record NovoUsuarioModel
+  public class UpdateAccountModel
   {
     [Required(ErrorMessage = "Nome de Usuário está vazio.")]
     public string? Username { get; set; }
@@ -17,5 +17,9 @@ namespace Auth.API.Models
 
     [Compare("Password", ErrorMessage = "Confirmação de senha não confere.")]
     public string? ConfirmPassword { get; set; }
+
+    [Required(ErrorMessage = "Telefone está vazio.")]
+    [StringLength(15, ErrorMessage = "Telefone deve ter entra 4 a 50 caracteres.", MinimumLength = 9)]
+    public string? PhoneNumber { get; set; }
   }
 }

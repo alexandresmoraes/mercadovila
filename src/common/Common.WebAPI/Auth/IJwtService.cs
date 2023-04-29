@@ -4,6 +4,6 @@
   {
     Task<AccessTokenDto> GenerateToken(string username);
     Task<string> GenerateRefreshToken(string username);
-    Task<bool> ValidateRefreshToken(string refreshToken);
+    Task<(bool, string)> ValidateRefreshToken(string refreshToken);
   }
 }

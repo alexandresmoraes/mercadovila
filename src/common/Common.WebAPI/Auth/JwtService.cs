@@ -96,7 +96,7 @@ namespace Common.WebAPI.Auth
       return handler.WriteToken(securityToken);
     }
 
-    public async Task<bool> ValidateRefreshToken(string refreshToken)
+    public async Task<(bool, string)> ValidateRefreshToken(string refreshToken)
     {
       var handler = new JsonWebTokenHandler();
 
@@ -112,6 +112,10 @@ namespace Common.WebAPI.Auth
         throw new SecurityTokenException("invalid refresh token");
 
       var user = await _userManager.FindByIdAsync(GetUserId(result.ClaimsIdentity)!);
+
+      if (user is null)
+        throw new SecurityTokenException("user not found");
+
       var claims = await _userManager.GetClaimsAsync(user!);
 
       var jti = GetJwtId(result.ClaimsIdentity);
@@ -123,7 +127,7 @@ namespace Common.WebAPI.Auth
         if (user.LockoutEnd < DateTime.Now)
           throw new SecurityTokenException("user blocked");
 
-      return true;
+      return (true, user.UserName);
     }
 
     private async Task UpdateLastRefreshToken(string jti, TIdentityUser user)

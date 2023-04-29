@@ -18,6 +18,7 @@
     public static Result Fail(string message) => new Result(message);
 
     public static Result Fail(string code, string message) => new Result(code, message);
+    public static Result Fail(IList<ErrorResult> errors) => new Result(errors);
 
     public static Result Ok() => new ResultNoContent();
 

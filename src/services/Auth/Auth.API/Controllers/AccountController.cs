@@ -25,6 +25,40 @@ namespace Auth.API.Controllers
     }
 
     /// <summary>
+    /// Pega informações da conta
+    /// </summary>
+    // GET api/account/{id}
+#if DEBUG
+    [AllowAnonymous]
+#else
+    [Authorize(Roles = "admin")]
+#endif
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<Result<AccountModel>> Post([FromRoute] string id)
+    {
+      var user = await _userManager.FindByIdAsync(id);
+
+      if (user is not null)
+      {
+#if DEBUG
+        await _userManager.AddToRoleAsync(user, "admin");
+#endif
+
+        return Result.Ok(new AccountModel
+        {
+          Id = user.Id,
+          Email = user.Email,
+          Username = user.UserName,
+          PhoneNumber = user.PhoneNumber
+        });
+      }
+
+      return Result.NotFound<AccountModel>("Usuário não encontrado.");
+    }
+
+    /// <summary>
     /// Criação de novos usuários
     /// </summary>
     // POST api/account
@@ -36,16 +70,17 @@ namespace Auth.API.Controllers
     [HttpPost]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result<AccessTokenDto>> Post([FromBody] NovoUsuarioModel novoUsuario, CancellationToken cancellationToken = default)
+    public async Task<Result<AccessTokenDto>> Post([FromBody] NewAccountModel newAccountModel)
     {
       var user = new IdentityUser
       {
-        UserName = novoUsuario.Username,
-        Email = novoUsuario.Email,
+        UserName = newAccountModel.Username,
+        Email = newAccountModel.Email,
+        PhoneNumber = newAccountModel.PhoneNumber,
         EmailConfirmed = true
       };
 
-      var result = await _userManager.CreateAsync(user, novoUsuario.Password);
+      var result = await _userManager.CreateAsync(user, newAccountModel.Password);
 
       if (result.Succeeded)
       {
@@ -61,35 +96,75 @@ namespace Auth.API.Controllers
     }
 
     /// <summary>
-    /// Adicionar role para o usuário
+    /// Criação de novos usuários
     /// </summary>
-    // POST api/account/role/{user}/{role}
+    // PUT api/account/{id}
 #if DEBUG
     [AllowAnonymous]
 #else
     [Authorize(Roles = "admin")]
 #endif
-    [Route("role/{user}/{role}")]
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<Result> Put([FromRoute] string id, [FromBody] UpdateAccountModel updateAccountModel)
+    {
+      var user = await _userManager.FindByIdAsync(id);
+
+      if (user is null)
+        return Result.NotFound("Usuário não econtrado.");
+
+      user.Email = updateAccountModel.Email;
+      user.PhoneNumber = updateAccountModel.PhoneNumber;
+      user.UserName = updateAccountModel.Username;
+
+      var result = await _userManager.UpdateAsync(user);
+
+      if (result.Succeeded)
+      {
+        result = await _userManager.RemovePasswordAsync(user);
+
+        if (result.Succeeded)
+        {
+          result = await _userManager.AddPasswordAsync(user, updateAccountModel.Password);
+
+          return Result.Ok();
+        }
+      }
+
+      return Result.Fail(result.Errors.Select(e => new ErrorResult(e.Code, null, e.Description)).ToArray());
+    }
+
+    /// <summary>
+    /// Adicionar role para o usuário
+    /// </summary>
+    // POST api/account/role/{userId}/{roleName}
+#if DEBUG
+    [AllowAnonymous]
+#else
+    [Authorize(Roles = "admin")]
+#endif
+    [Route("role/{userId}/{roleName}")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result> PostRole([FromRoute] string user, [FromRoute] string role, CancellationToken cancellationToken = default)
+    public async Task<Result> PostRole([FromRoute] string userId, [FromRoute] string roleName)
     {
-      if (!await _roleManager.RoleExistsAsync(role))
+      if (!await _roleManager.RoleExistsAsync(roleName))
       {
         return Result.NotFound("Role não encontrada.");
       }
 
-      var authUser = await _authService.GetUserByUsernameOrEmail(user)
-        ?? await _userManager.FindByIdAsync(user);
+      var authUser = await _authService.GetUserByUsernameOrEmail(userId)
+        ?? await _userManager.FindByIdAsync(userId);
 
       if (authUser is null)
       {
         return Result.NotFound("Usuário não encontrado.");
       }
 
-      await _userManager.AddToRoleAsync(authUser, role);
+      await _userManager.AddToRoleAsync(authUser, roleName);
 
       return Result.Ok();
     }

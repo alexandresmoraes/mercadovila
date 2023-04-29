@@ -80,5 +80,26 @@ namespace Auth.API.Controllers
       _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
       return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {await _authService.GetFailedAccessAttempts(user)} tentativas.");
     }
+
+    /// <summary>
+    /// Gerar novo token validando refresh token
+    /// </summary>
+    // POST api/account/refresh-token
+    [AllowAnonymous]
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+
+    public async Task<ActionResult<Result<AccessTokenDto>>> RefreshToken([FromBody] RefreshTokenModel refreshToken)
+    {
+      var (tokenIsValid, username) = await _jwtService.ValidateRefreshToken(refreshToken.RefreshToken);
+
+      if (tokenIsValid)
+      {
+        return Result.Ok(await _jwtService.GenerateToken(username));
+      }
+
+      return Result.Fail<AccessTokenDto>("refresh token invalid.");
+    }
   }
 }
