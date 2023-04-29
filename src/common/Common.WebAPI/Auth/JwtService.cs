@@ -114,7 +114,7 @@ namespace Common.WebAPI.Auth
       var user = await _userManager.FindByIdAsync(GetUserId(result.ClaimsIdentity)!);
 
       if (user is null)
-        throw new SecurityTokenException("user not found");
+        throw new SecurityTokenException("usuário não encontrado");
 
       var claims = await _userManager.GetClaimsAsync(user!);
 
