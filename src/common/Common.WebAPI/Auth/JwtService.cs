@@ -109,7 +109,7 @@ namespace Common.WebAPI.Auth
       });
 
       if (!result.IsValid)
-        throw new SecurityTokenException("invalid refresh token");
+        throw new SecurityTokenException("refresh token inválido");
 
       var user = await _userManager.FindByIdAsync(GetUserId(result.ClaimsIdentity)!);
 
@@ -121,11 +121,11 @@ namespace Common.WebAPI.Auth
       var jti = GetJwtId(result.ClaimsIdentity);
 
       if (!claims.Any(c => c.Type == LAST_REFRESH_TOKEN && c.Value == jti))
-        throw new SecurityTokenException("refresh token already used");
+        throw new SecurityTokenException("refresh token usado");
 
       if (user!.LockoutEnabled)
         if (user.LockoutEnd < DateTime.Now)
-          throw new SecurityTokenException("user blocked");
+          throw new SecurityTokenException("usuário bloqueado");
 
       return (true, user.UserName);
     }

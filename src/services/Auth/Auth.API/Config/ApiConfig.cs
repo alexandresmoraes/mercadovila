@@ -3,6 +3,7 @@ using Common.WebAPI.Auth;
 using Common.WebAPI.Data;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Results;
+using Common.WebAPI.WebApi;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,7 @@ namespace Auth.API.Config
         app.UseDeveloperExceptionPage();
       }
 
+      app.UseMiddleware<ErrorHandlerMiddleware>();
       app.UseHttpsRedirection();
       app.UseRouting();
       app.UseAuthentication();
