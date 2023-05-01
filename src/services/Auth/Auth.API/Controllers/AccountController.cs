@@ -15,6 +15,11 @@ namespace Auth.API.Controllers
   /// </summary>
   [Route("api/account")]
   [ApiController]
+#if DEBUG
+  [AllowAnonymous]
+#else
+  [Authorize(Roles = "admin")]
+#endif
   public class AccountController : ControllerBase
   {
     private readonly UserManager<IdentityUser> _userManager;
@@ -36,11 +41,6 @@ namespace Auth.API.Controllers
     /// Pega informações da conta
     /// </summary>
     // GET api/account/{id}
-#if DEBUG
-    [AllowAnonymous]
-#else
-    [Authorize(Roles = "admin")]
-#endif
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -71,11 +71,7 @@ namespace Auth.API.Controllers
     /// Retorna usuários paginados
     /// </summary>
     // GET api/account
-#if DEBUG
-    [AllowAnonymous]
-#else
-    [Authorize(Roles = "admin")]
-#endif
+
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -86,11 +82,6 @@ namespace Auth.API.Controllers
     /// Criação de novos usuários
     /// </summary>
     // POST api/account
-#if DEBUG
-    [AllowAnonymous]
-#else
-    [Authorize(Roles = "admin")]
-#endif
     [HttpPost]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -123,11 +114,6 @@ namespace Auth.API.Controllers
     /// Alteração de conta de usuário
     /// </summary>
     // PUT api/account/{id}
-#if DEBUG
-    [AllowAnonymous]
-#else
-    [Authorize(Roles = "admin")]
-#endif
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -163,11 +149,6 @@ namespace Auth.API.Controllers
     /// Adicionar role para o usuário
     /// </summary>
     // POST api/account/role/{userId}/{roleName}
-#if DEBUG
-    [AllowAnonymous]
-#else
-    [Authorize(Roles = "admin")]
-#endif
     [Route("role/{userId}/{roleName}")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
