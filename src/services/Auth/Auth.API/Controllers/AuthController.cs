@@ -6,7 +6,6 @@ using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace Auth.API.Controllers
 {
@@ -68,7 +67,7 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccessTokenDto>> LoginAsync([FromBody] LoginModel login, CancellationToken cancellationToken = default)
     {
-      _logger.LogInformation($"Login started {JsonSerializer.Serialize(login)}.");
+      _logger.LogInformation($"Login started {login}.");
 
       var user = await _authService.GetUserByUsernameOrEmail(login.UsernameOrEmail!);
 

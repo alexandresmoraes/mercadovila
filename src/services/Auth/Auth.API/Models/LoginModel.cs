@@ -9,5 +9,10 @@ namespace Auth.API.Models
 
     [Required(ErrorMessage = "Senha está vazio.")]
     public string? Password { get; set; }
+
+    public override string ToString()
+    {
+      return $"{nameof(UsernameOrEmail)}: {UsernameOrEmail}, {nameof(Password)}: {Password}";
+    }
   }
 }
