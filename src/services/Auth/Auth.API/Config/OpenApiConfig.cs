@@ -27,20 +27,22 @@ namespace Auth.API.Config
         });
 
         c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
+        {
+          {
+            new OpenApiSecurityScheme
+            {
+              Reference = new OpenApiReference
+              {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+              }
+            },
+            new string[] {}
+          }
+        });
 
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, "Auth.API.xml");
+        c.IncludeXmlComments(xmlPath, true);
       });
 
       return services;

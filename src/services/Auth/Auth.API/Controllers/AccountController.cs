@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.API.Controllers
 {
+  /// <summary>
+  /// Criar novas contas de usuário, alterar e adicionar roles
+  /// </summary>
   [Route("api/account")]
   [ApiController]
   public class AccountController : ControllerBase
