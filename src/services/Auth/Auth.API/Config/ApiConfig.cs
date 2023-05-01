@@ -1,4 +1,5 @@
 ﻿using Auth.API.Data;
+using Auth.API.Data.Repositories;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Data;
 using Common.WebAPI.HealthCheck;
@@ -22,6 +23,7 @@ namespace Auth.API.Config
       services.AddEndpointsApiExplorer();
       services.AddOpenApi();
       services.AddAuthServices<IdentityUser, string>();
+      services.AddScoped<IUserRepository, UserRepository>();
       services.Configure<ApiBehaviorOptions>(options =>
       {
         options.SuppressMapClientErrors = true;

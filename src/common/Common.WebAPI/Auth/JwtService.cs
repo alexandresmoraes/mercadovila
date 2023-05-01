@@ -109,23 +109,23 @@ namespace Common.WebAPI.Auth
       });
 
       if (!result.IsValid)
-        throw new SecurityTokenException("refresh token inválido");
+        throw new SecurityTokenException("Refresh token inválido");
 
       var user = await _userManager.FindByIdAsync(GetUserId(result.ClaimsIdentity)!);
 
       if (user is null)
-        throw new SecurityTokenException("usuário não encontrado");
+        throw new SecurityTokenException("Usuário não encontrado");
 
       var claims = await _userManager.GetClaimsAsync(user!);
 
       var jti = GetJwtId(result.ClaimsIdentity);
 
       if (!claims.Any(c => c.Type == LAST_REFRESH_TOKEN && c.Value == jti))
-        throw new SecurityTokenException("refresh token usado");
+        throw new SecurityTokenException("Refresh token usado");
 
       if (user!.LockoutEnabled)
         if (user.LockoutEnd < DateTime.Now)
-          throw new SecurityTokenException("usuário bloqueado");
+          throw new SecurityTokenException("Usuário bloqueado");
 
       return (true, user.UserName);
     }

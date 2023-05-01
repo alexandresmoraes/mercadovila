@@ -19,28 +19,44 @@ namespace Auth.API.Controllers
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
     private readonly ILogger<AuthController> _logger;
+    private readonly UserManager<IdentityUser> _userManager;
 
     public AuthController(
       IAuthService<IdentityUser> authService,
       IJwtService jwtService,
       SignInManager<IdentityUser> signInManager,
       IUnitOfWork<ApplicationDbContext> unitOfWork,
-      ILogger<AuthController> logger)
+      ILogger<AuthController> logger,
+      UserManager<IdentityUser> userManager)
     {
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
       _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
       _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+      _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
     }
 
     /// <summary>
-    /// Endpoint para verificar se o usuário está autorizado
+    /// Endpoint para verificar dados do usuário autenticado
     /// </summary>
     // GET api/auth
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public Result GetAsync() => Result.Ok();
+    [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<Result<AccountModel>> GetAsync()
+    {
+      var user = await _userManager.FindByIdAsync(_authService.GetUserId());
+
+      return Result.Ok(new AccountModel
+      {
+        Id = user.Id,
+        Email = user.Email,
+        Username = user.UserName,
+        PhoneNumber = user.PhoneNumber,
+        Roles = await _userManager.GetRolesAsync(user),
+      });
+    }
 
     /// <summary>
     /// Login de usuário
@@ -99,7 +115,7 @@ namespace Auth.API.Controllers
         return Result.Ok(await _jwtService.GenerateToken(username));
       }
 
-      return Result.Fail<AccessTokenDto>("refresh token invalid.");
+      return Result.Fail<AccessTokenDto>("Refresh token inválido.");
     }
   }
 }

@@ -6,19 +6,9 @@
     {
       get { return Start == 0 || Limit == 0 ? 1 : Start / Limit + 1; }
     }
-    public long Total { get; set; }
-    public int Start { get; set; }
-    public int Limit { get; set; }
-
-    public int FirstRowOnPage
-    {
-      get { return (CurrentPage - 1) * Start + 1; }
-    }
-
-    public int LastRowOnPage
-    {
-      get { return Convert.ToInt32(Math.Min(Convert.ToInt64((CurrentPage * Limit)), Total)); }
-    }
+    public long Total { get; private set; }
+    public int Start { get; private set; }
+    public int Limit { get; private set; }
 
     protected PagedResultBase(int start, int limit, long total)
     {
@@ -28,27 +18,26 @@
     }
   }
 
-  public record PagedResult<T> : PagedResultBase where T : class
+  public record PagedResult<TDto> : PagedResultBase where TDto : class
   {
-    public IList<T> Data { get; set; }
+    public IList<TDto> Data { get; private set; }
 
-    public PagedResult(int start, int limit, long total, IList<T> data)
+    public PagedResult(int start, int limit, long total, IList<TDto> data)
                 : base(start, limit, total)
     {
       Data = data ?? throw new ArgumentNullException(nameof(data));
     }
   }
 
-  public record PagedResultWithDto<T, TDto> : PagedResult<T>
-    where T : class
+  public record PagedResultWithExtraDto<TDto, TExtraDto> : PagedResult<TDto>
     where TDto : class
+    where TExtraDto : class
   {
-    public TDto Dto { get; set; }
+    public TExtraDto Dto { get; private set; }
 
-    public PagedResultWithDto(int start, int limit, long total, IList<T> data, TDto dto)
+    public PagedResultWithExtraDto(int start, int limit, long total, IList<TDto> data, TExtraDto dto)
                 : base(start, limit, total, data)
     {
-      Data = data ?? throw new ArgumentNullException(nameof(data));
       Dto = dto ?? throw new ArgumentNullException(nameof(dto));
     }
   }

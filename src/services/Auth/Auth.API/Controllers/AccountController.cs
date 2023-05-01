@@ -1,4 +1,7 @@
-﻿using Auth.API.Models;
+﻿using Auth.API.Data.Dto;
+using Auth.API.Data.Queries;
+using Auth.API.Data.Repositories;
+using Auth.API.Models;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -15,13 +18,15 @@ namespace Auth.API.Controllers
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IAuthService<IdentityUser> _authService;
     private readonly IJwtService _jwtService;
+    private readonly IUserRepository _userRepository;
 
-    public AccountController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IAuthService<IdentityUser> authService, IJwtService jwtService)
+    public AccountController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IAuthService<IdentityUser> authService, IJwtService jwtService, IUserRepository userRepository)
     {
       _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
       _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
+      _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
     /// <summary>
@@ -36,7 +41,7 @@ namespace Auth.API.Controllers
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result<AccountModel>> Post([FromRoute] string id)
+    public async Task<Result<AccountModel>> GetAsync([FromRoute] string id)
     {
       var user = await _userManager.FindByIdAsync(id);
 
@@ -51,12 +56,28 @@ namespace Auth.API.Controllers
           Id = user.Id,
           Email = user.Email,
           Username = user.UserName,
-          PhoneNumber = user.PhoneNumber
+          PhoneNumber = user.PhoneNumber,
+          Roles = await _userManager.GetRolesAsync(user),
         });
       }
 
       return Result.NotFound<AccountModel>("Usuário não encontrado.");
     }
+
+    /// <summary>
+    /// Retorna usuários paginados
+    /// </summary>
+    // GET api/account
+#if DEBUG
+    [AllowAnonymous]
+#else
+    [Authorize(Roles = "admin")]
+#endif
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<Result<PagedResult<UserDto>>> GetUsersAsync([FromQuery] UserQuery query)
+      => Result.Ok(await _userRepository.GetUsersPagination(query));
 
     /// <summary>
     /// Criação de novos usuários
@@ -70,7 +91,7 @@ namespace Auth.API.Controllers
     [HttpPost]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result<AccessTokenDto>> Post([FromBody] NewAccountModel newAccountModel)
+    public async Task<Result<AccessTokenDto>> PostAsync([FromBody] NewAccountModel newAccountModel)
     {
       var user = new IdentityUser
       {
@@ -96,7 +117,7 @@ namespace Auth.API.Controllers
     }
 
     /// <summary>
-    /// Criação de novos usuários
+    /// Alteração de conta de usuário
     /// </summary>
     // PUT api/account/{id}
 #if DEBUG
@@ -107,7 +128,7 @@ namespace Auth.API.Controllers
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result> Put([FromRoute] string id, [FromBody] UpdateAccountModel updateAccountModel)
+    public async Task<Result> PutAsync([FromRoute] string id, [FromBody] UpdateAccountModel updateAccountModel)
     {
       var user = await _userManager.FindByIdAsync(id);
 
@@ -149,7 +170,7 @@ namespace Auth.API.Controllers
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result> PostRole([FromRoute] string userId, [FromRoute] string roleName)
+    public async Task<Result> PostRoleAsync([FromRoute] string userId, [FromRoute] string roleName)
     {
       if (!await _roleManager.RoleExistsAsync(roleName))
       {
