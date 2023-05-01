@@ -104,8 +104,7 @@ namespace Auth.API.Controllers
     [HttpPost("refresh-token")]
     [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-
-    public async Task<ActionResult<Result<AccessTokenDto>>> RefreshToken([FromBody] RefreshTokenModel refreshToken)
+    public async Task<ActionResult<Result<AccessTokenDto>>> RefreshTokenAsync([FromBody] RefreshTokenModel refreshToken)
     {
       var (tokenIsValid, username) = await _jwtService.ValidateRefreshToken(refreshToken.RefreshToken);
 
