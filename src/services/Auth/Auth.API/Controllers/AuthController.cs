@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auth.API.Controllers
 {
+  /// <summary>
+  /// Autenticação do usuário, dados do user logado, refresh token.
+  /// </summary>
   [Route("api/auth")]
   [ApiController]
   public class AuthController : ControllerBase
