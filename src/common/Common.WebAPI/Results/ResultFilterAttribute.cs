@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Common.WebAPI.Results
@@ -16,6 +17,29 @@ namespace Common.WebAPI.Results
         {
           var data = result.GetType().GetProperty(nameof(Result<object>.Data))?.GetValue(result, null);
           context.Result = new OkObjectResult(data);
+        }
+      }
+
+      base.OnResultExecuting(context);
+    }
+  }
+
+  public class ResultCreatedFilterAttribute : ResultFilterAttribute
+  {
+    public override void OnResultExecuting(ResultExecutingContext context)
+    {
+      var cancellationToken = context.HttpContext.RequestAborted;
+      cancellationToken.ThrowIfCancellationRequested();
+
+      if (context.Result is ObjectResult objectResult)
+      {
+        if (objectResult.Value is Result result && result.GetType().IsGenericType && result.IsValid && result is IResultCreated)
+        {
+          var data = result.GetType().GetProperty(nameof(Result<object>.Data))?.GetValue(result, null);
+          context.Result = new ObjectResult(data)
+          {
+            StatusCode = StatusCodes.Status201Created
+          };
         }
       }
 
