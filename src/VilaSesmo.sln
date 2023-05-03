@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{25F0A5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WebAPI", "common\Common.WebAPI\Common.WebAPI.csproj", "{8F257BE6-1878-49C9-BA5C-7F6E32596F35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.EventBus", "..\Common.EventBus\Common.EventBus.csproj", "{0EE98C65-06FA-40A3-8470-2152AEFA0BB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.EventBus", "common\Common.EventBus\Common.EventBus.csproj", "{0EE98C65-06FA-40A3-8470-2152AEFA0BB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
