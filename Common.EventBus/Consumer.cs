@@ -67,7 +67,10 @@ namespace Common.EventBus
 
             if (result is not null)
             {
-              _logger.LogInformation("Consumer event started");
+              _logger.LogInformation($"Consumer event started \n"
+                   + $"partition: {result.Partition} \n"
+                   + $"offset: {result.Offset} \n"
+                   + $"timestamp: {result.Message.Timestamp.UtcDateTime}");
 
               var @event = JsonSerializer.Deserialize<TEvent>(result.Message.Value);
 
