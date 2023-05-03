@@ -103,7 +103,7 @@ namespace Auth.API.Controllers
         await _userManager.AddToRoleAsync(user, "admin");
 #endif
 
-        return Result.Ok(await _jwtService.GenerateToken(user.UserName!));
+        return Result.Created(await _jwtService.GenerateToken(user.UserName!));
       }
 
       return Result.Fail<AccessTokenDto>(
