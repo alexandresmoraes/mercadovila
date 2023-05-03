@@ -1,7 +1,7 @@
 ﻿using Common.EventBus.Integrations;
 using Confluent.Kafka;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 using System.Text.Json;
@@ -15,13 +15,9 @@ namespace Common.EventBus
     private readonly EventBusSettings _eventBusSettings = null!;
     private readonly ILogger<Producer> _logger;
 
-    public Producer(ILogger<Producer> logger, IConfiguration configuration)
+    public Producer(ILogger<Producer> logger, IOptions<EventBusSettings> settings)
     {
-      var _eventBusSettings = configuration.GetSection(nameof(EventBusSettings)).Get<EventBusSettings>();
-
-      if (_eventBusSettings is null)
-        throw new ArgumentNullException(nameof(EventBusSettings));
-
+      _eventBusSettings = settings.Value;
       _logger = logger;
 
       _producerConfig = new ProducerConfig
@@ -45,7 +41,7 @@ namespace Common.EventBus
 
         await _retryPolicy.ExecuteAsync(async () =>
         {
-          _logger.LogInformation($"producer message: {serialized}");
+          _logger.LogInformation($"Producer message: {serialized}");
 
           await producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
           {

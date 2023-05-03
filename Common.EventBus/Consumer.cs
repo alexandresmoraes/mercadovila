@@ -1,7 +1,7 @@
 ﻿using Common.EventBus.Integrations;
 using Confluent.Kafka;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Wrap;
 using System.Text.Json;
@@ -15,12 +15,10 @@ namespace Common.EventBus
     private readonly EventBusSettings _eventBusSettings = null!;
     private readonly AsyncPolicyWrap _policyWrap;
 
-    public Consumer(ILogger<Consumer> logger, IConfiguration configuration)
+    public Consumer(ILogger<Consumer> logger, IOptions<EventBusSettings> settings)
     {
-      var _eventBusSettings = configuration.GetSection(nameof(EventBusSettings)).Get<EventBusSettings>();
-
-      if (_eventBusSettings is null)
-        throw new ArgumentNullException(nameof(EventBusSettings));
+      _logger = logger;
+      _eventBusSettings = settings.Value;
 
       _consumerConfig = new ConsumerConfig
       {
@@ -28,8 +26,6 @@ namespace Common.EventBus
         BootstrapServers = _eventBusSettings.BootstrapServer,
         AutoOffsetReset = AutoOffsetReset.Earliest
       };
-
-      _logger = logger;
 
       var retryPolicy = Policy
         .Handle<ConsumeException>()
