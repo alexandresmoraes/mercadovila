@@ -83,7 +83,7 @@ namespace Auth.API.Controllers
     /// </summary>
     // POST api/account
     [HttpPost]
-    [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AccessTokenDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccessTokenDto>> PostAsync([FromBody] NewAccountModel newAccountModel)
     {
