@@ -39,7 +39,7 @@ services:
       restart: unless-stopped
 
   postgres:
-    image: postgres:15.2    
+    image: postgres:15.2
     ports:
       - "${DATABASE_PORT}:5432"
     environment:
@@ -52,7 +52,7 @@ services:
       - ${DATABASE_LOG_DIR}:/var/log/postgresql
 
   pgadmin:
-    image: 'dpage/pgadmin4:7.0'    
+    image: 'dpage/pgadmin4:7.0'
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
