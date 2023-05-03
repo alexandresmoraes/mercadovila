@@ -41,7 +41,7 @@ services:
   postgres:
     image: postgres:15.2
     ports:
-      - "${DATABASE_PORT}:5432"
+      - ${DATABASE_PORT}:5432
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USER}
@@ -57,8 +57,8 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
     volumes:
-      - '${PGADMIN_DATA}:/var/lib/pgadmin'
+      - ${PGADMIN_DATA}:/var/lib/pgadmin
     ports:
-      - '${PGADMIN_PORT}:80'
+      - ${PGADMIN_PORT}:80
     depends_on:
       - postgres
