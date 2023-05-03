@@ -71,7 +71,6 @@ namespace Auth.API.Controllers
     /// Retorna usuários paginados
     /// </summary>
     // GET api/account
-
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
