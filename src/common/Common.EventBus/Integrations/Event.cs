@@ -1,4 +1,6 @@
-﻿namespace Common.EventBus.Integrations
+﻿using System.Text.Json;
+
+namespace Common.EventBus.Integrations
 {
   public abstract class Event
   {
@@ -11,6 +13,11 @@
       MessageType = GetType().Name;
       AggregateId = aggregateId;
       CreatedAt = DateTime.Now;
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }
