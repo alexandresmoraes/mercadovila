@@ -9,6 +9,7 @@ namespace Common.WebAPI.Results
       services.AddMvc(opt =>
       {
         opt.Filters.Add<ResultOkFilterAttribute>();
+        opt.Filters.Add<ResultCreatedFilterAttribute>();
         opt.Filters.Add<ResultBadRequestFilterAttribute>();
         opt.Filters.Add<ResultNotFoundFilterAttribute>();
         opt.Filters.Add<ResultNoContentFilterAttribute>();
