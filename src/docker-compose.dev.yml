@@ -3,10 +3,13 @@ version: '3'
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest    
+    image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    volumes: 
+      - ${ZOOKEEPER_DATA_DIR}:/var/lib/zookeeper/data
+      - ${ZOOKEEPER_LOG_DIR}:/var/lib/zookeeper/log
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -22,22 +25,21 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes: 
+      - ${KAFKA_DATA_DIR}:/var/lib/kafka/data
 
   seq:
       image: datalust/seq:latest
       ports:
           - 5341:80
-      volumes:
-            - ${SERILOG_DATA_DIR}:/data
       environment:
           ACCEPT_EULA: "Y"
+      volumes:
+            - ${SERILOG_DATA_DIR}:/data
       restart: unless-stopped
 
   postgres:
-    image: postgres:15.2
-    volumes:
-      - ${DATABASE_DATA_DIR}:/var/lib/postgresql/data
-      - ${DATABASE_LOG_DIR}:/var/log/postgresql
+    image: postgres:15.2    
     ports:
       - "${DATABASE_PORT}:5432"
     environment:
@@ -45,14 +47,17 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_DB=${DATABASE_NAME}
       - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ${DATABASE_DATA_DIR}:/var/lib/postgresql/data
+      - ${DATABASE_LOG_DIR}:/var/log/postgresql
 
   pgadmin:
     image: 'dpage/pgadmin4:7.0'    
-    volumes:
-      - '${PGADMIN_DATA}:/var/lib/pgadmin'
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    volumes:
+      - '${PGADMIN_DATA}:/var/lib/pgadmin'
     ports:
       - '${PGADMIN_PORT}:80'
     depends_on:
