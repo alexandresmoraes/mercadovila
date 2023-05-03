@@ -3,7 +3,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.Retry;
+using Polly.Wrap;
 using System.Text.Json;
 
 namespace Common.EventBus
@@ -13,7 +13,7 @@ namespace Common.EventBus
     private readonly ConsumerConfig _consumerConfig;
     private readonly ILogger<Consumer> _logger;
     private readonly EventBusSettings _eventBusSettings = null!;
-    private readonly AsyncRetryPolicy _retryPolicy;
+    private readonly AsyncPolicyWrap _policyWrap;
 
     public Consumer(ILogger<Consumer> logger, IConfiguration configuration)
     {
@@ -31,12 +31,30 @@ namespace Common.EventBus
 
       _logger = logger;
 
-      _retryPolicy = Policy
+      var retryPolicy = Policy
         .Handle<ConsumeException>()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, retryCount, context) =>
         {
           _logger.LogError($"Consumer try: {retryCount}, exception: {exception.Message}");
         });
+
+      var circuitBreakerPolicy = Policy
+        .Handle<Exception>()
+        .CircuitBreakerAsync(5, TimeSpan.FromMinutes(3),
+        onBreak: (_, _) =>
+        {
+          _logger.LogWarning("Consumer Open (onBreak)");
+        },
+        onReset: () =>
+        {
+          _logger.LogWarning("Closed (onReset)");
+        },
+        onHalfOpen: () =>
+        {
+          _logger.LogWarning("Half Open (onHalfOpen)");
+        });
+
+      _policyWrap = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
     }
 
     public Task Consume<TEvent>(Action<TEvent> onEventReceived, CancellationToken cancellationToken = default) where TEvent : Event
@@ -47,13 +65,18 @@ namespace Common.EventBus
 
         while (true)
         {
-          _retryPolicy.ExecuteAsync(() =>
+          _policyWrap.ExecuteAsync(() =>
           {
             var result = consumer.Consume(cancellationToken);
 
             if (result is not null)
             {
+              _logger.LogInformation("Consumer event started");
+
               var @event = JsonSerializer.Deserialize<TEvent>(result.Message.Value);
+
+              _logger.LogInformation("Consumer event: {IntegrationEventId} - ({@IntegrationEvent})", @event!.AggregateId, @event);
+
               onEventReceived(@event!);
             }
 
