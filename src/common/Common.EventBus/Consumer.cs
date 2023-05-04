@@ -65,7 +65,7 @@ namespace Common.EventBus
 
               var @event = JsonSerializer.Deserialize<TEvent>(result.Message.Value);
 
-              _logger.LogInformation("Consumer event: {IntegrationEventId} - ({@IntegrationEvent})", @event!.AggregateId, @event);
+              _logger.LogInformation($"Consumer event: {@event!.AggregateId} - ({@event})");
 
               onEventReceived(@event!);
             }
