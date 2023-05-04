@@ -29,7 +29,7 @@ namespace Common.WebAPI.WebApi
         switch (error)
         {
           case SecurityTokenException e:
-            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            response.StatusCode = (int)HttpStatusCode.Unauthorized;
             break;
           default:
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
