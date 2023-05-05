@@ -36,7 +36,7 @@ namespace Common.EventBus
 
       var circuitBreakerPolicy = Policy
         .Handle<Exception>()
-        .CircuitBreakerAsync(5, TimeSpan.FromMinutes(3),
+        .CircuitBreakerAsync(3, TimeSpan.FromMinutes(3),
         onBreak: (_, _) => _logger.LogWarning("Consumer Open (onBreak)"),
         onReset: () => _logger.LogWarning("Closed (onReset)"),
         onHalfOpen: () => _logger.LogWarning("Half Open (onHalfOpen)"));
