@@ -45,7 +45,7 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
         labelSmall: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7), fontWeight: FontWeight.w400, fontFamily: 'PoppinsRegular'),
         bodySmall: const TextStyle(color: Colors.white, fontSize: 12), // Home screen
       ),
-      scaffoldBackgroundColor: Color(0xFF242639),
+      scaffoldBackgroundColor: const Color(0xFF242639),
 
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
@@ -55,20 +55,20 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
       ),
       textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.only(top: 10, bottom: 10)),
+        padding: MaterialStateProperty.all(const EdgeInsets.only(top: 10, bottom: 10)),
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.white),
         foregroundColor: MaterialStateProperty.all(Colors.white),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         )),
-        textStyle: MaterialStateProperty.all(TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+        textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
       )),
       fontFamily: 'PoppinsMedium',
       dividerColor: Colors.transparent,
-      dividerTheme: DividerThemeData(color: Color(0xFFEDF2F6).withOpacity(0.5), thickness: 1.5),
+      dividerTheme: DividerThemeData(color: const Color(0xFFEDF2F6).withOpacity(0.5), thickness: 1.5),
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.all(Color(0xFFF4694A)),
+        fillColor: MaterialStateProperty.all(const Color(0xFFF4694A)),
       ),
       cardTheme: CardTheme(
         elevation: 0.5,
@@ -157,27 +157,27 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
       ),
       textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.only(top: 10, bottom: 10)),
+        padding: MaterialStateProperty.all(const EdgeInsets.only(top: 10, bottom: 10)),
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.white),
         foregroundColor: MaterialStateProperty.all(Colors.white),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         )),
-        textStyle: MaterialStateProperty.all(TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+        textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
       )),
       fontFamily: 'PoppinsMedium',
       dividerColor: Colors.transparent, //Color(0xFF4B4F68),
 
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.all(Color(0xFFF4694A)),
+        fillColor: MaterialStateProperty.all(const Color(0xFFF4694A)),
       ),
       bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Color(0xFF5c7de0)),
       cardTheme: CardTheme(
         elevation: 0.5,
         margin: const EdgeInsets.all(0),
         color: const Color(0xFFedf2f6),
-        shadowColor: Color(0xFFedf2f6),
+        shadowColor: const Color(0xFFedf2f6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       ),
       dividerTheme: const DividerThemeData(
