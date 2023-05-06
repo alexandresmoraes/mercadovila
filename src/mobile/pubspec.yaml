@@ -38,6 +38,8 @@ dependencies:
   flutter_modular: ^5.0.3
   mobx: ^2.1.4
   flutter_mobx: ^2.0.6+5
+  animated_bottom_navigation_bar: ^1.2.0
+  material_design_icons_flutter: 6.0.7096
 
 dev_dependencies:
   flutter_test:

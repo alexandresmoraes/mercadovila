@@ -8,6 +8,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'VilaSESMO',
       theme: nativeTheme(isDarkModeEnable: true),
       routerDelegate: Modular.routerDelegate,
