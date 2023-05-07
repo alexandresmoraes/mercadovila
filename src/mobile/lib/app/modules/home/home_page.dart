@@ -638,7 +638,6 @@ class HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                         image: AssetImage('${_topSellingProduct[i].imagePath}'),
-                        fit: BoxFit.cover,
                       )),
                       height: 120,
                       width: 130,
@@ -749,10 +748,10 @@ class HomePageState extends State<HomePage> {
                     child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(
-                              '${_allCategoryList[i].imagePath}',
-                            ),
-                            fit: BoxFit.cover),
+                          image: AssetImage(
+                            '${_allCategoryList[i].imagePath}',
+                          ),
+                        ),
                       ),
                       height: 120,
                       width: 130,

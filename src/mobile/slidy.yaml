@@ -1,6 +1,6 @@
 slidy: '1'
 
 scripts: 
-    mobx_build: flutter pub run build_runner build --delete-conflicting-outputs
-    mobx_watch: flutter clean & flutter pub get & flutter pub run build_runner
-    mobx_build_clean: flutter clean & flutter pub get & flutter pub run build_runner build --delete-conflicting-outputs
+    build: flutter pub run build_runner build --delete-conflicting-outputs
+    watch: flutter clean & flutter pub get & flutter pub run build_runner
+    build_clean: flutter clean & flutter pub get & flutter pub run build_runner build --delete-conflicting-outputs
