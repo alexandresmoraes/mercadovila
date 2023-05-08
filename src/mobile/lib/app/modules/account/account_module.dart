@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomeModule extends Module {
-  static const routeName = '/home';
+class AccountModule extends Module {
+  static const routeName = '/account';
 
   @override
   final List<Bind> binds = [];
