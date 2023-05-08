@@ -406,6 +406,7 @@ class HomePageState extends State<HomePage> {
               SizedBox(
                 height: 210,
                 child: ListView(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   children: _topSellingWidgetList(),
                 ),
@@ -438,6 +439,7 @@ class HomePageState extends State<HomePage> {
               SizedBox(
                 height: 135,
                 child: ListView(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   children: _spotLightWidgetList(),
                 ),
@@ -470,6 +472,7 @@ class HomePageState extends State<HomePage> {
               SizedBox(
                 height: 210,
                 child: ListView(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   children: _topSellingWidgetList(),
                 ),
@@ -502,6 +505,7 @@ class HomePageState extends State<HomePage> {
               SizedBox(
                 height: 210,
                 child: ListView(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   children: _topSellingWidgetList(),
                 ),
