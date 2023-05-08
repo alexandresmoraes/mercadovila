@@ -587,7 +587,7 @@ class HomePageState extends State<HomePage> {
                                   Row(
                                     children: [
                                       Text(
-                                        "\$",
+                                        "R\$",
                                         style: Theme.of(context).primaryTextTheme.titleSmall,
                                       ),
                                       Text(
@@ -823,7 +823,7 @@ class HomePageState extends State<HomePage> {
                                   Row(
                                     children: [
                                       Text(
-                                        "\$",
+                                        "R\$",
                                         style: Theme.of(context).primaryTextTheme.displayMedium,
                                       ),
                                       Text(
