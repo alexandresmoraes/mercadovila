@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/utility/http/dio_api.dart';
 import 'package:vilasesmo/app/utility/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utility/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utility/models/account_model.dart';
@@ -13,12 +14,13 @@ import 'interfaces/i_auth_service.dart';
 class AuthService implements IAuthService {
   static const _currentToken = 'current_token';
 
-  late Dio dioWithoutJwt;
   late final DioForNative dio;
+  late final Dio dioWithoutJwt;
 
   AuthService() {
     dioWithoutJwt = Dio(Modular.get<BaseOptions>());
     dioWithoutJwt.interceptors.add(ErrorInterceptor());
+    dio = Modular.get<DioApi>();
   }
 
   @override
