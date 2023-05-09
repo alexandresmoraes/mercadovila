@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/home/home_page.dart';
+import 'package:vilasesmo/app/modules/login/login_page.dart';
 
 import '../account/account_page.dart';
 
@@ -92,7 +93,7 @@ class _TabPageState extends State<TabPage> {
 
   List<Widget> _screens() => [
         const HomePage(),
-        const AccountPage(),
+        const LoginPage(),
         const AccountPage(),
         const AccountPage(),
       ];

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/utility/services/interfaces/i_auth_service.dart';
 
 class BearerInterceptor extends InterceptorsWrapper {
@@ -140,7 +141,7 @@ class BearerInterceptor extends InterceptorsWrapper {
         if (kDebugMode) debugPrint(json.encode("========Dio Unlock========"));
       }
 
-      // Modular.to.navigate(LoginModule.routeName); // TODO
+      Modular.to.navigate(LoginModule.routeName);
       handler.reject(err);
     }
 
