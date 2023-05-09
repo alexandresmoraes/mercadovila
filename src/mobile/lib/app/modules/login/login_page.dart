@@ -1,5 +1,5 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +10,44 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  final passwordFocusNode = FocusNode();
+  final usernameFocusNode = FocusNode();
+
+  String animationType = 'idle';
+
+  final passwordController = TextEditingController();
+
+  bool isloading = true;
+
+  @override
+  void initState() {
+    passwordFocusNode.addListener(() {
+      if (passwordFocusNode.hasFocus) {
+        setState(() {
+          animationType = 'hands_up';
+        });
+      } else {
+        setState(() {
+          animationType = 'hands_down';
+        });
+      }
+    });
+
+    usernameFocusNode.addListener(() {
+      if (usernameFocusNode.hasFocus) {
+        setState(() {
+          animationType = 'test';
+        });
+      } else {
+        setState(() {
+          animationType = 'idle';
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -60,16 +98,45 @@ class LoginPageState extends State<LoginPage> {
                 icon: const Icon(MdiIcons.arrowLeft, color: Colors.white),
               ),
             ),
+            // Positioned(
+            //   top: MediaQuery.of(context).size.height * 0.07,
+            //   // left: MediaQuery.of(context).size.width / 4,
+            //   child: SizedBox(
+            //     height: MediaQuery.of(context).size.height * 0.50,
+            //     width: MediaQuery.of(context).size.width,
+            //     child: Text(
+            //       'Login',
+            //       textAlign: TextAlign.center,
+            //       style: Theme.of(context).primaryTextTheme.displaySmall,
+            //     ),
+            //   ),
+            // ),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.07,
-              // left: MediaQuery.of(context).size.width / 4,
+              top: MediaQuery.of(context).size.height * -0.07,
+              left: MediaQuery.of(context).size.width / 8,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.50,
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Login',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).primaryTextTheme.displaySmall,
+                height: 300,
+                width: 300,
+                child: FlareActor(
+                  'assets/Teddy.flr',
+                  alignment: Alignment.bottomCenter,
+                  fit: BoxFit.contain,
+                  animation: animationType,
+                  callback: (animation) {
+                    // setState(() {
+                    //   animationType = 'idle';
+                    // });
+
+                    if (true) {
+                      setState(() {
+                        animationType = 'success';
+                      });
+                    } else {
+                      setState(() {
+                        animationType = 'fail';
+                      });
+                    }
+                  },
                 ),
               ),
             ),
@@ -83,24 +150,43 @@ class LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text('Username', style: Theme.of(context).primaryTextTheme.bodyLarge),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2, bottom: 20),
-                      child: Text('Cód Verificação', style: Theme.of(context).primaryTextTheme.bodyLarge),
-                    ),
                     Container(
                       height: 50,
                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                       padding: const EdgeInsets.only(),
                       child: TextFormField(
+                        focusNode: usernameFocusNode,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.phone,
                         maxLength: 10,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                         decoration: InputDecoration(
-                          hintText: 'Username',
+                          hintText: 'Nome de usuário ou email',
                           prefixIcon: Icon(
-                            Icons.account_box_sharp,
+                            Icons.account_circle,
+                            color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                          ),
+                          counterText: '',
+                          contentPadding: const EdgeInsets.only(top: 10),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                      padding: const EdgeInsets.only(),
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        controller: passwordController,
+                        focusNode: passwordFocusNode,
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 10,
+                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                        decoration: InputDecoration(
+                          hintText: 'Senha',
+                          prefixIcon: Icon(
+                            Icons.password,
                             color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                           ),
                           counterText: '',
@@ -121,70 +207,84 @@ class LoginPageState extends State<LoginPage> {
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
                           onPressed: () {
+                            setState(() {
+                              animationType = 'hands_down';
+                            });
+
+                            //if (passwordController.text.compareTo('teste') == 0) {
+                            // if (false) {
+                            //   setState(() {
+                            //     animationType = "success";
+                            //   });
+                            // } else {
+                            //   setState(() {
+                            //     animationType = "fail";
+                            //   });
+                            // }
                             // Navigator.of(context)
                             //     .push(MaterialPageRoute(builder: (context) => OtpVerificationScreen(a: widget.analytics, o: widget.observer)));
                           },
                           child: const Text('Login')),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              thickness: 2,
-                            ),
-                          ),
-                          Text('  Login  ', style: Theme.of(context).primaryTextTheme.bodyLarge),
-                          Expanded(
-                              child: Divider(
-                            color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                            thickness: 2,
-                          ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 45,
-                            width: 45,
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFEC5F60),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(45),
-                                )),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              FontAwesomeIcons.google,
-                              size: 25,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                          ),
-                          Container(
-                            height: 45,
-                            width: 45,
-                            margin: const EdgeInsets.only(left: 20, right: 20),
-                            decoration: const BoxDecoration(
-                                color: Color(0xFF4C87D0),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(45),
-                                )),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              FontAwesomeIcons.facebookF,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              size: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 25),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Divider(
+                    //           color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                    //           thickness: 2,
+                    //         ),
+                    //       ),
+                    //       Text('  Login  ', style: Theme.of(context).primaryTextTheme.bodyLarge),
+                    //       Expanded(
+                    //           child: Divider(
+                    //         color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                    //         thickness: 2,
+                    //       ))
+                    //     ],
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 30),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Container(
+                    //         height: 45,
+                    //         width: 45,
+                    //         decoration: const BoxDecoration(
+                    //             color: Color(0xFFEC5F60),
+                    //             borderRadius: BorderRadius.all(
+                    //               Radius.circular(45),
+                    //             )),
+                    //         alignment: Alignment.center,
+                    //         child: Icon(
+                    //           FontAwesomeIcons.google,
+                    //           size: 25,
+                    //           color: Theme.of(context).scaffoldBackgroundColor,
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         height: 45,
+                    //         width: 45,
+                    //         margin: const EdgeInsets.only(left: 20, right: 20),
+                    //         decoration: const BoxDecoration(
+                    //             color: Color(0xFF4C87D0),
+                    //             borderRadius: BorderRadius.all(
+                    //               Radius.circular(45),
+                    //             )),
+                    //         alignment: Alignment.center,
+                    //         child: Icon(
+                    //           FontAwesomeIcons.facebookF,
+                    //           color: Theme.of(context).scaffoldBackgroundColor,
+                    //           size: 25,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -198,12 +298,5 @@ class LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  bool isloading = true;
-
-  @override
-  void initState() {
-    super.initState();
   }
 }
