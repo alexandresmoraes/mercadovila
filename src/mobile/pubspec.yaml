@@ -20,6 +20,9 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
   carousel_slider: ^4.2.1
   dots_indicator: ^2.1.1
+  dio: ^4.0.0
+  dartz: ^0.10.1
+  shared_preferences: ^2.1.1
 
 dev_dependencies:
   flutter_test:

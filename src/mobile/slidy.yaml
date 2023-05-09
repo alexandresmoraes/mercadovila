@@ -1,6 +1,32 @@
 slidy: '1'
 
-scripts: 
-    build: flutter pub run build_runner build --delete-conflicting-outputs
-    watch: flutter clean & flutter pub get & flutter pub run build_runner
-    build_clean: flutter clean & flutter pub get & flutter pub run build_runner build --delete-conflicting-outputs
+scripts:     
+
+    clean:
+        name: "Clean"
+        description: 'Recompila app'
+        run: flutter clean
+
+    build:
+        name: "Rebuild"
+        description: 'Rebuild'
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+    clean-rebuild:
+        description: "Clean and rebuild"
+        steps:
+            - name: "Clean"
+              run: flutter clean
+
+            - name: "GetPackages"
+              description: "Get packages"
+              run: flutter pub get
+
+            - name: "Rebuild"
+              description: "Rebuild"
+              run: flutter pub run build_runner build --delete-conflicting-outputs
+
+    cache-clean:
+        name: "Cache Clean"
+        description: 'Cache Clean'
+        run: flutter pub cache clean
