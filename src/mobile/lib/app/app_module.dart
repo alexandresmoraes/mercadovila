@@ -1,4 +1,5 @@
 import 'package:vilasesmo/app/modules/login/login_module.dart';
+import 'package:vilasesmo/app/modules/splash/splash_module.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
@@ -25,7 +26,8 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute('/', module: TabModule()),
+    ModuleRoute(Modular.initialRoute, module: SplashModule()),
+    ModuleRoute(TabModule.routeName, module: TabModule()),
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
   ];
 }
