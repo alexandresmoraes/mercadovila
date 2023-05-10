@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Common.WebAPI.Data
+﻿namespace Common.WebAPI.Data
 {
-  public interface IUnitOfWork<TDbContext> where TDbContext : DbContext
+  public interface IUnitOfWork
   {
     public Task BeginTransactionAsync(CancellationToken cancellationToken = default);
     public Task CommitAsync(CancellationToken cancellationToken = default);

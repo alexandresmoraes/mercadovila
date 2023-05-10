@@ -27,13 +27,12 @@ namespace Common.WebAPI.Data
       return options;
     }
 
-    public static IServiceCollection AddUnitOfWork<TDbContext>(this IServiceCollection services)
-      where TDbContext : DbContext
+    public static IServiceCollection AddUnitOfWork(this IServiceCollection services)
     {
       services.AddMvc(opt =>
       {
-        opt.Filters.Add<UnitOfWorkCommitAttribute<TDbContext>>();
-        opt.Filters.Add<UnitOfWorkExceptionAttribute<TDbContext>>();
+        opt.Filters.Add<UnitOfWorkCommitAttribute>();
+        opt.Filters.Add<UnitOfWorkExceptionAttribute>();
       });
 
       return services;

@@ -3,14 +3,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Common.WebAPI.Data
 {
-  public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext>, IDisposable
-    where TDbContext : DbContext
+  public class UnitOfWork : IUnitOfWork, IDisposable
   {
-    private readonly TDbContext _context;
+    private readonly DbContext _context;
     private IDbContextTransaction? _transaction;
     private bool _isActive = false;
 
-    public UnitOfWork(TDbContext context)
+    public UnitOfWork(DbContext context)
       => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

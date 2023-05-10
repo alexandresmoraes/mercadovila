@@ -1,18 +1,16 @@
 ﻿using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Common.WebAPI.Data
 {
-  public class UnitOfWorkCommitAttribute<TDbContext> : Attribute, IAsyncActionFilter
-    where TDbContext : DbContext
+  public class UnitOfWorkCommitAttribute : Attribute, IAsyncActionFilter
   {
-    private readonly IUnitOfWork<TDbContext> _uow;
-    private readonly ILogger<UnitOfWorkCommitAttribute<TDbContext>> _logger;
+    private readonly IUnitOfWork _uow;
+    private readonly ILogger<UnitOfWorkCommitAttribute> _logger;
 
-    public UnitOfWorkCommitAttribute(IUnitOfWork<TDbContext> uow, ILogger<UnitOfWorkCommitAttribute<TDbContext>> logger)
+    public UnitOfWorkCommitAttribute(IUnitOfWork uow, ILogger<UnitOfWorkCommitAttribute> logger)
     {
       _uow = uow ?? throw new ArgumentNullException(nameof(uow));
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -56,13 +54,12 @@ namespace Common.WebAPI.Data
     }
   }
 
-  public class UnitOfWorkExceptionAttribute<TDbContext> : Attribute, IAsyncActionFilter
-    where TDbContext : DbContext
+  public class UnitOfWorkExceptionAttribute : Attribute, IAsyncActionFilter
   {
-    private readonly IUnitOfWork<TDbContext> _uow;
-    private readonly ILogger<UnitOfWorkExceptionAttribute<TDbContext>> _logger;
+    private readonly IUnitOfWork _uow;
+    private readonly ILogger<UnitOfWorkExceptionAttribute> _logger;
 
-    public UnitOfWorkExceptionAttribute(IUnitOfWork<TDbContext> uow, ILogger<UnitOfWorkExceptionAttribute<TDbContext>> logger)
+    public UnitOfWorkExceptionAttribute(IUnitOfWork uow, ILogger<UnitOfWorkExceptionAttribute> logger)
     {
       _uow = uow ?? throw new ArgumentNullException(nameof(uow));
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));

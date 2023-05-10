@@ -7,6 +7,7 @@ using Common.WebAPI.Results;
 using Common.WebAPI.WebApi;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.Config
 {
@@ -30,8 +31,9 @@ namespace Auth.API.Config
         options.SuppressModelStateInvalidFilter = true;
       });
       services.AddDbContext<ApplicationDbContext>();
-      services.AddScoped<IUnitOfWork<ApplicationDbContext>, UnitOfWork<ApplicationDbContext>>();
-      services.AddUnitOfWork<ApplicationDbContext>();
+      services.AddScoped<DbContext, ApplicationDbContext>();
+      services.AddScoped<IUnitOfWork, UnitOfWork>();
+      services.AddUnitOfWork();
 
       return services;
     }

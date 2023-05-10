@@ -1,5 +1,4 @@
-﻿using Auth.API.Data;
-using Auth.API.Models;
+﻿using Auth.API.Models;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Data;
 using Common.WebAPI.Results;
@@ -19,7 +18,7 @@ namespace Auth.API.Controllers
     private readonly IAuthService<IdentityUser> _authService;
     private readonly IJwtService _jwtService;
     private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly IUnitOfWork<ApplicationDbContext> _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AuthController> _logger;
     private readonly UserManager<IdentityUser> _userManager;
 
@@ -27,7 +26,7 @@ namespace Auth.API.Controllers
       IAuthService<IdentityUser> authService,
       IJwtService jwtService,
       SignInManager<IdentityUser> signInManager,
-      IUnitOfWork<ApplicationDbContext> unitOfWork,
+      IUnitOfWork unitOfWork,
       ILogger<AuthController> logger,
       UserManager<IdentityUser> userManager)
     {
