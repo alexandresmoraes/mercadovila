@@ -112,14 +112,14 @@ class LoginPageState extends State<LoginPage> {
             //   ),
             // ),
             Positioned(
-              top: MediaQuery.of(context).size.height * -0.07,
-              left: MediaQuery.of(context).size.width / 8,
+              // top: 50,
+              // left: MediaQuery.of(context).size.width / 8,
               child: SizedBox(
-                height: 300,
-                width: 300,
+                height: MediaQuery.of(context).size.height / 2,
+                width: MediaQuery.of(context).size.width,
                 child: FlareActor(
                   'assets/Teddy.flr',
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
                   fit: BoxFit.contain,
                   animation: animationType,
                   callback: (animation) {
@@ -163,7 +163,7 @@ class LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           hintText: 'Nome de usuário ou email',
                           prefixIcon: Icon(
-                            Icons.account_circle,
+                            MdiIcons.account,
                             color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                           ),
                           counterText: '',
