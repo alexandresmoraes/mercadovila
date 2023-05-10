@@ -1,5 +1,6 @@
 import 'package:vilasesmo/app/modules/login/login_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/modules/login/login_page.dart';
 
 class LoginModule extends Module {
   static const routeName = '/login';
@@ -11,6 +12,6 @@ class LoginModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute(LoginModule.routeName, module: LoginModule()),
+    ChildRoute(Modular.initialRoute, child: (_, args) => const LoginPage(), transition: TransitionType.fadeIn, duration: const Duration(seconds: 2)),
   ];
 }

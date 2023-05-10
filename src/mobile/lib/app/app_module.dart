@@ -1,3 +1,5 @@
+import 'package:vilasesmo/app/modules/login/login_module.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,7 @@ import 'modules/tab/tab_module.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
+    Bind.lazySingleton((i) => AccountStore()),
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'https://teste' : 'http://192.168.0.100',
@@ -23,5 +26,6 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ModuleRoute('/', module: TabModule()),
+    ModuleRoute(LoginModule.routeName, module: LoginModule()),
   ];
 }

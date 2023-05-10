@@ -1,10 +1,12 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/account/account_page.dart';
 import 'package:vilasesmo/app/modules/home/home_page.dart';
+import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/modules/login/login_page.dart';
-
-import '../account/account_page.dart';
+import 'package:vilasesmo/app/utility/services/interfaces/i_auth_service.dart';
 
 class TabPage extends StatefulWidget {
   final String title;
@@ -21,13 +23,18 @@ class _TabPageState extends State<TabPage> {
     MdiIcons.barcodeScan,
     MdiIcons.accountOutline,
   ];
-  // late final HomeStore store;
   var _bottomNavIndex = 0;
 
   @override
   void initState() {
+    var authService = Modular.get<IAuthService>();
+    authService.isAuthenticated().then((value) {
+      if (!value) {
+        Modular.to.pushReplacementNamed('${LoginModule.routeName}/');
+      }
+    });
+
     super.initState();
-    // store = Modular.get<HomeStore>();
   }
 
   @override

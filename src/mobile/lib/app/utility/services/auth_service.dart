@@ -20,7 +20,7 @@ class AuthService implements IAuthService {
   AuthService() {
     dioWithoutJwt = Dio(Modular.get<BaseOptions>());
     dioWithoutJwt.interceptors.add(ErrorInterceptor());
-    dio = Modular.get<DioApi>();
+    dio = Modular.get<DioForNative>();
   }
 
   @override
