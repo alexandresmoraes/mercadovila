@@ -26,18 +26,6 @@ class _TabPageState extends State<TabPage> {
   var _bottomNavIndex = 0;
 
   @override
-  void initState() {
-    var authService = Modular.get<IAuthService>();
-    authService.isAuthenticated().then((value) {
-      if (!value) {
-        Modular.to.pushReplacementNamed('${LoginModule.routeName}/');
-      }
-    });
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {

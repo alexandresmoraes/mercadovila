@@ -47,9 +47,12 @@ namespace Auth.API.Config
         app.UseOpenApi();
         app.UseDeveloperExceptionPage();
       }
+      else
+      {
+        app.UseHttpsRedirection();
+      }
 
       app.UseMiddleware<ErrorHandlerMiddleware>();
-      app.UseHttpsRedirection();
       app.UseRouting();
       app.UseAuthentication();
       app.UseAuthorization();
