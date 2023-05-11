@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utility/http/dio_api.dart';
 import 'package:vilasesmo/app/utility/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utility/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utility/models/account_model.dart';
@@ -50,7 +49,8 @@ class AuthService implements IAuthService {
   @override
   Future<Either<ResultFailModel, AccessTokenModel>> login(String username, String password) async {
     try {
-      var response = await dio.post('/api/auth/login', data: FormData.fromMap({'usernameOrEmail': username, 'password': password}));
+      var response = await dio.post('/api/auth/login',
+          data: FormData.fromMap({'usernameOrEmail': username, 'password': password}));
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -67,7 +67,8 @@ class AuthService implements IAuthService {
   @override
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel) async {
     try {
-      var response = await dio.post('/api/auth/refresh-token', data: FormData.fromMap({'refreshToken': refreshTokenModel}));
+      var response =
+          await dio.post('/api/auth/refresh-token', data: FormData.fromMap({'refreshToken': refreshTokenModel}));
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -84,5 +85,6 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future<void> setCurrentToken(AccessTokenModel token) async => await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
+  Future<void> setCurrentToken(AccessTokenModel token) async =>
+      await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
 }
