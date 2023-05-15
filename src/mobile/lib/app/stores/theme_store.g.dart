@@ -25,18 +25,13 @@ mixin _$ThemeStore on _ThemeStoreBase, Store {
     });
   }
 
-  late final _$_ThemeStoreBaseActionController =
-      ActionController(name: '_ThemeStoreBase', context: context);
+  late final _$setDarkModeAsyncAction =
+      AsyncAction('_ThemeStoreBase.setDarkMode', context: context);
 
   @override
-  void setDarkMode(bool isDarkModeEnable) {
-    final _$actionInfo = _$_ThemeStoreBaseActionController.startAction(
-        name: '_ThemeStoreBase.setDarkMode');
-    try {
-      return super.setDarkMode(isDarkModeEnable);
-    } finally {
-      _$_ThemeStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> setDarkMode(bool isDarkModeEnable) {
+    return _$setDarkModeAsyncAction
+        .run(() => super.setDarkMode(isDarkModeEnable));
   }
 
   @override

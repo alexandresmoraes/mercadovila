@@ -304,7 +304,7 @@ class AccountPageState extends State<AccountPage> {
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Modular.get<ThemeStore>().isDarkModeEnable
+                  leading: !Modular.get<ThemeStore>().isDarkModeEnable
                       ? Icon(
                           Icons.dark_mode_outlined,
                           color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
@@ -314,7 +314,7 @@ class AccountPageState extends State<AccountPage> {
                           color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                         ),
                   title: Text(
-                    "Tema",
+                    Modular.get<ThemeStore>().isDarkModeEnable ? "Light" : "Dark",
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
                 ),
