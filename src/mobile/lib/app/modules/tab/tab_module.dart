@@ -2,7 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/tab/tab_page.dart';
 
 class TabModule extends Module {
-  static const routeName = '/tab';
+  static const routeName = '/tab/';
 
   @override
   final List<Bind> binds = [

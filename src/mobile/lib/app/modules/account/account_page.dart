@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 
 class AccountPage extends StatefulWidget {
   final String title;
@@ -58,14 +60,14 @@ class AccountPageState extends State<AccountPage> {
               Positioned(
                 bottom: 45,
                 child: Text(
-                  "Daniela Escober",
+                  "Alexandre Moraes",
                   style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: Colors.white),
                 ),
               ),
               Positioned(
                 bottom: 25,
                 child: Text(
-                  "+91 9007210595 | d.escober@gmail.com",
+                  "+55 46999055421 | alexandresmoraes@me.com",
                   style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.white),
                 ),
               ),
@@ -110,11 +112,7 @@ class AccountPageState extends State<AccountPage> {
               children: [
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OrderListScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/account/accounts');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   minLeadingWidth: 30,
@@ -125,7 +123,7 @@ class AccountPageState extends State<AccountPage> {
                     size: 20,
                   ),
                   title: Text(
-                    "Minhas compras",
+                    "Contas de usuários",
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
                 ),

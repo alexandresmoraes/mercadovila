@@ -1,3 +1,4 @@
+import 'package:vilasesmo/app/modules/account/account_module.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/modules/splash/splash_module.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
@@ -29,5 +30,6 @@ class AppModule extends Module {
     ModuleRoute(Modular.initialRoute, module: SplashModule()),
     ModuleRoute(TabModule.routeName, module: TabModule()),
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
+    ModuleRoute(AccountModule.routeName, module: AccountModule()),
   ];
 }
