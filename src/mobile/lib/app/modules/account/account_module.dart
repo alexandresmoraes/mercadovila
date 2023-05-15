@@ -10,8 +10,8 @@ class AccountModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    // ChildRoute(Modular.initialRoute,
-    //     child: (_, args) => const AccountPage(), transition: TransitionType.fadeIn, duration: const Duration(seconds: 2)),
+    ChildRoute(Modular.initialRoute,
+        child: (_, args) => const AccountPage(), transition: TransitionType.fadeIn, duration: const Duration(seconds: 2)),
     ChildRoute('/accounts', child: (_, args) => const AccountsPage()),
   ];
 }
