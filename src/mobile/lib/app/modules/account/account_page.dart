@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/account/accounts_page.dart';
+import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountPage extends StatefulWidget {
   final String title;
@@ -298,13 +299,12 @@ class AccountPageState extends State<AccountPage> {
                 const Divider(),
                 ListTile(
                   onTap: () {
-                    // global.isDarkModeEnable = !global.isDarkModeEnable;
-                    // Phoenix.rebirth(context);
+                    Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable);
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: 1 == 1 // TODO
+                  leading: Modular.get<ThemeStore>().isDarkModeEnable
                       ? Icon(
                           Icons.dark_mode_outlined,
                           color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),

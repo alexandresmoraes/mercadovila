@@ -22,7 +22,7 @@ class SplashPageState extends State<SplashPage> {
       if (await authService.isAuthenticated()) {
         Modular.to.pushReplacementNamed(TabModule.routeName);
       } else {
-        Modular.to.pushReplacementNamed(LoginModule.routeName);
+        Modular.to.pushReplacementNamed(TabModule.routeName);
       }
     });
   }
