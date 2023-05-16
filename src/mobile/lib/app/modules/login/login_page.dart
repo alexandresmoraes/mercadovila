@@ -1,6 +1,8 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -57,7 +59,7 @@ class LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
           body: Container(
-        decoration: 1 == 1
+        decoration: Modular.get<ThemeStore>().isDarkModeEnable
             ? const BoxDecoration(
                 gradient: LinearGradient(
                   stops: [0, 0.65],

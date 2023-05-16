@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -244,7 +246,7 @@ class HomePageState extends State<HomePage> {
                 },
                 horizontalTitleGap: 2,
                 contentPadding: const EdgeInsets.all(0),
-                leading: 1 == 1 //TODO
+                leading: Modular.get<ThemeStore>().isDarkModeEnable
                     ? Image.asset(
                         'assets/google_dark.png',
                         height: 60,
@@ -269,13 +271,9 @@ class HomePageState extends State<HomePage> {
                           //   ),
                           // );
                         },
-                        icon: const Icon(
-                          MdiIcons.bellOutline,
-                          color: Colors.white,
-                        )),
-                    // icon: 1 == 1 // TODO
-                    //     ? Image.asset('assets/notificationIcon_white.png')
-                    //     : Image.asset('assets/notificationIcon_black.png')),
+                        icon: Modular.get<ThemeStore>().isDarkModeEnable
+                            ? Image.asset('assets/notificationIcon_white.png')
+                            : Image.asset('assets/notificationIcon_black.png')),
                     Container(
                       decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
@@ -342,7 +340,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                   activeColor: Theme.of(context).primaryColor,
-                  color: 1 == 1 ? Colors.white : Colors.grey, // TODO
+                  color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.grey,
                 ),
               ),
               Padding(
@@ -626,7 +624,7 @@ class HomePageState extends State<HomePage> {
                       ),
                       child: Icon(
                         Icons.add,
-                        color: 1 == 1 // TODO
+                        color: Modular.get<ThemeStore>().isDarkModeEnable
                             ? Theme.of(context).scaffoldBackgroundColor
                             : i % 3 == 1
                                 ? const Color(0XFF9EEEFF)

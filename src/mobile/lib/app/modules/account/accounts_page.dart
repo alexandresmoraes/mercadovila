@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountsPage extends StatefulWidget {
   final String title;
@@ -23,63 +25,63 @@ class Order {
 class AccountsPageState extends State<AccountsPage> {
   final List<Order> _orderListScreen = [
     Order(
-        name: "Fresh Mutton",
+        name: "Alexandre Moraes",
         amount: "15.08",
         datetime: "12:03 PM | 24.02.2021",
         orderId: "#51602",
         orderOption: "Re - order",
         orderStatus: "Delivered"),
     Order(
-        name: "Fresh Chicken",
+        name: "Angelina Moraes",
         amount: "11.08",
         datetime: "10:57 AM | 25.02.2021",
         orderId: "#202145",
         orderOption: "Cancel",
         orderStatus: "Scheduled"),
     Order(
-        name: "Fresh Lamb",
+        name: "Alice Moraes",
         amount: "12.08",
         datetime: "12:03 PM | 24.02.2021",
         orderId: "#202145",
         orderOption: "Track Order",
         orderStatus: "Ongoing"),
     Order(
-        name: "Fresh Mutton",
+        name: "Maria Valentina Moraes",
         amount: "15.08",
         datetime: "11:36 AM | 27.02.2021",
         orderId: "#412563",
         orderOption: "Re - order",
         orderStatus: "Cancelled"),
     Order(
-        name: "Fresh Chicken",
+        name: "Maria Clara Moraes",
         amount: "11.08",
         datetime: "12:03 PM | 26.02.2021",
         orderId: "#202145",
         orderOption: "Cancel",
         orderStatus: "Scheduled"),
     Order(
-        name: "Fresh Lamb",
+        name: "Aurora Maria Moraes",
         amount: "12.08",
         datetime: "12:03 PM | 28.02.2021",
         orderId: "#412563",
         orderOption: "Re - order",
         orderStatus: "Ongoing"),
     Order(
-        name: "Fresh Mutton",
+        name: "Angelo Moraes",
         amount: "15.08",
         datetime: "12:03 PM | 24.02.2021",
         orderId: "#51602",
         orderOption: "Re - order",
         orderStatus: "Delivered"),
     Order(
-        name: "Fresh Chicken",
+        name: "Alexandre Moraes",
         amount: "11.08",
         datetime: "10:57 AM | 25.02.2021",
         orderId: "#202145",
         orderOption: "Cancel",
         orderStatus: "Scheduled"),
     Order(
-        name: "Fresh Lamb",
+        name: "Alice Moraes",
         amount: "12.08",
         datetime: "12:03 PM | 24.02.2021",
         orderId: "#202145",
@@ -93,14 +95,14 @@ class AccountsPageState extends State<AccountsPage> {
         orderOption: "Re - order",
         orderStatus: "Cancelled"),
     Order(
-        name: "Fresh Chicken",
+        name: "Angelina Moraes",
         amount: "11.08",
         datetime: "12:03 PM | 26.02.2021",
         orderId: "#202145",
         orderOption: "Cancel",
         orderStatus: "Scheduled"),
     Order(
-        name: "Fresh Lamb",
+        name: "Angelo Moraes",
         amount: "12.08",
         datetime: "12:03 PM | 28.02.2021",
         orderId: "#412563",
@@ -127,56 +129,14 @@ class AccountsPageState extends State<AccountsPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text("Contas de usuários"),
+            title: const Text(
+              "Contas de usuários",
+            ),
           ),
           body: Column(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: SizedBox(
-              //     height: 50,
-              //     child: AppBar(
-              //       shape: const RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.all(
-              //           Radius.circular(10.0),
-              //         ),
-              //       ),
-              //       backgroundColor: 1 == 1 ? const Color(0xFF435276) : const Color(0xFFEDF2F6), // TODO
-              //       bottom: TabBar(
-              //         indicator: UnderlineTabIndicator(
-              //           borderSide: BorderSide(
-              //             width: 3.0,
-              //             color: 1 == 1 ? Theme.of(context).primaryColor : const Color(0xFFEF5656), // TODO
-              //           ),
-              //           insets: const EdgeInsets.symmetric(horizontal: 8.0),
-              //         ),
-              //         labelColor: 1 == 1 ? Colors.white : Colors.black,
-              //         indicatorWeight: 4,
-              //         unselectedLabelStyle:
-              //             const TextStyle(fontSize: 13, color: 1 == 1 ? Colors.white : Colors.black, fontWeight: FontWeight.w400), // TODO
-              //         labelStyle: const TextStyle(fontSize: 13, color: 1 == 1 ? Colors.white : Colors.black, fontWeight: FontWeight.bold), // TODO
-              //         indicatorSize: TabBarIndicatorSize.label,
-              //         indicatorColor: 1 == 1 ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
-              //         tabs: [
-              //           const Tab(
-              //               child: Text(
-              //             'Todas',
-              //           )),
-              //           Tab(
-              //               child: Text(
-              //             'Scheduled',
-              //           )),
-              //           Tab(
-              //               child: Text(
-              //             'Previous',
-              //           )),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
               Expanded(
-                child: _allOrders(),
+                child: _allUsers(),
               ),
             ],
           ),
@@ -185,7 +145,9 @@ class AccountsPageState extends State<AccountsPage> {
     );
   }
 
-  Widget _allOrders() {
+  Widget _allUsers() {
+    final ThemeStore _themeStore = Modular.get<ThemeStore>();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
@@ -212,11 +174,11 @@ class AccountsPageState extends State<AccountsPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
-                            color: 1 == 1 ? Color(0xFF373C58) : Color(0xFFF2F5F8), // TODO
+                            color: _themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
@@ -246,10 +208,30 @@ class AccountsPageState extends State<AccountsPage> {
                       ],
                     ),
                   ),
+                  // Row(
+                  //   children: const [
+                  //     CircleAvatar(
+                  //       radius: 31,
+                  //       backgroundColor: Colors.white,
+                  //       child: CircleAvatar(
+                  //         radius: 28,
+                  //         backgroundImage: AssetImage('assets/person.png'),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   ListTile(
                     visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
                     contentPadding: const EdgeInsets.all(0),
                     minLeadingWidth: 0,
+                    leading: const CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 21,
+                        backgroundImage: AssetImage('assets/person.png'),
+                      ),
+                    ),
                     title: Text(
                       _orderListScreen[index].name!,
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -258,22 +240,23 @@ class AccountsPageState extends State<AccountsPage> {
                       _orderListScreen[index].datetime!,
                       style: Theme.of(context).primaryTextTheme.displayMedium,
                     ),
-                    trailing: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "\$${_orderListScreen[index].amount}",
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                        ),
-                        Text(
-                          "${_orderListScreen[index].orderOption}",
-                          style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.red),
-                        ),
-                      ],
-                    ),
+                    // trailing: Column(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: [
+                    //     Text(
+                    //       "\$${_orderListScreen[index].amount}",
+                    //       style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    //     ),
+                    //     Text(
+                    //       "${_orderListScreen[index].orderOption}",
+                    //       style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.red),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
                   Divider(
-                    color: 1 == 1 ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color, // TODO
+                    color:
+                        _themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                   ),
                 ],
               ),

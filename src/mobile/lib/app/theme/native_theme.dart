@@ -84,6 +84,7 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
         iconTheme: IconThemeData(color: Colors.white),
         color: Colors.transparent,
         elevation: 0,
+        titleTextStyle: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
       ),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(Colors.white),
@@ -118,12 +119,12 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
         displayMedium: TextStyle(fontSize: 12, color: Color(0xFF9EA5A8), fontWeight: FontWeight.w400, fontFamily: 'PoppinsRegular'),
         displaySmall: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 0.5),
         headlineMedium: TextStyle(color: Colors.white70, fontSize: 17),
-        headlineSmall: TextStyle(
-            color: Color(0xFF332E38), fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.3, fontFamily: 'PoppinsMedium'), //home titles
-        titleLarge: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600), // home's card title
+        headlineSmall:
+            TextStyle(color: Color(0xFF332E38), fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.3, fontFamily: 'PoppinsMedium'),
+        titleLarge: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600),
         labelLarge: TextStyle(fontSize: 10, color: Color(0xFF41505B), fontWeight: FontWeight.w400, fontFamily: 'PoppinsRegular'),
-        titleMedium: TextStyle(fontSize: 14, color: Color(0xFF332E38), fontWeight: FontWeight.w500, fontFamily: 'PoppinsMedium'), //home screen
-        titleSmall: TextStyle(fontSize: 12, color: Color(0xFF332E38), fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight'), //home screen
+        titleMedium: TextStyle(fontSize: 14, color: Color(0xFF332E38), fontWeight: FontWeight.w500, fontFamily: 'PoppinsMedium'),
+        titleSmall: TextStyle(fontSize: 12, color: Color(0xFF332E38), fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight'),
         bodyLarge: TextStyle(fontSize: 14, color: Color(0xFF332E38), fontWeight: FontWeight.w500, letterSpacing: 0.3, fontFamily: 'PoppinsMedium'),
         labelSmall: TextStyle(fontSize: 14, color: Color(0xFF332E38), fontWeight: FontWeight.w400, fontFamily: 'PoppinsRegular'),
         bodySmall: TextStyle(color: Colors.white, fontSize: 12),
@@ -178,6 +179,7 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
         iconTheme: IconThemeData(color: Colors.black),
         color: Colors.transparent,
         elevation: 0,
+        titleTextStyle: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600),
       ),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(Colors.white),

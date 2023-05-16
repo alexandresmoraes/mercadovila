@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountPage extends StatefulWidget {
@@ -52,7 +51,7 @@ class AccountPageState extends State<AccountPage> {
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 53,
-                        backgroundImage: AssetImage('assets/person.jpg'),
+                        backgroundImage: AssetImage('assets/person.png'),
                       ),
                     ),
                   ),
@@ -116,16 +115,18 @@ class AccountPageState extends State<AccountPage> {
                     Modular.to.pushNamed('/account/accounts');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
-                    MdiIcons.shoppingOutline,
+                    MdiIcons.accountBoxMultipleOutline,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Contas de usuários",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Contas de usuários",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -137,16 +138,64 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
-                    MdiIcons.mapMarkerOutline,
+                    MdiIcons.cartArrowUp,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Endereços",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Vendas",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => AddressListScreen(a: widget.analytics, o: widget.observer),
+                    //   ),
+                    // );
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.cartArrowDown,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Pedidos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => AddressListScreen(a: widget.analytics, o: widget.observer),
+                    //   ),
+                    // );
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.shoppingOutline,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Minhas compras",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -158,16 +207,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.walletOutline,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Carteira",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Pagamentos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -179,16 +230,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.heartOutline,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Favoritos",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Favoritos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -200,16 +253,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.bellOutline,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Notificações",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Notificações",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -221,16 +276,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.walletMembership,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Recompensa",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Recompensa",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -242,16 +299,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.walletMembership,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
-                  title: Text(
-                    "Cupons",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Cupons",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -263,16 +322,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.accountConvert,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Programa fidelidade",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Programa fidelidade",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -284,38 +345,43 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.translate,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Idioma",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Idioma",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  onTap: () {
-                    Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable);
-                  },
+                SwitchListTile(
+                  value: Modular.get<ThemeStore>().isDarkModeEnable,
+                  onChanged: (val) => Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: !Modular.get<ThemeStore>().isDarkModeEnable
+                  secondary: !Modular.get<ThemeStore>().isDarkModeEnable
                       ? Icon(
                           Icons.dark_mode_outlined,
                           color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
                         )
                       : Icon(
                           Icons.light_mode,
                           color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
                         ),
-                  title: Text(
-                    Modular.get<ThemeStore>().isDarkModeEnable ? "Light" : "Dark",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      Modular.get<ThemeStore>().isDarkModeEnable ? "Light" : "Dark",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -327,30 +393,34 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     Icons.feedback_outlined,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Contato",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Contato",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.textBox,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Sobre nós",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Sobre nós",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -362,16 +432,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.cogOutline,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Configurações",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Configurações",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -383,16 +455,18 @@ class AccountPageState extends State<AccountPage> {
                     // );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
                     MdiIcons.logout,
                     size: 20,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                   ),
-                  title: Text(
-                    "Sair",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Sair",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
                   ),
                 ),
                 const SizedBox(
