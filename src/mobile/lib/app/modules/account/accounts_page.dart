@@ -147,7 +147,9 @@ class AccountsPageState extends State<AccountsPage> {
                 icon: const Icon(MdiIcons.magnify),
               ),
               IconButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  Modular.to.pushNamed('/account/edit');
+                },
                 icon: const Icon(MdiIcons.plus),
               ),
             ],
@@ -194,12 +196,7 @@ class AccountsPageState extends State<AccountsPage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                // TODO
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => OrderDetailScreen(a: widget.analytics, o: widget.observer),
-                //   ),
-                // );
+                Modular.to.pushNamed('/account/edit');
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,

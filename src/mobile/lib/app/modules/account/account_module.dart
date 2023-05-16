@@ -2,6 +2,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/account/account_page.dart';
 import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 
+import 'account_edit_page.dart';
+
 class AccountModule extends Module {
   static const routeName = '/account/';
 
@@ -13,5 +15,6 @@ class AccountModule extends Module {
     ChildRoute(Modular.initialRoute,
         child: (_, args) => const AccountPage(), transition: TransitionType.fadeIn, duration: const Duration(seconds: 2)),
     ChildRoute('/accounts', child: (_, args) => const AccountsPage()),
+    ChildRoute('/edit', child: (_, args) => const AccountEditPage()),
   ];
 }
