@@ -16,98 +16,103 @@ class Order {
   String? name;
   String? orderStatus;
 
-  String? datetime;
+  String? email;
   String? orderOption;
   String? amount;
-  Order({this.amount, this.name, this.datetime, this.orderId, this.orderOption, this.orderStatus});
+  Order({this.amount, this.name, this.email, this.orderId, this.orderOption, this.orderStatus});
 }
 
 class AccountsPageState extends State<AccountsPage> {
+  bool isSearchVisibled = false;
+
   final List<Order> _orderListScreen = [
     Order(
-        name: "Alexandre Moraes",
-        amount: "15.08",
-        datetime: "12:03 PM | 24.02.2021",
-        orderId: "#51602",
-        orderOption: "Re - order",
-        orderStatus: "Delivered"),
+      name: "Alexandre Moraes",
+      amount: "15.08",
+      email: "alexandresmoraes@me.com",
+      orderId: "701b6b1f-e600-4553-826d-445bb99ecba8",
+      orderOption: "Re - order",
+      orderStatus: "Inativo",
+    ),
     Order(
-        name: "Angelina Moraes",
-        amount: "11.08",
-        datetime: "10:57 AM | 25.02.2021",
-        orderId: "#202145",
-        orderOption: "Cancel",
-        orderStatus: "Scheduled"),
+      name: "Angelina Moraes",
+      amount: "11.08",
+      email: "alexandresmoraes@me.com",
+      orderId: "b1888d24-c6e9-49f4-8a93-ae8be90b3471",
+      orderOption: "Cancel",
+      orderStatus: "Ativo",
+    ),
     Order(
-        name: "Alice Moraes",
-        amount: "12.08",
-        datetime: "12:03 PM | 24.02.2021",
-        orderId: "#202145",
-        orderOption: "Track Order",
-        orderStatus: "Ongoing"),
+      name: "Alice Moraes",
+      amount: "12.08",
+      email: "alexandresmoraes@me.com",
+      orderId: "0d15726d-997a-4006-9914-2cf40b45c20d",
+      orderOption: "Track Order",
+      orderStatus: "Ativo",
+    ),
     Order(
         name: "Maria Valentina Moraes",
         amount: "15.08",
-        datetime: "11:36 AM | 27.02.2021",
-        orderId: "#412563",
+        email: "alexandresmoraes@me.com",
+        orderId: "23332f0b-353d-4fba-9a78-339a3f7c595f",
         orderOption: "Re - order",
-        orderStatus: "Cancelled"),
+        orderStatus: "Inativo"),
     Order(
         name: "Maria Clara Moraes",
         amount: "11.08",
-        datetime: "12:03 PM | 26.02.2021",
-        orderId: "#202145",
+        email: "alexandresmoraes@me.com",
+        orderId: "6c0385b5-2222-4457-b9fd-bf1a17268309",
         orderOption: "Cancel",
-        orderStatus: "Scheduled"),
+        orderStatus: "Ativo"),
     Order(
         name: "Aurora Maria Moraes",
         amount: "12.08",
-        datetime: "12:03 PM | 28.02.2021",
-        orderId: "#412563",
+        email: "alexandresmoraes@me.com",
+        orderId: "2dbc4d80-1059-41c0-a113-7dbfffe60547",
         orderOption: "Re - order",
-        orderStatus: "Ongoing"),
+        orderStatus: "Ativo"),
     Order(
         name: "Angelo Moraes",
         amount: "15.08",
-        datetime: "12:03 PM | 24.02.2021",
-        orderId: "#51602",
+        email: "alexandresmoraes@me.com",
+        orderId: "5f0a8ca0-3f12-4691-bc3d-2a29457ec9a9",
         orderOption: "Re - order",
-        orderStatus: "Delivered"),
+        orderStatus: "Ativo"),
     Order(
         name: "Alexandre Moraes",
         amount: "11.08",
-        datetime: "10:57 AM | 25.02.2021",
-        orderId: "#202145",
+        email: "alexandresmoraes@me.com",
+        orderId: "9edc5278-17f5-4fb9-97ba-e04a4dc95dce",
         orderOption: "Cancel",
-        orderStatus: "Scheduled"),
+        orderStatus: "Ativo"),
     Order(
         name: "Alice Moraes",
         amount: "12.08",
-        datetime: "12:03 PM | 24.02.2021",
-        orderId: "#202145",
+        email: "alexandresmoraes@me.com",
+        orderId: "76e90fc7-f3ce-45f5-91d0-7cebc74b205f",
         orderOption: "Track Order",
-        orderStatus: "Ongoing"),
+        orderStatus: "Ativo"),
     Order(
         name: "Fresh Mutton",
         amount: "15.08",
-        datetime: "11:36 AM | 27.02.2021",
-        orderId: "#412563",
+        email: "alexandresmoraes@me.com",
+        orderId: "24918423-ee25-488e-b09a-ea3f731bb825",
         orderOption: "Re - order",
-        orderStatus: "Cancelled"),
+        orderStatus: "Inativo"),
     Order(
         name: "Angelina Moraes",
         amount: "11.08",
-        datetime: "12:03 PM | 26.02.2021",
-        orderId: "#202145",
+        email: "alexandresmoraes@me.com",
+        orderId: "656d1814-8cc2-435d-8b38-becbefc7dc93",
         orderOption: "Cancel",
-        orderStatus: "Scheduled"),
+        orderStatus: "Ativo"),
     Order(
         name: "Angelo Moraes",
         amount: "12.08",
-        datetime: "12:03 PM | 28.02.2021",
-        orderId: "#412563",
+        email: "alexandresmoraes@me.com",
+        orderId: "93f04dac-ce75-46a9-b0ec-30a68e5724ae",
         orderOption: "Re - order",
-        orderStatus: "Ongoing"),
+        orderStatus: "Ativo"),
   ];
   @override
   Widget build(BuildContext context) {
@@ -121,7 +126,7 @@ class AccountsPageState extends State<AccountsPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
               onTap: () {
-                Navigator.of(context).pop();
+                Modular.to.pop();
               },
               child: const Align(
                 alignment: Alignment.center,
@@ -132,9 +137,42 @@ class AccountsPageState extends State<AccountsPage> {
             title: const Text(
               "Contas de usuários",
             ),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  setState(() {
+                    isSearchVisibled = !isSearchVisibled;
+                  });
+                },
+                icon: const Icon(MdiIcons.magnify),
+              ),
+              IconButton(
+                onPressed: () async {},
+                icon: const Icon(MdiIcons.plus),
+              ),
+            ],
           ),
           body: Column(
             children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                height: isSearchVisibled ? 70 : 0,
+                child: Container(
+                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(),
+                  child: TextFormField(
+                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    decoration: const InputDecoration(
+                      hintText: 'Buscar por nome de usuários ou email',
+                      prefixIcon: Icon(
+                        MdiIcons.magnify,
+                      ),
+                      contentPadding: EdgeInsets.only(top: 10),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: _allUsers(),
               ),
@@ -146,7 +184,7 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   Widget _allUsers() {
-    final ThemeStore _themeStore = Modular.get<ThemeStore>();
+    final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -178,7 +216,7 @@ class AccountsPageState extends State<AccountsPage> {
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
-                            color: _themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                            color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
@@ -187,17 +225,13 @@ class AccountsPageState extends State<AccountsPage> {
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        Icon(
-                          _orderListScreen[index].orderStatus == 'Cancelled' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
-                          size: 20,
-                          color: _orderListScreen[index].orderStatus == 'Cancelled'
-                              ? Colors.red
-                              : _orderListScreen[index].orderStatus == 'Delivered'
-                                  ? Colors.greenAccent
-                                  : _orderListScreen[index].orderStatus == 'Ongoing'
-                                      ? Colors.blue
-                                      : Theme.of(context).primaryColorLight,
-                        ),
+                        Icon(_orderListScreen[index].orderStatus == 'Inativo' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                            size: 20,
+                            color: _orderListScreen[index].orderStatus == 'Inativo'
+                                ? Colors.red
+                                : index.floor().isEven
+                                    ? Colors.greenAccent
+                                    : Colors.blue),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
@@ -208,18 +242,6 @@ class AccountsPageState extends State<AccountsPage> {
                       ],
                     ),
                   ),
-                  // Row(
-                  //   children: const [
-                  //     CircleAvatar(
-                  //       radius: 31,
-                  //       backgroundColor: Colors.white,
-                  //       child: CircleAvatar(
-                  //         radius: 28,
-                  //         backgroundImage: AssetImage('assets/person.png'),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   ListTile(
                     visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
                     contentPadding: const EdgeInsets.all(0),
@@ -237,26 +259,22 @@ class AccountsPageState extends State<AccountsPage> {
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                     subtitle: Text(
-                      _orderListScreen[index].datetime!,
+                      _orderListScreen[index].email!,
                       style: Theme.of(context).primaryTextTheme.displayMedium,
                     ),
-                    // trailing: Column(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     Text(
-                    //       "\$${_orderListScreen[index].amount}",
-                    //       style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    //     ),
-                    //     Text(
-                    //       "${_orderListScreen[index].orderOption}",
-                    //       style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.red),
-                    //     ),
-                    //   ],
-                    // ),
+                    trailing: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "R\$ ${_orderListScreen[index].amount}",
+                          style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
+                        ),
+                      ],
+                    ),
                   ),
                   Divider(
                     color:
-                        _themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                        themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                   ),
                 ],
               ),

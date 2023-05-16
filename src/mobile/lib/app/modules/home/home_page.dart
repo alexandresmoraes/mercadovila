@@ -292,7 +292,7 @@ class HomePageState extends State<HomePage> {
                               left: 5,
                             ),
                             child: Text(
-                              '-0,00',
+                              ' 15,59',
                               style: Theme.of(context).primaryTextTheme.bodySmall,
                             ),
                           ),

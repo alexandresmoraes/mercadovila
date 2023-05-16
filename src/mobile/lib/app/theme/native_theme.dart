@@ -179,7 +179,7 @@ ThemeData nativeTheme({required bool isDarkModeEnable}) {
         iconTheme: IconThemeData(color: Colors.black),
         color: Colors.transparent,
         elevation: 0,
-        titleTextStyle: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600),
+        titleTextStyle: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600, fontFamily: 'PoppinsRegular'),
       ),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(Colors.white),
