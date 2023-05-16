@@ -10,15 +10,7 @@ class AccountEditPage extends StatefulWidget {
 }
 
 class AccountEditPageState extends State<AccountEditPage> {
-  final _cName = TextEditingController();
-  final _cNameOnCard = TextEditingController();
-  final _cEmail = TextEditingController();
-  final _cGender = TextEditingController();
-  final _fName = FocusNode();
-
-  final _fNameOnCard = FocusNode();
-  final _fEmail = FocusNode();
-  final _fGender = FocusNode();
+  bool isAdmin = false;
   AccountEditPageState() : super();
 
   @override
@@ -29,7 +21,7 @@ class AccountEditPageState extends State<AccountEditPage> {
             Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Editar conta de usuário"),
+          title: const Text("Editando usuário"),
         ),
         body: Column(
           mainAxisSize: MainAxisSize.min,
@@ -89,6 +81,25 @@ class AccountEditPageState extends State<AccountEditPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        "Nome completo",
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                        margin: const EdgeInsets.only(top: 5, bottom: 15),
+                        padding: const EdgeInsets.only(),
+                        child: TextFormField(
+                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          decoration: InputDecoration(
+                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                ? Theme.of(context).inputDecorationTheme.fillColor
+                                : Theme.of(context).scaffoldBackgroundColor,
+                            hintText: 'Alexandre Moraes',
+                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                          ),
+                        ),
+                      ),
+                      Text(
                         "Nome de usuário",
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                       ),
@@ -97,14 +108,12 @@ class AccountEditPageState extends State<AccountEditPage> {
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
                         child: TextFormField(
-                          controller: _cName,
-                          focusNode: _fName,
                           style: Theme.of(context).primaryTextTheme.bodyLarge,
                           decoration: InputDecoration(
                             fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                 ? Theme.of(context).inputDecorationTheme.fillColor
                                 : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'Alexandre Moraes',
+                            hintText: 'alexandre',
                             contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                           ),
                         ),
@@ -118,8 +127,6 @@ class AccountEditPageState extends State<AccountEditPage> {
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
                         child: TextFormField(
-                          controller: _cNameOnCard,
-                          focusNode: _fNameOnCard,
                           style: Theme.of(context).primaryTextTheme.bodyLarge,
                           decoration: InputDecoration(
                             fillColor: Modular.get<ThemeStore>().isDarkModeEnable
@@ -139,8 +146,6 @@ class AccountEditPageState extends State<AccountEditPage> {
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
                         child: TextFormField(
-                          controller: _cEmail,
-                          focusNode: _fEmail,
                           style: Theme.of(context).primaryTextTheme.bodyLarge,
                           decoration: InputDecoration(
                             fillColor: Modular.get<ThemeStore>().isDarkModeEnable
@@ -151,27 +156,17 @@ class AccountEditPageState extends State<AccountEditPage> {
                           ),
                         ),
                       ),
-                      Text(
-                        "Gênero",
-                        style: Theme.of(context).primaryTextTheme.displayMedium,
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
-                        margin: const EdgeInsets.only(top: 5, bottom: 15),
-                        padding: const EdgeInsets.only(),
-                        child: TextFormField(
-                          controller: _cGender,
-                          focusNode: _fGender,
-                          keyboardType: TextInputType.number,
-                          maxLength: 3,
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          decoration: InputDecoration(
-                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'Masculino',
-                            counterText: '',
-                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      Card(
+                        child: SwitchListTile(
+                          value: isAdmin,
+                          onChanged: (val) {
+                            setState(() {
+                              isAdmin = !isAdmin;
+                            });
+                          },
+                          title: Text(
+                            "Admin",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
                           ),
                         ),
                       ),
