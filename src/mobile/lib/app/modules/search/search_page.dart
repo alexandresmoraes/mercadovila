@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/cart/cart_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
@@ -150,28 +149,12 @@ class SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            // leading: InkWell(
-            //   customBorder: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(30),
-            //   ),
-            //   onTap: () {
-            //     Navigator.of(context).pop();
-            //   },
-            //   child: const Align(
-            //     alignment: Alignment.center,
-            //     child: Icon(MdiIcons.arrowLeft),
-            //   ),
-            // ),
             centerTitle: true,
             title: const Text("Todos"),
             actions: [
               IconButton(
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => FilterScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/search/search-filter');
                   },
                   icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
             ],

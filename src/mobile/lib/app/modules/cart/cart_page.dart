@@ -48,10 +48,8 @@ class CartPageState extends State<CartPage> {
   int? vendorId;
   String selectedTimeSlot = '';
   String? barberName;
-  int? _selectedAddress = 0;
   int _currentIndex = 0;
   int? selectedCoupon;
-  DateTime _focusedDay = DateTime.now();
   PageController? _pageController;
   ScrollController? _scrollController;
   int? _selectedPaymentOption = 3;

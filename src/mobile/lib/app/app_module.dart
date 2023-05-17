@@ -1,5 +1,6 @@
 import 'package:vilasesmo/app/modules/cart/cart_module.dart';
 import 'package:vilasesmo/app/modules/cart/cart_store.dart';
+import 'package:vilasesmo/app/modules/search/search_module.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/modules/account/account_module.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
@@ -37,5 +38,6 @@ class AppModule extends Module {
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
     ModuleRoute(AccountModule.routeName, module: AccountModule()),
     ModuleRoute(CartModule.routeName, module: CartModule()),
+    ModuleRoute(SearchModule.routeName, module: SearchModule()),
   ];
 }
