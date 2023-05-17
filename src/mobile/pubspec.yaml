@@ -24,8 +24,7 @@ dependencies:
   dartz: ^0.10.1
   shared_preferences: ^2.1.1
   font_awesome_flutter: ^10.4.0
-  flare_flutter: ^3.0.2  
-  table_calendar: ^3.0.9
+  flare_flutter: ^3.0.2
   
 dev_dependencies:
   flutter_test:

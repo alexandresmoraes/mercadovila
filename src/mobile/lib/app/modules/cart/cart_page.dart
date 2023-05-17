@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class CartPage extends StatefulWidget {
@@ -59,8 +58,6 @@ class CartPageState extends State<CartPage> {
   DateTime? selectedDate;
   bool step1Done = false;
   bool step2Done = false;
-  bool step3Done = false;
-  bool step4Done = false;
   TextEditingController textController1 = TextEditingController();
   TextEditingController textController2 = TextEditingController();
   List<Address> addressList = [
@@ -110,8 +107,8 @@ class CartPageState extends State<CartPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    List<String> orderProcess = ['Cart', 'End', 'Time', 'Pay'];
-    List<String> orderProcessText = ['Cart', 'end', 'Time', 'Pay'];
+    List<String> orderProcess = ['Carrinho', 'Pagamento'];
+    List<String> orderProcessText = ['Carrinho', 'Pagamento'];
 
     return WillPopScope(
       onWillPop: () async {
@@ -131,14 +128,12 @@ class CartPageState extends State<CartPage> {
                   if (_currentIndex == 0) {
                     Navigator.of(context).pop();
                   } else {
-                    _pageController!.animateToPage(_currentIndex - 1, duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     if (_currentIndex == 0) {
                       step1Done = false;
                     } else if (_currentIndex == 1) {
                       step2Done = false;
-                    } else if (_currentIndex == 2) {
-                      step3Done = false;
-                    } else {}
+                    }
 
                     setState(() {});
                   }
@@ -204,7 +199,7 @@ class CartPageState extends State<CartPage> {
                                       ),
                                     ],
                                   ),
-                                  i == 3
+                                  i == 1
                                       ? const SizedBox()
                                       : Container(
                                           height: 2,
@@ -221,9 +216,9 @@ class CartPageState extends State<CartPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? Color(0xFF4A4352) : Color(0xFFBcc8d2),
+                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i ? Color(0xFF4A4352) : Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -283,8 +278,6 @@ class CartPageState extends State<CartPage> {
                   },
                   children: [
                     _cartWidget(),
-                    _addressWidget(),
-                    _timeWidget(),
                     _payment(),
                   ],
                 ),
@@ -950,466 +943,6 @@ class CartPageState extends State<CartPage> {
     ));
   }
 
-  Widget _addressWidget() {
-    return SingleChildScrollView(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => AddAddressScreen(a: widget.analytics, o: widget.observer),
-              //   ),
-              // );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(top: 20),
-              padding: const EdgeInsets.all(2),
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Novo endereço",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w400),
-                  )),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: RadioListTile(
-              contentPadding: EdgeInsets.zero,
-              value: 0,
-              groupValue: _selectedAddress,
-              onChanged: (dynamic val) {
-                _selectedAddress = val;
-                setState(() {});
-              },
-              title: Text(
-                addressList[0].title!,
-                style: _selectedAddress == 0
-                    ? Theme.of(context).primaryTextTheme.bodyLarge
-                    : Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.displayMedium!.color),
-              ),
-              subtitle: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${addressList[0].address}",
-                    style: _selectedAddress == 0
-                        ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Theme.of(context).primaryTextTheme.bodyLarge!.color)
-                        : Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => AddAddressScreen(a: widget.analytics, o: widget.observer),
-                            //   ),
-                            // );
-                          },
-                          icon: Image.asset('assets/edit.png')),
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).primaryColor,
-                          )),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: RadioListTile(
-              contentPadding: EdgeInsets.zero,
-              value: 1,
-              groupValue: _selectedAddress,
-              onChanged: (dynamic val) {
-                _selectedAddress = val;
-                setState(() {});
-              },
-              title: Text(
-                addressList[1].title!,
-                style: _selectedAddress == 1
-                    ? Theme.of(context).primaryTextTheme.bodyLarge
-                    : Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.displayMedium!.color),
-              ),
-              subtitle: Text(
-                "${addressList[1].address}",
-                style: _selectedAddress == 1
-                    ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Theme.of(context).primaryTextTheme.bodyLarge!.color)
-                    : Theme.of(context).primaryTextTheme.displayMedium,
-              ),
-            ),
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: RadioListTile(
-              contentPadding: EdgeInsets.zero,
-              value: 2,
-              groupValue: _selectedAddress,
-              onChanged: (dynamic val) {
-                _selectedAddress = val;
-                setState(() {});
-              },
-              title: Text(
-                addressList[2].title!,
-                style: _selectedAddress == 2
-                    ? Theme.of(context).primaryTextTheme.bodyLarge
-                    : Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.displayMedium!.color),
-              ),
-              subtitle: Text(
-                "${addressList[2].address}",
-                style: _selectedAddress == 2
-                    ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Theme.of(context).primaryTextTheme.bodyLarge!.color)
-                    : Theme.of(context).primaryTextTheme.displayMedium,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
-
-  Widget _timeWidget() {
-    return SingleChildScrollView(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 5,
-              bottom: 7,
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Selecionar data',
-                style: Theme.of(context).primaryTextTheme.headlineSmall,
-              ),
-            ),
-          ),
-          Modular.get<ThemeStore>().isDarkModeEnable
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: TableCalendar(
-                    firstDay: DateTime.now(),
-                    lastDay: DateTime.now().add(Duration(days: 365)),
-                    focusedDay: _focusedDay,
-                    calendarFormat: CalendarFormat.month,
-                    availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-                    daysOfWeekHeight: 40,
-                    daysOfWeekStyle: const DaysOfWeekStyle(
-                      weekdayStyle: TextStyle(color: Colors.white60),
-                      weekendStyle: TextStyle(color: Colors.white60),
-                    ),
-                    rowHeight: 35,
-                    calendarStyle: const CalendarStyle(
-                        todayTextStyle: TextStyle(color: Colors.white),
-                        todayDecoration: BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                        selectedTextStyle: TextStyle(color: Colors.white),
-                        selectedDecoration: BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                        rangeStartTextStyle: TextStyle(color: Colors.white60),
-                        rangeEndTextStyle: TextStyle(color: Colors.white60),
-                        disabledTextStyle: TextStyle(color: Colors.white60),
-                        defaultTextStyle: TextStyle(color: Colors.white60),
-                        outsideTextStyle: TextStyle(color: Colors.white60),
-                        holidayTextStyle: TextStyle(color: Colors.white60),
-                        withinRangeTextStyle: TextStyle(color: Colors.white60),
-                        weekendTextStyle: TextStyle(color: Colors.white60)),
-                    headerStyle: const HeaderStyle(
-                      formatButtonTextStyle: TextStyle(color: Colors.white60),
-                      titleCentered: true,
-                      titleTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      headerPadding: EdgeInsets.all(0),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    selectedDayPredicate: (day) {
-                      return isSameDay(selectedDate, day);
-                    },
-                    onDaySelected: (selectedDay, focusedDay) {
-                      if (!isSameDay(selectedDate, selectedDay)) {
-                        setState(() {
-                          selectedDate = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      }
-                    },
-                    onFormatChanged: (format) {},
-                    onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
-                    },
-                  ),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: TableCalendar(
-                    firstDay: DateTime.now(),
-                    lastDay: DateTime.now().add(const Duration(days: 365)),
-                    focusedDay: _focusedDay,
-                    calendarFormat: CalendarFormat.month,
-                    availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-                    daysOfWeekHeight: 40,
-                    daysOfWeekStyle: const DaysOfWeekStyle(
-                      weekdayStyle: TextStyle(color: Colors.black87),
-                      weekendStyle: TextStyle(color: Colors.black87),
-                    ),
-                    rowHeight: 50,
-                    calendarStyle: const CalendarStyle(
-                        todayTextStyle: TextStyle(color: Colors.blue),
-                        todayDecoration: BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                        selectedTextStyle: TextStyle(color: Colors.white),
-                        selectedDecoration: BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                        rangeStartTextStyle: TextStyle(color: Colors.black87),
-                        rangeEndTextStyle: TextStyle(color: Colors.black87),
-                        disabledTextStyle: TextStyle(color: Colors.black87),
-                        defaultTextStyle: TextStyle(color: Colors.black87),
-                        outsideTextStyle: TextStyle(color: Colors.black87),
-                        holidayTextStyle: TextStyle(color: Colors.black87),
-                        withinRangeTextStyle: TextStyle(color: Colors.black87),
-                        weekendTextStyle: TextStyle(color: Colors.black87)),
-                    headerStyle: const HeaderStyle(
-                      formatButtonTextStyle: TextStyle(color: Colors.black87),
-                      titleCentered: true,
-                      titleTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      leftChevronIcon: Icon(
-                        Icons.chevron_left,
-                        color: Colors.white,
-                      ),
-                      rightChevronIcon: Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      ),
-                      headerPadding: EdgeInsets.all(0),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    selectedDayPredicate: (day) {
-                      return isSameDay(selectedDate, day);
-                    },
-                    onDaySelected: (selectedDay, focusedDay) {
-                      if (!isSameDay(selectedDate, selectedDay)) {
-                        setState(() {
-                          selectedDate = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      }
-                    },
-                    onFormatChanged: (format) {},
-                    onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
-                    },
-                  ),
-                ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 5,
-              bottom: 7,
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Selecione o slot',
-                style: Theme.of(context).primaryTextTheme.headlineSmall,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.all(4),
-                  child: Text(
-                    "8 AM - 12 PM",
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                        border: Border.all(color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.transparent : Colors.blue),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.all(4),
-                      child: Text(
-                        "12 PM - 4 PM",
-                        style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Container(
-                        height: 15,
-                        width: 22,
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.check,
-                          size: 10,
-                          color: Colors.white,
-                        )),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.all(4),
-                  child: Text(
-                    "8 AM - 12 PM",
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 5,
-              bottom: 7,
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Mention time',
-                style: Theme.of(context).primaryTextTheme.headlineSmall,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.only(top: 0),
-              padding: const EdgeInsets.all(2),
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Instant delivery",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
-
   Widget _payment() {
     return SingleChildScrollView(
       child: Padding(
@@ -1431,9 +964,9 @@ class CartPageState extends State<CartPage> {
               ),
             ),
             ListTile(
-              visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
               minLeadingWidth: 30,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               leading: Icon(
                 MdiIcons.brightnessPercent,
                 size: 20,
