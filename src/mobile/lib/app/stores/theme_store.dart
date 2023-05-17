@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utility/services/local_storage_service.dart';
 

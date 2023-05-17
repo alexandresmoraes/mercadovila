@@ -129,7 +129,7 @@ class LoginPageState extends State<LoginPage> {
                     //   animationType = 'idle';
                     // });
 
-                    if (true) {
+                    if (1 == 1) {
                       setState(() {
                         animationType = 'success';
                       });

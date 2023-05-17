@@ -4,7 +4,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/account/account_page.dart';
 import 'package:vilasesmo/app/modules/home/home_page.dart';
-import 'package:vilasesmo/app/modules/login/login_page.dart';
 import 'package:vilasesmo/app/modules/search/search_page.dart';
 
 class TabPage extends StatefulWidget {
