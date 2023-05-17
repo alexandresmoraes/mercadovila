@@ -1,3 +1,5 @@
+import 'package:vilasesmo/app/modules/cart/cart_module.dart';
+import 'package:vilasesmo/app/modules/cart/cart_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/modules/account/account_module.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
@@ -13,6 +15,7 @@ import 'modules/tab/tab_module.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
+    Bind.lazySingleton((i) => CartStore()),
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind(
@@ -33,5 +36,6 @@ class AppModule extends Module {
     ModuleRoute(TabModule.routeName, module: TabModule()),
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
     ModuleRoute(AccountModule.routeName, module: AccountModule()),
+    ModuleRoute(CartModule.routeName, module: CartModule()),
   ];
 }

@@ -78,11 +78,7 @@ class AccountPageState extends State<AccountPage> {
                     Radius.circular(40),
                   ),
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ProfileEditScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/account/edit');
                   },
                   child: Container(
                     height: 40,

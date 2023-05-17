@@ -4,9 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/account/account_page.dart';
 import 'package:vilasesmo/app/modules/home/home_page.dart';
-import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/modules/login/login_page.dart';
-import 'package:vilasesmo/app/utility/services/interfaces/i_auth_service.dart';
+import 'package:vilasesmo/app/modules/search/search_page.dart';
 
 class TabPage extends StatefulWidget {
   final String title;
@@ -70,11 +69,7 @@ class _TabPageState extends State<TabPage> {
             elevation: 0,
             backgroundColor: const Color(0xFFFA692C),
             onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     // builder: (context) => CheckoutScreen(a: widget.analytics, o: widget.observer),
-              //   ),
-              // );
+              Modular.to.pushNamed('/cart/');
             },
             child: Icon(
               MdiIcons.shopping,
@@ -88,7 +83,7 @@ class _TabPageState extends State<TabPage> {
 
   List<Widget> _screens() => [
         const HomePage(),
-        const LoginPage(),
+        const SearchPage(),
         const AccountPage(),
         const AccountPage(),
       ];
