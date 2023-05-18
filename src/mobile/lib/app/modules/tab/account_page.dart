@@ -165,29 +165,6 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => WalletScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.listBoxOutline,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Lista de compras",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
                     Modular.to.pushNamed('/pedidos/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -201,6 +178,25 @@ class AccountPageState extends State<AccountPage> {
                     offset: const Offset(-10, 0),
                     child: Text(
                       "Pedidos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Modular.to.pushNamed('/lista-compras/');
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.listBoxOutline,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Lista de compras",
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),
@@ -245,11 +241,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => WishListScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/favoritos/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -285,98 +277,6 @@ class AccountPageState extends State<AccountPage> {
                     ),
                   ),
                 ),
-                ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => MemberShipScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.walletMembership,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Recompensa",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => RewardScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.walletMembership,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Cupons",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ReferAndEarnScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.accountConvert,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Programa fidelidade",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ChooseLanguageScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.translate,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Idioma",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
                 const Divider(),
                 SwitchListTile(
                   value: Modular.get<ThemeStore>().isDarkModeEnable,
@@ -403,29 +303,6 @@ class AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ContactUsScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    Icons.feedback_outlined,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Contato",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
@@ -443,34 +320,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => SettingScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.cogOutline,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Configurações",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => LogInScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/login/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),

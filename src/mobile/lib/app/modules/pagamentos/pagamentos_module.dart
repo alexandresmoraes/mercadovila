@@ -10,6 +10,6 @@ class PagamentosModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute,
-        child: (_, args) => const PagamentosPage(), transition: TransitionType.leftToRight, duration: const Duration(milliseconds: 500)),
+        child: (_, args) => const PagamentosPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
   ];
 }

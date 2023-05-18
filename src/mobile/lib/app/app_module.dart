@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
+import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
 import 'package:vilasesmo/app/modules/notifications/notifications_module.dart';
 import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
@@ -53,5 +55,7 @@ class AppModule extends Module {
     ModuleRoute(PedidosModule.routeName, module: PedidosModule()),
     ModuleRoute(MinhasComprasModule.routeName, module: MinhasComprasModule()),
     ModuleRoute(PagamentosModule.routeName, module: PagamentosModule()),
+    ModuleRoute(FavoritosModule.routeName, module: FavoritosModule()),
+    ModuleRoute(ListaComprasModule.routeName, module: ListaComprasModule()),
   ];
 }

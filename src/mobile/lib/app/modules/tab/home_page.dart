@@ -651,7 +651,7 @@ class HomePageState extends State<HomePage> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - homeScreen.dart - _topSellingWidgetList():$e");
+        print("Exception - home_page.dart - _topSellingWidgetList():$e");
       }
       return widgetList;
     }
@@ -765,7 +765,7 @@ class HomePageState extends State<HomePage> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - homeScreen.dart - _allCategoryWidgetList():$e");
+        print("Exception - home_page.dart - _allCategoryWidgetList():$e");
       }
       return widgetList;
     }
@@ -904,7 +904,7 @@ class HomePageState extends State<HomePage> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - homeScreen.dart - _spotLightWidgetList():$e");
+        print("Exception - home_page.dart - _spotLightWidgetList():$e");
       }
       return widgetList;
     }

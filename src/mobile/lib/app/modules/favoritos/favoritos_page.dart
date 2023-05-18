@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
+import 'package:vilasesmo/app/modules/tab/home_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class ProdutosPage extends StatefulWidget {
+class FavoritosPage extends StatefulWidget {
   final String title;
-  const ProdutosPage({Key? key, this.title = 'Produtos'}) : super(key: key);
+  const FavoritosPage({Key? key, this.title = 'Favoritos'}) : super(key: key);
   @override
-  ProdutosPageState createState() => ProdutosPageState();
+  FavoritosPageState createState() => FavoritosPageState();
 }
 
-class ProdutosPageState extends State<ProdutosPage> {
-  ProdutosPageState() : super();
+class FavoritosPageState extends State<FavoritosPage> {
+  FavoritosPageState() : super();
 
   final List<Product> _productList = [
     Product(
@@ -101,7 +101,7 @@ class ProdutosPageState extends State<ProdutosPage> {
               child: Icon(MdiIcons.arrowLeft),
             ),
           ),
-          title: const Text("Produtos"),
+          title: const Text("Favoritos"),
           actions: [
             IconButton(
                 onPressed: () async {

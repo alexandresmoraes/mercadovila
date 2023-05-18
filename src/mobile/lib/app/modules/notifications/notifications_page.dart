@@ -96,6 +96,12 @@ class NotificationsPageState extends State<NotificationsPage> {
           ),
           centerTitle: true,
           title: const Text("Notificações"),
+          actions: [
+            IconButton(
+              onPressed: () async {},
+              icon: const Icon(MdiIcons.plus),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),

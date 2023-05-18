@@ -7,7 +7,7 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class VendasPage extends StatefulWidget {
   final String title;
-  const VendasPage({Key? key, this.title = 'OrdersPage'}) : super(key: key);
+  const VendasPage({Key? key, this.title = 'Vendas'}) : super(key: key);
   @override
   VendasPageState createState() => VendasPageState();
 }
@@ -343,7 +343,7 @@ class VendasPageState extends State<VendasPage> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - orders_page.dart - _allCategoryWidgetList():$e");
+        print("Exception - vendas_page.dart - _allCategoryWidgetList():$e");
       }
       return widgetList;
     }

@@ -6,15 +6,15 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class ProdutosPage extends StatefulWidget {
+class ListaComprasPage extends StatefulWidget {
   final String title;
-  const ProdutosPage({Key? key, this.title = 'Produtos'}) : super(key: key);
+  const ListaComprasPage({Key? key, this.title = 'ListaComprasPage'}) : super(key: key);
   @override
-  ProdutosPageState createState() => ProdutosPageState();
+  ListaComprasPageState createState() => ListaComprasPageState();
 }
 
-class ProdutosPageState extends State<ProdutosPage> {
-  ProdutosPageState() : super();
+class ListaComprasPageState extends State<ListaComprasPage> {
+  ListaComprasPageState() : super();
 
   final List<Product> _productList = [
     Product(
@@ -101,7 +101,7 @@ class ProdutosPageState extends State<ProdutosPage> {
               child: Icon(MdiIcons.arrowLeft),
             ),
           ),
-          title: const Text("Produtos"),
+          title: const Text("Lista de compras"),
           actions: [
             IconButton(
                 onPressed: () async {

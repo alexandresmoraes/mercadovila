@@ -10,6 +10,6 @@ class MinhasComprasModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute,
-        child: (_, args) => const MinhasComprasPage(), transition: TransitionType.leftToRight, duration: const Duration(milliseconds: 500)),
+        child: (_, args) => const MinhasComprasPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
   ];
 }

@@ -10,7 +10,8 @@ class VendasModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => const VendasPage()),
+    ChildRoute(Modular.initialRoute,
+        child: (_, args) => const VendasPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
     ChildRoute('/venda-detalhes', child: (_, args) => const VendaDetalhesPage()),
   ];
 }
