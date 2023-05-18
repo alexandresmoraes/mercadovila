@@ -358,7 +358,7 @@ class VendasPageState extends State<VendasPage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Modular.to.pushNamed('/account/venda-detalhes');
+                Modular.to.pushNamed('/vendas/venda-detalhes');
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,

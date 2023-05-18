@@ -1,10 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
 import 'package:vilasesmo/app/modules/notifications/notifications_module.dart';
+import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
+import 'package:vilasesmo/app/modules/pedidos/pedidos_module.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
 import 'package:vilasesmo/app/modules/search/search_module.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
+import 'package:vilasesmo/app/modules/vendas/vendas_module.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/modules/account/account_module.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
@@ -19,7 +23,7 @@ import 'package:vilasesmo/app/utility/services/auth_service.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => CartStore()),
+    Bind.lazySingleton((i) => CarrinhoStore()),
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind(
@@ -45,5 +49,9 @@ class AppModule extends Module {
     ModuleRoute(SearchModule.routeName, module: SearchModule()),
     ModuleRoute(NotificationsModule.routeName, module: NotificationsModule()),
     ModuleRoute(ProdutosModule.routeName, module: ProdutosModule()),
+    ModuleRoute(VendasModule.routeName, module: VendasModule()),
+    ModuleRoute(PedidosModule.routeName, module: PedidosModule()),
+    ModuleRoute(MinhasComprasModule.routeName, module: MinhasComprasModule()),
+    ModuleRoute(PagamentosModule.routeName, module: PagamentosModule()),
   ];
 }

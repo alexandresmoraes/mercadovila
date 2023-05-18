@@ -2,7 +2,7 @@ import 'package:mobx/mobx.dart';
 
 part 'carrinho_store.g.dart';
 
-class CartStore = _CarrinhoStoreBase with _$CartStore;
+class CarrinhoStore = _CarrinhoStoreBase with _$CarrinhoStore;
 
 abstract class _CarrinhoStoreBase with Store {
   @observable

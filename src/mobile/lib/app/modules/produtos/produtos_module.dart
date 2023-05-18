@@ -2,7 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_page.dart';
 
 class ProdutosModule extends Module {
-  static const routeName = '/products/';
+  static const routeName = '/produtos/';
 
   @override
   final List<Bind> binds = [];
