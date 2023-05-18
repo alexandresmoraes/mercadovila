@@ -415,86 +415,6 @@ class VendaDetalhesPageState extends State<VendaDetalhesPage> {
                     style: Theme.of(context).primaryTextTheme.headlineSmall,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Total",
-                      style: Theme.of(context).primaryTextTheme.labelSmall,
-                    ),
-                    Text(
-                      "\$80.62",
-                      style: Theme.of(context).primaryTextTheme.labelSmall,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Desconto",
-                        style: Theme.of(context).primaryTextTheme.labelSmall,
-                      ),
-                      Text(
-                        " - \$20.02",
-                        style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Cupom",
-                        style: Theme.of(context).primaryTextTheme.labelSmall,
-                      ),
-                      Text(
-                        "Aplicar cupom",
-                        style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Theme.of(context).primaryColorLight),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Delivery",
-                            style: Theme.of(context).primaryTextTheme.labelSmall,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Icon(
-                              Icons.error_outline,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          )
-                        ],
-                      ),
-                      Text(
-                        " - \$20.02",
-                        style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Colors.blue),
-                      )
-                    ],
-                  ),
-                ),
-                const Divider(),
                 ListTile(
                   minVerticalPadding: 0,
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -525,45 +445,6 @@ class VendaDetalhesPageState extends State<VendaDetalhesPage> {
                       style: Theme.of(context).primaryTextTheme.labelSmall,
                     ),
                   ],
-                ),
-                InkWell(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => RateOrderScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    padding: const EdgeInsets.all(2),
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Rating",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color:
-                                  Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w400),
-                        )),
-                  ),
                 ),
               ],
             ),
