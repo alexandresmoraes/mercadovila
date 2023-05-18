@@ -1,11 +1,10 @@
-import 'package:badges/badges.dart' as badges;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/account/account_page.dart';
-import 'package:vilasesmo/app/modules/home/home_page.dart';
-import 'package:vilasesmo/app/modules/search/search_page.dart';
+import 'package:vilasesmo/app/modules/tab/account_page.dart';
+import 'package:vilasesmo/app/modules/tab/home_page.dart';
+import 'package:vilasesmo/app/modules/tab/search_page.dart';
 
 class TabPage extends StatefulWidget {
   final String title;
