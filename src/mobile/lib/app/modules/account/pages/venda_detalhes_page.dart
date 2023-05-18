@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/cart/cart_page.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class OrderDetailsPage extends StatefulWidget {
+class VendaDetalhesPage extends StatefulWidget {
   final String title;
-  const OrderDetailsPage({Key? key, this.title = 'OrderDetailPage'}) : super(key: key);
+  const VendaDetalhesPage({Key? key, this.title = 'OrderDetailPage'}) : super(key: key);
   @override
-  OrderDetailsPageState createState() => OrderDetailsPageState();
+  VendaDetalhesPageState createState() => VendaDetalhesPageState();
 }
 
-class OrderDetailsPageState extends State<OrderDetailsPage> {
-  OrderDetailsPageState() : super();
+class VendaDetalhesPageState extends State<VendaDetalhesPage> {
+  VendaDetalhesPageState() : super();
+
   final List<Product> _productList = [
     Product(
         name: "Hersheys",

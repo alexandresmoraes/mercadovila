@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class CartPage extends StatefulWidget {
+class CarrinhoPage extends StatefulWidget {
   final String title;
-  const CartPage({Key? key, this.title = 'CartPage'}) : super(key: key);
+  const CarrinhoPage({Key? key, this.title = 'CartPage'}) : super(key: key);
   @override
-  CartPageState createState() => CartPageState();
+  CarrinhoPageState createState() => CarrinhoPageState();
 }
 
 class Product {
@@ -41,7 +41,7 @@ class Address {
   Address({this.title, this.address});
 }
 
-class CartPageState extends State<CartPage> {
+class CarrinhoPageState extends State<CarrinhoPage> {
   GlobalKey<ScaffoldState>? _scaffoldKey;
 
   String? selectedCouponCode;
@@ -63,7 +63,7 @@ class CartPageState extends State<CartPage> {
     Address(title: "Office", address: "STP 02 Building sector 05, Module 02, Nearest landmark- New york , USA"),
     Address(title: "Home 02", address: "STP 02 Building sector 05, Module 02, Nearest landmark- New york , USA"),
   ];
-  CartPageState() : super();
+  CarrinhoPageState() : super();
   @override
   @override
   void dispose() {

@@ -5,11 +5,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/modules/tab/home_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class OrdersPage extends StatefulWidget {
+class VendasPage extends StatefulWidget {
   final String title;
-  const OrdersPage({Key? key, this.title = 'OrdersPage'}) : super(key: key);
+  const VendasPage({Key? key, this.title = 'OrdersPage'}) : super(key: key);
   @override
-  OrdersPageState createState() => OrdersPageState();
+  VendasPageState createState() => VendasPageState();
 }
 
 class Order {
@@ -25,8 +25,9 @@ class Order {
   Order({this.amount, this.name, this.datetime, this.orderId, this.orderOption, this.orderStatus});
 }
 
-class OrdersPageState extends State<OrdersPage> {
-  OrdersPageState() : super();
+class VendasPageState extends State<VendasPage> {
+  VendasPageState() : super();
+
   final List<Order> _orderListScreen = [
     Order(
         name: "Alexandre Moraes",
@@ -357,7 +358,7 @@ class OrdersPageState extends State<OrdersPage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Modular.to.pushNamed('/account/order-details');
+                Modular.to.pushNamed('/account/venda-detalhes');
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,

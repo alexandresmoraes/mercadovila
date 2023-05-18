@@ -146,7 +146,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    Modular.to.pushNamed('/account/orders');
+                    Modular.to.pushNamed('/account/vendas');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),

@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/cart/cart_page.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
-class ProductsPage extends StatefulWidget {
+class ProdutosPage extends StatefulWidget {
   final String title;
-  const ProductsPage({Key? key, this.title = 'ProductsPage'}) : super(key: key);
+  const ProdutosPage({Key? key, this.title = 'ProductsPage'}) : super(key: key);
   @override
-  ProductsPageState createState() => ProductsPageState();
+  ProdutosPageState createState() => ProdutosPageState();
 }
 
-class ProductsPageState extends State<ProductsPage> {
+class ProdutosPageState extends State<ProdutosPage> {
+  ProdutosPageState() : super();
+
   final List<Product> _productList = [
     Product(
         name: "Fresh Mutton",
@@ -80,7 +82,7 @@ class ProductsPageState extends State<ProductsPage> {
         imagePath: "assets/cheese.png",
         qty: 3),
   ];
-  ProductsPageState() : super();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

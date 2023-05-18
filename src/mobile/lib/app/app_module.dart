@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:vilasesmo/app/modules/cart/cart_module.dart';
-import 'package:vilasesmo/app/modules/cart/cart_store.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/notifications/notifications_module.dart';
-import 'package:vilasesmo/app/modules/products/products_module.dart';
+import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
 import 'package:vilasesmo/app/modules/search/search_module.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -41,9 +41,9 @@ class AppModule extends Module {
     ModuleRoute(TabModule.routeName, module: TabModule()),
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
     ModuleRoute(AccountModule.routeName, module: AccountModule()),
-    ModuleRoute(CartModule.routeName, module: CartModule()),
+    ModuleRoute(CarrinhoModule.routeName, module: CarrinhoModule()),
     ModuleRoute(SearchModule.routeName, module: SearchModule()),
     ModuleRoute(NotificationsModule.routeName, module: NotificationsModule()),
-    ModuleRoute(ProductsModule.routeName, module: ProductsModule()),
+    ModuleRoute(ProdutosModule.routeName, module: ProdutosModule()),
   ];
 }
