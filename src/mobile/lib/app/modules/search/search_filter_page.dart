@@ -36,7 +36,7 @@ class SearchFilterPageState extends State<SearchFilterPage> {
             },
             child: const Align(
               alignment: Alignment.center,
-              child: Icon(FontAwesomeIcons.windowClose),
+              child: Icon(FontAwesomeIcons.rectangleXmark),
             ),
           ),
           actions: [
@@ -52,7 +52,7 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 12.0, top: 10),
+                    padding: const EdgeInsets.only(left: 12.0, top: 10),
                     child: Text(
                       'Sort by name',
                       style: Theme.of(context).primaryTextTheme.bodyLarge,

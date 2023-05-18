@@ -127,11 +127,26 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => AddressListScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/products/');
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.orderAlphabeticalAscending,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Produtos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Modular.to.pushNamed('/account/orders');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -144,6 +159,29 @@ class AccountPageState extends State<AccountPage> {
                     offset: const Offset(-10, 0),
                     child: Text(
                       "Vendas",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => WalletScreen(a: widget.analytics, o: widget.observer),
+                    //   ),
+                    // );
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.listBoxOutline,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Lista de compras",
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),
@@ -242,11 +280,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => NotificationScreen(a: widget.analytics, o: widget.observer),
-                    //   ),
-                    // );
+                    Modular.to.pushNamed('/notifications/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),

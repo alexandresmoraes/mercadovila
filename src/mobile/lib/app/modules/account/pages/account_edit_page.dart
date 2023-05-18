@@ -165,6 +165,23 @@ class AccountEditPageState extends State<AccountEditPage> {
                             });
                           },
                           title: Text(
+                            isAdmin ? "Ativo" : "Inativo",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Card(
+                        child: SwitchListTile(
+                          value: isAdmin,
+                          onChanged: (val) {
+                            setState(() {
+                              isAdmin = !isAdmin;
+                            });
+                          },
+                          title: Text(
                             "Admin",
                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                           ),

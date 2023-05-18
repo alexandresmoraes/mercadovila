@@ -1,7 +1,10 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/cart/cart_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utility/services/auth_service.dart';
 
 class SearchPage extends StatefulWidget {
   final String title;
@@ -229,6 +232,8 @@ class SearchPageState extends State<SearchPage> {
                                   //     builder: (context) => ProductListScreen(a: widget.analytics, o: widget.observer),
                                   //   ),
                                   // );
+
+                                  Modular.get<AuthService>().getAccount();
                                 },
                                 child: Image.asset('assets/orange_next.png')),
                           ],

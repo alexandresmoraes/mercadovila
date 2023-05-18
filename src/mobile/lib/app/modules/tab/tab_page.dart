@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -65,16 +66,17 @@ class _TabPageState extends State<TabPage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            backgroundColor: const Color(0xFFFA692C),
-            onPressed: () {
-              Modular.to.pushNamed('/cart/');
-            },
-            child: Icon(
-              MdiIcons.shopping,
-              color: Colors.white,
-              size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
-            )),
+          elevation: 0,
+          backgroundColor: const Color(0xFFFA692C),
+          onPressed: () {
+            Modular.to.pushNamed('/cart/');
+          },
+          child: Icon(
+            MdiIcons.shopping,
+            color: Colors.white,
+            size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
+          ),
+        ),
         body: _screens().elementAt(_bottomNavIndex),
       )),
     );

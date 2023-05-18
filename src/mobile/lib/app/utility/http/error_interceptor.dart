@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:vilasesmo/app/app_widget.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
   @override
@@ -15,6 +17,14 @@ class ErrorInterceptor extends InterceptorsWrapper {
 
     var error = _handleError(err);
     // if (error.isNotEmpty) GlobalSnackbar.error(_handleError(e)).show(); //TODO
+    if (error.isNotEmpty) {
+      AnimatedSnackBar.material(
+        _handleError(err),
+        type: AnimatedSnackBarType.error,
+        mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+        desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+      ).show(AppWidget.navigatorKey.currentState!.context);
+    }
 
     handler.reject(err);
 

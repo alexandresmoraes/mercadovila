@@ -124,7 +124,7 @@ class CartPageState extends State<CartPage> {
             leading: IconButton(
                 onPressed: () {
                   if (_currentIndex == 0) {
-                    Navigator.of(context).pop();
+                    Modular.to.pop();
                   } else {
                     _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     if (_currentIndex == 0) {
@@ -355,83 +355,11 @@ class CartPageState extends State<CartPage> {
               ),
               child: Stack(
                 clipBehavior: Clip.none,
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 children: [
                   SizedBox(
                     height: 110,
                     width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10, left: 120),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${_productList[0].name}',
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                            ),
-                            Text(
-                              '${_productList[0].description}',
-                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            RichText(
-                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${_productList[0].amount}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${_productList[0].unitName}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 18,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "${_productList[0].rating} ",
-                                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                      children: [
-                                        TextSpan(
-                                          text: '|',
-                                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                                        ),
-                                        TextSpan(
-                                          text: ' ${_productList[0].ratingCount} ratings',
-                                          style: Theme.of(context).primaryTextTheme.displayLarge,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardTheme.color,

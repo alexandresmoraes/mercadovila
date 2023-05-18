@@ -5,10 +5,13 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/theme/native_theme.dart';
 
 class AppWidget extends StatelessWidget {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   const AppWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Modular.setNavigatorKey(navigatorKey);
     return Observer(
       builder: (_) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
