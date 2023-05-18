@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/account/accounts_page.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detalhes_page.dart';
 import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
 
 import 'account_edit_page.dart';
