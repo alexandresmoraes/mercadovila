@@ -16,7 +16,6 @@ class ErrorInterceptor extends InterceptorsWrapper {
     }
 
     var error = _handleError(err);
-    // if (error.isNotEmpty) GlobalSnackbar.error(_handleError(e)).show(); //TODO
     if (error.isNotEmpty) {
       AnimatedSnackBar.material(
         _handleError(err),
