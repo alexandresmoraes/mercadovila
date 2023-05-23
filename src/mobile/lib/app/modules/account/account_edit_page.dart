@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountEditPage extends StatefulWidget {
@@ -13,12 +15,56 @@ class AccountEditPageState extends State<AccountEditPage> {
   bool isAdmin = false;
   AccountEditPageState() : super();
 
+  _getImagePicker(ImageSource source) async {
+    var pickedFile = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 1920,
+      maxHeight: 1080,
+      imageQuality: 100,
+    );
+    if (pickedFile != null) _cropImage(pickedFile.path);
+  }
+
+  _cropImage(filePath) async {
+    var croppedImage = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        aspectRatioPresets: CropAspectRatioPreset.values,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(
+          ratioX: 1,
+          ratioY: 1,
+        ),
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.png,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Recortar',
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            title: 'Recortar',
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
+          ),
+          WebUiSettings(context: context)
+        ]);
+    if (croppedImage != null) {
+      // List<int> imageBytes = croppedImage.readAsBytes();
+      // String base64Image = base64Encode(imageBytes);
+      // controller.setPhoto(base64Image);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -61,7 +107,31 @@ class AccountEditPageState extends State<AccountEditPage> {
                   Positioned(
                     bottom: 25,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(Icons.photo),
+                                    title: const Text('Galeria'),
+                                    onTap: () {
+                                      _getImagePicker(ImageSource.gallery);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.photo_camera),
+                                    title: const Text('Camera'),
+                                    onTap: () {
+                                      _getImagePicker(ImageSource.camera);
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      },
                       child: Text(
                         'Trocar foto',
                         style: Theme.of(context).primaryTextTheme.displayLarge,

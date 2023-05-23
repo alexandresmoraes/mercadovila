@@ -27,6 +27,8 @@ dependencies:
   flare_flutter: ^3.0.2
   animated_snack_bar: ^0.3.1
   badges: ^2.0.3
+  image_picker: ^0.8.7+5
+  image_cropper: ^4.0.1
   
 dev_dependencies:
   flutter_test:
