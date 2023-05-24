@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountEditPage extends StatefulWidget {
@@ -14,6 +16,8 @@ class AccountEditPage extends StatefulWidget {
 class AccountEditPageState extends State<AccountEditPage> {
   bool isAdmin = false;
   AccountEditPageState() : super();
+
+  AccountEditController _controller = Modular.get<AccountEditController>();
 
   _getImagePicker(ImageSource source) async {
     var pickedFile = await ImagePicker().pickImage(
@@ -55,6 +59,8 @@ class AccountEditPageState extends State<AccountEditPage> {
       // List<int> imageBytes = croppedImage.readAsBytes();
       // String base64Image = base64Encode(imageBytes);
       // controller.setPhoto(base64Image);
+      // _controller.setFotoBase64(await croppedImage.readAsString());
+      _controller.setfotoPath(croppedImage.path);
     }
   }
 
@@ -92,14 +98,16 @@ class AccountEditPageState extends State<AccountEditPage> {
                         ),
                       ),
                       alignment: Alignment.topCenter,
-                      child: const Center(
+                      child: Center(
                         child: CircleAvatar(
                           radius: 60,
                           backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            radius: 53,
-                            backgroundImage: AssetImage('assets/person.png'),
-                          ),
+                          child: Observer(builder: (_) {
+                            return CircleAvatar(
+                              radius: 100,
+                              backgroundImage: AssetImage(_controller.fotoPath ?? 'assets/person.png'),
+                            );
+                          }),
                         ),
                       ),
                     ),
