@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/utility/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utility/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utility/models/account_model.dart';
@@ -61,7 +62,7 @@ class AuthService implements IAuthService {
   @override
   Future<void> logout() async {
     await removeCurrentToken();
-    // Modular.to.navigate(LoginModule.routeName); //TODO
+    Modular.to.navigate(LoginModule.routeName);
   }
 
   @override

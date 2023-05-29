@@ -40,7 +40,7 @@ class SearchFilterPageState extends State<SearchFilterPage> {
             ),
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(MdiIcons.syncIcon)),
+            IconButton(onPressed: () {}, icon: const Icon(MdiIcons.syncIcon)),
           ],
         ),
         body: SingleChildScrollView(
