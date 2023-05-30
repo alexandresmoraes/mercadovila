@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -17,7 +20,7 @@ class AccountEditPageState extends State<AccountEditPage> {
   bool isAdmin = false;
   AccountEditPageState() : super();
 
-  AccountEditController _controller = Modular.get<AccountEditController>();
+  final AccountEditController _controller = Modular.get<AccountEditController>();
 
   _getImagePicker(ImageSource source) async {
     var pickedFile = await ImagePicker().pickImage(
@@ -44,10 +47,11 @@ class AccountEditPageState extends State<AccountEditPage> {
         compressFormat: ImageCompressFormat.png,
         uiSettings: [
           AndroidUiSettings(
-            toolbarTitle: 'Recortar',
-            initAspectRatio: CropAspectRatioPreset.square,
-            lockAspectRatio: true,
-          ),
+              toolbarTitle: 'Recortar',
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
           IOSUiSettings(
             title: 'Recortar',
             minimumAspectRatio: 1.0,
@@ -56,11 +60,8 @@ class AccountEditPageState extends State<AccountEditPage> {
           WebUiSettings(context: context)
         ]);
     if (croppedImage != null) {
-      // List<int> imageBytes = croppedImage.readAsBytes();
-      // String base64Image = base64Encode(imageBytes);
-      // controller.setPhoto(base64Image);
-      // _controller.setFotoBase64(await croppedImage.readAsString());
       _controller.setfotoPath(croppedImage.path);
+      Modular.to.pop();
     }
   }
 
@@ -103,9 +104,15 @@ class AccountEditPageState extends State<AccountEditPage> {
                           radius: 60,
                           backgroundColor: Colors.white,
                           child: Observer(builder: (_) {
-                            return CircleAvatar(
+                            if (_controller.fotoPath != null && _controller.fotoPath!.isNotEmpty) {
+                              return CircleAvatar(
+                                radius: 100,
+                                backgroundImage: Image.file(File(_controller.fotoPath!)).image,
+                              );
+                            }
+                            return const CircleAvatar(
                               radius: 100,
-                              backgroundImage: AssetImage(_controller.fotoPath ?? 'assets/person.png'),
+                              backgroundImage: AssetImage('assets/person.png'),
                             );
                           }),
                         ),
