@@ -63,7 +63,7 @@ services:
     depends_on:
       - postgres
 
-  api-server:
+  gateway:
       image: nginx
       restart: always
       volumes:

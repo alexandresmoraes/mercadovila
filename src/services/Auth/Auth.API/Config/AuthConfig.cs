@@ -1,4 +1,5 @@
 ﻿using Auth.API.Data;
+using Auth.API.Data.Entities;
 using Common.WebAPI.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,7 @@ public static class AuthConfig
   {
     var authSettings = configuration.GetSection(nameof(AuthSettings));
 
-    services.AddIdentity<IdentityUser, IdentityRole>(o =>
+    services.AddIdentity<ApplicationUser, IdentityRole>(o =>
     {
       o.Password.RequireDigit = false;
       o.Password.RequireLowercase = false;

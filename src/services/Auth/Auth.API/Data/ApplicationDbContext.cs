@@ -1,11 +1,12 @@
-﻿using Common.WebAPI.Data;
+﻿using Auth.API.Data.Entities;
+using Common.WebAPI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.Data
 {
-  public class ApplicationDbContext : IdentityDbContext
+  public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
   {
     protected readonly IConfiguration _configuration;
 
@@ -23,10 +24,10 @@ namespace Auth.API.Data
     {
       base.OnModelCreating(modelBuilder);
 
-      modelBuilder.Entity<IdentityUser>(b =>
+      modelBuilder.Entity<ApplicationUser>(b =>
       {
         b.HasKey(e => e.Id);
-        b.Property(e => e.Id).HasMaxLength(36);
+        b.Property(e => e.Id).HasMaxLength(36).ValueGeneratedOnAdd();
         b.Property(e => e.UserName).HasMaxLength(128);
         b.Property(e => e.NormalizedUserName).HasMaxLength(128);
         b.Property(e => e.Email).HasMaxLength(128);
@@ -35,6 +36,7 @@ namespace Auth.API.Data
         b.Property(e => e.SecurityStamp).HasMaxLength(32);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
         b.Property(e => e.PhoneNumber).HasMaxLength(16);
+        b.Property(e => e.IsActive);
 
         b.ToTable("users");
       });

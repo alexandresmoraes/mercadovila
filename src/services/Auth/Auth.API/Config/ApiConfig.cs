@@ -1,11 +1,11 @@
 ﻿using Auth.API.Data;
+using Auth.API.Data.Entities;
 using Auth.API.Data.Repositories;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Data;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Results;
 using Common.WebAPI.WebApi;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +23,7 @@ namespace Auth.API.Config
       services.AddControllers();
       services.AddEndpointsApiExplorer();
       services.AddOpenApi();
-      services.AddAuthServices<IdentityUser, string>();
+      services.AddAuthServices<ApplicationUser, string>();
       services.AddScoped<IUserRepository, UserRepository>();
       services.Configure<ApiBehaviorOptions>(options =>
       {
@@ -41,11 +41,12 @@ namespace Auth.API.Config
     public static IApplicationBuilder UseApiConfiguration(this WebApplication app)
     {
       app.RunMigrations<ApplicationDbContext>();
+      app.MapHealthChecks();
 
       if (app.Environment.IsDevelopment())
       {
         app.UseOpenApi();
-        app.UseDeveloperExceptionPage();
+        app.MapHealthChecksUI();
       }
       else
       {
@@ -56,8 +57,6 @@ namespace Auth.API.Config
       app.UseRouting();
       app.UseAuthentication();
       app.UseAuthorization();
-      app.MapHealthChecks();
-      app.MapHealthChecksUI();
       app.MapControllers();
 
       return app;

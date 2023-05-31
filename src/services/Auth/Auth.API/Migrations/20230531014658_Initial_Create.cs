@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Auth.API.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial_Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,6 +29,7 @@ namespace Auth.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     Email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
@@ -160,8 +161,8 @@ namespace Auth.API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6c995f31-0dcb-4a67-941f-98e798ab1769", "9a961646-44fc-4c14-b253-9ff054a06abe", "user", "USER" },
-                    { "94d533c7-0c9f-4cf9-89f6-cbf5cdfd9502", "9e6bbb90-cc49-4333-ab64-d5abcdcc19ec", "admin", "ADMIN" }
+                    { "995ee54d-b141-498d-b2cb-38451598cba5", "ae53f2db-b8d6-4b67-baab-914ac8c1248a", "user", "USER" },
+                    { "d99fedb7-4617-41f8-af56-b3f88d9e60cc", "43e47942-beba-4793-9956-0bbfb22e9189", "admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

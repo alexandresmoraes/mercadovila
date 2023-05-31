@@ -21,5 +21,9 @@ namespace Auth.API.Models
     [Required(ErrorMessage = "Telefone está vazio.")]
     [StringLength(15, ErrorMessage = "Telefone deve ter entra 4 a 50 caracteres.", MinimumLength = 9)]
     public string? PhoneNumber { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public bool IsAdmin { get; set; }
   }
 }

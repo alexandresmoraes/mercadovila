@@ -30,7 +30,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => AccountStore()),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'https://teste' : 'http://192.168.0.100',
+        baseUrl: kReleaseMode ? 'http://192.168.0.100.' : 'http://192.168.0.100',
         connectTimeout: kReleaseMode ? 20000 : 0,
         receiveTimeout: kReleaseMode ? 20000 : 0,
         sendTimeout: kReleaseMode ? 20000 : 0,

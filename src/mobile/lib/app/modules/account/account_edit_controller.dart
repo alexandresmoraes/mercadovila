@@ -6,11 +6,6 @@ class AccountEditController = _AccountEditControllerBase with _$AccountEditContr
 
 abstract class _AccountEditControllerBase with Store {
   @observable
-  String? fotoBase64;
-  @action
-  void setFotoBase64(String? v) => fotoBase64 = v;
-
-  @observable
   String? fotoPath;
   @action
   void setfotoPath(String? v) => fotoPath = v;
