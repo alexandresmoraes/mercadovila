@@ -58,7 +58,7 @@ class AccountEditPageState extends State<AccountEditPage> {
           WebUiSettings(context: context)
         ]);
     if (croppedImage != null) {
-      _controller.setfotoPath(croppedImage.path);
+      _controller.setPhotoPath(croppedImage.path);
       Modular.to.pop();
     }
   }
@@ -67,9 +67,8 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -102,10 +101,10 @@ class AccountEditPageState extends State<AccountEditPage> {
                           radius: 60,
                           backgroundColor: Colors.white,
                           child: Observer(builder: (_) {
-                            if (_controller.fotoPath != null && _controller.fotoPath!.isNotEmpty) {
+                            if (_controller.isFotoAlterada) {
                               return CircleAvatar(
                                 radius: 100,
-                                backgroundImage: Image.file(File(_controller.fotoPath!)).image,
+                                backgroundImage: Image.file(File(_controller.photoPath!)).image,
                               );
                             }
                             return const CircleAvatar(
