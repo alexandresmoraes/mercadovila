@@ -8,9 +8,12 @@ using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Auth.API.Controllers
 {
+  using Result = Common.WebAPI.Results.Result;
+
   /// <summary>
   /// Criar novas contas de usuário, alterar e adicionar roles
   /// </summary>
@@ -47,10 +50,6 @@ namespace Auth.API.Controllers
 
       if (user is not null)
       {
-#if DEBUG
-        await _userManager.AddToRoleAsync(user, "admin");
-#endif
-
         return Result.Ok(new AccountModel
         {
           Id = user.Id,
@@ -148,6 +147,34 @@ namespace Auth.API.Controllers
       }
 
       return Result.Fail(result.Errors.Select(e => new ErrorResult(e.Code, null, e.Description)).ToArray());
+    }
+
+    /// <summary>
+    /// Upload foto do usuário
+    /// </summary>
+    // PUT api/account/{userId}/photo
+    [HttpPost("{userId}/photo")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<Result> UploadImageAsync([FromRoute] string userId, IFormFile userPhoto)
+    {
+      var photoUploadModel = new PhotoUploadModel(userPhoto);
+
+      var context = new ValidationContext(photoUploadModel);
+      var validationResults = new List<ValidationResult>();
+      var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
+      if (!isValid)
+      {
+        return Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+      }
+
+      var user = await _userManager.FindByIdAsync(userId);
+
+      if (user is null)
+        return Result.NotFound();
+
+      return Result.Ok();
     }
   }
 }

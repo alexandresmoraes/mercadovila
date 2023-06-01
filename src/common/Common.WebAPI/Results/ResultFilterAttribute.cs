@@ -58,7 +58,14 @@ namespace Common.WebAPI.Results
       {
         if (objectResult.Value is Result result && result is IResultNotFound)
         {
-          context.Result = new NotFoundObjectResult(new Result(result.Errors));
+          if (result.HasError)
+          {
+            context.Result = new NotFoundObjectResult(new Result(result.Errors));
+          }
+          else
+          {
+            context.Result = new NotFoundResult();
+          }
         }
       }
 

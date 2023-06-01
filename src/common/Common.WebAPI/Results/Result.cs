@@ -15,6 +15,7 @@
       new Result<TDataResponse>(code, message);
 
     public static Result NotFound(string message) => new ResultNotFound(message);
+    public static Result NotFound() => new ResultNotFound();
 
     public static Result<TDataResponse> NotFound<TDataResponse>(string message) => new ResultNotFound<TDataResponse>(message);
 
