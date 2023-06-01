@@ -29,6 +29,8 @@ namespace Common.WebAPI.Data
 
     public static IServiceCollection AddUnitOfWork(this IServiceCollection services)
     {
+      services.AddScoped<IUnitOfWork, UnitOfWork>();
+
       services.AddMvc(opt =>
       {
         opt.Filters.Add<UnitOfWorkCommitAttribute>();

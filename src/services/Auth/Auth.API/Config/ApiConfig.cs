@@ -32,7 +32,6 @@ namespace Auth.API.Config
       });
       services.AddDbContext<ApplicationDbContext>();
       services.AddScoped<DbContext, ApplicationDbContext>();
-      services.AddScoped<IUnitOfWork, UnitOfWork>();
       services.AddUnitOfWork();
 
       return services;
