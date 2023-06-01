@@ -205,23 +205,32 @@ class VendasPageState extends State<VendasPage> {
                         Radius.circular(10.0),
                       ),
                     ),
-                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                    backgroundColor:
+                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                     bottom: TabBar(
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(
                           width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColor
+                              : const Color(0xFFEF5656),
                         ),
                         insets: const EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                       indicatorWeight: 4,
                       unselectedLabelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w400),
                       labelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold),
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Theme.of(context).primaryColor
+                          : const Color(0xFFEF5656),
                       tabs: const [
                         Tab(
                             child: Text(
@@ -304,7 +313,8 @@ class VendasPageState extends State<VendasPage> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     '${_allItemsList[i].amount}',
@@ -375,7 +385,9 @@ class VendasPageState extends State<VendasPage> {
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
-                            color: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                            color: Modular.get<ThemeStore>().isDarkModeEnable
+                                ? const Color(0xFF373C58)
+                                : const Color(0xFFF2F5F8),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
@@ -385,7 +397,9 @@ class VendasPageState extends State<VendasPage> {
                         ),
                         const Expanded(child: SizedBox()),
                         Icon(
-                          _orderListScreen[index].orderStatus == 'Cancelled' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                          _orderListScreen[index].orderStatus == 'Cancelled'
+                              ? MdiIcons.closeOctagon
+                              : MdiIcons.checkDecagram,
                           size: 20,
                           color: _orderListScreen[index].orderStatus == 'Cancelled'
                               ? Colors.red
@@ -438,9 +452,28 @@ class VendasPageState extends State<VendasPage> {
                               _orderListScreen[index].isProductsVisible = !_orderListScreen[index].isProductsVisible;
                             });
                           },
-                          child: Text(
-                            "${_orderListScreen[index].orderOption}",
-                            style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.red),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                            margin: const EdgeInsets.only(right: 10, top: 5),
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            width: 60,
+                            height: 23,
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 0,
+                                    ),
+                                    child: Text(
+                                      'Detalhes',
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],

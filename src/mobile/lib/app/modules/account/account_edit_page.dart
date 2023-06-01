@@ -67,8 +67,9 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -176,7 +177,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                             fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                 ? Theme.of(context).inputDecorationTheme.fillColor
                                 : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'Alexandre Moraes',
+                            hintText: 'João das Neves',
                             contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                           ),
                         ),
@@ -195,7 +196,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                             fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                 ? Theme.of(context).inputDecorationTheme.fillColor
                                 : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'alexandre',
+                            hintText: 'jonsnow',
                             contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                           ),
                         ),
