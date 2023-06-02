@@ -152,14 +152,14 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // PUT api/account/{userId}/photo
-    [HttpPost("{userId}/photo")]
+    // PUT api/account/{id}/photo
+    [HttpPost("{id}/photo")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result> UploadImageAsync([FromRoute] string userId, IFormFile userPhoto)
+    public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile photo)
     {
-      var photoUploadModel = new PhotoUploadModel(userPhoto);
+      var photoUploadModel = new PhotoUploadModel(photo);
 
       var context = new ValidationContext(photoUploadModel);
       var validationResults = new List<ValidationResult>();
@@ -169,7 +169,7 @@ namespace Auth.API.Controllers
         return Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
       }
 
-      var user = await _userManager.FindByIdAsync(userId);
+      var user = await _userManager.FindByIdAsync(id);
 
       if (user is null)
         return Result.NotFound();

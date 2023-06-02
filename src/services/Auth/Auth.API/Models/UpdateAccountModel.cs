@@ -19,7 +19,7 @@ namespace Auth.API.Models
     public string? ConfirmPassword { get; set; }
 
     [Required(ErrorMessage = "Telefone está vazio.")]
-    [StringLength(15, ErrorMessage = "Telefone deve ter entra 4 a 50 caracteres.", MinimumLength = 9)]
+    [StringLength(17, ErrorMessage = "Telefone deve ter entra 11 a 17 caracteres.", MinimumLength = 11)]
     public string? PhoneNumber { get; set; }
 
     public bool IsActive { get; set; }

@@ -112,9 +112,11 @@ namespace Auth.API.Controllers
 
       if (tokenIsValid)
       {
+        _logger.LogInformation($"RefreskToken generate.");
         return Result.Ok(await _jwtService.GenerateToken(username));
       }
 
+      _logger.LogWarning($"RefreskToken invalid.");
       return Result.Fail<AccessTokenDto>("Refresh token inválido.");
     }
   }
