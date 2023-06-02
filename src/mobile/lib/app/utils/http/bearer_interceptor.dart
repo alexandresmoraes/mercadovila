@@ -5,7 +5,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
-import 'package:vilasesmo/app/utility/services/interfaces/i_auth_service.dart';
+import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
 
 class BearerInterceptor extends InterceptorsWrapper {
   @override

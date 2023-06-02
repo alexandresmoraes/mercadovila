@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
-import 'package:vilasesmo/app/utility/http/error_interceptor.dart';
+import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
 
 import 'bearer_interceptor.dart';
 

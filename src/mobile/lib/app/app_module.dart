@@ -19,8 +19,8 @@ import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utility/http/dio_api.dart';
-import 'package:vilasesmo/app/utility/services/auth_service.dart';
+import 'package:vilasesmo/app/utils/http/dio_api.dart';
+import 'package:vilasesmo/app/utils/services/auth_service.dart';
 
 class AppModule extends Module {
   @override

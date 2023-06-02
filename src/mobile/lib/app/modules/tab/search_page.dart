@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utility/services/auth_service.dart';
+import 'package:vilasesmo/app/utils/services/auth_service.dart';
 
 class SearchPage extends StatefulWidget {
   final String title;
