@@ -2,7 +2,7 @@
 
 namespace Auth.API.Models
 {
-  public class LoginModel
+  public record LoginModel
   {
     [Required(ErrorMessage = "Nome de usuário ou email está vazio")]
     public string? UsernameOrEmail { get; set; }

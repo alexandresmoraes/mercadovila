@@ -59,7 +59,7 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future<void> logout() async {
+  Future logout() async {
     await removeCurrentToken();
     Modular.to.navigate(LoginModule.routeName);
   }
@@ -76,7 +76,7 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future<void> removeCurrentToken() async {
+  Future removeCurrentToken() async {
     var contains = await LocalStorageService.cointains(_currentToken);
     if (contains) {
       await LocalStorageService.removeValue(_currentToken);
@@ -84,5 +84,5 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future<void> setCurrentToken(AccessTokenModel token) async => await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
+  Future setCurrentToken(AccessTokenModel token) async => await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
 }

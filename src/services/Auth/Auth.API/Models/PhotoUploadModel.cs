@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Auth.API.Models
 {
-  public class PhotoUploadModel
+  public record PhotoUploadModel
   {
     [Required(ErrorMessage = "Please select a file.")]
     [DataType(DataType.Upload)]

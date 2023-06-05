@@ -7,10 +7,10 @@ import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 abstract class IAuthService implements Disposable {
   Future<AccountModel> getAccount();
   Future<AccessTokenModel?> getCurrentToken();
-  Future<void> setCurrentToken(AccessTokenModel token);
-  Future<void> removeCurrentToken();
+  Future setCurrentToken(AccessTokenModel token);
+  Future removeCurrentToken();
   Future<bool> isAuthenticated();
-  Future<void> logout();
+  Future logout();
   Future<Either<ResultFailModel, AccessTokenModel>> login(String username, String password);
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel);
 }

@@ -4,7 +4,10 @@ namespace Auth.API.Models
 {
   public record NewAccountModel
   {
-    [Required(ErrorMessage = "Nome de Usuário está vazio.")]
+    [Required(ErrorMessage = "Nome do usuário está vazio.")]
+    public string? Nome { get; set; }
+
+    [Required(ErrorMessage = "Nome de usuário está vazio.")]
     public string? Username { get; set; }
 
     [Required(ErrorMessage = "Email do Usuário está vazio.")]
@@ -15,12 +18,13 @@ namespace Auth.API.Models
     [StringLength(50, ErrorMessage = "Senha deve ter entra 4 a 50 caracteres.", MinimumLength = 4)]
     public string? Password { get; set; }
 
+    [StringLength(50, ErrorMessage = "Confirmação de senha deve ter entra 4 a 50 caracteres.", MinimumLength = 4)]
     [Compare("Password", ErrorMessage = "Confirmação de senha não confere.")]
     public string? ConfirmPassword { get; set; }
 
     [Required(ErrorMessage = "Telefone está vazio.")]
     [StringLength(17, ErrorMessage = "Telefone deve ter entra 11 a 17 caracteres.", MinimumLength = 11)]
-    public string? PhoneNumber { get; set; }
+    public string? Telefone { get; set; }
 
     public bool IsActive { get; set; }
 

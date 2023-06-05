@@ -1,6 +1,6 @@
 ﻿namespace Auth.API.Models
 {
-  public class RefreshTokenModel
+  public record RefreshTokenModel
   {
     public string RefreshToken { get; set; } = null!;
   }

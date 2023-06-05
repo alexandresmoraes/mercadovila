@@ -20,7 +20,10 @@ namespace Auth.API.Config
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddPostgresHealthCheck(configuration);
       services.AddDefaultHealthCheckUI();
-      services.AddControllers();
+      services.AddControllers().AddJsonOptions(options =>
+      {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+      });
       services.AddEndpointsApiExplorer();
       services.AddOpenApi();
       services.AddAuthServices<ApplicationUser, string>();

@@ -7,13 +7,14 @@ class ThemeStore = _ThemeStoreBase with _$ThemeStore;
 
 abstract class _ThemeStoreBase with Store {
   static const _isDarkModeEnable = '_isDarkModeEnable';
+  bool defaultIsDarkEnable = true;
 
   _ThemeStoreBase() {
     _initStore();
   }
 
   Future<void> _initStore() async {
-    isDarkModeEnable = await getIsDarkModeEnable() ?? true;
+    isDarkModeEnable = await getIsDarkModeEnable();
   }
 
   @observable
@@ -25,12 +26,12 @@ abstract class _ThemeStoreBase with Store {
     this.isDarkModeEnable = isDarkModeEnable;
   }
 
-  Future<bool?> getIsDarkModeEnable() async {
+  Future<bool> getIsDarkModeEnable() async {
     var contains = await LocalStorageService.cointains(_isDarkModeEnable);
     if (contains) {
       return await LocalStorageService.getValue<bool>(_isDarkModeEnable);
     } else {
-      return null;
+      return defaultIsDarkEnable;
     }
   }
 }

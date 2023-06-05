@@ -53,9 +53,11 @@ namespace Auth.API.Controllers
         return Result.Ok(new AccountModel
         {
           Id = user.Id,
+          Nome = user.Nome,
           Email = user.Email,
           Username = user.UserName,
-          PhoneNumber = user.PhoneNumber,
+          Telefone = user.PhoneNumber,
+          FotoUrl = user.FotoUrl,
           Roles = await _userManager.GetRolesAsync(user),
         });
       }
@@ -84,9 +86,10 @@ namespace Auth.API.Controllers
     {
       var user = new ApplicationUser
       {
+        Nome = newAccountModel.Nome!,
         UserName = newAccountModel.Username,
         Email = newAccountModel.Email,
-        PhoneNumber = newAccountModel.PhoneNumber,
+        PhoneNumber = newAccountModel.Telefone,
         EmailConfirmed = true,
         IsActive = newAccountModel.IsActive
       };
@@ -118,8 +121,9 @@ namespace Auth.API.Controllers
       if (user is null)
         return Result.NotFound();
 
+      user.Nome = updateAccountModel.Nome!;
       user.Email = updateAccountModel.Email;
-      user.PhoneNumber = updateAccountModel.PhoneNumber;
+      user.PhoneNumber = updateAccountModel.Telefone;
       user.UserName = updateAccountModel.Username;
       user.IsActive = updateAccountModel.IsActive;
 
