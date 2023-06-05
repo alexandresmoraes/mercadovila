@@ -60,7 +60,7 @@ namespace Auth.API.Controllers
         });
       }
 
-      return Result.NotFound<AccountModel>("Usuário não encontrado.");
+      return Result.NotFound<AccountModel>();
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ namespace Auth.API.Controllers
       var user = await _userManager.FindByIdAsync(id);
 
       if (user is null)
-        return Result.NotFound("Usuário não econtrado.");
+        return Result.NotFound();
 
       user.Email = updateAccountModel.Email;
       user.PhoneNumber = updateAccountModel.PhoneNumber;

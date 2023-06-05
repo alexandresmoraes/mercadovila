@@ -5,8 +5,6 @@
   public record ResultNotFound : Result, IResultNotFound
   {
     public ResultNotFound() { }
-
-    public ResultNotFound(string message) : base(message) { }
   }
-  public record ResultNotFound<T>(string message) : Result<T>(message), IResultNotFound { }
+  public record ResultNotFound<T>() : Result<T>(), IResultNotFound { }
 }
