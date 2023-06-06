@@ -145,7 +145,7 @@ class AccountsPageState extends State<AccountsPage> {
           body: Column(
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 height: isSearchVisibled ? 70 : 0,
                 child: Container(
                   decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
@@ -210,7 +210,10 @@ class AccountsPageState extends State<AccountsPage> {
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        Icon(_orderListScreen[index].orderStatus == 'Inativo' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                        Icon(
+                            _orderListScreen[index].orderStatus == 'Inativo'
+                                ? MdiIcons.closeOctagon
+                                : MdiIcons.checkDecagram,
                             size: 20,
                             color: _orderListScreen[index].orderStatus == 'Inativo'
                                 ? Colors.red
@@ -258,8 +261,9 @@ class AccountsPageState extends State<AccountsPage> {
                     ),
                   ),
                   Divider(
-                    color:
-                        themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                    color: themeStore.isDarkModeEnable
+                        ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                        : Theme.of(context).dividerTheme.color,
                   ),
                 ],
               ),

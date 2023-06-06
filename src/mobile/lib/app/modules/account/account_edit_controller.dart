@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:mobx/mobx.dart';
 import 'package:string_validator/string_validator.dart';
 
@@ -121,9 +122,53 @@ abstract class _AccountEditControllerBase with Store {
   }
 
   @observable
+  bool isAtivo = true;
+  @action
+  void setIsAtivo(bool v) => isAtivo = v;
+
+  @observable
+  bool isAdmin = false;
+  @action
+  void setIsAdmin(bool v) => isAdmin = v;
+
+  @observable
   bool isLoading = false;
   @observable
   bool isPasswordVisible = false;
   @observable
   bool isConfirmPasswordVisible = false;
+
+  @computed
+  bool get isValid {
+    nome = nome ?? "";
+    username = username ?? "";
+    email = email ?? "";
+    telefone = telefone ?? "";
+    password = password ?? "";
+    confirmPassword = confirmPassword ?? "";
+
+    return nome != null &&
+        username != null &&
+        email != null &&
+        telefone != null &&
+        password != null &&
+        confirmPassword != null &&
+        getNomeError == null &&
+        getUsernameError == null &&
+        getTelefoneError == null &&
+        getPasswordError == null &&
+        getConfirmPasswordError == null &&
+        getPasswordError == null &&
+        getEmailError == null;
+  }
+
+  Future save() async {
+    try {
+      isLoading = true;
+
+      Future.delayed(const Duration(milliseconds: 5000), () {
+        isLoading = false;
+      });
+    } finally {}
+  }
 }

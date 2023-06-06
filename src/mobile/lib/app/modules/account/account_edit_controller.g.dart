@@ -262,6 +262,38 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
     });
   }
 
+  late final _$isAtivoAtom =
+      Atom(name: '_AccountEditControllerBase.isAtivo', context: context);
+
+  @override
+  bool get isAtivo {
+    _$isAtivoAtom.reportRead();
+    return super.isAtivo;
+  }
+
+  @override
+  set isAtivo(bool value) {
+    _$isAtivoAtom.reportWrite(value, super.isAtivo, () {
+      super.isAtivo = value;
+    });
+  }
+
+  late final _$isAdminAtom =
+      Atom(name: '_AccountEditControllerBase.isAdmin', context: context);
+
+  @override
+  bool get isAdmin {
+    _$isAdminAtom.reportRead();
+    return super.isAdmin;
+  }
+
+  @override
+  set isAdmin(bool value) {
+    _$isAdminAtom.reportWrite(value, super.isAdmin, () {
+      super.isAdmin = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: '_AccountEditControllerBase.isLoading', context: context);
 
@@ -393,6 +425,28 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   @override
+  void setIsAtivo(bool v) {
+    final _$actionInfo = _$_AccountEditControllerBaseActionController
+        .startAction(name: '_AccountEditControllerBase.setIsAtivo');
+    try {
+      return super.setIsAtivo(v);
+    } finally {
+      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsAdmin(bool v) {
+    final _$actionInfo = _$_AccountEditControllerBaseActionController
+        .startAction(name: '_AccountEditControllerBase.setIsAdmin');
+    try {
+      return super.setIsAdmin(v);
+    } finally {
+      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 photoPath: ${photoPath},
@@ -402,6 +456,8 @@ email: ${email},
 password: ${password},
 confirmPassword: ${confirmPassword},
 telefone: ${telefone},
+isAtivo: ${isAtivo},
+isAdmin: ${isAdmin},
 isLoading: ${isLoading},
 isPasswordVisible: ${isPasswordVisible},
 isConfirmPasswordVisible: ${isConfirmPasswordVisible},

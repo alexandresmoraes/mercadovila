@@ -458,7 +458,7 @@ class VendasPageState extends State<VendasPage> {
                             margin: const EdgeInsets.only(right: 10, top: 5),
                             padding: const EdgeInsets.only(left: 5, right: 5),
                             width: 60,
-                            height: 23,
+                            height: 20,
                             child: Center(
                               child: Row(
                                 children: [
@@ -480,7 +480,7 @@ class VendasPageState extends State<VendasPage> {
                     ),
                   ),
                   AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 300),
                     height: _orderListScreen[index].isProductsVisible ? 180 : 0,
                     child: SingleChildScrollView(
                       child: SizedBox(

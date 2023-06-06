@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vilasesmo/app/app_widget.dart';
 import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
@@ -171,16 +173,22 @@ class AccountEditPageState extends State<AccountEditPage> {
                         decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
-                        child: TextFormField(
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          decoration: InputDecoration(
-                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'João das Neves',
-                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                          ),
-                        ),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            autocorrect: true,
+                            initialValue: _controller.nome,
+                            onChanged: _controller.setNome,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: 'João das Neves',
+                              errorText: _controller.getNomeError,
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                            ),
+                          );
+                        }),
                       ),
                       Text(
                         "Nome de usuário",
@@ -190,16 +198,21 @@ class AccountEditPageState extends State<AccountEditPage> {
                         decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
-                        child: TextFormField(
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          decoration: InputDecoration(
-                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'jonsnow',
-                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                          ),
-                        ),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            initialValue: _controller.username,
+                            onChanged: _controller.setUsername,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: 'jonsnow',
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                              errorText: _controller.getUsernameError,
+                            ),
+                          );
+                        }),
                       ),
                       Text(
                         "Telefone",
@@ -209,16 +222,21 @@ class AccountEditPageState extends State<AccountEditPage> {
                         decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
-                        child: TextFormField(
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          decoration: InputDecoration(
-                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: '+55 46999055421',
-                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                          ),
-                        ),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            initialValue: _controller.telefone,
+                            onChanged: _controller.setTelefone,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: '+55 46999057070',
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                              errorText: _controller.getTelefoneError,
+                            ),
+                          );
+                        }),
                       ),
                       Text(
                         "Email",
@@ -228,47 +246,122 @@ class AccountEditPageState extends State<AccountEditPage> {
                         decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                         margin: const EdgeInsets.only(top: 5, bottom: 15),
                         padding: const EdgeInsets.only(),
-                        child: TextFormField(
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          decoration: InputDecoration(
-                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                            hintText: 'alexandresmoraes@me.com',
-                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                          ),
-                        ),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            initialValue: _controller.email,
+                            onChanged: _controller.setEmail,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: 'jonsnow@got.com',
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                              errorText: _controller.getEmailError,
+                            ),
+                          );
+                        }),
+                      ),
+                      Text(
+                        "Senha",
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                        margin: const EdgeInsets.only(top: 5, bottom: 15),
+                        padding: const EdgeInsets.only(),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            obscureText: !_controller.isPasswordVisible,
+                            initialValue: _controller.password,
+                            onChanged: _controller.setPassword,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: 'Digite a senha',
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                              errorText: _controller.getPasswordError,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _controller.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  _controller.isPasswordVisible = !_controller.isPasswordVisible;
+                                },
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                      Text(
+                        "Confirmação de senha",
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                        margin: const EdgeInsets.only(top: 5, bottom: 15),
+                        padding: const EdgeInsets.only(),
+                        child: Observer(builder: (_) {
+                          return TextFormField(
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            obscureText: !_controller.isConfirmPasswordVisible,
+                            initialValue: _controller.confirmPassword,
+                            onChanged: _controller.setConfirmPassword,
+                            decoration: InputDecoration(
+                              fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                  ? Theme.of(context).inputDecorationTheme.fillColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              hintText: 'Confirme a senha',
+                              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                              errorText: _controller.getConfirmPasswordError,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _controller.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  _controller.isConfirmPasswordVisible = !_controller.isConfirmPasswordVisible;
+                                },
+                              ),
+                            ),
+                          );
+                        }),
                       ),
                       Card(
-                        child: SwitchListTile(
-                          value: isAdmin,
-                          onChanged: (val) {
-                            setState(() {
-                              isAdmin = !isAdmin;
-                            });
+                        child: Observer(
+                          builder: (_) {
+                            return SwitchListTile(
+                              value: _controller.isAtivo,
+                              onChanged: (v) {
+                                _controller.setIsAtivo(v);
+                              },
+                              title: Text(
+                                "Ativo",
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                            );
                           },
-                          title: Text(
-                            isAdmin ? "Ativo" : "Inativo",
-                            style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Card(
-                        child: SwitchListTile(
-                          value: isAdmin,
-                          onChanged: (val) {
-                            setState(() {
-                              isAdmin = !isAdmin;
-                            });
-                          },
-                          title: Text(
-                            "Admin",
-                            style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          ),
-                        ),
+                        child: Observer(builder: (_) {
+                          return SwitchListTile(
+                            value: _controller.isAdmin,
+                            onChanged: (v) {
+                              _controller.setIsAdmin(v);
+                            },
+                            title: Text(
+                              "Admin",
+                              style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            ),
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -294,11 +387,34 @@ class AccountEditPageState extends State<AccountEditPage> {
                 margin: const EdgeInsets.all(8.0),
                 height: 50,
                 width: MediaQuery.of(context).size.width,
-                child: TextButton(
+                child: Observer(builder: (_) {
+                  return TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      if (_controller.isValid) {
+                        _controller.save();
+                      } else {
+                        AnimatedSnackBar.material(
+                          'ERROU!',
+                          type: AnimatedSnackBarType.error,
+                          mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                          desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+                        ).show(AppWidget.navigatorKey.currentState!.context);
+                      }
                     },
-                    child: const Text('Salvar')),
+                    child: _controller.isLoading
+                        ? Center(
+                            child: SizedBox(
+                              height: 21,
+                              width: 21,
+                              child: CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                                color: Theme.of(context).primaryTextTheme.displaySmall!.color,
+                              ),
+                            ),
+                          )
+                        : const Text('Salvar'),
+                  );
+                }),
               ),
             ),
           ],
