@@ -6,7 +6,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
-import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
@@ -15,12 +14,7 @@ class AccountEditPage extends StatefulWidget {
   final String? id;
   final bool mySelf;
 
-  const AccountEditPage({
-    Key? key,
-    this.title = 'Editando usuário',
-    this.id,
-    required this.mySelf,
-  }) : super(key: key);
+  const AccountEditPage({Key? key, this.title = 'Editando usuário', this.id, required this.mySelf}) : super(key: key);
   @override
   AccountEditPageState createState() => AccountEditPageState();
 }
@@ -29,10 +23,7 @@ class AccountEditPageState extends State<AccountEditPage> {
   bool isAdmin = false;
   late AccountEditController _controller;
 
-  AccountEditPageState() : super() {
-    _controller = Modular.get<AccountEditController>();
-    _controller.id = widget.mySelf ? Modular.get<AccountStore>().account!.id! : widget.id;
-  }
+  AccountEditPageState() : super();
 
   _getImagePicker(ImageSource source) async {
     var pickedFile = await ImagePicker().pickImage(
@@ -81,8 +72,9 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -504,6 +496,9 @@ class AccountEditPageState extends State<AccountEditPage> {
 
   @override
   void initState() {
+    _controller = Modular.get<AccountEditController>();
+    _controller.id = widget.mySelf ? Modular.get<AccountStore>().account!.id! : widget.id;
+
     super.initState();
   }
 }

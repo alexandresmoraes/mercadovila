@@ -1,5 +1,4 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:flutter/material.dart';
 import 'package:vilasesmo/app/app_widget.dart';
 
 class GlobalSnackbar {
