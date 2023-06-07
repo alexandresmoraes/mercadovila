@@ -29,7 +29,9 @@ namespace Auth.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    Nome = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    FotoUrl = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     UserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     Email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
@@ -161,8 +163,8 @@ namespace Auth.API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "995ee54d-b141-498d-b2cb-38451598cba5", "ae53f2db-b8d6-4b67-baab-914ac8c1248a", "user", "USER" },
-                    { "d99fedb7-4617-41f8-af56-b3f88d9e60cc", "43e47942-beba-4793-9956-0bbfb22e9189", "admin", "ADMIN" }
+                    { "5c1a1254-e8b0-4a7b-a845-9cf5baf5c069", "272877db-0514-4c0d-9a9c-deae2d7e8e06", "admin", "ADMIN" },
+                    { "eb24d950-fd16-4c9e-8975-5d9c3cdbb338", "869d3bee-c022-4d0b-ba99-999d2ac353c1", "user", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

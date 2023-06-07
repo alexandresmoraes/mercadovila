@@ -54,7 +54,7 @@ namespace Auth.API.Controllers
         Id = user.Id,
         Email = user.Email,
         Username = user.UserName,
-        PhoneNumber = user.PhoneNumber,
+        Telefone = user.PhoneNumber,
         Roles = await _userManager.GetRolesAsync(user),
       });
     }

@@ -20,6 +20,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/http/dio_api.dart';
+import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 
 class AppModule extends Module {
@@ -30,7 +31,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => AccountStore()),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://192.168.0.100.' : 'http://192.168.0.100',
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.0.100:8081',
         connectTimeout: kReleaseMode ? 20000 : 0,
         receiveTimeout: kReleaseMode ? 20000 : 0,
         sendTimeout: kReleaseMode ? 20000 : 0,
@@ -38,7 +39,7 @@ class AppModule extends Module {
     ),
     BindInject((i) => DioApi(i.get<BaseOptions>()), isSingleton: true, isLazy: true),
     BindInject((i) => AuthService(), isSingleton: true, isLazy: true),
-    Bind<BuildContext>((i) => i.args as BuildContext)
+    BindInject((i) => AccountRepository(), isSingleton: true, isLazy: true),
   ];
 
   @override

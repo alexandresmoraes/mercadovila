@@ -1,6 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:vilasesmo/app/utils/models/account_model.dart';
+import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 part 'account_edit_controller.g.dart';
 
@@ -162,12 +166,32 @@ abstract class _AccountEditControllerBase with Store {
         getEmailError == null;
   }
 
+  AccountModel? accountModel;
+
+  Future<AccountModel> fetch(String id) async {
+    if (accountModel != null) return accountModel!;
+
+    var accountRepository = Modular.get<IAccountRepository>();
+    accountModel = await accountRepository.getAccount(id);
+
+    nome = accountModel!.nome;
+    username = accountModel!.username;
+    email = accountModel!.email;
+    telefone = accountModel!.telefone;
+    password = "";
+    confirmPassword = "";
+
+    return accountModel!;
+  }
+
   Future save() async {
     try {
       isLoading = true;
 
       Future.delayed(const Duration(milliseconds: 5000), () {
         isLoading = false;
+        GlobalSnackbar.success('AWUR');
+        GlobalSnackbar.message('AWUR');
       });
     } finally {}
   }

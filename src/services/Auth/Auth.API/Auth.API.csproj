@@ -39,4 +39,8 @@
     <ProjectReference Include="..\..\..\common\Common.WebAPI\Common.WebAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

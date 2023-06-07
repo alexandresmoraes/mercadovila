@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auth.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230531014658_Initial_Create")]
+    [Migration("20230607013202_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,7 @@ namespace Auth.API.Migrations
             modelBuilder.Entity("Auth.API.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)");
 
@@ -45,6 +46,10 @@ namespace Auth.API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("FotoUrl")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -53,6 +58,10 @@ namespace Auth.API.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(128)
@@ -126,15 +135,15 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d99fedb7-4617-41f8-af56-b3f88d9e60cc",
-                            ConcurrencyStamp = "43e47942-beba-4793-9956-0bbfb22e9189",
+                            Id = "5c1a1254-e8b0-4a7b-a845-9cf5baf5c069",
+                            ConcurrencyStamp = "272877db-0514-4c0d-9a9c-deae2d7e8e06",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "995ee54d-b141-498d-b2cb-38451598cba5",
-                            ConcurrencyStamp = "ae53f2db-b8d6-4b67-baab-914ac8c1248a",
+                            Id = "eb24d950-fd16-4c9e-8975-5d9c3cdbb338",
+                            ConcurrencyStamp = "869d3bee-c022-4d0b-ba99-999d2ac353c1",
                             Name = "user",
                             NormalizedName = "USER"
                         });

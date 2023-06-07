@@ -37,6 +37,13 @@ namespace Auth.API.Config
       services.AddScoped<DbContext, ApplicationDbContext>();
       services.AddUnitOfWork();
 
+      services.AddMvc(opt =>
+      {
+#if DEBUG
+        opt.Filters.Add<DelayDebugAttribute>();
+#endif
+      });
+
       return services;
     }
 

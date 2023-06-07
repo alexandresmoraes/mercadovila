@@ -36,6 +36,7 @@ namespace Auth.API.Data
         b.Property(e => e.SecurityStamp).HasMaxLength(32);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
         b.Property(e => e.PhoneNumber).HasMaxLength(16);
+        b.Property(e => e.FotoUrl).HasMaxLength(128);
         b.Property(e => e.IsActive);
 
         b.ToTable("users");

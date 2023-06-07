@@ -30,4 +30,14 @@ namespace Auth.API.Models
 
     public bool IsAdmin { get; set; }
   }
+
+  public record NewAccountResponseModel
+  {
+    public string Id { get; set; }
+
+    public NewAccountResponseModel(string id)
+    {
+      Id = id;
+    }
+  }
 }

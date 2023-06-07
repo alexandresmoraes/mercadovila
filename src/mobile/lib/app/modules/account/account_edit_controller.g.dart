@@ -51,6 +51,12 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
           Computed<String?>(() => super.getTelefoneError,
               name: '_AccountEditControllerBase.getTelefoneError'))
       .value;
+  Computed<bool>? _$isValidComputed;
+
+  @override
+  bool get isValid => (_$isValidComputed ??= Computed<bool>(() => super.isValid,
+          name: '_AccountEditControllerBase.isValid'))
+      .value;
 
   late final _$photoPathAtom =
       Atom(name: '_AccountEditControllerBase.photoPath', context: context);
@@ -466,7 +472,8 @@ getUsernameError: ${getUsernameError},
 getEmailError: ${getEmailError},
 getPasswordError: ${getPasswordError},
 getConfirmPasswordError: ${getConfirmPasswordError},
-getTelefoneError: ${getTelefoneError}
+getTelefoneError: ${getTelefoneError},
+isValid: ${isValid}
     ''';
   }
 }
