@@ -15,8 +15,13 @@
       new Result<TDataResponse>(code, message);
 
     public static Result NotFound() => new ResultNotFound();
-
     public static Result<TDataResponse> NotFound<TDataResponse>() => new ResultNotFound<TDataResponse>();
+
+    public static Result Unauthorized() => new ResultUnauthorized();
+    public static Result<TDataResponse> Unauthorized<TDataResponse>() => new ResultUnauthorized<TDataResponse>();
+
+    public static Result Forbidden() => new ResultForbidden();
+    public static Result<TDataResponse> Forbidden<TDataResponse>() => new ResultForbidden<TDataResponse>();
 
     public static Result Fail(string message) => new Result(message);
 

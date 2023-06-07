@@ -3,6 +3,7 @@ using Auth.API.Data.Entities;
 using Auth.API.Data.Queries;
 using Auth.API.Data.Repositories;
 using Auth.API.Models;
+using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,20 +19,17 @@ namespace Auth.API.Controllers
   /// </summary>
   [Route("api/account")]
   [ApiController]
-#if DEBUG
-  [AllowAnonymous]
-#else
-  [Authorize(Roles = "admin")]
-#endif
   public class AccountController : ControllerBase
   {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserRepository _userRepository;
+    private readonly IAuthService<ApplicationUser> _authService;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService)
     {
-      _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-      _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+      _userManager = userManager;
+      _userRepository = userRepository;
+      _authService = authService;
     }
 
     /// <summary>
@@ -41,22 +39,29 @@ namespace Auth.API.Controllers
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<AccountModel>> GetAsync([FromRoute] string id)
     {
+      if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
+      {
+        return Result.Forbidden<AccountModel>();
+      }
+
       var user = await _userManager.FindByIdAsync(id);
 
       if (user is not null)
       {
-        return Result.Ok(new AccountModel
-        {
-          Id = user.Id,
-          Nome = user.Nome,
-          Email = user.Email,
-          Username = user.UserName,
-          Telefone = user.PhoneNumber,
-          FotoUrl = user.FotoUrl,
-          Roles = await _userManager.GetRolesAsync(user),
-        });
+        return Result.Ok(new AccountModel(
+          id: user.Id,
+          nome: user.Nome,
+          email: user.Email,
+          username: user.UserName,
+          telefone: user.PhoneNumber,
+          fotoUrl: user.FotoUrl,
+          isAtivo: user.IsAtivo,
+          roles: await _userManager.GetRolesAsync(user)
+        ));
       }
 
       return Result.NotFound<AccountModel>();
@@ -66,9 +71,12 @@ namespace Auth.API.Controllers
     /// Retorna usuários paginados
     /// </summary>
     // GET api/account
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<UserDto>>> GetUsersAsync([FromQuery] UserQuery query)
       => Result.Ok(await _userRepository.GetUsersPagination(query));
 
@@ -76,9 +84,12 @@ namespace Auth.API.Controllers
     /// Criação de novos usuários
     /// </summary>
     // POST api/account
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(NewAccountResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<NewAccountResponseModel>> PostAsync([FromBody] NewAndUpdateAccountModel newAccountModel)
     {
       var user = new ApplicationUser
@@ -88,14 +99,17 @@ namespace Auth.API.Controllers
         Email = newAccountModel.Email,
         PhoneNumber = newAccountModel.Telefone,
         EmailConfirmed = true,
-        IsActive = newAccountModel.IsActive
+        IsAtivo = newAccountModel.IsAtivo
       };
 
       var result = await _userManager.CreateAsync(user, newAccountModel.Password);
 
-      if (result.Succeeded && newAccountModel.IsAdmin)
+      if (result.Succeeded)
       {
-        await _userManager.AddToRoleAsync(user, "admin");
+        if (newAccountModel.IsAdmin)
+        {
+          await _userManager.AddToRoleAsync(user, "admin");
+        }
 
         return Result.Created(new NewAccountResponseModel(user.Id));
       }
@@ -107,9 +121,12 @@ namespace Auth.API.Controllers
     /// Alteração de conta de usuário
     /// </summary>
     // PUT api/account/{id}
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] NewAndUpdateAccountModel updateAccountModel)
     {
       var user = await _userManager.FindByIdAsync(id);
@@ -121,7 +138,7 @@ namespace Auth.API.Controllers
       user.Email = updateAccountModel.Email;
       user.PhoneNumber = updateAccountModel.Telefone;
       user.UserName = updateAccountModel.Username;
-      user.IsActive = updateAccountModel.IsActive;
+      user.IsAtivo = updateAccountModel.IsAtivo;
 
       var result = await _userManager.UpdateAsync(user);
 
@@ -157,8 +174,15 @@ namespace Auth.API.Controllers
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile photo)
     {
+      if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
+      {
+        return Result.Forbidden<AccountModel>();
+      }
+
       var photoUploadModel = new PhotoUploadModel(photo);
 
       var context = new ValidationContext(photoUploadModel);

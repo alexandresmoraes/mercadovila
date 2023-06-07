@@ -26,7 +26,7 @@ namespace Auth.API.Models
     [StringLength(17, ErrorMessage = "Telefone deve ter entra 11 a 17 caracteres.", MinimumLength = 11)]
     public string? Telefone { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool IsAtivo { get; set; }
 
     public bool IsAdmin { get; set; }
   }

@@ -8,58 +8,58 @@ part of 'account_edit_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$AccountEditController on _AccountEditControllerBase, Store {
+mixin _$AccountEditController on AccountEditControllerBase, Store {
   Computed<String?>? _$getNomeErrorComputed;
 
   @override
   String? get getNomeError =>
       (_$getNomeErrorComputed ??= Computed<String?>(() => super.getNomeError,
-              name: '_AccountEditControllerBase.getNomeError'))
+              name: 'AccountEditControllerBase.getNomeError'))
           .value;
   Computed<String?>? _$getUsernameErrorComputed;
 
   @override
   String? get getUsernameError => (_$getUsernameErrorComputed ??=
           Computed<String?>(() => super.getUsernameError,
-              name: '_AccountEditControllerBase.getUsernameError'))
+              name: 'AccountEditControllerBase.getUsernameError'))
       .value;
   Computed<String?>? _$getEmailErrorComputed;
 
   @override
   String? get getEmailError =>
       (_$getEmailErrorComputed ??= Computed<String?>(() => super.getEmailError,
-              name: '_AccountEditControllerBase.getEmailError'))
+              name: 'AccountEditControllerBase.getEmailError'))
           .value;
   Computed<String?>? _$getPasswordErrorComputed;
 
   @override
   String? get getPasswordError => (_$getPasswordErrorComputed ??=
           Computed<String?>(() => super.getPasswordError,
-              name: '_AccountEditControllerBase.getPasswordError'))
+              name: 'AccountEditControllerBase.getPasswordError'))
       .value;
   Computed<String?>? _$getConfirmPasswordErrorComputed;
 
   @override
   String? get getConfirmPasswordError => (_$getConfirmPasswordErrorComputed ??=
           Computed<String?>(() => super.getConfirmPasswordError,
-              name: '_AccountEditControllerBase.getConfirmPasswordError'))
+              name: 'AccountEditControllerBase.getConfirmPasswordError'))
       .value;
   Computed<String?>? _$getTelefoneErrorComputed;
 
   @override
   String? get getTelefoneError => (_$getTelefoneErrorComputed ??=
           Computed<String?>(() => super.getTelefoneError,
-              name: '_AccountEditControllerBase.getTelefoneError'))
+              name: 'AccountEditControllerBase.getTelefoneError'))
       .value;
   Computed<bool>? _$isValidComputed;
 
   @override
   bool get isValid => (_$isValidComputed ??= Computed<bool>(() => super.isValid,
-          name: '_AccountEditControllerBase.isValid'))
+          name: 'AccountEditControllerBase.isValid'))
       .value;
 
   late final _$isFotoAlteradaAtom =
-      Atom(name: '_AccountEditControllerBase.isFotoAlterada', context: context);
+      Atom(name: 'AccountEditControllerBase.isFotoAlterada', context: context);
 
   @override
   bool get isFotoAlterada {
@@ -75,7 +75,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$photoPathAtom =
-      Atom(name: '_AccountEditControllerBase.photoPath', context: context);
+      Atom(name: 'AccountEditControllerBase.photoPath', context: context);
 
   @override
   String? get photoPath {
@@ -91,7 +91,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$nomeAtom =
-      Atom(name: '_AccountEditControllerBase.nome', context: context);
+      Atom(name: 'AccountEditControllerBase.nome', context: context);
 
   @override
   String? get nome {
@@ -107,7 +107,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_nomeApiErrorAtom =
-      Atom(name: '_AccountEditControllerBase._nomeApiError', context: context);
+      Atom(name: 'AccountEditControllerBase._nomeApiError', context: context);
 
   @override
   String? get _nomeApiError {
@@ -123,7 +123,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$usernameAtom =
-      Atom(name: '_AccountEditControllerBase.username', context: context);
+      Atom(name: 'AccountEditControllerBase.username', context: context);
 
   @override
   String? get username {
@@ -139,7 +139,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_usernameApiErrorAtom = Atom(
-      name: '_AccountEditControllerBase._usernameApiError', context: context);
+      name: 'AccountEditControllerBase._usernameApiError', context: context);
 
   @override
   String? get _usernameApiError {
@@ -155,7 +155,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$emailAtom =
-      Atom(name: '_AccountEditControllerBase.email', context: context);
+      Atom(name: 'AccountEditControllerBase.email', context: context);
 
   @override
   String? get email {
@@ -171,7 +171,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_emailApiErrorAtom =
-      Atom(name: '_AccountEditControllerBase._emailApiError', context: context);
+      Atom(name: 'AccountEditControllerBase._emailApiError', context: context);
 
   @override
   String? get _emailApiError {
@@ -187,7 +187,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$passwordAtom =
-      Atom(name: '_AccountEditControllerBase.password', context: context);
+      Atom(name: 'AccountEditControllerBase.password', context: context);
 
   @override
   String? get password {
@@ -203,7 +203,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_passwordApiErrorAtom = Atom(
-      name: '_AccountEditControllerBase._passwordApiError', context: context);
+      name: 'AccountEditControllerBase._passwordApiError', context: context);
 
   @override
   String? get _passwordApiError {
@@ -218,8 +218,8 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
     });
   }
 
-  late final _$confirmPasswordAtom = Atom(
-      name: '_AccountEditControllerBase.confirmPassword', context: context);
+  late final _$confirmPasswordAtom =
+      Atom(name: 'AccountEditControllerBase.confirmPassword', context: context);
 
   @override
   String? get confirmPassword {
@@ -235,7 +235,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_confirmPasswordApiErrorAtom = Atom(
-      name: '_AccountEditControllerBase._confirmPasswordApiError',
+      name: 'AccountEditControllerBase._confirmPasswordApiError',
       context: context);
 
   @override
@@ -253,7 +253,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$telefoneAtom =
-      Atom(name: '_AccountEditControllerBase.telefone', context: context);
+      Atom(name: 'AccountEditControllerBase.telefone', context: context);
 
   @override
   String? get telefone {
@@ -269,7 +269,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$_telefoneApiErrorAtom = Atom(
-      name: '_AccountEditControllerBase._telefoneApiError', context: context);
+      name: 'AccountEditControllerBase._telefoneApiError', context: context);
 
   @override
   String? get _telefoneApiError {
@@ -285,7 +285,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$isAtivoAtom =
-      Atom(name: '_AccountEditControllerBase.isAtivo', context: context);
+      Atom(name: 'AccountEditControllerBase.isAtivo', context: context);
 
   @override
   bool get isAtivo {
@@ -301,7 +301,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$isAdminAtom =
-      Atom(name: '_AccountEditControllerBase.isAdmin', context: context);
+      Atom(name: 'AccountEditControllerBase.isAdmin', context: context);
 
   @override
   bool get isAdmin {
@@ -317,7 +317,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$isLoadingAtom =
-      Atom(name: '_AccountEditControllerBase.isLoading', context: context);
+      Atom(name: 'AccountEditControllerBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -333,7 +333,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$isPasswordVisibleAtom = Atom(
-      name: '_AccountEditControllerBase.isPasswordVisible', context: context);
+      name: 'AccountEditControllerBase.isPasswordVisible', context: context);
 
   @override
   bool get isPasswordVisible {
@@ -349,7 +349,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   }
 
   late final _$isConfirmPasswordVisibleAtom = Atom(
-      name: '_AccountEditControllerBase.isConfirmPasswordVisible',
+      name: 'AccountEditControllerBase.isConfirmPasswordVisible',
       context: context);
 
   @override
@@ -366,105 +366,105 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
     });
   }
 
-  late final _$_AccountEditControllerBaseActionController =
-      ActionController(name: '_AccountEditControllerBase', context: context);
+  late final _$AccountEditControllerBaseActionController =
+      ActionController(name: 'AccountEditControllerBase', context: context);
 
   @override
   void setPhotoPath(String v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setPhotoPath');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setPhotoPath');
     try {
       return super.setPhotoPath(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setNome(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setNome');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setNome');
     try {
       return super.setNome(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setUsername(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setUsername');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setUsername');
     try {
       return super.setUsername(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setEmail(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setEmail');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setEmail');
     try {
       return super.setEmail(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setPassword(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setPassword');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setPassword');
     try {
       return super.setPassword(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setConfirmPassword(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setConfirmPassword');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setConfirmPassword');
     try {
       return super.setConfirmPassword(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setTelefone(String? v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setTelefone');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setTelefone');
     try {
       return super.setTelefone(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setIsAtivo(bool v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setIsAtivo');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setIsAtivo');
     try {
       return super.setIsAtivo(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setIsAdmin(bool v) {
-    final _$actionInfo = _$_AccountEditControllerBaseActionController
-        .startAction(name: '_AccountEditControllerBase.setIsAdmin');
+    final _$actionInfo = _$AccountEditControllerBaseActionController
+        .startAction(name: 'AccountEditControllerBase.setIsAdmin');
     try {
       return super.setIsAdmin(v);
     } finally {
-      _$_AccountEditControllerBaseActionController.endAction(_$actionInfo);
+      _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 

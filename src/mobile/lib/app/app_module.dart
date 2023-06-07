@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';

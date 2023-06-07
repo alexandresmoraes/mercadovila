@@ -6,7 +6,7 @@ class NewAndUpdateAccountModel {
     required this.password,
     required this.confirmPassword,
     required this.telefone,
-    required this.isActive,
+    required this.isAtivo,
     required this.isAdmin,
   });
   late final String nome;
@@ -15,7 +15,7 @@ class NewAndUpdateAccountModel {
   late final String password;
   late final String confirmPassword;
   late final String telefone;
-  late final bool isActive;
+  late final bool isAtivo;
   late final bool isAdmin;
 
   Map<String, dynamic> toJson() {
@@ -26,7 +26,7 @@ class NewAndUpdateAccountModel {
     data['password'] = password;
     data['confirmPassword'] = confirmPassword;
     data['telefone'] = telefone;
-    data['isActive'] = isActive;
+    data['isAtivo'] = isAtivo;
     data['isAdmin'] = isAdmin;
     return data;
   }

@@ -1,4 +1,5 @@
-﻿using Auth.API.Models;
+﻿using Auth.API.Data.Entities;
+using Auth.API.Models;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Data;
 using Common.WebAPI.Results;
@@ -15,20 +16,20 @@ namespace Auth.API.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly IAuthService<IdentityUser> _authService;
+    private readonly IAuthService<ApplicationUser> _authService;
     private readonly IJwtService _jwtService;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AuthController> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public AuthController(
-      IAuthService<IdentityUser> authService,
+      IAuthService<ApplicationUser> authService,
       IJwtService jwtService,
-      SignInManager<IdentityUser> signInManager,
+      SignInManager<ApplicationUser> signInManager,
       IUnitOfWork unitOfWork,
       ILogger<AuthController> logger,
-      UserManager<IdentityUser> userManager)
+      UserManager<ApplicationUser> userManager)
     {
       _authService = authService ?? throw new ArgumentNullException(nameof(authService));
       _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
@@ -49,14 +50,16 @@ namespace Auth.API.Controllers
     {
       var user = await _userManager.FindByIdAsync(_authService.GetUserId());
 
-      return Result.Ok(new AccountModel
-      {
-        Id = user.Id,
-        Email = user.Email,
-        Username = user.UserName,
-        Telefone = user.PhoneNumber,
-        Roles = await _userManager.GetRolesAsync(user),
-      });
+      return Result.Ok(new AccountModel(
+        id: user.Id,
+        nome: user.Nome,
+        email: user.Email,
+        username: user.UserName,
+        telefone: user.PhoneNumber,
+        fotoUrl: user.FotoUrl,
+        isAtivo: user.IsAtivo,
+        roles: await _userManager.GetRolesAsync(user)
+      ));
     }
 
     /// <summary>

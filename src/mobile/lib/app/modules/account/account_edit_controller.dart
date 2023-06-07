@@ -12,9 +12,9 @@ import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 part 'account_edit_controller.g.dart';
 
-class AccountEditController = _AccountEditControllerBase with _$AccountEditController;
+class AccountEditController = AccountEditControllerBase with _$AccountEditController;
 
-abstract class _AccountEditControllerBase with Store {
+abstract class AccountEditControllerBase with Store {
   String? id;
 
   @observable
@@ -173,6 +173,8 @@ abstract class _AccountEditControllerBase with Store {
     telefone = accountModel!.telefone;
     password = "";
     confirmPassword = "";
+    isAtivo = accountModel!.isAtivo;
+    isAdmin = accountModel!.isAdmin;
 
     return accountModel!;
   }

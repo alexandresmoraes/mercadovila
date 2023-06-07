@@ -8,9 +8,9 @@ part of 'carrinho_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$CarrinhoStore on _CarrinhoStoreBase, Store {
+mixin _$CarrinhoStore on CarrinhoStoreBase, Store {
   late final _$valueAtom =
-      Atom(name: '_CarrinhoStoreBase.value', context: context);
+      Atom(name: 'CarrinhoStoreBase.value', context: context);
 
   @override
   int get value {
@@ -25,17 +25,17 @@ mixin _$CarrinhoStore on _CarrinhoStoreBase, Store {
     });
   }
 
-  late final _$_CarrinhoStoreBaseActionController =
-      ActionController(name: '_CarrinhoStoreBase', context: context);
+  late final _$CarrinhoStoreBaseActionController =
+      ActionController(name: 'CarrinhoStoreBase', context: context);
 
   @override
   void increment() {
-    final _$actionInfo = _$_CarrinhoStoreBaseActionController.startAction(
-        name: '_CarrinhoStoreBase.increment');
+    final _$actionInfo = _$CarrinhoStoreBaseActionController.startAction(
+        name: 'CarrinhoStoreBase.increment');
     try {
       return super.increment();
     } finally {
-      _$_CarrinhoStoreBaseActionController.endAction(_$actionInfo);
+      _$CarrinhoStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

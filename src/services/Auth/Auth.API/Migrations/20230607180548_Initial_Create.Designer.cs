@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auth.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230607013202_Initial_Create")]
+    [Migration("20230607180548_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace Auth.API.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsAtivo")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
@@ -83,8 +83,8 @@ namespace Auth.API.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
@@ -103,6 +103,26 @@ namespace Auth.API.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "9bb4bff4-257c-48b1-b3f8-b5b01925174c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "46e5dc48-7636-48d4-b6d1-e2188ba992ff",
+                            Email = "admin@admin.com",
+                            EmailConfirmed = false,
+                            IsAtivo = true,
+                            LockoutEnabled = false,
+                            Nome = "Admin",
+                            NormalizedEmail = "ADMIN@ADMIN.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEObdgg1L9cdJv8kOxWLnV8xMhcShHk+3/25Zn7gECp6nPCE9fXNAdKOjapbmM28K/g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "eeb7aa33-3fdd-4842-b9cc-07ed3bffcb62",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -135,17 +155,10 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5c1a1254-e8b0-4a7b-a845-9cf5baf5c069",
-                            ConcurrencyStamp = "272877db-0514-4c0d-9a9c-deae2d7e8e06",
+                            Id = "cd6e87d7-d908-40c6-82d6-61100b62d1dd",
+                            ConcurrencyStamp = "180a6502-86de-4986-8f22-4db16887b43e",
                             Name = "admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "eb24d950-fd16-4c9e-8975-5d9c3cdbb338",
-                            ConcurrencyStamp = "869d3bee-c022-4d0b-ba99-999d2ac353c1",
-                            Name = "user",
-                            NormalizedName = "USER"
                         });
                 });
 
@@ -248,6 +261,13 @@ namespace Auth.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("user_roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "9bb4bff4-257c-48b1-b3f8-b5b01925174c",
+                            RoleId = "cd6e87d7-d908-40c6-82d6-61100b62d1dd"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

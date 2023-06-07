@@ -58,14 +58,45 @@ namespace Common.WebAPI.Results
       {
         if (objectResult.Value is Result result && result is IResultNotFound)
         {
-          if (result.HasError)
-          {
-            context.Result = new NotFoundObjectResult(new Result(result.Errors));
-          }
-          else
-          {
-            context.Result = new NotFoundResult();
-          }
+          context.Result = new NotFoundResult();
+        }
+      }
+
+      base.OnResultExecuting(context);
+    }
+  }
+
+  public class ResultUnauthorizedFilterAttribute : ResultFilterAttribute
+  {
+    public override void OnResultExecuting(ResultExecutingContext context)
+    {
+      var cancellationToken = context.HttpContext.RequestAborted;
+      cancellationToken.ThrowIfCancellationRequested();
+
+      if (context.Result is ObjectResult objectResult)
+      {
+        if (objectResult.Value is Result result && result is IResultUnauthorized)
+        {
+          context.Result = new UnauthorizedResult();
+        }
+      }
+
+      base.OnResultExecuting(context);
+    }
+  }
+
+  public class ResultForbiddenFilterAttribute : ResultFilterAttribute
+  {
+    public override void OnResultExecuting(ResultExecutingContext context)
+    {
+      var cancellationToken = context.HttpContext.RequestAborted;
+      cancellationToken.ThrowIfCancellationRequested();
+
+      if (context.Result is ObjectResult objectResult)
+      {
+        if (objectResult.Value is Result result && result is IResultForbidden)
+        {
+          context.Result = new ForbidResult();
         }
       }
 
@@ -101,7 +132,7 @@ namespace Common.WebAPI.Results
 
       if (context.Result is ObjectResult objectResult)
       {
-        if (objectResult.Value is Result result && result.HasError && result is not IResultNotFound)
+        if (objectResult.Value is Result result && result.HasError)
         {
           context.Result = new BadRequestObjectResult(result);
         }

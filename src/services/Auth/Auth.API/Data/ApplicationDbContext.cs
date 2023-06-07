@@ -33,11 +33,11 @@ namespace Auth.API.Data
         b.Property(e => e.Email).HasMaxLength(128);
         b.Property(e => e.NormalizedEmail).HasMaxLength(128);
         b.Property(e => e.PasswordHash).HasMaxLength(256);
-        b.Property(e => e.SecurityStamp).HasMaxLength(32);
+        b.Property(e => e.SecurityStamp).HasMaxLength(36);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
         b.Property(e => e.PhoneNumber).HasMaxLength(16);
         b.Property(e => e.FotoUrl).HasMaxLength(128);
-        b.Property(e => e.IsActive);
+        b.Property(e => e.IsAtivo);
 
         b.ToTable("users");
       });
@@ -49,10 +49,6 @@ namespace Auth.API.Data
         b.Property(e => e.Name).HasMaxLength(128);
         b.Property(e => e.NormalizedName).HasMaxLength(128);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
-
-        b.HasData(
-          new IdentityRole("admin") { NormalizedName = "ADMIN" },
-          new IdentityRole("user") { NormalizedName = "USER" });
 
         b.ToTable("roles");
       });
@@ -105,6 +101,28 @@ namespace Auth.API.Data
 
         b.ToTable("user_tokens");
       });
+
+      var roleAdmin = new IdentityRole("admin") { NormalizedName = "ADMIN" };
+      modelBuilder.Entity<IdentityRole>().HasData(roleAdmin);
+
+      var userAdmin = new ApplicationUser
+      {
+        Id = Guid.NewGuid().ToString(),
+        SecurityStamp = Guid.NewGuid().ToString(),
+        Nome = "Admin",
+        UserName = "admin",
+        Email = "admin@admin.com",
+        NormalizedUserName = "ADMIN",
+        NormalizedEmail = "ADMIN@ADMIN.COM",
+        IsAtivo = true
+      };
+      var hasher = new PasswordHasher<ApplicationUser>();
+      userAdmin.PasswordHash = hasher.HashPassword(userAdmin, "admin");
+      modelBuilder.Entity<ApplicationUser>().HasData(userAdmin);
+
+      modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string> { RoleId = roleAdmin.Id, UserId = userAdmin.Id }
+        );
     }
   }
 }

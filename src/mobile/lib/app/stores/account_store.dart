@@ -3,9 +3,9 @@ import 'package:vilasesmo/app/utils/models/account_model.dart';
 
 part 'account_store.g.dart';
 
-class AccountStore = _AccountStoreBase with _$AccountStore;
+class AccountStore = AccountStoreBase with _$AccountStore;
 
-abstract class _AccountStoreBase with Store {
+abstract class AccountStoreBase with Store {
   @observable
   AccountModel? account;
 

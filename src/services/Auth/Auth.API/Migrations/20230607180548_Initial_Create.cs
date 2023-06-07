@@ -30,7 +30,7 @@ namespace Auth.API.Migrations
                 {
                     Id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     Nome = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsAtivo = table.Column<bool>(type: "boolean", nullable: false),
                     FotoUrl = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     UserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
@@ -38,7 +38,7 @@ namespace Auth.API.Migrations
                     NormalizedEmail = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    SecurityStamp = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    SecurityStamp = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
                     PhoneNumber = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
@@ -161,11 +161,17 @@ namespace Auth.API.Migrations
             migrationBuilder.InsertData(
                 table: "roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "5c1a1254-e8b0-4a7b-a845-9cf5baf5c069", "272877db-0514-4c0d-9a9c-deae2d7e8e06", "admin", "ADMIN" },
-                    { "eb24d950-fd16-4c9e-8975-5d9c3cdbb338", "869d3bee-c022-4d0b-ba99-999d2ac353c1", "user", "USER" }
-                });
+                values: new object[] { "cd6e87d7-d908-40c6-82d6-61100b62d1dd", "180a6502-86de-4986-8f22-4db16887b43e", "admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FotoUrl", "IsAtivo", "LockoutEnabled", "LockoutEnd", "Nome", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "9bb4bff4-257c-48b1-b3f8-b5b01925174c", 0, "46e5dc48-7636-48d4-b6d1-e2188ba992ff", "admin@admin.com", false, null, true, false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN", "AQAAAAEAACcQAAAAEObdgg1L9cdJv8kOxWLnV8xMhcShHk+3/25Zn7gECp6nPCE9fXNAdKOjapbmM28K/g==", null, false, "eeb7aa33-3fdd-4842-b9cc-07ed3bffcb62", false, "admin" });
+
+            migrationBuilder.InsertData(
+                table: "user_roles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "cd6e87d7-d908-40c6-82d6-61100b62d1dd", "9bb4bff4-257c-48b1-b3f8-b5b01925174c" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_claims_RoleId",

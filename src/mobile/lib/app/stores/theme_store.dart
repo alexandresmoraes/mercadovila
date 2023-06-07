@@ -3,13 +3,13 @@ import 'package:vilasesmo/app/utils/services/local_storage_service.dart';
 
 part 'theme_store.g.dart';
 
-class ThemeStore = _ThemeStoreBase with _$ThemeStore;
+class ThemeStore = ThemeStoreBase with _$ThemeStore;
 
-abstract class _ThemeStoreBase with Store {
+abstract class ThemeStoreBase with Store {
   static const _isDarkModeEnable = '_isDarkModeEnable';
   bool defaultIsDarkEnable = true;
 
-  _ThemeStoreBase() {
+  ThemeStoreBase() {
     _initStore();
   }
 
