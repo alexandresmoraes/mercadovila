@@ -3,7 +3,6 @@ using Auth.API.Data.Entities;
 using Auth.API.Data.Queries;
 using Auth.API.Data.Repositories;
 using Auth.API.Models;
-using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,13 +26,11 @@ namespace Auth.API.Controllers
   public class AccountController : ControllerBase
   {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IJwtService _jwtService;
     private readonly IUserRepository _userRepository;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IJwtService jwtService, IUserRepository userRepository)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository)
     {
       _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-      _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
       _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
@@ -82,7 +79,7 @@ namespace Auth.API.Controllers
     [HttpPost]
     [ProducesResponseType(typeof(NewAccountResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result<NewAccountResponseModel>> PostAsync([FromBody] NewAccountModel newAccountModel)
+    public async Task<Result<NewAccountResponseModel>> PostAsync([FromBody] NewAndUpdateAccountModel newAccountModel)
     {
       var user = new ApplicationUser
       {
@@ -113,7 +110,7 @@ namespace Auth.API.Controllers
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<Result> PutAsync([FromRoute] string id, [FromBody] UpdateAccountModel updateAccountModel)
+    public async Task<Result> PutAsync([FromRoute] string id, [FromBody] NewAndUpdateAccountModel updateAccountModel)
     {
       var user = await _userManager.FindByIdAsync(id);
 

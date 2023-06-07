@@ -58,6 +58,22 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
           name: '_AccountEditControllerBase.isValid'))
       .value;
 
+  late final _$isFotoAlteradaAtom =
+      Atom(name: '_AccountEditControllerBase.isFotoAlterada', context: context);
+
+  @override
+  bool get isFotoAlterada {
+    _$isFotoAlteradaAtom.reportRead();
+    return super.isFotoAlterada;
+  }
+
+  @override
+  set isFotoAlterada(bool value) {
+    _$isFotoAlteradaAtom.reportWrite(value, super.isFotoAlterada, () {
+      super.isFotoAlterada = value;
+    });
+  }
+
   late final _$photoPathAtom =
       Atom(name: '_AccountEditControllerBase.photoPath', context: context);
 
@@ -455,6 +471,7 @@ mixin _$AccountEditController on _AccountEditControllerBase, Store {
   @override
   String toString() {
     return '''
+isFotoAlterada: ${isFotoAlterada},
 photoPath: ${photoPath},
 nome: ${nome},
 username: ${username},

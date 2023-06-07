@@ -231,7 +231,7 @@ class SearchPageState extends State<SearchPage> {
                                   //   ),
                                   // );
 
-                                  Modular.get<AuthService>().getAccount();
+                                  Modular.get<AuthService>().me();
                                 },
                                 child: Image.asset('assets/orange_next.png')),
                           ],

@@ -2,7 +2,7 @@
 
 namespace Auth.API.Models
 {
-  public record NewAccountModel
+  public record NewAndUpdateAccountModel
   {
     [Required(ErrorMessage = "Nome do usuário está vazio.")]
     public string? Nome { get; set; }

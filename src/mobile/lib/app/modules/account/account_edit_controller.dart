@@ -2,8 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
+import 'package:vilasesmo/app/utils/models/account/new_and_update_account_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
+import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 part 'account_edit_controller.g.dart';
@@ -11,6 +16,9 @@ part 'account_edit_controller.g.dart';
 class AccountEditController = _AccountEditControllerBase with _$AccountEditController;
 
 abstract class _AccountEditControllerBase with Store {
+  String? id;
+
+  @observable
   bool isFotoAlterada = false;
 
   @observable
@@ -26,9 +34,9 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _nomeApiError;
   @computed
-  String? get getNomeError => _nomeApiError != null && _nomeApiError!.isNotEmpty
+  String? get getNomeError => isNullorEmpty(_nomeApiError)
       ? _nomeApiError
-      : nome != null && nome!.isEmpty
+      : isNullorEmpty(nome)
           ? 'Nome do usuário não pode ser vazio.'
           : null;
   @action
@@ -42,9 +50,9 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _usernameApiError;
   @computed
-  String? get getUsernameError => _usernameApiError != null && _usernameApiError!.isNotEmpty
+  String? get getUsernameError => isNullorEmpty(_usernameApiError)
       ? _usernameApiError
-      : username != null && username!.isEmpty
+      : isNullorEmpty(username)
           ? 'Nome de usuário não pode ser vazio.'
           : null;
   @action
@@ -58,11 +66,11 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _emailApiError;
   @computed
-  String? get getEmailError => _emailApiError != null && _emailApiError!.isNotEmpty
+  String? get getEmailError => isNullorEmpty(_emailApiError)
       ? _emailApiError
-      : email != null && email!.isEmpty
+      : isNullorEmpty(email)
           ? 'Email do usuário não pode ser vazio.'
-          : email != null && !isEmail(email!)
+          : !isEmail(email!)
               ? 'Insira um email válido.'
               : null;
   @action
@@ -76,13 +84,13 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _passwordApiError;
   @computed
-  String? get getPasswordError => _passwordApiError != null && _passwordApiError!.isNotEmpty
+  String? get getPasswordError => isNullorEmpty(_passwordApiError)
       ? _passwordApiError
-      : password != null && password!.isEmpty
+      : isNullorEmpty(password)
           ? 'Senha do usuário não pode ser vazio.'
-          : password != null && password!.length < 4
+          : password!.length < 4
               ? 'Mínimo 4 caracteres.'
-              : password != null && password!.length > 50
+              : password!.length > 50
                   ? 'Máximo 50 caracteres.'
                   : null;
   @action
@@ -96,11 +104,11 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _confirmPasswordApiError;
   @computed
-  String? get getConfirmPasswordError => _confirmPasswordApiError != null && _confirmPasswordApiError!.isNotEmpty
+  String? get getConfirmPasswordError => isNullorEmpty(_confirmPasswordApiError)
       ? _confirmPasswordApiError
-      : confirmPassword != null && confirmPassword!.isEmpty
+      : isNullorEmpty(confirmPassword)
           ? 'Confirme a senha.'
-          : confirmPassword != null && password != null && password! != confirmPassword!
+          : password! != confirmPassword!
               ? 'Senhas não conferem.'
               : null;
   @action
@@ -114,9 +122,9 @@ abstract class _AccountEditControllerBase with Store {
   @observable
   String? _telefoneApiError;
   @computed
-  String? get getTelefoneError => _telefoneApiError != null && _telefoneApiError!.isNotEmpty
+  String? get getTelefoneError => isNullorEmpty(_telefoneApiError)
       ? _telefoneApiError
-      : telefone != null && telefone!.isEmpty
+      : isNullorEmpty(telefone)
           ? 'Número telefone não pode ser vazio.'
           : null;
   @action
@@ -143,36 +151,22 @@ abstract class _AccountEditControllerBase with Store {
   bool isConfirmPasswordVisible = false;
 
   @computed
-  bool get isValid {
-    nome = nome ?? "";
-    username = username ?? "";
-    email = email ?? "";
-    telefone = telefone ?? "";
-    password = password ?? "";
-    confirmPassword = confirmPassword ?? "";
-
-    return nome != null &&
-        username != null &&
-        email != null &&
-        telefone != null &&
-        password != null &&
-        confirmPassword != null &&
-        getNomeError == null &&
-        getUsernameError == null &&
-        getTelefoneError == null &&
-        getPasswordError == null &&
-        getConfirmPasswordError == null &&
-        getPasswordError == null &&
-        getEmailError == null;
-  }
+  bool get isValid =>
+      isNullorEmpty(getNomeError) &&
+      isNullorEmpty(getUsernameError) &&
+      isNullorEmpty(getTelefoneError) &&
+      isNullorEmpty(getPasswordError) &&
+      isNullorEmpty(getConfirmPasswordError) &&
+      isNullorEmpty(getPasswordError) &&
+      isNullorEmpty(getEmailError);
 
   AccountModel? accountModel;
 
-  Future<AccountModel> fetch(String id) async {
+  Future<AccountModel> load() async {
     if (accountModel != null) return accountModel!;
 
     var accountRepository = Modular.get<IAccountRepository>();
-    accountModel = await accountRepository.getAccount(id);
+    accountModel = await accountRepository.getAccount(id!);
 
     nome = accountModel!.nome;
     username = accountModel!.username;
@@ -185,14 +179,51 @@ abstract class _AccountEditControllerBase with Store {
   }
 
   Future save() async {
-    try {
-      isLoading = true;
+    var newAndUpdateAccountModel = NewAndUpdateAccountModel(
+      nome: nome!,
+      username: username!,
+      email: email!,
+      telefone: telefone!,
+      password: password!,
+      confirmPassword: confirmPassword!,
+      isActive: true,
+      isAdmin: true,
+    );
 
-      Future.delayed(const Duration(milliseconds: 5000), () {
-        isLoading = false;
-        GlobalSnackbar.success('AWUR');
-        GlobalSnackbar.message('AWUR');
+    var accountRepository = Modular.get<IAccountRepository>();
+    if (isNullorEmpty(id)) {
+      var result = await accountRepository.newAccount(newAndUpdateAccountModel);
+
+      result.fold(apiErrors, (accountResponse) async {
+        GlobalSnackbar.success('Alterado com sucesso!');
+        Modular.to.pop();
       });
-    } finally {}
+    } else {
+      var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
+
+      result.fold(apiErrors, (accountResponse) async {
+        var me = await Modular.get<IAuthService>().me();
+        result.fold((resultFail) {}, (result) {
+          Modular.get<AccountStore>().setAccount(me);
+        });
+
+        GlobalSnackbar.success('Alterado com sucesso!');
+        Modular.to.pop();
+      });
+    }
+  }
+
+  void apiErrors(ResultFailModel resultFail) {
+    if (resultFail.statusCode == 400) {
+      _nomeApiError = resultFail.getErrorByProperty('Nome');
+      _usernameApiError = resultFail.getErrorByProperty('Username');
+      _emailApiError = resultFail.getErrorByProperty('Email');
+      _telefoneApiError = resultFail.getErrorByProperty('Telefone');
+      _passwordApiError = resultFail.getErrorByProperty('Password');
+      _confirmPasswordApiError = resultFail.getErrorByProperty('ConfirmPassword');
+
+      var message = resultFail.getErrorNotProperty();
+      if (message.isNotEmpty) GlobalSnackbar.error(message);
+    }
   }
 }

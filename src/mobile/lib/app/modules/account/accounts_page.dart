@@ -136,7 +136,7 @@ class AccountsPageState extends State<AccountsPage> {
               ),
               IconButton(
                 onPressed: () async {
-                  Modular.to.pushNamed('/account/edit');
+                  Modular.to.pushNamed('/account/edit/self');
                 },
                 icon: const Icon(MdiIcons.plus),
               ),
@@ -184,7 +184,7 @@ class AccountsPageState extends State<AccountsPage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Modular.to.pushNamed('/account/edit');
+                Modular.to.pushNamed('/account/edit/061c84c4-ddfb-4d10-ace3-123756fdb5dd'); // TODO
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -210,10 +210,7 @@ class AccountsPageState extends State<AccountsPage> {
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        Icon(
-                            _orderListScreen[index].orderStatus == 'Inativo'
-                                ? MdiIcons.closeOctagon
-                                : MdiIcons.checkDecagram,
+                        Icon(_orderListScreen[index].orderStatus == 'Inativo' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                             size: 20,
                             color: _orderListScreen[index].orderStatus == 'Inativo'
                                 ? Colors.red
@@ -261,9 +258,8 @@ class AccountsPageState extends State<AccountsPage> {
                     ),
                   ),
                   Divider(
-                    color: themeStore.isDarkModeEnable
-                        ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                        : Theme.of(context).dividerTheme.color,
+                    color:
+                        themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                   ),
                 ],
               ),

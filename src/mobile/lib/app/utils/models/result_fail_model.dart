@@ -39,7 +39,7 @@ class ResultFailModel {
             : <ResultError>[],
       );
 
-  String getMessageNotProperty() => errors.where((e) => e.property == null || e.property!.isEmpty).map((e) => e.message).join('\n');
-  String getMessageByProperty(String propertyName) =>
+  String getErrorNotProperty() => errors.where((e) => e.property == null || e.property!.isEmpty).map((e) => e.message).join('\n');
+  String getErrorByProperty(String propertyName) =>
       errors.where((e) => (e.property ?? '').toLowerCase() == propertyName.toLowerCase()).map((e) => e.message).join('\n');
 }

@@ -5,7 +5,7 @@ import 'package:vilasesmo/app/utils/models/account_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 
 abstract class IAuthService implements Disposable {
-  Future<AccountModel> getAccount();
+  Future<AccountModel> me();
   Future<AccessTokenModel?> getCurrentToken();
   Future setCurrentToken(AccessTokenModel token);
   Future removeCurrentToken();

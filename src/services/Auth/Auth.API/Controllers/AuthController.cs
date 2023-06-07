@@ -41,8 +41,8 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Endpoint para verificar dados do usuário autenticado
     /// </summary>
-    // GET api/auth
-    [HttpGet]
+    // GET api/auth/me
+    [HttpGet("me")]
     [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccountModel>> GetAsync()

@@ -1,5 +1,5 @@
-class UpdateAccountModel {
-  UpdateAccountModel({
+class NewAndUpdateAccountModel {
+  NewAndUpdateAccountModel({
     required this.nome,
     required this.username,
     required this.email,
@@ -29,5 +29,14 @@ class UpdateAccountModel {
     data['isActive'] = isActive;
     data['isAdmin'] = isAdmin;
     return data;
+  }
+}
+
+class NewAccountResponseModel {
+  NewAccountResponseModel({required this.id});
+  late final String id;
+
+  NewAccountResponseModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
   }
 }

@@ -27,8 +27,8 @@ class AuthService implements IAuthService {
   void dispose() {}
 
   @override
-  Future<AccountModel> getAccount() async {
-    var response = await dio.get('/api/account');
+  Future<AccountModel> me() async {
+    var response = await dio.get('/api/auth/me');
 
     return AccountModel.fromJson(response.data);
   }

@@ -1,19 +1,26 @@
 import 'dart:io';
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vilasesmo/app/app_widget.dart';
 import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
+import 'package:vilasesmo/app/modules/account/accounts_page.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class AccountEditPage extends StatefulWidget {
   final String title;
-  const AccountEditPage({Key? key, this.title = 'AccountEditPage'}) : super(key: key);
+  final String? id;
+  final bool mySelf;
+
+  const AccountEditPage({
+    Key? key,
+    this.title = 'Editando usuário',
+    this.id,
+    required this.mySelf,
+  }) : super(key: key);
   @override
   AccountEditPageState createState() => AccountEditPageState();
 }
@@ -24,6 +31,7 @@ class AccountEditPageState extends State<AccountEditPage> {
 
   AccountEditPageState() : super() {
     _controller = Modular.get<AccountEditController>();
+    _controller.id = widget.mySelf ? Modular.get<AccountStore>().account!.id! : widget.id;
   }
 
   _getImagePicker(ImageSource source) async {
@@ -73,15 +81,14 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
         ),
         body: FutureBuilder(
-          future: _controller.fetch('061c84c4-ddfb-4d10-ace3-123756fdb5dd'),
+          future: _controller.load(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -461,13 +468,13 @@ class AccountEditPageState extends State<AccountEditPage> {
                 width: MediaQuery.of(context).size.width,
                 child: Observer(builder: (_) {
                   return TextButton(
-                    onPressed: () {
-                      if (_controller.isValid) {
-                        _controller.save();
-                      } else {
-                        GlobalSnackbar.error('ERROU!');
-                      }
-                    },
+                    onPressed: !_controller.isLoading && _controller.isValid
+                        ? () async {
+                            _controller.isLoading = true;
+                            await _controller.save();
+                            _controller.isLoading = false;
+                          }
+                        : null,
                     child: _controller.isLoading
                         ? Center(
                             child: SizedBox(
