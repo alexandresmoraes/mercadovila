@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/models/access_token_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
+import 'package:vilasesmo/app/utils/models/login_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 
 abstract class IAuthService implements Disposable {
@@ -11,6 +12,6 @@ abstract class IAuthService implements Disposable {
   Future removeCurrentToken();
   Future<bool> isAuthenticated();
   Future logout();
-  Future<Either<ResultFailModel, AccessTokenModel>> login(String username, String password);
+  Future<Either<ResultFailModel, AccessTokenModel>> login(LoginModel loginModel);
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel);
 }

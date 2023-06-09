@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace Auth.API.Config;
@@ -64,6 +65,14 @@ public static class AuthConfig
             return Task.CompletedTask;
           }
         };
+      });
+
+    services.AddAuthorization((opt) =>
+      {
+        opt.AddPolicy("Admin", authBuilder =>
+        {
+          authBuilder.RequireClaim(ClaimTypes.Role, "admin");
+        });
       });
 
     services.AddMvc(opt =>

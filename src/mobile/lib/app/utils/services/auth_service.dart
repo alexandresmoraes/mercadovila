@@ -5,6 +5,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
+import 'package:vilasesmo/app/utils/models/login_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
 import 'package:vilasesmo/app/utils/models/access_token_model.dart';
@@ -48,9 +49,9 @@ class AuthService implements IAuthService {
   Future<bool> isAuthenticated() async => await LocalStorageService.cointains(_currentToken);
 
   @override
-  Future<Either<ResultFailModel, AccessTokenModel>> login(String username, String password) async {
+  Future<Either<ResultFailModel, AccessTokenModel>> login(LoginModel loginModel) async {
     try {
-      var response = await dio.post('/api/auth/login', data: FormData.fromMap({'usernameOrEmail': username, 'password': password}));
+      var response = await dio.post('/api/auth/login', data: loginModel.toJson());
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -67,7 +68,8 @@ class AuthService implements IAuthService {
   @override
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel) async {
     try {
-      var response = await dio.post('/api/auth/refresh-token', data: FormData.fromMap({'refreshToken': refreshTokenModel}));
+      var response =
+          await dio.post('/api/auth/refresh-token', data: FormData.fromMap({'refreshToken': refreshTokenModel}));
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -84,5 +86,6 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future setCurrentToken(AccessTokenModel token) async => await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
+  Future setCurrentToken(AccessTokenModel token) async =>
+      await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
 }

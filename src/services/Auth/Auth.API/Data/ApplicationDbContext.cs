@@ -35,7 +35,7 @@ namespace Auth.API.Data
         b.Property(e => e.PasswordHash).HasMaxLength(256);
         b.Property(e => e.SecurityStamp).HasMaxLength(36);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
-        b.Property(e => e.PhoneNumber).HasMaxLength(16);
+        b.Property(e => e.PhoneNumber).HasMaxLength(17);
         b.Property(e => e.FotoUrl).HasMaxLength(128);
         b.Property(e => e.IsAtivo);
 
@@ -114,6 +114,7 @@ namespace Auth.API.Data
         Email = "admin@admin.com",
         NormalizedUserName = "ADMIN",
         NormalizedEmail = "ADMIN@ADMIN.COM",
+        PhoneNumber = "+55 46 99909-7070",
         IsAtivo = true
       };
       var hasher = new PasswordHasher<ApplicationUser>();

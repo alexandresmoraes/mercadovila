@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class AccountPage extends StatefulWidget {
   final String title;
-  const AccountPage({Key? key, this.title = 'AccountHomePage'}) : super(key: key);
+  const AccountPage({Key? key, this.title = 'Configurações'}) : super(key: key);
   @override
   AccountPageState createState() => AccountPageState();
 }
@@ -78,7 +79,7 @@ class AccountPageState extends State<AccountPage> {
                     Radius.circular(40),
                   ),
                   onTap: () {
-                    Modular.to.pushNamed('/account/edit');
+                    Modular.to.pushNamed('/account/edit/${Modular.get<AccountStore>().account!.id!}');
                   },
                   child: Container(
                     height: 40,
@@ -280,7 +281,8 @@ class AccountPageState extends State<AccountPage> {
                 const Divider(),
                 SwitchListTile(
                   value: Modular.get<ThemeStore>().isDarkModeEnable,
-                  onChanged: (val) => Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
+                  onChanged: (val) =>
+                      Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   secondary: !Modular.get<ThemeStore>().isDarkModeEnable

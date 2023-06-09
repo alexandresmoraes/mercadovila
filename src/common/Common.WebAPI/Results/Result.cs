@@ -42,11 +42,11 @@
 
     public bool IsValid => !HasError;
     public bool HasError => Errors.Count > 0;
-    public List<ErrorResult> Errors { get; private set; } = new List<ErrorResult>();
+    public IList<ErrorResult> Errors { get; private set; } = new List<ErrorResult>();
 
     public Result() { }
 
-    public Result(IList<ErrorResult> errors)
+    public Result(IEnumerable<ErrorResult> errors)
     {
       foreach (var error in errors)
         AddError(error);

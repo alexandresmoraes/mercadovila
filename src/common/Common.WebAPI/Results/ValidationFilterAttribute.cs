@@ -9,11 +9,17 @@ namespace Common.WebAPI.Results
     {
       if (!context.ModelState.IsValid)
       {
-        var errors = context.ModelState.Values
-          .SelectMany(e => e.Errors)
-          .Select(e => new ErrorResult(e.ErrorMessage)).ToArray();
+        IList<ErrorResult> errors = new List<ErrorResult>();
+        foreach (var modelStateKey in context.ModelState.Keys)
+        {
+          var value = context.ModelState[modelStateKey];
+          foreach (var error in value?.Errors!)
+          {
+            errors.Add(new ErrorResult(null, modelStateKey, error.ErrorMessage));
+          }
+        }
 
-        context.Result = new NotFoundObjectResult(new Result(errors));
+        context.Result = new BadRequestObjectResult(new Result(errors));
       }
       else
       {

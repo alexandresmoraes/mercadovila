@@ -74,8 +74,8 @@ namespace Auth.API.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                        .HasMaxLength(17)
+                        .HasColumnType("character varying(17)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
@@ -105,9 +105,9 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9bb4bff4-257c-48b1-b3f8-b5b01925174c",
+                            Id = "9967e078-b0fc-45ed-835c-156d159a793a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "46e5dc48-7636-48d4-b6d1-e2188ba992ff",
+                            ConcurrencyStamp = "6c4118a0-6f9b-41ee-8682-f8dd597ca680",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             IsAtivo = true,
@@ -115,9 +115,10 @@ namespace Auth.API.Migrations
                             Nome = "Admin",
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEObdgg1L9cdJv8kOxWLnV8xMhcShHk+3/25Zn7gECp6nPCE9fXNAdKOjapbmM28K/g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIex7RaNJwImFMizYVPvEUl9kUpC/Vb5fs+51RHLS9y8BfAye4HwU2ysXTsaE9CNCA==",
+                            PhoneNumber = "+55 46 99909-7070",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "eeb7aa33-3fdd-4842-b9cc-07ed3bffcb62",
+                            SecurityStamp = "445b8b8c-5717-4918-9534-37ed18f824fe",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -153,8 +154,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cd6e87d7-d908-40c6-82d6-61100b62d1dd",
-                            ConcurrencyStamp = "180a6502-86de-4986-8f22-4db16887b43e",
+                            Id = "5e0490dc-613a-44b3-a545-d72d2eec4f1a",
+                            ConcurrencyStamp = "1b4281ee-920e-4c22-8988-a42132cc4683",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -263,8 +264,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "9bb4bff4-257c-48b1-b3f8-b5b01925174c",
-                            RoleId = "cd6e87d7-d908-40c6-82d6-61100b62d1dd"
+                            UserId = "9967e078-b0fc-45ed-835c-156d159a793a",
+                            RoleId = "5e0490dc-613a-44b3-a545-d72d2eec4f1a"
                         });
                 });
 

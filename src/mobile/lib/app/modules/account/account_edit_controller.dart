@@ -33,7 +33,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _nomeApiError;
   @computed
-  String? get getNomeError => isNullorEmpty(_nomeApiError)
+  String? get getNomeError => !isNullorEmpty(_nomeApiError)
       ? _nomeApiError
       : isNullorEmpty(nome)
           ? 'Nome do usuário não pode ser vazio.'
@@ -49,7 +49,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _usernameApiError;
   @computed
-  String? get getUsernameError => isNullorEmpty(_usernameApiError)
+  String? get getUsernameError => !isNullorEmpty(_usernameApiError)
       ? _usernameApiError
       : isNullorEmpty(username)
           ? 'Nome de usuário não pode ser vazio.'
@@ -65,7 +65,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _emailApiError;
   @computed
-  String? get getEmailError => isNullorEmpty(_emailApiError)
+  String? get getEmailError => !isNullorEmpty(_emailApiError)
       ? _emailApiError
       : isNullorEmpty(email)
           ? 'Email do usuário não pode ser vazio.'
@@ -83,7 +83,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _passwordApiError;
   @computed
-  String? get getPasswordError => isNullorEmpty(_passwordApiError)
+  String? get getPasswordError => !isNullorEmpty(_passwordApiError)
       ? _passwordApiError
       : isNullorEmpty(password)
           ? 'Senha do usuário não pode ser vazio.'
@@ -103,7 +103,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _confirmPasswordApiError;
   @computed
-  String? get getConfirmPasswordError => isNullorEmpty(_confirmPasswordApiError)
+  String? get getConfirmPasswordError => !isNullorEmpty(_confirmPasswordApiError)
       ? _confirmPasswordApiError
       : isNullorEmpty(confirmPassword)
           ? 'Confirme a senha.'
@@ -121,7 +121,7 @@ abstract class AccountEditControllerBase with Store {
   @observable
   String? _telefoneApiError;
   @computed
-  String? get getTelefoneError => isNullorEmpty(_telefoneApiError)
+  String? get getTelefoneError => !isNullorEmpty(_telefoneApiError)
       ? _telefoneApiError
       : isNullorEmpty(telefone)
           ? 'Número telefone não pode ser vazio.'
@@ -187,7 +187,7 @@ abstract class AccountEditControllerBase with Store {
       telefone: telefone!,
       password: password!,
       confirmPassword: confirmPassword!,
-      isActive: true,
+      isAtivo: true,
       isAdmin: true,
     );
 

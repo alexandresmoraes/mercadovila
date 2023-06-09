@@ -1,3 +1,5 @@
+import 'package:vilasesmo/app/utils/utils.dart';
+
 class ResultError {
   String? code;
   String? property;
@@ -39,7 +41,9 @@ class ResultFailModel {
             : <ResultError>[],
       );
 
-  String getErrorNotProperty() => errors.where((e) => e.property == null || e.property!.isEmpty).map((e) => e.message).join('\n');
-  String getErrorByProperty(String propertyName) =>
-      errors.where((e) => (e.property ?? '').toLowerCase() == propertyName.toLowerCase()).map((e) => e.message).join('\n');
+  String getErrorNotProperty() => errors.where((e) => isNullorEmpty(e.property)).map((e) => e.message).join('\n');
+  String getErrorByProperty(String propertyName) => errors
+      .where((e) => (e.property ?? '').toLowerCase() == propertyName.toLowerCase())
+      .map((e) => e.message)
+      .join('\n');
 }

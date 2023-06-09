@@ -41,7 +41,7 @@ namespace Common.WebAPI.Auth
       identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
 
       var userRoles = await _userManager.GetRolesAsync(user);
-      userRoles.ToList().ForEach(r => identityClaims.AddClaim(new Claim("role", r)));
+      userRoles.ToList().ForEach(r => identityClaims.AddClaim(new Claim(ClaimTypes.Role, r)));
 
       var userClaims = await _userManager.GetClaimsAsync(user);
       RemoveRefreshToken(userClaims);

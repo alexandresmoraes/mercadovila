@@ -2,16 +2,24 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/login/login_controller.dart';
+import 'package:vilasesmo/app/modules/tab/tab_module.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/models/login_model.dart';
+import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
-  const LoginPage({Key? key, this.title = 'LoginPage'}) : super(key: key);
+  const LoginPage({Key? key, this.title = 'Login'}) : super(key: key);
   @override
   LoginPageState createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
+  var _controller = Modular.get<LoginController>();
+
   final passwordFocusNode = FocusNode();
   final usernameFocusNode = FocusNode();
 
@@ -145,7 +153,8 @@ class LoginPageState extends State<LoginPage> {
             Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
               height: MediaQuery.of(context).size.height * 0.60,
               width: MediaQuery.of(context).size.width,
@@ -161,6 +170,7 @@ class LoginPageState extends State<LoginPage> {
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.phone,
                         maxLength: 10,
+                        onChanged: _controller.setUsername,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                         decoration: InputDecoration(
                           hintText: 'Nome de usuário ou email',
@@ -184,6 +194,7 @@ class LoginPageState extends State<LoginPage> {
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.phone,
                         maxLength: 10,
+                        onChanged: _controller.setPassword,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                         decoration: InputDecoration(
                           hintText: 'Senha',
@@ -208,23 +219,26 @@ class LoginPageState extends State<LoginPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               animationType = 'hands_down';
                             });
 
-                            //if (passwordController.text.compareTo('teste') == 0) {
-                            // if (false) {
-                            //   setState(() {
-                            //     animationType = "success";
-                            //   });
-                            // } else {
-                            //   setState(() {
-                            //     animationType = "fail";
-                            //   });
-                            // }
-                            // Navigator.of(context)
-                            //     .push(MaterialPageRoute(builder: (context) => OtpVerificationScreen(a: widget.analytics, o: widget.observer)));
+                            var authService = Modular.get<IAuthService>();
+
+                            var result = await authService.login(LoginModel(
+                              usernameOrEmail: _controller.username!,
+                              password: _controller.password,
+                            ));
+
+                            result.fold((resultFail) {
+                              var message = resultFail.getErrorNotProperty();
+                              if (message.isNotEmpty) GlobalSnackbar.error(message);
+                            }, (r) async {
+                              await authService.setCurrentToken(r);
+                              Modular.get<AccountStore>().setAccount(await authService.me());
+                              Modular.to.pushReplacementNamed(TabModule.routeName);
+                            });
                           },
                           child: const Text('Login')),
                     ),

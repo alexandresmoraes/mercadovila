@@ -12,8 +12,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Auth.API.Controllers
 {
-  using Result = Common.WebAPI.Results.Result;
-
   /// <summary>
   /// Criar novas contas de usuário, alterar e adicionar roles
   /// </summary>
@@ -44,9 +42,7 @@ namespace Auth.API.Controllers
     public async Task<Result<AccountModel>> GetAsync([FromRoute] string id)
     {
       if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
-      {
         return Result.Forbidden<AccountModel>();
-      }
 
       var user = await _userManager.FindByIdAsync(id);
 
@@ -70,8 +66,8 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Retorna usuários paginados
     /// </summary>
-    // GET api/account
-    [Authorize(Roles = "Admin")]
+    // GET api/account    
+    [Authorize("Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -84,7 +80,7 @@ namespace Auth.API.Controllers
     /// Criação de novos usuários
     /// </summary>
     // POST api/account
-    [Authorize(Roles = "Admin")]
+    [Authorize("Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(NewAccountResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -121,7 +117,7 @@ namespace Auth.API.Controllers
     /// Alteração de conta de usuário
     /// </summary>
     // PUT api/account/{id}
-    [Authorize(Roles = "Admin")]
+    // [Authorize("Admin")]
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -129,6 +125,9 @@ namespace Auth.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] NewAndUpdateAccountModel updateAccountModel)
     {
+      if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
+        return Result.Forbidden();
+
       var user = await _userManager.FindByIdAsync(id);
 
       if (user is null)
@@ -170,6 +169,7 @@ namespace Auth.API.Controllers
     /// Upload foto do usuário
     /// </summary>
     // PUT api/account/{id}/photo
+    [Authorize("MeOrAdmin")]
     [HttpPost("{id}/photo")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -179,9 +179,7 @@ namespace Auth.API.Controllers
     public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile photo)
     {
       if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
-      {
-        return Result.Forbidden<AccountModel>();
-      }
+        return Result.Forbidden();
 
       var photoUploadModel = new PhotoUploadModel(photo);
 

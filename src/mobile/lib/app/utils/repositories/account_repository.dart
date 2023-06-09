@@ -39,7 +39,7 @@ class AccountRepository implements IAccountRepository {
   @override
   Future<Either<ResultFailModel, String>> updateAccount(String id, NewAndUpdateAccountModel updateAccountModel) async {
     try {
-      await dio.put('/api/account/$id');
+      await dio.put('/api/account/$id', data: updateAccountModel.toJson());
       return Right(id);
     } on DioError catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));

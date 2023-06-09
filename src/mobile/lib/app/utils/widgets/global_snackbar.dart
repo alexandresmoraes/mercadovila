@@ -8,6 +8,7 @@ class GlobalSnackbar {
       type: AnimatedSnackBarType.warning,
       mobileSnackBarPosition: MobileSnackBarPosition.bottom,
       desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+      duration: const Duration(seconds: 4),
     ).show(AppWidget.navigatorKey.currentState!.context);
   }
 
@@ -17,6 +18,7 @@ class GlobalSnackbar {
       type: AnimatedSnackBarType.error,
       mobileSnackBarPosition: MobileSnackBarPosition.bottom,
       desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+      duration: const Duration(seconds: 4),
     ).show(AppWidget.navigatorKey.currentState!.context);
   }
 
@@ -26,6 +28,7 @@ class GlobalSnackbar {
       type: AnimatedSnackBarType.info,
       mobileSnackBarPosition: MobileSnackBarPosition.bottom,
       desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+      duration: const Duration(seconds: 4),
     ).show(AppWidget.navigatorKey.currentState!.context);
   }
 
@@ -35,6 +38,7 @@ class GlobalSnackbar {
       type: AnimatedSnackBarType.success,
       mobileSnackBarPosition: MobileSnackBarPosition.bottom,
       desktopSnackBarPosition: DesktopSnackBarPosition.topRight,
+      duration: const Duration(seconds: 4),
     ).show(AppWidget.navigatorKey.currentState!.context);
   }
 }

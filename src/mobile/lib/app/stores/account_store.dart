@@ -10,5 +10,5 @@ abstract class AccountStoreBase with Store {
   AccountModel? account;
 
   @action
-  void setAccount(AccountModel account) => account = account;
+  void setAccount(AccountModel account) => this.account = account;
 }
