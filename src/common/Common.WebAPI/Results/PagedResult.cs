@@ -9,6 +9,16 @@
     public long Total { get; private set; }
     public int Start { get; private set; }
     public int Limit { get; private set; }
+    public int FirstRowOnPage
+    {
+      get { return (CurrentPage - 1) * Start + 1; }
+    }
+
+    public int LastRowOnPage
+    {
+      get { return Convert.ToInt32(Math.Min(Convert.ToInt64((CurrentPage * Limit)), Total)); }
+    }
+
 
     protected PagedResultBase(int start, int limit, long total)
     {
