@@ -210,7 +210,7 @@ abstract class AccountEditControllerBase with Store {
         var result = await accountRepository.newAccount(newAndUpdateAccountModel);
 
         result.fold(apiErrors, (accountResponse) async {
-          GlobalSnackbar.success('Alterado com sucesso!');
+          GlobalSnackbar.success('Adicionado com sucesso!');
           Modular.to.pop();
         });
       } else {

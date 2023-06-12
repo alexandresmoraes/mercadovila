@@ -61,14 +61,14 @@ class AccountPageState extends State<AccountPage> {
               Positioned(
                 bottom: 45,
                 child: Text(
-                  "Alexandre Moraes",
+                  Modular.get<AccountStore>().account!.nome,
                   style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: Colors.white),
                 ),
               ),
               Positioned(
                 bottom: 25,
                 child: Text(
-                  "+55 46999055421 | alexandresmoraes@me.com",
+                  "${Modular.get<AccountStore>().account!.telefone} | ${Modular.get<AccountStore>().account!.email}",
                   style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.white),
                 ),
               ),
