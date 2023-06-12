@@ -164,8 +164,19 @@ abstract class AccountEditControllerBase with Store {
   Future<AccountModel> load() async {
     if (accountModel != null) return accountModel!;
 
-    var accountRepository = Modular.get<IAccountRepository>();
-    accountModel = await accountRepository.getAccount(id!);
+    if (!isNullorEmpty(id)) {
+      var accountRepository = Modular.get<IAccountRepository>();
+      accountModel = await accountRepository.getAccount(id!);
+    } else {
+      accountModel = AccountModel(
+        nome: "",
+        username: "",
+        email: "",
+        telefone: "",
+        isAtivo: true,
+        roles: [],
+      );
+    }
 
     nome = accountModel!.nome;
     username = accountModel!.username;
@@ -180,41 +191,46 @@ abstract class AccountEditControllerBase with Store {
   }
 
   Future save() async {
-    var newAndUpdateAccountModel = NewAndUpdateAccountModel(
-      nome: nome!,
-      username: username!,
-      email: email!,
-      telefone: telefone!,
-      password: password!,
-      confirmPassword: confirmPassword!,
-      isAtivo: true,
-      isAdmin: true,
-    );
+    try {
+      isLoading = true;
 
-    var accountRepository = Modular.get<IAccountRepository>();
-    if (isNullorEmpty(id)) {
-      var result = await accountRepository.newAccount(newAndUpdateAccountModel);
+      var newAndUpdateAccountModel = NewAndUpdateAccountModel(
+        nome: nome!,
+        username: username!,
+        email: email!,
+        telefone: telefone!,
+        password: password!,
+        confirmPassword: confirmPassword!,
+        isAtivo: isAtivo,
+        isAdmin: isAdmin,
+      );
 
-      result.fold(apiErrors, (accountResponse) async {
-        GlobalSnackbar.success('Alterado com sucesso!');
-        Modular.to.pop();
-      });
-    } else {
-      var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
+      var accountRepository = Modular.get<IAccountRepository>();
+      if (isNullorEmpty(id)) {
+        var result = await accountRepository.newAccount(newAndUpdateAccountModel);
 
-      result.fold(apiErrors, (accountResponse) async {
-        var me = await Modular.get<IAuthService>().me();
-        result.fold((resultFail) {}, (result) {
-          Modular.get<AccountStore>().setAccount(me);
+        result.fold(apiErrors, (accountResponse) async {
+          GlobalSnackbar.success('Alterado com sucesso!');
+          Modular.to.pop();
         });
+      } else {
+        var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
 
-        GlobalSnackbar.success('Alterado com sucesso!');
-        Modular.to.pop();
-      });
+        result.fold(apiErrors, (accountResponse) async {
+          var me = await Modular.get<IAuthService>().me();
+          Modular.get<AccountStore>().setAccount(me);
+          GlobalSnackbar.success('Alterado com sucesso!');
+          Modular.to.pop();
+        });
+      }
+    } catch (e) {
+      isLoading = false;
     }
   }
 
   void apiErrors(ResultFailModel resultFail) {
+    isLoading = false;
+
     if (resultFail.statusCode == 400) {
       _nomeApiError = resultFail.getErrorByProperty('Nome');
       _usernameApiError = resultFail.getErrorByProperty('Username');

@@ -25,6 +25,7 @@ public static class AuthConfig
       o.Password.RequiredUniqueChars = 0;
       o.Password.RequiredLength = 4;
       o.Lockout.MaxFailedAccessAttempts = 5;
+      o.User.RequireUniqueEmail = true;
     }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -79,6 +80,7 @@ public static class AuthConfig
     {
       opt.Filters.Add(new AuthorizeFilter());
     });
+
 
     return services;
   }

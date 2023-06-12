@@ -136,7 +136,7 @@ class AccountsPageState extends State<AccountsPage> {
               ),
               IconButton(
                 onPressed: () async {
-                  Modular.to.pushNamed('/account/edit/self');
+                  Modular.to.pushNamed('/account/new');
                 },
                 icon: const Icon(MdiIcons.plus),
               ),

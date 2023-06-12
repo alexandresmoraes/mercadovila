@@ -29,7 +29,8 @@ dependencies:
   badges: ^2.0.3
   image_picker: ^0.8.7+5
   image_cropper: ^4.0.1
-  string_validator: ^1.0.0  
+  string_validator: ^1.0.0
+  infinite_scroll_pagination: ^3.2.0
   
 dev_dependencies:
   flutter_test:

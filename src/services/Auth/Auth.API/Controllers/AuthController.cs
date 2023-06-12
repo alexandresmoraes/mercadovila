@@ -82,6 +82,12 @@ namespace Auth.API.Controllers
         return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
       }
 
+      if (!user.IsAtivo)
+      {
+        _logger.LogWarning($"User is not active {login.UsernameOrEmail}.");
+        return Result.Fail<AccessTokenDto>("Usuário inativo.");
+      }
+
       var resultSign = await _signInManager.CheckPasswordSignInAsync(user!, login.Password, true);
 
       await _unitOfWork.CommitAsync(cancellationToken);

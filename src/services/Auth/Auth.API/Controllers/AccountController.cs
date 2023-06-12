@@ -88,7 +88,17 @@ namespace Auth.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<NewAccountResponseModel>> PostAsync([FromBody] NewAndUpdateAccountModel newAccountModel)
     {
-      var user = new ApplicationUser
+      var user = await _userManager.FindByNameAsync(newAccountModel.Username);
+
+      if (user is not null)
+        return Result.Fail<NewAccountResponseModel>("Usuário já existente.");
+
+      user = await _userManager.FindByEmailAsync(newAccountModel.Email);
+
+      if (user is not null)
+        return Result.Fail<NewAccountResponseModel>("Email já existente.");
+
+      user = new ApplicationUser
       {
         Nome = newAccountModel.Nome!,
         UserName = newAccountModel.Username,
@@ -168,28 +178,25 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // PUT api/account/{id}/photo
-    [Authorize("MeOrAdmin")]
+    // PUT api/account/{id}/photo    
     [HttpPost("{id}/photo")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile photo)
+    public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile foto)
     {
       if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
         return Result.Forbidden();
 
-      var photoUploadModel = new PhotoUploadModel(photo);
+      var photoUploadModel = new PhotoUploadModel(foto);
 
       var context = new ValidationContext(photoUploadModel);
       var validationResults = new List<ValidationResult>();
       var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
       if (!isValid)
-      {
         return Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
-      }
 
       var user = await _userManager.FindByIdAsync(id);
 

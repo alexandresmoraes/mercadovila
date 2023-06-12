@@ -17,7 +17,8 @@ class AccountModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute('/', child: (_, args) => const VendasPage()),
     ChildRoute('/accounts', child: (_, args) => const AccountsPage()),
-    ChildRoute('/edit/self', child: (_, args) => const AccountEditPage(mySelf: true)),
+    ChildRoute('/new', child: (_, args) => const AccountEditPage(mySelf: false)),
     ChildRoute('/edit/:id', child: (_, args) => AccountEditPage(id: args.params['id'], mySelf: false)),
+    ChildRoute('/edit/self', child: (_, args) => const AccountEditPage(mySelf: true)),
   ];
 }
