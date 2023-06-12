@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:curved_progress_bar/curved_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -73,9 +74,8 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -108,8 +108,7 @@ class AccountEditPageState extends State<AccountEditPage> {
             child: SizedBox(
               height: 21,
               width: 21,
-              child: CircularProgressIndicator(
-                strokeCap: StrokeCap.round,
+              child: CurvedLinearProgressIndicator(
                 color: Theme.of(context).primaryTextTheme.displaySmall!.color,
               ),
             ),
@@ -488,8 +487,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   child: SizedBox(
                                     height: 21,
                                     width: 21,
-                                    child: CircularProgressIndicator(
-                                      strokeCap: StrokeCap.round,
+                                    child: CurvedLinearProgressIndicator(
                                       color: Theme.of(context).primaryTextTheme.displaySmall!.color,
                                     ),
                                   ),

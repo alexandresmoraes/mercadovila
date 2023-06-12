@@ -126,8 +126,7 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Alteração de conta de usuário
     /// </summary>
-    // PUT api/account/{id}
-    // [Authorize("Admin")]
+    // PUT api/account/{id}    
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
