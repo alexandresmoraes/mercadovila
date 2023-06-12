@@ -108,7 +108,7 @@ class AccountEditPageState extends State<AccountEditPage> {
             child: SizedBox(
               height: 21,
               width: 21,
-              child: CurvedLinearProgressIndicator(
+              child: CurvedCircularProgressIndicator(
                 color: Theme.of(context).primaryTextTheme.displaySmall!.color,
               ),
             ),
@@ -421,9 +421,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                             builder: (_) {
                               return SwitchListTile(
                                 value: _controller.isAtivo,
-                                onChanged: (v) {
-                                  _controller.setIsAtivo(v);
-                                },
+                                onChanged: _controller.setIsAtivo,
                                 title: Text(
                                   "Ativo",
                                   style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -439,9 +437,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return SwitchListTile(
                               value: _controller.isAdmin,
-                              onChanged: (v) {
-                                _controller.setIsAdmin(v);
-                              },
+                              onChanged: _controller.setIsAdmin,
                               title: Text(
                                 "Admin",
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -457,48 +453,52 @@ class AccountEditPageState extends State<AccountEditPage> {
             ],
           ),
         ),
-        bottomNavigationBar: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            !_controller.isLoading && _controller.isValid
-                ? Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: LinearGradient(
-                          stops: const [0, .90],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+        bottomNavigationBar: Observer(
+          builder: (_) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                !_controller.isLoading && _controller.isValid
+                    ? Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            gradient: LinearGradient(
+                              stops: const [0, .90],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                            ),
+                          ),
+                          margin: const EdgeInsets.all(8.0),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          child: Observer(builder: (_) {
+                            return TextButton(
+                              onPressed: () async {
+                                if (!_controller.isLoading && _controller.isValid) {
+                                  await _controller.save();
+                                }
+                              },
+                              child: _controller.isLoading
+                                  ? Center(
+                                      child: SizedBox(
+                                        height: 21,
+                                        width: 21,
+                                        child: CurvedCircularProgressIndicator(
+                                          color: Theme.of(context).primaryTextTheme.displaySmall!.color,
+                                        ),
+                                      ),
+                                    )
+                                  : const Text('Salvar'),
+                            );
+                          }),
                         ),
-                      ),
-                      margin: const EdgeInsets.all(8.0),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: Observer(builder: (_) {
-                        return TextButton(
-                          onPressed: () async {
-                            if (!_controller.isLoading && _controller.isValid) {
-                              await _controller.save();
-                            }
-                          },
-                          child: _controller.isLoading
-                              ? Center(
-                                  child: SizedBox(
-                                    height: 21,
-                                    width: 21,
-                                    child: CurvedLinearProgressIndicator(
-                                      color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                                    ),
-                                  ),
-                                )
-                              : const Text('Salvar'),
-                        );
-                      }),
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ],
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            );
+          },
         ),
       ),
     );

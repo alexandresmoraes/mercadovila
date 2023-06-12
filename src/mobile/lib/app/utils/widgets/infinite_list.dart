@@ -78,7 +78,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
                   child: SizedBox(
                     height: 80,
                     child: Center(
-                      child: CurvedLinearProgressIndicator(
+                      child: CurvedCircularProgressIndicator(
                         color: Theme.of(context).primaryTextTheme.displaySmall!.color,
                       ),
                     ),
@@ -88,7 +88,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
             child: SizedBox(
               height: 80,
               child: Center(
-                child: CurvedLinearProgressIndicator(
+                child: CurvedCircularProgressIndicator(
                   color: Theme.of(context).primaryTextTheme.displaySmall!.color,
                 ),
               ),
