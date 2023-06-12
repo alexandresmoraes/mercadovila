@@ -83,11 +83,25 @@ class AccountEditPageState extends State<AccountEditPage> {
         body: FutureTriple(
           future: _controller.load(),
           error: Center(
-            child: TextButton(
-              onPressed: () {
-                setState(() {});
-              },
-              child: const Text('Refresh'),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                gradient: LinearGradient(
+                  stops: const [0, .90],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                ),
+              ),
+              height: 50,
+              child: Observer(builder: (_) {
+                return TextButton(
+                  onPressed: () async {
+                    setState(() {});
+                  },
+                  child: const Text('Refresh'),
+                );
+              }),
             ),
           ),
           loading: Center(
@@ -447,43 +461,45 @@ class AccountEditPageState extends State<AccountEditPage> {
         bottomNavigationBar: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  gradient: LinearGradient(
-                    stops: const [0, .90],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                  ),
-                ),
-                margin: const EdgeInsets.all(8.0),
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: Observer(builder: (_) {
-                  return TextButton(
-                    onPressed: () async {
-                      if (!_controller.isLoading && _controller.isValid) {
-                        await _controller.save();
-                      }
-                    },
-                    child: _controller.isLoading
-                        ? Center(
-                            child: SizedBox(
-                              height: 21,
-                              width: 21,
-                              child: CircularProgressIndicator(
-                                strokeCap: StrokeCap.round,
-                                color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                              ),
-                            ),
-                          )
-                        : const Text('Salvar'),
-                  );
-                }),
-              ),
-            ),
+            !_controller.isLoading && _controller.isValid
+                ? Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        gradient: LinearGradient(
+                          stops: const [0, .90],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(8.0),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Observer(builder: (_) {
+                        return TextButton(
+                          onPressed: () async {
+                            if (!_controller.isLoading && _controller.isValid) {
+                              await _controller.save();
+                            }
+                          },
+                          child: _controller.isLoading
+                              ? Center(
+                                  child: SizedBox(
+                                    height: 21,
+                                    width: 21,
+                                    child: CircularProgressIndicator(
+                                      strokeCap: StrokeCap.round,
+                                      color: Theme.of(context).primaryTextTheme.displaySmall!.color,
+                                    ),
+                                  ),
+                                )
+                              : const Text('Salvar'),
+                        );
+                      }),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
       ),
