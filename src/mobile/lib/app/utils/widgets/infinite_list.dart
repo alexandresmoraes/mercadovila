@@ -3,25 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
 
-typedef RequestFn<T> = Future<T> Function(int nextIndex);
-typedef ItemBuilder<T> = Widget Function(BuildContext context, T item, int index);
-typedef EmptyBuilder<T> = Widget Function(BuildContext context);
-
 class InfiniteList<T> extends StatefulWidget {
-  final RequestFn<PagedResult<T>> onRequest;
-  final ItemBuilder<T> itemBuilder;
-  final EmptyBuilder emptyBuilder;
-  final T Function(Map<String, dynamic>) onCast;
-  final Widget Function(BuildContext)? noMoreItemsBuilder;
-  final Widget Function(BuildContext)? firstPageProgressIndicatorBuilder;
+  final Future<PagedResult<T>> Function(int nextIndex) request;
+  final Widget Function(BuildContext context, T item, int index) itemBuilder;
+  final Widget emptyBuilder;
+  final T Function(Map<String, dynamic>) cast;
+  final Widget? noMoreItemsBuilder;
+  final Widget? firstPageProgressIndicatorWidget;
 
   const InfiniteList({
     Key? key,
-    required this.onRequest,
+    required this.request,
     required this.itemBuilder,
-    required this.onCast,
+    required this.cast,
     required this.emptyBuilder,
-    this.firstPageProgressIndicatorBuilder,
+    this.firstPageProgressIndicatorWidget,
     this.noMoreItemsBuilder,
   }) : super(key: key);
 
@@ -48,9 +44,9 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final pagedResult = await widget.onRequest(pageKey);
+      final pagedResult = await widget.request(pageKey);
 
-      var newItems = pagedResult.data.map((item) => widget.onCast(item)).toList();
+      var newItems = pagedResult.data.map((item) => widget.cast(item)).toList();
 
       final isLastPage = pagedResult.total == pagedResult.lastRowOnPage;
       if (isLastPage) {
@@ -72,18 +68,18 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       ),
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorBuilder != null
-              ? widget.firstPageProgressIndicatorBuilder!(context)
-              : Center(
-                  child: SizedBox(
-                    height: 80,
-                    child: Center(
-                      child: CurvedCircularProgressIndicator(
-                        color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                      ),
+          firstPageProgressIndicatorBuilder: (context) =>
+              widget.firstPageProgressIndicatorWidget ??
+              Center(
+                child: SizedBox(
+                  height: 80,
+                  child: Center(
+                    child: CurvedCircularProgressIndicator(
+                      color: Theme.of(context).primaryTextTheme.displaySmall!.color,
                     ),
                   ),
                 ),
+              ),
           newPageProgressIndicatorBuilder: (_) => Center(
             child: SizedBox(
               height: 80,
@@ -107,17 +103,17 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
               child: const Icon(Icons.refresh, size: 50),
             ),
           ),
-          noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder(context),
-          noMoreItemsIndicatorBuilder: (context) => widget.noMoreItemsBuilder != null
-              ? widget.noMoreItemsBuilder!(context)
-              : const Padding(
-                  padding: EdgeInsets.only(bottom: 24),
-                  child: Center(
-                    child: Text(
-                      'Fim da lista.',
-                    ),
+          noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder,
+          noMoreItemsIndicatorBuilder: (context) =>
+              widget.noMoreItemsBuilder ??
+              const Padding(
+                padding: EdgeInsets.only(bottom: 24),
+                child: Center(
+                  child: Text(
+                    'Fim da lista.',
                   ),
                 ),
+              ),
         ),
         pagingController: _pagingController,
         separatorBuilder: (context, index) => const SizedBox.shrink(),

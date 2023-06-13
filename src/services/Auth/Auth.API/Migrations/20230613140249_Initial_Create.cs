@@ -161,17 +161,17 @@ namespace Auth.API.Migrations
             migrationBuilder.InsertData(
                 table: "roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "5e0490dc-613a-44b3-a545-d72d2eec4f1a", "1b4281ee-920e-4c22-8988-a42132cc4683", "admin", "ADMIN" });
+                values: new object[] { "7cfb56a1-afca-4a5a-9deb-800c5c9cf28f", "f497e5f8-72be-4dcc-a4e9-1572ed103978", "admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FotoUrl", "IsAtivo", "LockoutEnabled", "LockoutEnd", "Nome", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "9967e078-b0fc-45ed-835c-156d159a793a", 0, "6c4118a0-6f9b-41ee-8682-f8dd597ca680", "admin@admin.com", false, null, true, false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN", "AQAAAAEAACcQAAAAEIex7RaNJwImFMizYVPvEUl9kUpC/Vb5fs+51RHLS9y8BfAye4HwU2ysXTsaE9CNCA==", "+55 46 99909-7070", false, "445b8b8c-5717-4918-9534-37ed18f824fe", false, "admin" });
+                values: new object[] { "7204cc92-9a71-414d-b170-d42e09374c9b", 0, "a521108b-55cb-45a6-bc9b-d1fbaef94b9c", "admin@admin.com", false, null, true, false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN", "AQAAAAEAACcQAAAAEEPQ3OF4lkqktpuzs4SvVEDoBqjmxQID+MDSD/aF0TP8YSKBH/YtZugxtYUkgbGuSg==", "+55 46 99909-7070", false, "d20e7c8f-ed49-45c5-a534-7617df25c9f2", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "user_roles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "5e0490dc-613a-44b3-a545-d72d2eec4f1a", "9967e078-b0fc-45ed-835c-156d159a793a" });
+                values: new object[] { "7cfb56a1-afca-4a5a-9deb-800c5c9cf28f", "7204cc92-9a71-414d-b170-d42e09374c9b" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_claims_RoleId",
@@ -179,7 +179,7 @@ namespace Auth.API.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
+                name: "roles_rolename_index",
                 table: "roles",
                 column: "NormalizedName",
                 unique: true);
@@ -200,12 +200,13 @@ namespace Auth.API.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
+                name: "users_email_index",
                 table: "users",
-                column: "NormalizedEmail");
+                column: "NormalizedEmail",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
+                name: "users_username_index",
                 table: "users",
                 column: "NormalizedUserName",
                 unique: true);

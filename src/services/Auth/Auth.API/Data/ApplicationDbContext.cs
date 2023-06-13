@@ -39,6 +39,14 @@ namespace Auth.API.Data
         b.Property(e => e.FotoUrl).HasMaxLength(128);
         b.Property(e => e.IsAtivo);
 
+        b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("users_username_index").IsUnique();
+        b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("users_email_index").IsUnique();
+
+        b.HasMany<IdentityUserClaim<string>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+        b.HasMany<IdentityUserLogin<string>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
+        b.HasMany<IdentityUserToken<string>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
+        b.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+
         b.ToTable("users");
       });
 
@@ -49,6 +57,11 @@ namespace Auth.API.Data
         b.Property(e => e.Name).HasMaxLength(128);
         b.Property(e => e.NormalizedName).HasMaxLength(128);
         b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
+
+        b.HasIndex(r => r.NormalizedName).HasDatabaseName("roles_rolename_index").IsUnique();
+
+        b.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
+        b.HasMany<IdentityRoleClaim<string>>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
         b.ToTable("roles");
       });

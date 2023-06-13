@@ -95,11 +95,13 @@ class AccountEditPageState extends State<AccountEditPage> {
               ),
               height: 50,
               child: Observer(builder: (_) {
-                return TextButton(
-                  onPressed: () async {
-                    setState(() {});
-                  },
-                  child: const Text('Refresh'),
+                return GestureDetector(
+                  onTap: () => setState(() {}),
+                  child: Icon(
+                    Icons.refresh,
+                    size: 50,
+                    color: Theme.of(context).primaryTextTheme.displaySmall!.color,
+                  ),
                 );
               }),
             ),
@@ -192,9 +194,6 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   ),
                                 ),
                                 CupertinoActionSheetAction(
-                                  /// This parameter indicates the action would perform
-                                  /// a destructive action such as delete or exit and turns
-                                  /// the action's text color to red.
                                   isDestructiveAction: true,
                                   onPressed: () {
                                     Navigator.pop(context);

@@ -21,6 +21,8 @@ class FutureTriple<T> extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return data;
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return loading;
         } else if (snapshot.hasError) {
           return error;
         } else {
