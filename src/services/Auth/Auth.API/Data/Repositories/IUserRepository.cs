@@ -6,6 +6,6 @@ namespace Auth.API.Data.Repositories
 {
   public interface IUserRepository
   {
-    public Task<PagedResult<UserDto>> GetUsersPagination(UserQuery userQuery);
+    public Task<PagedResult<AccountDto>> GetUsersPaginationAsync(UserQuery userQuery);
   }
 }

@@ -14,15 +14,23 @@ namespace Auth.API.Data.Repositories
       _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<PagedResult<UserDto>> GetUsersPagination(UserQuery userQuery)
+    public async Task<PagedResult<AccountDto>> GetUsersPaginationAsync(UserQuery userQuery)
     {
-      var query = _context.Users.AsQueryable().AsNoTrackingWithIdentityResolution();
+      var query = _context.Users
+        .AsQueryable().AsNoTrackingWithIdentityResolution();
+
+      if (!string.IsNullOrWhiteSpace(userQuery.username))
+      {
+        query.Where(u => u.NormalizedUserName == userQuery.username.ToUpper());
+      }
 
       var total = await query.CountAsync();
 
+      var start = (userQuery.page - 1) * userQuery.limit;
+
       var users = query
-        .Skip(userQuery.start).Take(userQuery.limit)
-        .Select(x => new UserDto()
+        .Skip(start).Take(userQuery.limit)
+        .Select(x => new AccountDto()
         {
           Id = x.Id,
           Username = x.UserName,
@@ -31,7 +39,7 @@ namespace Auth.API.Data.Repositories
         })
         .ToList();
 
-      return new PagedResult<UserDto>(userQuery.start, userQuery.limit, total, users);
+      return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
     }
   }
 }

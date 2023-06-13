@@ -1,6 +1,6 @@
 ﻿namespace Auth.API.Data.Dto
 {
-  public record UserDto
+  public record AccountDto
   {
     public string Id { get; set; } = null!;
     public string Username { get; set; } = null!;

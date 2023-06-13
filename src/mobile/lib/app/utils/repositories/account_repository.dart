@@ -2,8 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/utils/dtos/account_dto.dart';
 import 'package:vilasesmo/app/utils/models/account/new_and_update_account_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
+import 'package:vilasesmo/app/utils/models/paged_result.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
 
@@ -44,5 +46,15 @@ class AccountRepository implements IAccountRepository {
     } on DioError catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
+  }
+
+  @override
+  Future<PagedResult<AccountDto>> getAccounts(int page, String? usernameOrEmail) async {
+    var response = await dio.get('/api/account?${page.toString()}', queryParameters: {
+      "page": page.toString(),
+      "username": usernameOrEmail,
+    });
+
+    return PagedResult.fromJson(response.data);
   }
 }

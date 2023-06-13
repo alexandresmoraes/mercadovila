@@ -69,12 +69,12 @@ namespace Auth.API.Controllers
     // GET api/account    
     [Authorize("Admin")]
     [HttpGet]
-    [ProducesResponseType(typeof(PagedResult<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResult<AccountDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PagedResult<UserDto>>> GetUsersAsync([FromQuery] UserQuery query)
-      => Result.Ok(await _userRepository.GetUsersPagination(query));
+    public async Task<Result<PagedResult<AccountDto>>> GetUsersAsync([FromQuery] UserQuery query)
+      => Result.Ok(await _userRepository.GetUsersPaginationAsync(query));
 
     /// <summary>
     /// Criação de novos usuários
