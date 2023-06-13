@@ -50,8 +50,9 @@ class AccountRepository implements IAccountRepository {
 
   @override
   Future<PagedResult<AccountDto>> getAccounts(int page, String? usernameOrEmail) async {
-    var response = await dio.get('/api/account?${page.toString()}', queryParameters: {
+    var response = await dio.get('/api/account', queryParameters: {
       "page": page.toString(),
+      "limit": 5,
       "username": usernameOrEmail,
     });
 

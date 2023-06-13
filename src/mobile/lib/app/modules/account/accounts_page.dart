@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/dtos/account_dto.dart';
+import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class AccountsPage extends StatefulWidget {
   final String title;
-  const AccountsPage({Key? key, this.title = 'AccountsPage'}) : super(key: key);
+  const AccountsPage({Key? key, this.title = 'Contas de usuários'}) : super(key: key);
   @override
   AccountsPageState createState() => AccountsPageState();
 }
@@ -136,7 +139,8 @@ class AccountsPageState extends State<AccountsPage> {
               ),
               IconButton(
                 onPressed: () async {
-                  Modular.to.pushNamed('/account/new');
+                  await Modular.to.pushNamed('/account/new');
+                  setState(() {});
                 },
                 icon: const Icon(MdiIcons.plus),
               ),
@@ -153,12 +157,13 @@ class AccountsPageState extends State<AccountsPage> {
                   padding: const EdgeInsets.only(),
                   child: TextFormField(
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Buscar por nome de usuários ou email',
                       prefixIcon: Icon(
                         MdiIcons.magnify,
+                        size: isSearchVisibled ? 20 : 0,
                       ),
-                      contentPadding: EdgeInsets.only(top: 10),
+                      contentPadding: const EdgeInsets.only(top: 10),
                     ),
                   ),
                 ),
@@ -177,14 +182,30 @@ class AccountsPageState extends State<AccountsPage> {
     final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: _orderListScreen.length,
-          itemBuilder: (context, index) {
+        padding: const EdgeInsets.all(8.0),
+        child: InfiniteList<AccountDto>(
+          request: (page) async {
+            return await Modular.get<IAccountRepository>().getAccounts(page, null);
+          },
+          cast: AccountDto.fromJson,
+          emptyBuilder: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // const ImageAsset('assets/images/img_no_upcoming.png', width: 160, height: 160),
+                const SizedBox(height: 60),
+                Text(
+                  'Você não possui nenhum resultado.',
+                  style: Theme.of(context).primaryTextTheme.displayLarge,
+                ),
+              ],
+            ),
+          ),
+          itemBuilder: (context, item, index) {
             return InkWell(
               onTap: () {
-                Modular.to.pushNamed('/account/edit/9967e078-b0fc-45ed-835c-156d159a793a'); // TODO
+                Modular.to.pushNamed('/account/edit/${item.id}');
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -205,7 +226,7 @@ class AccountsPageState extends State<AccountsPage> {
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
-                            _orderListScreen[index].orderId!,
+                            item.id,
                             style: Theme.of(context).primaryTextTheme.displayMedium,
                           ),
                         ),
@@ -243,11 +264,11 @@ class AccountsPageState extends State<AccountsPage> {
                       ),
                     ),
                     title: Text(
-                      _orderListScreen[index].name!,
+                      item.username,
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                     subtitle: Text(
-                      _orderListScreen[index].email!,
+                      item.email,
                       style: Theme.of(context).primaryTextTheme.displayMedium,
                     ),
                     trailing: Column(
@@ -268,8 +289,8 @@ class AccountsPageState extends State<AccountsPage> {
                 ],
               ),
             );
-          }),
-    );
+          },
+        ));
   }
 
   @override

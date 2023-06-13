@@ -26,8 +26,7 @@ public static class AuthConfig
       o.Password.RequiredLength = 4;
       o.Lockout.MaxFailedAccessAttempts = 5;
       o.User.RequireUniqueEmail = true;
-    }).AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+    }).AddEntityFrameworkStores<ApplicationDbContext>();
 
     var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authSettings[nameof(AuthSettings.SecretKey)]));
 
@@ -40,7 +39,6 @@ public static class AuthConfig
       .AddJwtBearer(opt =>
       {
         opt.RequireHttpsMetadata = true;
-        opt.SaveToken = true;
         opt.ClaimsIssuer = authSettings[nameof(AuthSettings.Issuer)];
         opt.TokenValidationParameters = new TokenValidationParameters
         {

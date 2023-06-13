@@ -72,7 +72,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
               widget.firstPageProgressIndicatorWidget ??
               Center(
                 child: SizedBox(
-                  height: 80,
+                  height: 50,
                   child: Center(
                     child: CurvedCircularProgressIndicator(
                       color: Theme.of(context).primaryTextTheme.displaySmall!.color,
@@ -106,11 +106,12 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
           noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder,
           noMoreItemsIndicatorBuilder: (context) =>
               widget.noMoreItemsBuilder ??
-              const Padding(
-                padding: EdgeInsets.only(bottom: 24),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
                 child: Center(
                   child: Text(
                     'Fim da lista.',
+                    style: Theme.of(context).primaryTextTheme.displayMedium,
                   ),
                 ),
               ),
