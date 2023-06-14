@@ -29,17 +29,21 @@ namespace Auth.API.Data.Repositories
       var start = (userQuery.page - 1) * userQuery.limit;
 
       var users = query
+        .OrderByDescending(u => u.IsAtivo)
+        .ThenBy(u => u.NormalizedUserName)
         .Skip(start).Take(userQuery.limit)
-        .Select(x => new AccountDto()
+        .Select(account => new AccountDto()
         {
-          Id = x.Id,
-          Username = x.UserName,
-          PhoneNumber = x.PhoneNumber,
-          Email = x.Email
+          Id = account.Id,
+          Username = account.UserName,
+          PhoneNumber = account.PhoneNumber,
+          Email = account.Email,
+          IsAtivo = account.IsAtivo
         })
         .ToList();
 
-      return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
+      //return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
+      return new PagedResult<AccountDto>(0, 5, 0, new List<AccountDto>());
     }
   }
 }

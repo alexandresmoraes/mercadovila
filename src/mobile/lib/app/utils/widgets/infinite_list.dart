@@ -10,6 +10,7 @@ class InfiniteList<T> extends StatefulWidget {
   final T Function(Map<String, dynamic>) cast;
   final Widget? noMoreItemsBuilder;
   final Widget? firstPageProgressIndicatorWidget;
+  final PagingController<int, T>? pagingController;
 
   const InfiniteList({
     Key? key,
@@ -19,6 +20,7 @@ class InfiniteList<T> extends StatefulWidget {
     required this.emptyBuilder,
     this.firstPageProgressIndicatorWidget,
     this.noMoreItemsBuilder,
+    this.pagingController,
   }) : super(key: key);
 
   @override
@@ -26,11 +28,13 @@ class InfiniteList<T> extends StatefulWidget {
 }
 
 class InfiniteListState<T> extends State<InfiniteList<T>> {
-  final PagingController<int, T> _pagingController = PagingController(firstPageKey: 1);
+  PagingController<int, T>? _pagingController;
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((pageKey) {
+    _pagingController = widget.pagingController ?? PagingController(firstPageKey: 1);
+
+    _pagingController!.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
     super.initState();
@@ -38,7 +42,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
   @override
   void dispose() {
-    _pagingController.dispose();
+    _pagingController!.dispose();
     super.dispose();
   }
 
@@ -50,13 +54,13 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
       final isLastPage = pagedResult.total == pagedResult.lastRowOnPage;
       if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
+        _pagingController!.appendLastPage(newItems);
       } else {
-        _pagingController.appendPage(newItems, pageKey + 1);
+        _pagingController!.appendPage(newItems, pageKey + 1);
       }
     } catch (error) {
       if (!mounted) return;
-      _pagingController.error = error;
+      _pagingController!.error = error;
     }
   }
 
@@ -64,7 +68,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => Future.sync(
-        () => _pagingController.refresh(),
+        () => _pagingController!.refresh(),
       ),
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<T>(
@@ -93,13 +97,13 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
           itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
           newPageErrorIndicatorBuilder: (_) => Center(
             child: GestureDetector(
-              onTap: () => _pagingController.refresh(),
+              onTap: () => _pagingController!.refresh(),
               child: const Icon(Icons.refresh, size: 50),
             ),
           ),
           firstPageErrorIndicatorBuilder: (_) => Center(
             child: GestureDetector(
-              onTap: () => _pagingController.refresh(),
+              onTap: () => _pagingController!.refresh(),
               child: const Icon(Icons.refresh, size: 50),
             ),
           ),
@@ -116,7 +120,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
                 ),
               ),
         ),
-        pagingController: _pagingController,
+        pagingController: _pagingController!,
         separatorBuilder: (context, index) => const SizedBox.shrink(),
       ),
     );

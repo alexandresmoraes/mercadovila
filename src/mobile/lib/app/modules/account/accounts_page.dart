@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dtos/account_dto.dart';
@@ -117,6 +118,9 @@ class AccountsPageState extends State<AccountsPage> {
         orderOption: "Re - order",
         orderStatus: "Ativo"),
   ];
+
+  PagingController<int, AccountDto> pagingController = PagingController(firstPageKey: 1);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -140,7 +144,7 @@ class AccountsPageState extends State<AccountsPage> {
               IconButton(
                 onPressed: () async {
                   await Modular.to.pushNamed('/account/new');
-                  setState(() {});
+                  pagingController.refresh();
                 },
                 icon: const Icon(MdiIcons.plus),
               ),
@@ -184,20 +188,21 @@ class AccountsPageState extends State<AccountsPage> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: InfiniteList<AccountDto>(
+          pagingController: pagingController,
           request: (page) async {
             return await Modular.get<IAccountRepository>().getAccounts(page, null);
           },
           cast: AccountDto.fromJson,
+          noMoreItemsBuilder: const SizedBox.shrink(),
           emptyBuilder: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // const ImageAsset('assets/images/img_no_upcoming.png', width: 160, height: 160),
-                const SizedBox(height: 60),
-                Text(
-                  'Você não possui nenhum resultado.',
-                  style: Theme.of(context).primaryTextTheme.displayLarge,
+                Image.asset(
+                  'assets/emptycart.png',
+                  width: 300,
+                  height: 300,
                 ),
               ],
             ),
@@ -232,19 +237,14 @@ class AccountsPageState extends State<AccountsPage> {
                         ),
                         const Expanded(child: SizedBox()),
                         Icon(
-                            _orderListScreen[index].orderStatus == 'Inativo'
-                                ? MdiIcons.closeOctagon
-                                : MdiIcons.checkDecagram,
-                            size: 20,
-                            color: _orderListScreen[index].orderStatus == 'Inativo'
-                                ? Colors.red
-                                : index.floor().isEven
-                                    ? Colors.greenAccent
-                                    : Colors.blue),
+                          !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                          size: 20,
+                          color: !item.isAtivo ? Colors.red : Colors.greenAccent,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            _orderListScreen[index].orderStatus!,
+                            item.isAtivo ? "Ativo" : "Inativo",
                             style: Theme.of(context).primaryTextTheme.displayMedium,
                           ),
                         )
