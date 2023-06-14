@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:curved_progress_bar/curved_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
+import 'package:vilasesmo/app/utils/widgets/refresh_button.dart';
 
 class AccountEditPage extends StatefulWidget {
   final String title;
@@ -82,39 +83,10 @@ class AccountEditPageState extends State<AccountEditPage> {
         ),
         body: FutureTriple(
           future: _controller.load(),
-          error: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  stops: const [0, .90],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                ),
-              ),
-              height: 50,
-              child: Observer(builder: (_) {
-                return GestureDetector(
-                  onTap: () => setState(() {}),
-                  child: Icon(
-                    Icons.refresh,
-                    size: 50,
-                    color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                  ),
-                );
-              }),
-            ),
+          error: RefreshButton(
+            onTap: () => setState(() {}),
           ),
-          loading: Center(
-            child: SizedBox(
-              height: 21,
-              width: 21,
-              child: CurvedCircularProgressIndicator(
-                color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-              ),
-            ),
-          ),
+          loading: const CircularProgress(),
           data: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -479,17 +451,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   await _controller.save();
                                 }
                               },
-                              child: _controller.isLoading
-                                  ? Center(
-                                      child: SizedBox(
-                                        height: 21,
-                                        width: 21,
-                                        child: CurvedCircularProgressIndicator(
-                                          color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                                        ),
-                                      ),
-                                    )
-                                  : const Text('Salvar'),
+                              child: _controller.isLoading ? const CircularProgress() : const Text('Salvar'),
                             );
                           }),
                         ),

@@ -42,8 +42,7 @@ namespace Auth.API.Data.Repositories
         })
         .ToList();
 
-      //return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
-      return new PagedResult<AccountDto>(0, 5, 0, new List<AccountDto>());
+      return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
     }
   }
 }

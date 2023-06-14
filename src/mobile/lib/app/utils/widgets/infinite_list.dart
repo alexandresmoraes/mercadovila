@@ -1,7 +1,8 @@
-import 'package:curved_progress_bar/curved_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/refresh_button.dart';
 
 class InfiniteList<T> extends StatefulWidget {
   final Future<PagedResult<T>> Function(int nextIndex) request;
@@ -72,40 +73,14 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       ),
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) =>
-              widget.firstPageProgressIndicatorWidget ??
-              Center(
-                child: SizedBox(
-                  height: 50,
-                  child: Center(
-                    child: CurvedCircularProgressIndicator(
-                      color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                    ),
-                  ),
-                ),
-              ),
-          newPageProgressIndicatorBuilder: (_) => Center(
-            child: SizedBox(
-              height: 80,
-              child: Center(
-                child: CurvedCircularProgressIndicator(
-                  color: Theme.of(context).primaryTextTheme.displaySmall!.color,
-                ),
-              ),
-            ),
-          ),
+          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
           itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
-          newPageErrorIndicatorBuilder: (_) => Center(
-            child: GestureDetector(
-              onTap: () => _pagingController!.refresh(),
-              child: const Icon(Icons.refresh, size: 50),
-            ),
+          newPageErrorIndicatorBuilder: (_) => RefreshButton(
+            onTap: () => _pagingController!.refresh(),
           ),
-          firstPageErrorIndicatorBuilder: (_) => Center(
-            child: GestureDetector(
-              onTap: () => _pagingController!.refresh(),
-              child: const Icon(Icons.refresh, size: 50),
-            ),
+          firstPageErrorIndicatorBuilder: (_) => RefreshButton(
+            onTap: () => _pagingController!.refresh(),
           ),
           noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder,
           noMoreItemsIndicatorBuilder: (context) =>

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class PagamentosPage extends StatefulWidget {
@@ -9,6 +8,18 @@ class PagamentosPage extends StatefulWidget {
   const PagamentosPage({Key? key, this.title = 'Pagamentos'}) : super(key: key);
   @override
   PagamentosPageState createState() => PagamentosPageState();
+}
+
+class Order {
+  String? orderId;
+
+  String? name;
+  String? orderStatus;
+
+  String? email;
+  String? orderOption;
+  String? amount;
+  Order({this.amount, this.name, this.email, this.orderId, this.orderOption, this.orderStatus});
 }
 
 class PagamentosPageState extends State<PagamentosPage> {
