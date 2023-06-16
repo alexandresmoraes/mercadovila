@@ -98,7 +98,7 @@ class AccountsPageState extends State<AccountsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/emptycart.png',
+                'assets/empty_list.png',
                 width: 300,
                 height: 300,
               ),
@@ -180,7 +180,9 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                      : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
