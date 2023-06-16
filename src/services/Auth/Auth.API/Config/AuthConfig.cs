@@ -68,10 +68,7 @@ public static class AuthConfig
 
     services.AddAuthorization((opt) =>
       {
-        opt.AddPolicy("Admin", authBuilder =>
-        {
-          authBuilder.RequireClaim(ClaimTypes.Role, "admin");
-        });
+        opt.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "admin"));
       });
 
     services.AddMvc(opt =>
