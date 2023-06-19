@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.WebAPI.Data
+namespace Common.WebAPI.PostgreSql
 {
-  public static class DataExtensions
+  public static class PostgreSqlExtensions
   {
     public static WebApplication RunMigrations<TDbContext>(this WebApplication app) where TDbContext : DbContext
     {
@@ -27,17 +27,27 @@ namespace Common.WebAPI.Data
       return options;
     }
 
-    public static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+    public static IServiceCollection AddUnitOfWorkPostgres(this IServiceCollection services)
     {
       services.AddScoped<IUnitOfWork, UnitOfWork>();
 
       services.AddMvc(opt =>
       {
-        opt.Filters.Add<UnitOfWorkCommitAttribute>();
+        opt.Filters.Add<UnitOfWorkPostgresAttribute>();
         opt.Filters.Add<UnitOfWorkExceptionAttribute>();
       });
 
       return services;
+    }
+
+    public static IHealthChecksBuilder AddPostgresHealthCheck(this IHealthChecksBuilder checkBuilder, IConfiguration configuration)
+    {
+      var connectionString = configuration.GetConnectionString("Default");
+
+      if (string.IsNullOrEmpty(connectionString))
+        throw new ArgumentException("Default connectionString is empty");
+
+      return checkBuilder.AddNpgSql(connectionString, name: "postgres", tags: new[] { "infra" });
     }
   }
 }

@@ -316,6 +316,22 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
     });
   }
 
+  late final _$isSavingAtom =
+      Atom(name: 'AccountEditControllerBase.isSaving', context: context);
+
+  @override
+  bool get isSaving {
+    _$isSavingAtom.reportRead();
+    return super.isSaving;
+  }
+
+  @override
+  set isSaving(bool value) {
+    _$isSavingAtom.reportWrite(value, super.isSaving, () {
+      super.isSaving = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: 'AccountEditControllerBase.isLoading', context: context);
 
@@ -481,6 +497,7 @@ confirmPassword: ${confirmPassword},
 telefone: ${telefone},
 isAtivo: ${isAtivo},
 isAdmin: ${isAdmin},
+isSaving: ${isSaving},
 isLoading: ${isLoading},
 isPasswordVisible: ${isPasswordVisible},
 isConfirmPasswordVisible: ${isConfirmPasswordVisible},

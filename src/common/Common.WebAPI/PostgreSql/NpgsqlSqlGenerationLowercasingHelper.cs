@@ -2,7 +2,7 @@
 using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 using System.Text;
 
-namespace Common.WebAPI.Data
+namespace Common.WebAPI.PostgreSql
 {
   public class NpgsqlSqlGenerationLowercasingHelper : NpgsqlSqlGenerationHelper
   {

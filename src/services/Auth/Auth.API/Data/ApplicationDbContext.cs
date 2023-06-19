@@ -1,5 +1,5 @@
 ﻿using Auth.API.Data.Entities;
-using Common.WebAPI.Data;
+using Common.WebAPI.PostgreSql;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

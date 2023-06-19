@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace Common.WebAPI.Data
+namespace Common.WebAPI.PostgreSql
 {
-  public class UnitOfWorkCommitAttribute : Attribute, IAsyncActionFilter
+  public class UnitOfWorkPostgresAttribute : Attribute, IAsyncActionFilter
   {
     private readonly IUnitOfWork _uow;
-    private readonly ILogger<UnitOfWorkCommitAttribute> _logger;
+    private readonly ILogger<UnitOfWorkPostgresAttribute> _logger;
 
-    public UnitOfWorkCommitAttribute(IUnitOfWork uow, ILogger<UnitOfWorkCommitAttribute> logger)
+    public UnitOfWorkPostgresAttribute(IUnitOfWork uow, ILogger<UnitOfWorkPostgresAttribute> logger)
     {
       _uow = uow ?? throw new ArgumentNullException(nameof(uow));
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -32,17 +32,17 @@ namespace Common.WebAPI.Data
       {
         if (_uow.IsActive)
         {
-          var objectResult = result.Result as ObjectResult;
-          if (objectResult != null && objectResult.Value is Result resultValue)
+          if (result.Result is ObjectResult objectResult
+            && objectResult.Value is Result resultValue
+            && resultValue.IsValid)
           {
-            if (resultValue.IsValid)
-              await _uow.CommitAsync(cancellationToken);
-            else
-              await _uow.RollbackAsync(cancellationToken);
+            await _uow.CommitAsync(cancellationToken);
+            _logger.LogInformation("commited.");
           }
           else
           {
             await _uow.RollbackAsync(cancellationToken);
+            _logger.LogInformation("rollbacked.");
           }
         }
       }

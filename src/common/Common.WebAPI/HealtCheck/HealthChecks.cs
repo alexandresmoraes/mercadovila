@@ -1,7 +1,6 @@
 ﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -26,16 +25,6 @@ namespace Common.WebAPI.HealthCheck
       }).AddInMemoryStorage();
 
       return services;
-    }
-
-    public static IHealthChecksBuilder AddPostgresHealthCheck(this IHealthChecksBuilder checkBuilder, IConfiguration configuration)
-    {
-      var connectionString = configuration.GetConnectionString("Default");
-
-      if (string.IsNullOrEmpty(connectionString))
-        throw new ArgumentException("Default connectionString is empty");
-
-      return checkBuilder.AddNpgSql(connectionString, name: "postgres", tags: new[] { "infra" });
     }
 
     public static IApplicationBuilder MapHealthChecks(this IApplicationBuilder app)

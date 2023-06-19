@@ -1,7 +1,7 @@
 ﻿using Auth.API.Data.Entities;
 using Auth.API.Models;
 using Common.WebAPI.Auth;
-using Common.WebAPI.Data;
+using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

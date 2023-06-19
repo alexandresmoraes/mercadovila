@@ -143,6 +143,8 @@ abstract class AccountEditControllerBase with Store {
   void setIsAdmin(bool v) => isAdmin = v;
 
   @observable
+  bool isSaving = false;
+  @observable
   bool isLoading = false;
   @observable
   bool isPasswordVisible = false;
@@ -163,6 +165,7 @@ abstract class AccountEditControllerBase with Store {
 
   Future<AccountModel> load() async {
     if (accountModel != null) return accountModel!;
+    isLoading = true;
 
     if (!isNullorEmpty(id)) {
       var accountRepository = Modular.get<IAccountRepository>();
@@ -187,12 +190,13 @@ abstract class AccountEditControllerBase with Store {
     isAtivo = accountModel!.isAtivo;
     isAdmin = accountModel!.isAdmin;
 
+    isLoading = false;
     return accountModel!;
   }
 
   Future save() async {
     try {
-      isLoading = true;
+      isSaving = true;
 
       var newAndUpdateAccountModel = NewAndUpdateAccountModel(
         nome: nome!,
@@ -224,12 +228,12 @@ abstract class AccountEditControllerBase with Store {
         });
       }
     } catch (e) {
-      isLoading = false;
+      isSaving = false;
     }
   }
 
   void apiErrors(ResultFailModel resultFail) {
-    isLoading = false;
+    isSaving = false;
 
     if (resultFail.statusCode == 400) {
       _nomeApiError = resultFail.getErrorByProperty('Nome');
