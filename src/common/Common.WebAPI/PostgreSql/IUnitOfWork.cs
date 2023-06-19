@@ -1,4 +1,4 @@
-﻿namespace Common.WebAPI.Data
+﻿namespace Common.WebAPI.PostgreSql
 {
   public interface IUnitOfWork
   {

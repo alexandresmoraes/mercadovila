@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Common.WebAPI.Data
+namespace Common.WebAPI.PostgreSql
 {
   public class UnitOfWork : IUnitOfWork, IDisposable
   {
@@ -14,20 +14,20 @@ namespace Common.WebAPI.Data
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-      _isActive = true;
       _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+      _isActive = true;
     }
 
-    public Task CommitAsync(CancellationToken cancellationToken = default)
+    public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
+      await _transaction!.CommitAsync(cancellationToken);
       _isActive = false;
-      return _transaction!.CommitAsync(cancellationToken);
     }
 
-    public Task RollbackAsync(CancellationToken cancellationToken = default)
+    public async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
+      await _transaction!.RollbackAsync(cancellationToken);
       _isActive = false;
-      return _transaction!.RollbackAsync(cancellationToken);
     }
 
     public bool IsActive { get => _isActive; }

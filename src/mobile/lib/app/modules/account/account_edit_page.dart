@@ -75,8 +75,9 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
@@ -429,7 +430,7 @@ class AccountEditPageState extends State<AccountEditPage> {
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                !_controller.isLoading && _controller.isValid
+                !_controller.isLoading
                     ? Expanded(
                         child: Container(
                           decoration: BoxDecoration(
@@ -447,11 +448,16 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextButton(
                               onPressed: () async {
-                                if (!_controller.isLoading && _controller.isValid) {
+                                if (!_controller.isSaving && _controller.isValid) {
                                   await _controller.save();
                                 }
                               },
-                              child: _controller.isLoading ? const CircularProgress() : const Text('Salvar'),
+                              child: _controller.isSaving
+                                  ? const CircularProgress(
+                                      width: 21,
+                                      height: 21,
+                                    )
+                                  : const Text('Salvar'),
                             );
                           }),
                         ),

@@ -73,7 +73,8 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       ),
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          firstPageProgressIndicatorBuilder: (context) =>
+              widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
           itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
           newPageErrorIndicatorBuilder: (_) => RefreshButton(
