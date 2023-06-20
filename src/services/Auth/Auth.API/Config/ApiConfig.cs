@@ -57,10 +57,6 @@ namespace Auth.API.Config
         app.UseOpenApi();
         app.MapHealthChecksUI();
       }
-      else
-      {
-        app.UseHttpsRedirection();
-      }
 
       app.UseMiddleware<ErrorHandlerMiddleware>();
       app.UseRouting();

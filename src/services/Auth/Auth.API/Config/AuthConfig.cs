@@ -76,7 +76,6 @@ public static class AuthConfig
       opt.Filters.Add(new AuthorizeFilter());
     });
 
-
     return services;
   }
 }

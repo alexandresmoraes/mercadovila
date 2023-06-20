@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
@@ -18,6 +19,9 @@ class SplashPageState extends State<SplashPage> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 1)).then((value) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+
       var authService = Modular.get<IAuthService>();
 
       if (await authService.isAuthenticated()) {

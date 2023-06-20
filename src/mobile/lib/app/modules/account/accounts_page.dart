@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -15,7 +17,10 @@ class AccountsPage extends StatefulWidget {
 }
 
 class AccountsPageState extends State<AccountsPage> {
+  String? usernameFilter;
   bool isSearchVisibled = false;
+
+  Timer? _debounce;
 
   PagingController<int, AccountDto> pagingController = PagingController(firstPageKey: 1);
 
@@ -58,6 +63,15 @@ class AccountsPageState extends State<AccountsPage> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.only(),
                   child: TextFormField(
+                    onChanged: ((value) {
+                      if (_debounce?.isActive ?? false) _debounce!.cancel();
+                      _debounce = Timer(const Duration(milliseconds: 500), () {
+                        setState(() {
+                          usernameFilter = value;
+                          pagingController.refresh();
+                        });
+                      });
+                    }),
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                     decoration: InputDecoration(
                       hintText: 'Buscar por nome de usuários ou email',
@@ -88,7 +102,7 @@ class AccountsPageState extends State<AccountsPage> {
       child: InfiniteList<AccountDto>(
         pagingController: pagingController,
         request: (page) async {
-          return await Modular.get<IAccountRepository>().getAccounts(page, null);
+          return await Modular.get<IAccountRepository>().getAccounts(page, usernameFilter);
         },
         cast: AccountDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),

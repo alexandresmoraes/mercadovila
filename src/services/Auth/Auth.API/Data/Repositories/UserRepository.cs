@@ -21,7 +21,8 @@ namespace Auth.API.Data.Repositories
 
       if (!string.IsNullOrWhiteSpace(userQuery.username))
       {
-        query.Where(u => u.NormalizedUserName == userQuery.username.ToUpper());
+        query = query.Where(x => x.NormalizedUserName.Contains(userQuery.username.ToUpper())
+                      || x.NormalizedEmail.Contains(userQuery.username.ToUpper()));
       }
 
       var total = await query.CountAsync();
