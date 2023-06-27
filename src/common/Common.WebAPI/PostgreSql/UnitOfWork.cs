@@ -26,8 +26,11 @@ namespace Common.WebAPI.PostgreSql
 
     public async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
-      await _transaction!.RollbackAsync(cancellationToken);
-      _isActive = false;
+      if (_isActive)
+      {
+        await _transaction!.RollbackAsync(cancellationToken);
+        _isActive = false;
+      }
     }
 
     public bool IsActive { get => _isActive; }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace Common.WebAPI.PostgreSql
+namespace Common.WebAPI.MongoDb
 {
   public class UnitOfWorkAttribute : Attribute, IAsyncActionFilter
   {
@@ -36,19 +36,19 @@ namespace Common.WebAPI.PostgreSql
             && objectResult.Value is Result resultValue
             && resultValue.IsValid)
           {
-            await _uow.CommitAsync(cancellationToken);
+            await _uow.CommitTransactionAsync(cancellationToken);
             _logger.LogInformation("commited.");
           }
           else
           {
-            await _uow.RollbackAsync(cancellationToken);
+            await _uow.AbortTransactionAsync(cancellationToken);
             _logger.LogInformation("rollbacked.");
           }
         }
       }
       catch (OperationCanceledException)
       {
-        await _uow.RollbackAsync(cancellationToken);
+        await _uow.AbortTransactionAsync(cancellationToken);
         _logger.LogInformation("Cancellation Requested");
       }
     }
@@ -74,7 +74,7 @@ namespace Common.WebAPI.PostgreSql
 
       if (result.Exception is not null && _uow.IsActive)
       {
-        await _uow.RollbackAsync(cancellationToken);
+        await _uow.AbortTransactionAsync(cancellationToken);
         _logger.LogInformation("Roolback exception");
       }
     }

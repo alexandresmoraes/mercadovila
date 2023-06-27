@@ -33,7 +33,7 @@ namespace Common.WebAPI.PostgreSql
 
       services.AddMvc(opt =>
       {
-        opt.Filters.Add<UnitOfWorkPostgresAttribute>();
+        opt.Filters.Add<UnitOfWorkAttribute>();
         opt.Filters.Add<UnitOfWorkExceptionAttribute>();
       });
 

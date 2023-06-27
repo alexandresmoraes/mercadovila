@@ -82,6 +82,7 @@ services:
 
   mongo:
     image: mongo
+    restart: always
     container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}

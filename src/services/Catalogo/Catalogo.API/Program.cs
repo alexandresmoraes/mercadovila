@@ -13,6 +13,7 @@ builder.Services.UseMongoDb(builder.Configuration);
 builder.Services.AddDefaultHealthCheck().AddMongoHealthCheck(builder.Configuration);
 builder.Services.AddDefaultHealthCheckUI();
 builder.Services.AddOpenApi();
+builder.Services.AddUnitOfWorkMongo();
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<CarrinhoRepository>();
 builder.Services.AddScoped<FavoritosRepository>();
