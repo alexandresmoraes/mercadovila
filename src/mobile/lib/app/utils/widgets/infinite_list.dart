@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_button.dart';
+import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
 class InfiniteList<T> extends StatefulWidget {
   final Future<PagedResult<T>> Function(int nextIndex) request;
@@ -73,14 +73,13 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       ),
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) =>
-              widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
           itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
-          newPageErrorIndicatorBuilder: (_) => RefreshButton(
+          newPageErrorIndicatorBuilder: (_) => RefreshWidget(
             onTap: () => _pagingController!.refresh(),
           ),
-          firstPageErrorIndicatorBuilder: (_) => RefreshButton(
+          firstPageErrorIndicatorBuilder: (_) => RefreshWidget(
             onTap: () => _pagingController!.refresh(),
           ),
           noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder,

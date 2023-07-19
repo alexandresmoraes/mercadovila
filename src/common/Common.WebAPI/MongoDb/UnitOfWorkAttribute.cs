@@ -37,19 +37,19 @@ namespace Common.WebAPI.MongoDb
             && resultValue.IsValid)
           {
             await _uow.CommitTransactionAsync(cancellationToken);
-            _logger.LogInformation("commited.");
+            _logger.LogInformation("mongodb: commited.");
           }
           else
           {
             await _uow.AbortTransactionAsync(cancellationToken);
-            _logger.LogInformation("rollbacked.");
+            _logger.LogInformation("mongodb: rollbacked.");
           }
         }
       }
       catch (OperationCanceledException)
       {
         await _uow.AbortTransactionAsync(cancellationToken);
-        _logger.LogInformation("Cancellation Requested");
+        _logger.LogInformation("mongodb: cancellation requested.");
       }
     }
   }
@@ -75,7 +75,7 @@ namespace Common.WebAPI.MongoDb
       if (result.Exception is not null && _uow.IsActive)
       {
         await _uow.AbortTransactionAsync(cancellationToken);
-        _logger.LogInformation("Roolback exception");
+        _logger.LogInformation("mongodb: rollbacked exception.");
       }
     }
   }

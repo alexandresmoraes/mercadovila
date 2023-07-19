@@ -37,19 +37,19 @@ namespace Common.WebAPI.PostgreSql
             && resultValue.IsValid)
           {
             await _uow.CommitAsync(cancellationToken);
-            _logger.LogInformation("commited.");
+            _logger.LogInformation("postgres: commited.");
           }
           else
           {
             await _uow.RollbackAsync(cancellationToken);
-            _logger.LogInformation("rollbacked.");
+            _logger.LogInformation("postgres: rollbacked.");
           }
         }
       }
       catch (OperationCanceledException)
       {
         await _uow.RollbackAsync(cancellationToken);
-        _logger.LogInformation("Cancellation Requested");
+        _logger.LogInformation("postgres: cancellation requested.");
       }
     }
   }
@@ -75,7 +75,7 @@ namespace Common.WebAPI.PostgreSql
       if (result.Exception is not null && _uow.IsActive)
       {
         await _uow.RollbackAsync(cancellationToken);
-        _logger.LogInformation("Roolback exception");
+        _logger.LogInformation("postgres: rollbacked exception.");
       }
     }
   }

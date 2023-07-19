@@ -9,7 +9,7 @@ namespace Common.WebAPI.Results
     {
       if (!context.ModelState.IsValid)
       {
-        IList<ErrorResult> errors = new List<ErrorResult>();
+        var errors = new List<ErrorResult>();
         foreach (var modelStateKey in context.ModelState.Keys)
         {
           var value = context.ModelState[modelStateKey];

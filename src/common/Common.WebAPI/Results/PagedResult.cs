@@ -9,14 +9,23 @@
     public long Total { get; private set; }
     public int Start { get; private set; }
     public int Limit { get; private set; }
+    public int TotalPages { get; private set; }
+    public bool HasPreviousPage => CurrentPage > 1;
+    public bool HasNextPage => CurrentPage < TotalPages;
     public int FirstRowOnPage
     {
-      get { return (CurrentPage - 1) * Start + 1; }
+      get
+      {
+        return (CurrentPage - 1) * Start + 1;
+      }
     }
 
     public int LastRowOnPage
     {
-      get { return Convert.ToInt32(Math.Min(Convert.ToInt64((CurrentPage * Limit)), Total)); }
+      get
+      {
+        return Convert.ToInt32(Math.Min(Convert.ToInt64(CurrentPage * Limit), Total));
+      }
     }
 
 
@@ -25,15 +34,17 @@
       Start = start;
       Limit = limit;
       Total = total;
+
+      TotalPages = Convert.ToInt32(Math.Ceiling(total / (double)limit));
     }
   }
 
   public record PagedResult<TDto> : PagedResultBase where TDto : class
   {
-    public IList<TDto> Data { get; private set; }
+    public IEnumerable<TDto> Data { get; private set; }
 
-    public PagedResult(int start, int limit, long total, IList<TDto> data)
-                : base(start, limit, total)
+    public PagedResult(int start, int limit, long total, IEnumerable<TDto> data)
+      : base(start, limit, total)
     {
       Data = data ?? throw new ArgumentNullException(nameof(data));
     }
@@ -45,8 +56,8 @@
   {
     public TExtraDto Dto { get; private set; }
 
-    public PagedResultWithExtraDto(int start, int limit, long total, IList<TDto> data, TExtraDto dto)
-                : base(start, limit, total, data)
+    public PagedResultWithExtraDto(int start, int limit, long total, IEnumerable<TDto> data, TExtraDto dto)
+      : base(start, limit, total, data)
     {
       Dto = dto ?? throw new ArgumentNullException(nameof(dto));
     }

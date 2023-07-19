@@ -10,7 +10,7 @@ import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_button.dart';
+import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
 class AccountEditPage extends StatefulWidget {
   final String title;
@@ -75,16 +75,15 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Editando usuário"),
         ),
         body: FutureTriple(
           future: _controller.load(),
-          error: RefreshButton(
+          error: RefreshWidget(
             onTap: () => setState(() {}),
           ),
           loading: const CircularProgress(),

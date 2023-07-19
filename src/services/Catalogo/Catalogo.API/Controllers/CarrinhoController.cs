@@ -1,5 +1,6 @@
 ﻿using Catalogo.API.Data.Entities;
 using Catalogo.API.Data.Repositories;
+using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
@@ -16,20 +17,18 @@ namespace Catalogo.API.Controllers
       _carrinhoRepository = carrinhoRepository;
     }
 
-    // GET: api/carrinho
-    [HttpGet]
-    public async Task<IEnumerable<Carrinho>> GetAsync()
+    // GET: api/carrinho/{userId}
+    [HttpGet("{userId}")]
+    public async Task<Result<Carrinho>> GetAsync([FromRoute] string userId)
     {
-      return await _carrinhoRepository.Collection.AsQueryable().ToListAsync();
-    }
+      var carrinho = await _carrinhoRepository.Collection
+        .Find(Builders<Carrinho>.Filter.Eq(e => e.UserId, userId))
+        .SingleOrDefaultAsync();
 
-    // GET api/carrinho/5
-    [HttpGet("{id}")]
-    public Carrinho? Get(string id)
-    {
-      return _carrinhoRepository.Collection
-        .Find(Builders<Carrinho>.Filter.Eq("_id", id))
-        .SingleOrDefault();
+      if (carrinho is null)
+        return Result.NotFound<Carrinho>();
+
+      return Result.Ok(carrinho);
     }
 
     // POST api/carrinho

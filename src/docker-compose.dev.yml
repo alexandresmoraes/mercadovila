@@ -63,34 +63,26 @@ services:
     depends_on:
       - postgres
 
+  mongo:
+    image: mongo:5    
+    volumes:
+      - ${MONGODB_DATA}:/data/db
+    ports:
+      - ${MONGODB_PORT}:27017
+
   mongo-express:
-    image: mongo-express    
+    image: mongo-express
     restart: always
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEXPRESS_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD}
-      ME_CONFIG_MONGODB_PORT: ${MONGODB_PORT}
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
     ports:
       - ${MONGOEXPRESS_PORT}:8081
-    links:
-      - mongo
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=${MONGODB_PORT}
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
     depends_on:
       - mongo
 
-  mongo:
-    image: mongo
-    restart: always
-    container_name: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
-    ports:
-      - ${MONGODB_PORT}:27017
-    volumes:
-      - ${MONGODB_DATA}:/data/db    
 
   gateway:
       image: nginx
