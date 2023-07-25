@@ -3,6 +3,7 @@ using Catalogo.API.Data.Repositories;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Logs;
 using Common.WebAPI.MongoDb;
+using Common.WebAPI.Results;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +14,11 @@ builder.Services.UseMongoDb(builder.Configuration);
 builder.Services.AddDefaultHealthCheck().AddMongoHealthCheck(builder.Configuration);
 builder.Services.AddDefaultHealthCheckUI();
 builder.Services.AddOpenApi();
-
-if (!builder.Environment.IsDevelopment())
-  builder.Services.AddUnitOfWorkMongo();
+builder.Services.AddResultFilter();
 
 builder.Services.AddScoped<ProdutoRepository>();
-builder.Services.AddScoped<CarrinhoRepository>();
-builder.Services.AddScoped<FavoritosRepository>();
+builder.Services.AddScoped<CarrinhoItemRepository>();
+builder.Services.AddScoped<FavoritoItemRepository>();
 
 builder.Logging.AddSerilog(builder.Configuration);
 

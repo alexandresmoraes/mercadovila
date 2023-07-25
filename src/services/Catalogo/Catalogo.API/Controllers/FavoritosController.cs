@@ -9,32 +9,32 @@ namespace Catalogo.API.Controllers
   [ApiController]
   public class FavoritosController : ControllerBase
   {
-    private readonly FavoritosRepository _favoritosRepository;
+    private readonly FavoritoItemRepository _favoritosRepository;
 
-    public FavoritosController(FavoritosRepository favoritosRepository)
+    public FavoritosController(FavoritoItemRepository favoritosRepository)
     {
       _favoritosRepository = favoritosRepository;
     }
 
     // GET: api/favoritos
     [HttpGet]
-    public async Task<IEnumerable<Favoritos>> GetAsync()
+    public async Task<IEnumerable<FavoritoItem>> GetAsync()
     {
       return await _favoritosRepository.Collection.AsQueryable().ToListAsync();
     }
 
     // GET api/favoritos/5
     [HttpGet("{id}")]
-    public Favoritos? Get(string id)
+    public FavoritoItem? Get(string id)
     {
       return _favoritosRepository.Collection
-        .Find(Builders<Favoritos>.Filter.Eq("_id", id))
+        .Find(Builders<FavoritoItem>.Filter.Eq("_id", id))
         .SingleOrDefault();
     }
 
     // POST api/favoritos
     [HttpPost]
-    public string Post([FromBody] Favoritos source)
+    public string Post([FromBody] FavoritoItem source)
     {
       _favoritosRepository.Collection.InsertOne(source);
       return source.UserId;
@@ -44,7 +44,7 @@ namespace Catalogo.API.Controllers
     [HttpDelete("{id}")]
     public void Delete(string id)
     {
-      var filter = Builders<Favoritos>.Filter.Eq("_id", id);
+      var filter = Builders<FavoritoItem>.Filter.Eq("_id", id);
       _favoritosRepository.Collection.FindOneAndDelete(filter);
     }
   }

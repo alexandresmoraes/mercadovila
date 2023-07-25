@@ -10,41 +10,43 @@ namespace Catalogo.API.Controllers
   [ApiController]
   public class CarrinhoController : ControllerBase
   {
-    private readonly CarrinhoRepository _carrinhoRepository;
+    private readonly CarrinhoItemRepository _carrinhoRepository;
 
-    public CarrinhoController(CarrinhoRepository carrinhoRepository)
+    public CarrinhoController(CarrinhoItemRepository carrinhoRepository)
     {
       _carrinhoRepository = carrinhoRepository;
     }
 
     // GET: api/carrinho/{userId}
     [HttpGet("{userId}")]
-    public async Task<Result<Carrinho>> GetAsync([FromRoute] string userId)
+    public async Task<Result<CarrinhoItem>> GetAsync([FromRoute] string userId)
     {
       var carrinho = await _carrinhoRepository.Collection
-        .Find(Builders<Carrinho>.Filter.Eq(e => e.UserId, userId))
+        .Find(Builders<CarrinhoItem>.Filter.Eq(e => e.UserId, userId))
         .SingleOrDefaultAsync();
 
       if (carrinho is null)
-        return Result.NotFound<Carrinho>();
+        return Result.NotFound<CarrinhoItem>();
 
       return Result.Ok(carrinho);
     }
 
     // POST api/carrinho
     [HttpPost]
-    public string Post([FromBody] Carrinho source)
+    public Result<string> Post([FromBody] CarrinhoItem source)
     {
       _carrinhoRepository.Collection.InsertOne(source);
-      return source.UserId;
+      return Result.Ok(source.UserId);
     }
 
     // DELETE api/carrinho/5
     [HttpDelete("{id}")]
-    public void Delete(string id)
+    public Result Delete(string id)
     {
-      var filter = Builders<Carrinho>.Filter.Eq("_id", id);
+      var filter = Builders<CarrinhoItem>.Filter.Eq("_id", id);
       _carrinhoRepository.Collection.FindOneAndDelete(filter);
+
+      return Result.Ok();
     }
   }
 }

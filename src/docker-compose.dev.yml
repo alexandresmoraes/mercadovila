@@ -71,7 +71,7 @@ services:
       - ${MONGODB_PORT}:27017
 
   mongo-express:
-    image: mongo-express
+    image: mongo-express:0.54
     restart: always
     ports:
       - ${MONGOEXPRESS_PORT}:8081

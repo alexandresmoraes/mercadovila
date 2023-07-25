@@ -2,7 +2,7 @@
 
 namespace Catalogo.API.Data.Entities
 {
-  public class Favoritos
+  public class FavoritoItem
   {
     [BsonId]
     public string Id { get; set; } = Guid.NewGuid().ToString();
