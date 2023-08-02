@@ -191,10 +191,11 @@ namespace Auth.API.Controllers
 
       var photoUploadModel = new PhotoUploadModel(foto);
 
-      var validations = ValidatePhotoUploadModel(photoUploadModel);
+      Result? result = null;
+      var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
 
-      if (!validations.Item1)
-        return validations.Item2!;
+      if (!validation)
+        return result!;
 
       var user = await _userManager.FindByIdAsync(id);
 
@@ -204,16 +205,18 @@ namespace Auth.API.Controllers
       return Result.Ok();
     }
 
-    private (bool, Result?) ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel)
+    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result? result)
     {
       var context = new ValidationContext(photoUploadModel);
       var validationResults = new List<ValidationResult>();
       var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
 
-      if (isValid)
-        return (isValid, Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray()));
+      if (!isValid)
+      {
+        result = Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+      }
 
-      return (isValid, null);
+      return isValid;
     }
   }
 }
