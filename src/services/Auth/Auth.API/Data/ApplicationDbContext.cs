@@ -28,6 +28,7 @@ namespace Auth.API.Data
       {
         b.HasKey(e => e.Id);
         b.Property(e => e.Id).HasMaxLength(36).ValueGeneratedOnAdd();
+        b.Property(e => e.Nome).HasMaxLength(256);
         b.Property(e => e.UserName).HasMaxLength(128);
         b.Property(e => e.NormalizedUserName).HasMaxLength(128);
         b.Property(e => e.Email).HasMaxLength(128);

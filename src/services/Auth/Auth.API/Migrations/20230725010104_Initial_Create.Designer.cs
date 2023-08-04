@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auth.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230613140249_Initial_Create")]
+    [Migration("20230725010104_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -61,7 +61,8 @@ namespace Auth.API.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(128)
@@ -108,9 +109,9 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7204cc92-9a71-414d-b170-d42e09374c9b",
+                            Id = "0f76aa88-6a46-41cd-805d-a6d87b19f481",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a521108b-55cb-45a6-bc9b-d1fbaef94b9c",
+                            ConcurrencyStamp = "1f86cac4-31cd-40b5-9293-06e692b98b87",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             IsAtivo = true,
@@ -118,10 +119,10 @@ namespace Auth.API.Migrations
                             Nome = "Admin",
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEPQ3OF4lkqktpuzs4SvVEDoBqjmxQID+MDSD/aF0TP8YSKBH/YtZugxtYUkgbGuSg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELtBWZNYmte5aZr1b5/Kf9kT9klwBG8pZ5Rc7xrIkvg/2MjqVTrfcnXjwNDnDdAmAg==",
                             PhoneNumber = "+55 46 99909-7070",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d20e7c8f-ed49-45c5-a534-7617df25c9f2",
+                            SecurityStamp = "bc26d054-8803-465b-9d66-c46b42fa1589",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -157,8 +158,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7cfb56a1-afca-4a5a-9deb-800c5c9cf28f",
-                            ConcurrencyStamp = "f497e5f8-72be-4dcc-a4e9-1572ed103978",
+                            Id = "31ab46df-f95e-471e-9e65-e9b21b296f42",
+                            ConcurrencyStamp = "ce1e5d27-0f6d-404b-993c-571e261899b4",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -267,8 +268,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "7204cc92-9a71-414d-b170-d42e09374c9b",
-                            RoleId = "7cfb56a1-afca-4a5a-9deb-800c5c9cf28f"
+                            UserId = "0f76aa88-6a46-41cd-805d-a6d87b19f481",
+                            RoleId = "31ab46df-f95e-471e-9e65-e9b21b296f42"
                         });
                 });
 
