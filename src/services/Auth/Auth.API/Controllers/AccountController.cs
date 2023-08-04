@@ -177,7 +177,7 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // PUT api/account/{id}/photo    
+    // POST api/account/{id}/photo    
     [HttpPost("{id}/photo")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -191,11 +191,11 @@ namespace Auth.API.Controllers
 
       var photoUploadModel = new PhotoUploadModel(foto);
 
-      var context = new ValidationContext(photoUploadModel);
-      var validationResults = new List<ValidationResult>();
-      var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
-      if (!isValid)
-        return Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+      Result? result = null;
+      var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
+
+      if (!validation)
+        return result!;
 
       var user = await _userManager.FindByIdAsync(id);
 
@@ -203,6 +203,20 @@ namespace Auth.API.Controllers
         return Result.NotFound();
 
       return Result.Ok();
+    }
+
+    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result? result)
+    {
+      var context = new ValidationContext(photoUploadModel);
+      var validationResults = new List<ValidationResult>();
+      var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
+
+      if (!isValid)
+      {
+        result = Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+      }
+
+      return isValid;
     }
   }
 }
