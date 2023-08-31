@@ -12,7 +12,7 @@ namespace Auth.API.Config
         {
           Title = "Vila Sesmo Auth API",
           Description = "API de autenticação e autorização do Vila Sesmo.",
-          Contact = new OpenApiContact() { Name = "Alexandre S Moraes", Email = "alexandresmoraes@me.com" },
+          Contact = new OpenApiContact() { Name = "Alexandre de Moraes", Email = "alexandresmoraes@me.com" },
           License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/Licenses/MIT") }
         });
 

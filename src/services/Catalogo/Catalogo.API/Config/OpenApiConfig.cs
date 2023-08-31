@@ -12,7 +12,7 @@ namespace Catalogo.API.Config
         {
           Title = "Vila Sesmo Catalogo API",
           Description = "API de produtos, carrinho e favoritos do Vila Sesmo.",
-          Contact = new OpenApiContact() { Name = "Alexandre S Moraes", Email = "alexandresmoraes@me.com" },
+          Contact = new OpenApiContact() { Name = "Alexandre de Moraes", Email = "alexandresmoraes@me.com" },
           License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/Licenses/MIT") }
         });
 
