@@ -21,7 +21,7 @@ class ProdutosPageState extends State<ProdutosPage> {
         name: "Fresh Mutton",
         amount: "15.08",
         description: "Fresh meat, ready to eat",
-        discount: "20%",
+        discount: "5",
         isFavourite: true,
         unitName: "kg",
         rating: "2",
@@ -32,7 +32,7 @@ class ProdutosPageState extends State<ProdutosPage> {
         name: "Fresh Chicken",
         amount: "11.08",
         description: "Fresh Chicken, ready to eat",
-        discount: "20%",
+        discount: "7",
         isFavourite: true,
         unitName: "kg",
         rating: "4.5",
@@ -44,6 +44,7 @@ class ProdutosPageState extends State<ProdutosPage> {
         amount: "12.08",
         description: "Fresh lamb, ready to eat",
         isFavourite: false,
+        discount: "9",
         unitName: "kg",
         rating: "3",
         ratingCount: "65",
@@ -53,7 +54,7 @@ class ProdutosPageState extends State<ProdutosPage> {
         name: "Fresh Mutton",
         amount: "15.08",
         description: "Fresh meat, ready to eat",
-        discount: "20%",
+        discount: "6",
         isFavourite: true,
         unitName: "kg",
         rating: "4.5",
@@ -64,7 +65,7 @@ class ProdutosPageState extends State<ProdutosPage> {
         name: "Fresh Chicken",
         amount: "11.08",
         description: "Fresh Chicken, ready to eat",
-        discount: "20%",
+        discount: "8",
         isFavourite: true,
         unitName: "kg",
         rating: "4.5",
@@ -105,7 +106,7 @@ class ProdutosPageState extends State<ProdutosPage> {
           actions: [
             IconButton(
                 onPressed: () async {
-                  // await br.openBarcodeScanner();
+                  //
                 },
                 icon: const Icon(MdiIcons.barcode)),
             FloatingActionButton(
@@ -127,22 +128,22 @@ class ProdutosPageState extends State<ProdutosPage> {
                 ),
               ),
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => CheckoutScreen(a: widget.analytics, o: widget.observer),
-                //   ),
-                // );
+                //
               },
             ),
             IconButton(
                 onPressed: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => FilterScreen(a: widget.analytics, o: widget.observer),
-                  //   ),
-                  // );
+                  //
                 },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
+                icon: Modular.get<ThemeStore>().isDarkModeEnable
+                    ? Image.asset('assets/filter_white.png')
+                    : Image.asset('assets/filter_black.png')),
+            IconButton(
+              onPressed: () async {
+                await Modular.to.pushNamed('/produtos/edit');
+              },
+              icon: const Icon(MdiIcons.plus),
+            ),
           ],
         ),
         body: Padding(
@@ -184,7 +185,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 10, left: 120),
+                            padding: const EdgeInsets.only(top: 10, left: 130),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -200,16 +201,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 RichText(
-                                    text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                                  TextSpan(
-                                    text: '${_productList[index].amount}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${_productList[index].unitName}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                    text: TextSpan(
+                                        text: "\$",
+                                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                                        children: [
+                                      TextSpan(
+                                        text: '${_productList[index].amount}',
+                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                      ),
+                                      TextSpan(
+                                        text: ' / ${_productList[index].unitName}',
+                                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                                      )
+                                    ])),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 4.0),
                                   child: Row(
@@ -254,123 +258,52 @@ class ProdutosPageState extends State<ProdutosPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _productList[index].discount != null
-                                ? Container(
-                                    height: 20,
-                                    width: 60,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.lightBlue,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "${_productList[index].discount} off",
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context).primaryTextTheme.bodySmall,
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 20,
-                                    width: 60,
-                                  ),
-                            IconButton(
-                              onPressed: () {
-                                _productList[index].isFavourite = !_productList[index].isFavourite!;
-                                setState(() {});
-                              },
-                              icon: _productList[index].isFavourite! ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                            Container(
+                              height: 20,
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                "Estoque alvo ${_productList[index].discount}",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                              ),
                             )
                           ],
                         ),
                       ),
-                      _productList[index].qty == null || (_productList[index].qty != null && _productList[index].qty == 0)
-                          ? Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).iconTheme.color,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                  ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
                                 ),
-                                child: IconButton(
-                                  padding: const EdgeInsets.all(0),
-                                  visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                                  onPressed: () {
-                                    _productList[index].qty = _productList[index].qty! + 1;
-                                    setState(() {});
-                                  },
-                                  icon: Icon(
-                                    Icons.add,
-                                    color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                                  ),
-                                ),
+                              ),
+                              child: Text(
+                                "Estoque ${_productList[index].discount}",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.bodySmall,
                               ),
                             )
-                          : Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                height: 28,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    stops: const [0, .90],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorLight],
-                                  ),
-                                  borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                                        onPressed: () {
-                                          _productList[index].qty = _productList[index].qty! - 1;
-                                          setState(() {});
-                                        },
-                                        icon: Icon(
-                                          FontAwesomeIcons.minus,
-                                          size: 11,
-                                          color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                                        )),
-                                    Text(
-                                      "${_productList[index].qty}",
-                                      style: Theme.of(context)
-                                          .primaryTextTheme
-                                          .bodyLarge!
-                                          .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
-                                    ),
-                                    IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                                        onPressed: () {
-                                          _productList[index].qty = _productList[index].qty! + 1;
-                                          setState(() {});
-                                        },
-                                        icon: Icon(
-                                          FontAwesomeIcons.plus,
-                                          size: 11,
-                                          color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          ],
+                        ),
+                      ),
                       Positioned(
                         left: 0,
                         top: -20,
