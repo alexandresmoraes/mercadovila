@@ -45,9 +45,9 @@ namespace Catalogo.API.Data.Repositories
     public async Task<bool> ExisteProdutoPorNome(string nome)
     {
       var filtro = Builders<Produto>.Filter.Eq(p => p.Nome, nome);
-      var produto = await Collection.Find(filtro).FirstOrDefaultAsync();
+      var count = await Collection.CountDocumentsAsync(filtro);
 
-      return produto is not null;
+      return count > 0;
     }
 
     public async Task<Produto?> GetAsync(string id)
