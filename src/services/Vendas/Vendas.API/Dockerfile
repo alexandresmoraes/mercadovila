@@ -3,20 +3,19 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Services/Pedidos/Pedidos.API/Pedidos.API.csproj", "Services/Pedidos/Pedidos.API/"]
-RUN dotnet restore "Services/Pedidos/Pedidos.API/Pedidos.API.csproj"
+COPY ["services/Vendas/Vendas.API/Vendas.API.csproj", "services/Vendas/Vendas.API/"]
+RUN dotnet restore "services/Vendas/Vendas.API/Vendas.API.csproj"
 COPY . .
-WORKDIR "/src/Services/Pedidos/Pedidos.API"
-RUN dotnet build "Pedidos.API.csproj" -c Release -o /app/build
+WORKDIR "/src/services/Vendas/Vendas.API"
+RUN dotnet build "Vendas.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Pedidos.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Vendas.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Pedidos.API.dll"]
+ENTRYPOINT ["dotnet", "Vendas.API.dll"]
