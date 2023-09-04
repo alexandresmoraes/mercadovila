@@ -12,11 +12,11 @@ class ProdutoModel {
   String? id;
   late final String nome;
   late final String descricao;
-  late final String preco;
+  late final double preco;
   late final String unidadeMedida;
   late final String codigoBarras;
-  late final String estoqueAlvo;
-  late final String estoque;
+  late final int estoqueAlvo;
+  late final int estoque;
   late final bool isAtivo;
 
   Map<String, dynamic> toJson() {

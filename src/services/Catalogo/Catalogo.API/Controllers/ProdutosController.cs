@@ -73,7 +73,7 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<ProdutoResponseModel>> PostAsync([FromBody] ProdutoModel produtoModel)
     {
-      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!);
+      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, null);
 
       if (isExist)
         return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
@@ -106,7 +106,7 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
     {
-      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!);
+      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
 
       if (isExist)
         return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");

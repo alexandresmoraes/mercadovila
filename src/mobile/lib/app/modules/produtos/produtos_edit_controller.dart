@@ -1,6 +1,8 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utils/models/produtos/produto_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
+import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
@@ -165,26 +167,27 @@ abstract class ProdutosEditControllerBase with Store {
     isLoading = true;
 
     if (!isNullorEmpty(id)) {
-      produtoModel = null;
+      var produtosRepository = Modular.get<IProdutosRepository>();
+      produtoModel = await produtosRepository.getProduto(id!);
     } else {
       produtoModel = ProdutoModel(
           nome: "",
           descricao: "",
-          preco: "",
+          preco: 0,
           unidadeMedida: "",
           codigoBarras: "",
-          estoqueAlvo: "",
-          estoque: "",
+          estoqueAlvo: 0,
+          estoque: 0,
           isAtivo: true);
     }
 
     nome = produtoModel!.nome;
     descricao = produtoModel!.descricao;
-    preco = produtoModel!.preco;
+    preco = produtoModel!.preco.toString();
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
-    estoqueAlvo = produtoModel!.estoqueAlvo;
-    estoque = produtoModel!.estoque;
+    estoqueAlvo = produtoModel!.estoqueAlvo.toString();
+    estoque = produtoModel!.estoque.toString();
     isAtivo = produtoModel!.isAtivo;
 
     isLoading = false;
@@ -195,27 +198,33 @@ abstract class ProdutosEditControllerBase with Store {
     try {
       isSaving = true;
 
-      // var accountRepository = Modular.get<IAccountRepository>();
-      // if (isNullorEmpty(id)) {
-      //   var result = await accountRepository.newAccount(NewAndUpdateAccountModel(
-      //     nome: "",
+      var produtoModel = ProdutoModel(
+        nome: nome!,
+        descricao: descricao!,
+        preco: double.parse(preco!),
+        unidadeMedida: unidadeMedida!,
+        codigoBarras: codigoBarras!,
+        estoqueAlvo: int.parse(estoqueAlvo!),
+        estoque: int.parse(estoque!),
+        isAtivo: isAtivo,
+      );
 
-      //   ));
+      var produtoRepository = Modular.get<IProdutosRepository>();
+      if (isNullorEmpty(id)) {
+        var result = await produtoRepository.createProduto(produtoModel);
 
-      //   result.fold(apiErrors, (accountResponse) async {
-      //     GlobalSnackbar.success('Criado com sucesso!');
-      //     Modular.to.pop();
-      //   });
-      // } else {
-      //   var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
+        result.fold(apiErrors, (response) async {
+          GlobalSnackbar.success('Criado com sucesso!');
+          Modular.to.pop();
+        });
+      } else {
+        var result = await produtoRepository.editProduto(id!, produtoModel);
 
-      //   result.fold(apiErrors, (accountResponse) async {
-      //     var me = await Modular.get<IAuthService>().me();
-      //     Modular.get<AccountStore>().setAccount(me);
-      //     GlobalSnackbar.success('Editado com sucesso!');
-      //     Modular.to.pop();
-      //   });
-      // }
+        result.fold(apiErrors, (accountResponse) async {
+          GlobalSnackbar.success('Editado com sucesso!');
+          Modular.to.pop();
+        });
+      }
     } catch (e) {
       isSaving = false;
     }

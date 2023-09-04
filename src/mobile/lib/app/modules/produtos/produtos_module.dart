@@ -3,6 +3,7 @@ import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_edit_page.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_page.dart';
+import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 
 class ProdutosModule extends Module {
   static const routeName = '/produtos/';
@@ -11,6 +12,7 @@ class ProdutosModule extends Module {
   final List<Bind> binds = [
     Bind.factory((i) => ProdutosEditController()),
     Bind.factory((i) => AccountEditController()),
+    BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),
   ];
 
   @override

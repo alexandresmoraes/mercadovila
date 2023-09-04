@@ -4,6 +4,7 @@ using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Logs;
 using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
+using Common.WebAPI.WebApi;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,13 @@ builder.Services.AddResultFilter();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
   options.SuppressMapClientErrors = true;
+});
+
+builder.Services.AddMvc(opt =>
+{
+#if DEBUG
+  opt.Filters.Add<DelayDebugAttribute>();
+#endif
 });
 
 builder.Services.AddScoped<ProdutoRepository>();

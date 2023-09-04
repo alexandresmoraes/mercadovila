@@ -22,7 +22,7 @@ class ProdutosRepository implements IProdutosRepository {
   @override
   Future<Either<ResultFailModel, ProdutoResponseModel>> createProduto(ProdutoModel produtoModel) async {
     try {
-      var response = await dio.post('/api/account', data: produtoModel.toJson());
+      var response = await dio.post('/api/produtos', data: produtoModel.toJson());
       var result = ProdutoResponseModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -33,7 +33,7 @@ class ProdutosRepository implements IProdutosRepository {
   @override
   Future<Either<ResultFailModel, String>> editProduto(String id, ProdutoModel produtoModel) async {
     try {
-      await dio.put('/api/account/$id', data: produtoModel.toJson());
+      await dio.put('/api/produtos/$id', data: produtoModel.toJson());
       return Right(id);
     } on DioError catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
@@ -42,14 +42,14 @@ class ProdutosRepository implements IProdutosRepository {
 
   @override
   Future<ProdutoModel> getProduto(String id) async {
-    var response = await dio.get('/api/account/$id');
+    var response = await dio.get('/api/produtos/$id');
 
     return ProdutoModel.fromJson(response.data);
   }
 
   @override
   Future<PagedResult<ProdutoDto>> getProdutos(int page, String? nome) async {
-    var response = await dio.get('/api/account', queryParameters: {
+    var response = await dio.get('/api/produtos', queryParameters: {
       "page": page.toString(),
       "limit": 10,
       "nome": nome,
