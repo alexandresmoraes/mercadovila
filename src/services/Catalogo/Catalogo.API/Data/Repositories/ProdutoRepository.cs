@@ -48,7 +48,7 @@ namespace Catalogo.API.Data.Repositories
 
       if (!string.IsNullOrEmpty(id))
       {
-        filtro &= Builders<Produto>.Filter.Ne(p => id, id);
+        filtro &= Builders<Produto>.Filter.Ne(p => p.Id, id);
       }
 
       var count = await Collection.CountDocumentsAsync(filtro);
