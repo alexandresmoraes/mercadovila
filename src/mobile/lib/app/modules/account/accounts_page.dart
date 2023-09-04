@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dtos/account_dto.dart';
+import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
@@ -194,9 +194,7 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),

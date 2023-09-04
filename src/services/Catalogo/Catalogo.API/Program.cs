@@ -4,6 +4,7 @@ using Common.WebAPI.HealthCheck;
 using Common.WebAPI.Logs;
 using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,23 +16,20 @@ builder.Services.AddDefaultHealthCheck().AddMongoHealthCheck(builder.Configurati
 builder.Services.AddDefaultHealthCheckUI();
 builder.Services.AddOpenApi();
 builder.Services.AddResultFilter();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+  options.SuppressMapClientErrors = true;
+});
 
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<CarrinhoItemRepository>();
 builder.Services.AddScoped<FavoritoItemRepository>();
+builder.Services.AddAuthConfig(builder.Configuration);
 
 builder.Logging.AddSerilog(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapHealthChecks();
-if (app.Environment.IsDevelopment())
-{
-  app.UseOpenApi();
-  app.MapHealthChecksUI();
-}
-
-app.UseAuthorization();
-app.MapControllers();
+app.UseApiConfiguration();
 
 app.Run();

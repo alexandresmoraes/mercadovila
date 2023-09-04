@@ -1,5 +1,8 @@
-﻿using Catalogo.API.Data.Entities;
+﻿using Catalogo.API.Data.Dto;
+using Catalogo.API.Data.Entities;
+using Catalogo.API.Data.Queries;
 using Common.WebAPI.MongoDb;
+using Common.WebAPI.Results;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -35,5 +38,60 @@ namespace Catalogo.API.Data.Repositories
         Builders<Produto>.IndexKeys.Descending(_ => _.Rating)
       ));
     }
+
+    public async Task CreateAsync(Produto produto)
+      => await Collection.InsertOneAsync(produto);
+
+    public async Task<bool> ExisteProdutoPorNome(string nome)
+    {
+      var filtro = Builders<Produto>.Filter.Eq(p => p.Nome, nome);
+      var produto = await Collection.Find(filtro).FirstOrDefaultAsync();
+
+      return produto is not null;
+    }
+
+    public async Task<Produto?> GetAsync(string id)
+      => await Collection.Find(p => p.Id == id).FirstOrDefaultAsync();
+
+    public async Task<PagedResult<ProdutoDto>> GetProdutosAsync(ProdutoQuery produtoQuery)
+    {
+      var filtro = Builders<Produto>.Filter.Empty;
+
+      if (!string.IsNullOrWhiteSpace(produtoQuery.Nome))
+      {
+        filtro &= Builders<Produto>.Filter.Eq(p => p.Nome, produtoQuery.Nome);
+      }
+
+      var start = (produtoQuery.Page - 1) * produtoQuery.Limit;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new ProdutoDto
+        {
+          Id = p.Id,
+          Nome = p.Nome,
+          Descricao = p.Descricao,
+          Preco = p.Preco,
+          UnidadeMedida = p.UnidadeMedida,
+          EstoqueAlvo = p.EstoqueAlvo,
+          Estoque = p.Estoque,
+          Rating = p.Rating,
+          RatingCount = p.RatingCount,
+          IsAtivo = p.IsAtivo
+        });
+
+      var produtos = await Collection.Find(filtro)
+        .SortBy(p => p.Nome)
+        .Skip((produtoQuery.Page - 1) * produtoQuery.Limit)
+        .Limit(produtoQuery.Limit)
+        .Project<ProdutoDto>(projections)
+        .ToListAsync();
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return new PagedResult<ProdutoDto>(start, produtoQuery.Limit, count, produtos);
+    }
+
+    public async Task UpdateAsync(Produto produto)
+      => await Collection.ReplaceOneAsync(p => p.Id == produto.Id, produto);
   }
 }

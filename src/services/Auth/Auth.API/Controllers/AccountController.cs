@@ -36,7 +36,6 @@ namespace Auth.API.Controllers
     // GET api/account/{id}
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<AccountModel>> GetAsync([FromRoute] string id)

@@ -9,6 +9,7 @@ class ProdutoModel {
     required this.estoque,
     required this.isAtivo,
   });
+  String? id;
   late final String nome;
   late final String descricao;
   late final String preco;
@@ -29,6 +30,18 @@ class ProdutoModel {
     data['estoque'] = estoque;
     data['isAtivo'] = isAtivo;
     return data;
+  }
+
+  ProdutoModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nome = json['nome'];
+    descricao = json['descricao'];
+    preco = json['preco'];
+    unidadeMedida = json['unidadeMedida'];
+    codigoBarras = json['codigoBarras'];
+    estoqueAlvo = json['estoqueAlvo'];
+    estoque = json['estoque'];
+    isAtivo = json['isAtivo'];
   }
 }
 

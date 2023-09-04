@@ -1,7 +1,6 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -135,9 +134,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                 onPressed: () {
                   //
                 },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Image.asset('assets/filter_white.png')
-                    : Image.asset('assets/filter_black.png')),
+                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
             IconButton(
               onPressed: () async {
                 await Modular.to.pushNamed('/produtos/edit');
@@ -201,19 +198,16 @@ class ProdutosPageState extends State<ProdutosPage> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 RichText(
-                                    text: TextSpan(
-                                        text: "\$",
-                                        style: Theme.of(context).primaryTextTheme.displayMedium,
-                                        children: [
-                                      TextSpan(
-                                        text: '${_productList[index].amount}',
-                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                      ),
-                                      TextSpan(
-                                        text: ' / ${_productList[index].unitName}',
-                                        style: Theme.of(context).primaryTextTheme.displayMedium,
-                                      )
-                                    ])),
+                                    text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                                  TextSpan(
+                                    text: '${_productList[index].amount}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${_productList[index].unitName}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 4.0),
                                   child: Row(

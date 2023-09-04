@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace Common.WebAPI.MongoDb
 {
-  public abstract class MongoService<T> : IMongoService<T>
+  public abstract class MongoService<T>
   {
     private readonly IMongoClient _mongoClient;
     private readonly IMongoDatabase _database;
@@ -16,6 +16,6 @@ namespace Common.WebAPI.MongoDb
       _collectionName = collectionName;
     }
 
-    public IMongoCollection<T> Collection => _database.GetCollection<T>(_collectionName);
+    protected IMongoCollection<T> Collection => _database.GetCollection<T>(_collectionName);
   }
 }
