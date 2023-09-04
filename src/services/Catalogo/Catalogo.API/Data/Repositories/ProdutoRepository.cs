@@ -46,11 +46,11 @@ namespace Catalogo.API.Data.Repositories
     {
       var filtro = Builders<Produto>.Filter.Eq(p => p.Nome, nome);
 
-      if (string.IsNullOrEmpty(id))
+      if (!string.IsNullOrEmpty(id))
       {
         filtro &= Builders<Produto>.Filter.Ne(p => id, id);
       }
-      
+
       var count = await Collection.CountDocumentsAsync(filtro);
 
       return count > 0;
