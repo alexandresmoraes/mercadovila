@@ -27,7 +27,7 @@ namespace Catalogo.API.Data.Entities
 
     public DateTime? DataUltimaCompra { get; set; }
 
-    public DateTime DataCriacao { get; set; } = DateTime.Now;
+    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
     public bool IsAtivo { get; set; }
   }
