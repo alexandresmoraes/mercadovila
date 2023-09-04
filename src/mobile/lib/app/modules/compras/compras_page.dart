@@ -4,18 +4,17 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/tab/home_page.dart';
 import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
+import 'package:vilasesmo/app/stores/theme_store.dart';
 
-import '../../stores/theme_store.dart';
-
-class PedidosPage extends StatefulWidget {
+class ComprasPage extends StatefulWidget {
   final String title;
-  const PedidosPage({Key? key, this.title = 'Pedidos'}) : super(key: key);
+  const ComprasPage({Key? key, this.title = 'Compras'}) : super(key: key);
   @override
-  PedidosPageState createState() => PedidosPageState();
+  ComprasPageState createState() => ComprasPageState();
 }
 
-class PedidosPageState extends State<PedidosPage> {
-  PedidosPageState() : super();
+class ComprasPageState extends State<ComprasPage> {
+  ComprasPageState() : super();
 
   final List<Order> _orderListScreen = [
     Order(
