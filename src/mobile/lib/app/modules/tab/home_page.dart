@@ -38,7 +38,7 @@ class Product {
 }
 
 class HomePageState extends State<HomePage> {
-  CarouselController? _carouselController;
+  final CarouselController _carouselController = CarouselController();
   final List<String> _imagesList = ['assets/homescreen_banner.png', 'assets/Banner0.png', 'assets/Banner1.png'];
   int _currentIndex = 0;
   final List<Product> _allCategoryList = [
@@ -259,7 +259,10 @@ class HomePageState extends State<HomePage> {
                       ),
                 title: Text('Bom dia', style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@alexandre',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -271,7 +274,8 @@ class HomePageState extends State<HomePage> {
                             ? Image.asset('assets/notificationIcon_white.png')
                             : Image.asset('assets/notificationIcon_black.png')),
                     Container(
-                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(
+                          color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       width: 84,
@@ -325,7 +329,8 @@ class HomePageState extends State<HomePage> {
                 position: _currentIndex.toDouble(),
                 onTap: (i) {
                   _currentIndex = i.toInt();
-                  _carouselController!.animateToPage(_currentIndex, duration: const Duration(microseconds: 1), curve: Curves.easeInOut);
+                  _carouselController.animateToPage(_currentIndex,
+                      duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
                 },
                 decorator: DotsDecorator(
                   activeSize: const Size(6, 6),
@@ -713,7 +718,8 @@ class HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       'R\$ ',
-                                      style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                      style: TextStyle(
+                                          fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                     ),
                                     Text(
                                       '${_allCategoryList[i].amount}',

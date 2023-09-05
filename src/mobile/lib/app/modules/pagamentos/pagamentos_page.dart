@@ -136,7 +136,7 @@ class PagamentosPageState extends State<PagamentosPage> {
               ),
               IconButton(
                 onPressed: () async {
-                  Modular.to.pushNamed('/account/edit');
+                  Modular.to.pushNamed('/account/edit/');
                 },
                 icon: const Icon(MdiIcons.plus),
               ),
@@ -184,7 +184,7 @@ class PagamentosPageState extends State<PagamentosPage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Modular.to.pushNamed('/account/edit');
+                Modular.to.pushNamed('/account/edit/');
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -210,7 +210,10 @@ class PagamentosPageState extends State<PagamentosPage> {
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        Icon(_orderListScreen[index].orderStatus == 'Inativo' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                        Icon(
+                            _orderListScreen[index].orderStatus == 'Inativo'
+                                ? MdiIcons.closeOctagon
+                                : MdiIcons.checkDecagram,
                             size: 20,
                             color: _orderListScreen[index].orderStatus == 'Inativo'
                                 ? Colors.red
@@ -258,8 +261,9 @@ class PagamentosPageState extends State<PagamentosPage> {
                     ),
                   ),
                   Divider(
-                    color:
-                        themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                    color: themeStore.isDarkModeEnable
+                        ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                        : Theme.of(context).dividerTheme.color,
                   ),
                 ],
               ),

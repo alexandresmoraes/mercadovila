@@ -1,11 +1,19 @@
-﻿using Catalogo.API.Data.Entities;
+﻿using Catalogo.API.Data.Dto;
+using Catalogo.API.Data.Entities;
+using Catalogo.API.Data.Queries;
 using Catalogo.API.Data.Repositories;
+using Catalogo.API.Models;
+using Common.WebAPI.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 
 namespace Catalogo.API.Controllers
 {
+  /// <summary>
+  /// Criar e editar produtos para gerar o catalogo
+  /// </summary>
   [Route("api/produtos")]
+  [Authorize("Admin")]
   [ApiController]
   public class ProdutosController : ControllerBase
   {
@@ -16,36 +24,113 @@ namespace Catalogo.API.Controllers
       _produtoRepository = produtoService;
     }
 
-    // GET: api/catalogo
-    [HttpGet]
-    public async Task<IEnumerable<Produto>> GetAsync()
-    {
-      return await _produtoRepository.Collection.AsQueryable().ToListAsync();
-    }
-
-    // GET api/catalogo/5
+    /// <summary>
+    /// Pega informações do produto para edição
+    /// </summary>
+    // GET api/catalogo/{id}
     [HttpGet("{id}")]
-    public Produto? Get(string id)
+    [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<ProdutoModel>> GetAsync([FromRoute] string id)
     {
-      return _produtoRepository.Collection
-        .Find(Builders<Produto>.Filter.Eq("_id", id))
-        .SingleOrDefault();
+      var produto = await _produtoRepository.GetAsync(id);
+
+      if (produto is null)
+        Result.NotFound();
+
+      return Result.Ok(new ProdutoModel
+      {
+        Nome = produto!.Nome,
+        Descricao = produto.Descricao,
+        Preco = produto.Preco,
+        UnidadeMedida = produto.UnidadeMedida,
+        CodigoBarras = produto.CodigoBarras,
+        EstoqueAlvo = produto.EstoqueAlvo,
+        Estoque = produto.Estoque,
+        IsAtivo = produto.IsAtivo
+      });
     }
 
-    // POST api/catalogo
+    /// <summary>
+    /// Retorna produtos paginados
+    /// </summary>
+    // GET api/catalogo
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult<ProdutoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<PagedResult<ProdutoDto>>> GetProdutosAsync([FromQuery] ProdutoQuery query)
+      => Result.Ok(await _produtoRepository.GetProdutosAsync(query));
+
+    /// <summary>
+    /// Criação de novos produtos
+    /// </summary>
+    // POST api/catalogo    
     [HttpPost]
-    public string Post([FromBody] Produto source)
+    [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<ProdutoResponseModel>> PostAsync([FromBody] ProdutoModel produtoModel)
     {
-      _produtoRepository.Collection.InsertOne(source);
-      return source.Id!;
+      var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, null);
+      if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
+
+      var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, null);
+      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
+
+      var produto = new Produto
+      {
+        Nome = produtoModel.Nome!,
+        Descricao = produtoModel.Descricao!,
+        Preco = produtoModel.Preco!,
+        UnidadeMedida = produtoModel.UnidadeMedida!,
+        CodigoBarras = produtoModel.CodigoBarras!,
+        EstoqueAlvo = produtoModel.EstoqueAlvo,
+        Estoque = produtoModel.Estoque,
+        IsAtivo = produtoModel.IsAtivo
+      };
+
+      await _produtoRepository.CreateAsync(produto);
+
+      return Result.Ok(new ProdutoResponseModel(produto.Id));
     }
 
-    // DELETE api/catalogo/5
-    [HttpDelete("{id}")]
-    public void Delete(string id)
+    /// <summary>
+    /// Alteração de produto
+    /// </summary>
+    // PUT api/catalogo/{id}    
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
     {
-      var filter = Builders<Produto>.Filter.Eq("_id", id);
-      _produtoRepository.Collection.FindOneAndDelete(filter);
+      var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
+      if (isExistPorNome) return Result.Fail("Produto já existente com o mesmo nome.");
+
+      var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
+      if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
+
+      var produto = new Produto
+      {
+        Id = id,
+        Nome = produtoModel.Nome!,
+        Descricao = produtoModel.Descricao!,
+        Preco = produtoModel.Preco!,
+        UnidadeMedida = produtoModel.UnidadeMedida!,
+        CodigoBarras = produtoModel.CodigoBarras!,
+        EstoqueAlvo = produtoModel.EstoqueAlvo,
+        Estoque = produtoModel.Estoque,
+        IsAtivo = produtoModel.IsAtivo
+      };
+
+      await _produtoRepository.UpdateAsync(produto);
+
+      return Result.Ok();
     }
   }
 }

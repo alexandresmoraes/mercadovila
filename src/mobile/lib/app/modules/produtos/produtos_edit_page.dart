@@ -1,77 +1,28 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
 import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
-class AccountEditPage extends StatefulWidget {
+class ProdutosEditPage extends StatefulWidget {
   final String title;
   final String? id;
-  final bool mySelf;
-
-  const AccountEditPage({Key? key, this.id, required this.mySelf, this.title = "Conta de usuário"}) : super(key: key);
-
+  const ProdutosEditPage({Key? key, this.title = 'Produto', this.id}) : super(key: key);
   @override
-  AccountEditPageState createState() => AccountEditPageState();
+  ProdutosEditPageState createState() => ProdutosEditPageState();
 }
 
-class AccountEditPageState extends State<AccountEditPage> {
+class ProdutosEditPageState extends State<ProdutosEditPage> {
   bool isAdmin = false;
-  late AccountEditController _controller;
-
-  AccountEditPageState() : super();
-
-  _getImagePicker(ImageSource source) async {
-    var pickedFile = await ImagePicker().pickImage(
-      source: source,
-      maxWidth: 1920,
-      maxHeight: 1080,
-      imageQuality: 100,
-    );
-    if (pickedFile != null) _cropImage(pickedFile.path);
-  }
-
-  _cropImage(filePath) async {
-    var croppedImage = await ImageCropper().cropImage(
-        sourcePath: filePath,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        aspectRatioPresets: CropAspectRatioPreset.values,
-        compressQuality: 100,
-        aspectRatio: const CropAspectRatio(
-          ratioX: 1,
-          ratioY: 1,
-        ),
-        cropStyle: CropStyle.circle,
-        compressFormat: ImageCompressFormat.png,
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Recortar',
-              initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: true,
-              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
-          IOSUiSettings(
-            title: 'Recortar',
-            minimumAspectRatio: 1.0,
-            aspectRatioLockEnabled: true,
-          ),
-          WebUiSettings(context: context)
-        ]);
-    if (croppedImage != null) {
-      _controller.setPhotoPath(croppedImage.path);
-      Modular.to.pop();
-    }
-  }
+  late ProdutosEditController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +33,7 @@ class AccountEditPageState extends State<AccountEditPage> {
             : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(widget.id != null ? "Editando usuário" : "Criando usuário"),
+          title: Text(isNullorEmpty(widget.id) ? "Criando produto" : "Editando produto"),
         ),
         body: FutureTriple(
           future: _controller.load(),
@@ -147,7 +98,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   child: CupertinoActionSheetAction(
                                     isDefaultAction: true,
                                     onPressed: () {
-                                      _getImagePicker(ImageSource.camera);
+                                      //_getImagePicker(ImageSource.camera);
                                     },
                                     child: const Text(
                                       'Camera',
@@ -159,7 +110,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                 ),
                                 CupertinoActionSheetAction(
                                   onPressed: () {
-                                    _getImagePicker(ImageSource.gallery);
+                                    //_getImagePicker(ImageSource.gallery);
                                   },
                                   child: const Text(
                                     'Galeria',
@@ -203,7 +154,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Nome completo",
+                          "Nome",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -220,7 +171,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'João das Neves',
+                                hintText: 'Coca-cola',
                                 errorText: _controller.getNomeError,
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                               ),
@@ -228,7 +179,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                           }),
                         ),
                         Text(
-                          "Nome de usuário",
+                          "Descrição",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -238,21 +189,21 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextFormField(
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              initialValue: _controller.username,
-                              onChanged: _controller.setUsername,
+                              initialValue: _controller.descricao,
+                              onChanged: _controller.setDescricao,
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'jonsnow',
+                                hintText: 'Coca-cola lata 350ml',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getUsernameError,
+                                errorText: _controller.getDescricaoError,
                               ),
                             );
                           }),
                         ),
                         Text(
-                          "Telefone",
+                          "Preço",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -262,22 +213,21 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextFormField(
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              initialValue: _controller.telefone,
-                              onChanged: _controller.setTelefone,
-                              keyboardType: TextInputType.phone,
+                              initialValue: _controller.preco,
+                              onChanged: _controller.setPreco,
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: '+55 46999057070',
+                                hintText: 'R\$ 3,79',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getTelefoneError,
+                                errorText: _controller.getPrecoError,
                               ),
                             );
                           }),
                         ),
                         Text(
-                          "Email",
+                          "Unidade de medida",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -287,21 +237,21 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextFormField(
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              initialValue: _controller.email,
-                              onChanged: _controller.setEmail,
+                              initialValue: _controller.unidadeMedida,
+                              onChanged: _controller.setUnidadeMedida,
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'jonsnow@got.com',
+                                hintText: 'un | kg',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getEmailError,
+                                errorText: _controller.getUnidadeMedidaError,
                               ),
                             );
                           }),
                         ),
                         Text(
-                          "Senha",
+                          "Código de barras",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -311,23 +261,22 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextFormField(
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              obscureText: !_controller.isPasswordVisible,
-                              initialValue: _controller.password,
-                              onChanged: _controller.setPassword,
+                              initialValue: _controller.codigoBarras,
+                              onChanged: _controller.setCodigoBarras,
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'Digite a senha',
+                                hintText: '7898357417892',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getPasswordError,
+                                errorText: _controller.getCodigoBarrasError,
                                 suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _controller.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                  icon: const Icon(
+                                    MdiIcons.barcode,
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    _controller.isPasswordVisible = !_controller.isPasswordVisible;
+                                    //
                                   },
                                 ),
                               ),
@@ -335,7 +284,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                           }),
                         ),
                         Text(
-                          "Confirmação de senha",
+                          "Estoque alvo",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                         Container(
@@ -345,25 +294,39 @@ class AccountEditPageState extends State<AccountEditPage> {
                           child: Observer(builder: (_) {
                             return TextFormField(
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              obscureText: !_controller.isConfirmPasswordVisible,
-                              initialValue: _controller.confirmPassword,
-                              onChanged: _controller.setConfirmPassword,
+                              initialValue: _controller.estoqueAlvo,
+                              onChanged: _controller.setEstoqueAlvo,
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'Confirme a senha',
+                                hintText: '5',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getConfirmPasswordError,
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _controller.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    _controller.isConfirmPasswordVisible = !_controller.isConfirmPasswordVisible;
-                                  },
-                                ),
+                                errorText: _controller.getEstoqueAlvoError,
+                              ),
+                            );
+                          }),
+                        ),
+                        Text(
+                          "Estoque",
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                          margin: const EdgeInsets.only(top: 5, bottom: 15),
+                          padding: const EdgeInsets.only(),
+                          child: Observer(builder: (_) {
+                            return TextFormField(
+                              style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              initialValue: _controller.estoque,
+                              onChanged: _controller.setEstoque,
+                              decoration: InputDecoration(
+                                fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                    ? Theme.of(context).inputDecorationTheme.fillColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                                hintText: '3',
+                                contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                errorText: _controller.getEstoqueError,
                               ),
                             );
                           }),
@@ -381,21 +344,6 @@ class AccountEditPageState extends State<AccountEditPage> {
                               );
                             },
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Card(
-                          child: Observer(builder: (_) {
-                            return SwitchListTile(
-                              value: _controller.isAdmin,
-                              onChanged: _controller.setIsAdmin,
-                              title: Text(
-                                "Admin",
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                            );
-                          }),
                         ),
                       ],
                     ),
@@ -437,7 +385,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                       width: 21,
                                       height: 21,
                                     )
-                                  : Text(isNullorEmpty(widget.id) ? "Criar" : "Editar"),
+                                  : Text(isNullorEmpty(widget.id) ? 'Criar' : 'Editar'),
                             );
                           }),
                         ),
@@ -458,8 +406,8 @@ class AccountEditPageState extends State<AccountEditPage> {
 
   @override
   void initState() {
-    _controller = Modular.get<AccountEditController>();
-    _controller.id = widget.mySelf ? Modular.get<AccountStore>().account!.id! : widget.id;
+    _controller = Modular.get<ProdutosEditController>();
+    _controller.id = widget.id;
 
     super.initState();
   }

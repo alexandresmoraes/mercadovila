@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  var _controller = Modular.get<LoginController>();
+  final _controller = Modular.get<LoginController>();
 
   final passwordFocusNode = FocusNode();
   final usernameFocusNode = FocusNode();
@@ -153,8 +153,7 @@ class LoginPageState extends State<LoginPage> {
             Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
+                  color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
               height: MediaQuery.of(context).size.height * 0.60,
               width: MediaQuery.of(context).size.width,

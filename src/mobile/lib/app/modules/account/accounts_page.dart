@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dtos/account_dto.dart';
+import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
@@ -19,7 +19,7 @@ class AccountsPage extends StatefulWidget {
 class AccountsPageState extends State<AccountsPage> {
   String? usernameFilter;
   bool isSearchVisibled = false;
-
+  final searchController = TextEditingController();
   Timer? _debounce;
 
   PagingController<int, AccountDto> pagingController = PagingController(firstPageKey: 1);
@@ -40,6 +40,9 @@ class AccountsPageState extends State<AccountsPage> {
                 onPressed: () async {
                   setState(() {
                     isSearchVisibled = !isSearchVisibled;
+                    usernameFilter = "";
+                    searchController.clear();
+                    if (!isSearchVisibled) pagingController.refresh();
                   });
                 },
                 icon: const Icon(MdiIcons.magnify),
@@ -63,6 +66,7 @@ class AccountsPageState extends State<AccountsPage> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.only(),
                   child: TextFormField(
+                    controller: searchController,
                     onChanged: ((value) {
                       if (_debounce?.isActive ?? false) _debounce!.cancel();
                       _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -194,9 +198,7 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
