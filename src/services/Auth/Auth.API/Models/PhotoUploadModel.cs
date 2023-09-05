@@ -16,4 +16,14 @@ namespace Auth.API.Models
       File = file;
     }
   }
+
+  public record PhotoUploadResponseModel
+  {
+    public string Filename { get; set; }
+
+    public PhotoUploadResponseModel(string filename)
+    {
+      Filename = filename;
+    }
+  }
 }

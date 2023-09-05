@@ -8,7 +8,9 @@ using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
 
 namespace Auth.API.Controllers
 {
@@ -176,35 +178,88 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // POST api/account/{id}/photo    
-    [HttpPost("{id}/photo")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    // POST api/account/{userId}
+    [HttpPost("photo/{userId}")]
+    [ProducesResponseType(typeof(PhotoUploadResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile foto)
+    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile foto)
     {
-      if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
-        return Result.Forbidden();
+      if (!_authService.GetUserId().Equals(userId) && !User.IsInRole("admin"))
+        return Result.Forbidden<PhotoUploadResponseModel>();
 
       var photoUploadModel = new PhotoUploadModel(foto);
 
-      Result? result = null;
+      Result<PhotoUploadResponseModel>? result = null;
       var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
 
       if (!validation)
         return result!;
 
-      var user = await _userManager.FindByIdAsync(id);
+      var user = await _userManager.FindByIdAsync(userId);
 
       if (user is null)
-        return Result.NotFound();
+        return Result.NotFound<PhotoUploadResponseModel>();
 
-      return Result.Ok();
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var filename = Guid.NewGuid().ToString() + Path.GetExtension(foto.FileName);
+      var caminhoCompleto = Path.Combine(currentDirectory, "app", "uploads", filename);
+
+      string diretorio = Path.GetDirectoryName(caminhoCompleto)!;
+      if (!Directory.Exists(diretorio))
+      {
+        Directory.CreateDirectory(diretorio);
+      }
+
+      using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
+      {
+        await foto.CopyToAsync(stream);
+      }
+
+      return Result.Ok(new PhotoUploadResponseModel(filename));
     }
 
-    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result? result)
+    /// <summary>
+    /// Download foto do usuário
+    /// </summary>
+    // GET api/account/photo/{filename}
+    [AllowAnonymous]
+    [HttpGet("photo/{filename}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
+    {
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var fullFilename = Path.Combine(currentDirectory, "app", "uploads", filename);
+
+      if (System.IO.File.Exists(fullFilename))
+      {
+        var _contentTypeProvider = new FileExtensionContentTypeProvider();
+
+        var extensao = Path.GetExtension(filename);
+
+        if (_contentTypeProvider.TryGetContentType(extensao, out var contentType))
+        {
+          var contentDisposition = new ContentDispositionHeaderValue("inline")
+          {
+            FileName = filename
+          };
+
+          Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+          Response.Headers.Add("Content-Type", contentType);
+
+          var arquivoBytes = await System.IO.File.ReadAllBytesAsync(fullFilename);
+          return File(arquivoBytes, contentType);
+        }
+      }
+
+      return NotFound();
+    }
+
+    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result<PhotoUploadResponseModel>? result)
     {
       var context = new ValidationContext(photoUploadModel);
       var validationResults = new List<ValidationResult>();
@@ -212,7 +267,7 @@ namespace Auth.API.Controllers
 
       if (!isValid)
       {
-        result = Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+        result = Result.Fail<PhotoUploadResponseModel>(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
       }
 
       return isValid;
