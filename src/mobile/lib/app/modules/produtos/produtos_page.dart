@@ -40,18 +40,6 @@ class ProdutosPageState extends State<ProdutosPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          leading: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: const Align(
-              alignment: Alignment.center,
-              child: Icon(MdiIcons.arrowLeft),
-            ),
-          ),
           title: const Text("Produtos"),
           actions: [
             IconButton(
@@ -185,19 +173,16 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(
-                                    text: "R\$ ",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: '${item.preco}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${item.unidadeMedida}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                              TextSpan(
+                                text: '${item.preco}',
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              TextSpan(
+                                text: ' / ${item.unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              )
+                            ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(

@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/compras/pedidos_page.dart';
+import 'package:vilasesmo/app/modules/compras/compras_page.dart';
 
 class ComprasModule extends Module {
   static const routeName = '/pedidos/';
