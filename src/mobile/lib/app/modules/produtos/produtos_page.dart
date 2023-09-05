@@ -159,7 +159,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    height: 115,
+                    height: 125,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       decoration: BoxDecoration(
@@ -175,19 +175,6 @@ class ProdutosPageState extends State<ProdutosPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                                color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                              child: Text(
-                                item.id,
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              ),
-                            ),
                             Text(
                               item.nome,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -198,16 +185,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${item.preco}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "R\$ ",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${item.preco}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -237,6 +227,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                                     ),
                                   ),
                                 ],
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              child: Text(
+                                item.id,
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
                               ),
                             ),
                           ],
