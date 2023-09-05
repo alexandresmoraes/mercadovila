@@ -178,19 +178,19 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // POST api/account/{userId}
+    // POST api/account/photo/{userId}
     [HttpPost("photo/{userId}")]
     [ProducesResponseType(typeof(PhotoUploadResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile foto)
+    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile? file)
     {
       if (!_authService.GetUserId().Equals(userId) && !User.IsInRole("admin"))
         return Result.Forbidden<PhotoUploadResponseModel>();
 
-      var photoUploadModel = new PhotoUploadModel(foto);
+      var photoUploadModel = new PhotoUploadModel(file);
 
       Result<PhotoUploadResponseModel>? result = null;
       var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
@@ -204,7 +204,7 @@ namespace Auth.API.Controllers
         return Result.NotFound<PhotoUploadResponseModel>();
 
       var currentDirectory = Directory.GetCurrentDirectory();
-      var filename = Guid.NewGuid().ToString() + Path.GetExtension(foto.FileName);
+      var filename = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
       var caminhoCompleto = Path.Combine(currentDirectory, "wwwroot/images/users", filename);
 
       string diretorio = Path.GetDirectoryName(caminhoCompleto)!;
@@ -215,7 +215,7 @@ namespace Auth.API.Controllers
 
       using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
       {
-        await foto.CopyToAsync(stream);
+        await file.CopyToAsync(stream);
       }
 
       return Result.Ok(new PhotoUploadResponseModel(filename));

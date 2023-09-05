@@ -29,7 +29,7 @@ class BearerInterceptor extends InterceptorsWrapper {
         debugPrint("Authorization: ${options.headers['Authorization']}");
       }
       if (options.data != null) {
-        debugPrint("Payload ${json.encode(options.data)}");
+        // debugPrint("Payload ${json.encode(options.data)}");
       }
       debugPrint(json.encode("========End Request========"));
     }

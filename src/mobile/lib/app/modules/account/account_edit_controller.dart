@@ -198,6 +198,15 @@ abstract class AccountEditControllerBase with Store {
     try {
       isSaving = true;
 
+      var accountRepository = Modular.get<IAccountRepository>();
+
+      if (!isNullorEmpty(photoPath)) {
+        var globalAccount = Modular.get<AccountStore>();
+        if (globalAccount.account!.isAdmin) {
+          var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, photoPath!);
+        }
+      }
+
       var newAndUpdateAccountModel = NewAndUpdateAccountModel(
         nome: nome!,
         username: username!,
@@ -209,7 +218,6 @@ abstract class AccountEditControllerBase with Store {
         isAdmin: isAdmin,
       );
 
-      var accountRepository = Modular.get<IAccountRepository>();
       if (isNullorEmpty(id)) {
         var result = await accountRepository.newAccount(newAndUpdateAccountModel);
 
@@ -233,8 +241,6 @@ abstract class AccountEditControllerBase with Store {
   }
 
   void apiErrors(ResultFailModel resultFail) {
-    isSaving = false;
-
     if (resultFail.statusCode == 400) {
       _nomeApiError = resultFail.getErrorByProperty('Nome');
       _usernameApiError = resultFail.getErrorByProperty('Username');
@@ -246,5 +252,7 @@ abstract class AccountEditControllerBase with Store {
       var message = resultFail.getErrorNotProperty();
       if (message.isNotEmpty) GlobalSnackbar.error(message);
     }
+
+    isSaving = false;
   }
 }
