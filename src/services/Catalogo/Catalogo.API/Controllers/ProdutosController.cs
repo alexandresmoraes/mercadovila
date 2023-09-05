@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Catalogo.API.Controllers
 {
+  /// <summary>
+  /// Criar e editar produtos para gerar o catalogo
+  /// </summary>
   [Route("api/produtos")]
   [Authorize("Admin")]
   [ApiController]
