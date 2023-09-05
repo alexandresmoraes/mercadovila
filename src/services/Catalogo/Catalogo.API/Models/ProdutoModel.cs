@@ -5,8 +5,6 @@ namespace Catalogo.API.Models
 {
   public record ProdutoModel
   {
-    public string? Id { get; set; }
-
     [Required(ErrorMessage = "Nome do produto está vazio.")]
     public string? Nome { get; set; } = null!;
 
@@ -14,7 +12,6 @@ namespace Catalogo.API.Models
     public string? Descricao { get; set; } = null!;
 
     [Required(ErrorMessage = "Preço do produto está vazio.")]
-    //[RegularExpression(@"^\d+\.\d+$", ErrorMessage = "Por favor, insira um número decimal válido com ponto, ex: 1.79.")]
     [DecimalStringValidation(ErrorMessage = "Por favor, insira um número decimal válido.")]
     [Range(0.01, 9999999999999999.99, ErrorMessage = "O preço deve estar entre 0.01 e 9999999999999999.99.")]
     public decimal Preco { get; set; }
@@ -38,7 +35,7 @@ namespace Catalogo.API.Models
 
   public record ProdutoResponseModel
   {
-    public string Id { get; private set; }
+    public string Id { get; set; }
 
     public ProdutoResponseModel(string id)
     {

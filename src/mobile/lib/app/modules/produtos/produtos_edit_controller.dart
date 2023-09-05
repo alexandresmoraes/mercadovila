@@ -173,7 +173,7 @@ abstract class ProdutosEditControllerBase with Store {
       produtoModel = ProdutoModel(
         nome: "",
         descricao: "",
-        preco: "",
+        preco: 0,
         unidadeMedida: "",
         codigoBarras: "",
         estoqueAlvo: 0,
@@ -184,7 +184,7 @@ abstract class ProdutosEditControllerBase with Store {
 
     nome = produtoModel!.nome;
     descricao = produtoModel!.descricao;
-    preco = produtoModel!.preco.toString();
+    preco = produtoModel!.preco == 0 ? "" : produtoModel!.preco.toString();
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
     estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "" : produtoModel!.estoqueAlvo.toString();
@@ -202,7 +202,7 @@ abstract class ProdutosEditControllerBase with Store {
       var produtoModel = ProdutoModel(
         nome: nome!,
         descricao: descricao!,
-        preco: preco!,
+        preco: double.parse(preco!),
         unidadeMedida: unidadeMedida!,
         codigoBarras: codigoBarras!,
         estoqueAlvo: int.parse(estoqueAlvo!),

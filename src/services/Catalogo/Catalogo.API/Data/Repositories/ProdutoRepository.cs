@@ -21,6 +21,11 @@ namespace Catalogo.API.Data.Repositories
       ));
 
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
+        Builders<Produto>.IndexKeys.Ascending(_ => _.CodigoBarras),
+        new CreateIndexOptions { Unique = true }
+      ));
+
+      Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
         Builders<Produto>.IndexKeys.Descending(_ => _.Nome)
       ));
 

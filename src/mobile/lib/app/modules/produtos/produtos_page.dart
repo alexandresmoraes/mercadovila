@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -21,7 +20,7 @@ class ProdutosPage extends StatefulWidget {
 class ProdutosPageState extends State<ProdutosPage> {
   String? nomeFilter;
   bool isSearchVisibled = false;
-
+  final searchController = TextEditingController();
   Timer? _debounce;
 
   PagingController<int, ProdutoDto> pagingController = PagingController(firstPageKey: 1);
@@ -56,39 +55,16 @@ class ProdutosPageState extends State<ProdutosPage> {
           title: const Text("Produtos"),
           actions: [
             IconButton(
-                onPressed: () async {
-                  //
-                },
-                icon: const Icon(MdiIcons.barcode)),
-            FloatingActionButton(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              child: badges.Badge(
-                badgeContent: const Text(
-                  "3",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 9,
-                  ),
-                ),
-                padding: const EdgeInsets.all(6),
-                badgeColor: Colors.red,
-                child: Icon(
-                  MdiIcons.shoppingOutline,
-                  color: Theme.of(context).primaryIconTheme.color,
-                ),
-              ),
-              onPressed: () {
-                //
+              onPressed: () async {
+                setState(() {
+                  isSearchVisibled = !isSearchVisibled;
+                  nomeFilter = "";
+                  searchController.clear();
+                  if (!isSearchVisibled) pagingController.refresh();
+                });
               },
+              icon: const Icon(MdiIcons.magnify),
             ),
-            IconButton(
-                onPressed: () {
-                  //
-                },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Image.asset('assets/filter_white.png')
-                    : Image.asset('assets/filter_black.png')),
             IconButton(
               onPressed: () async {
                 await Modular.to.pushNamed('/produtos/edit');
@@ -107,6 +83,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.only(),
                 child: TextFormField(
+                  controller: searchController,
                   onChanged: ((value) {
                     if (_debounce?.isActive ?? false) _debounce!.cancel();
                     _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -138,6 +115,8 @@ class ProdutosPageState extends State<ProdutosPage> {
   }
 
   Widget _allProdutos() {
+    final ThemeStore themeStore = Modular.get<ThemeStore>();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<ProdutoDto>(
@@ -180,7 +159,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    height: 110,
+                    height: 115,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       decoration: BoxDecoration(
@@ -196,6 +175,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              child: Text(
+                                item.id,
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              ),
+                            ),
                             Text(
                               item.nome,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -206,19 +198,16 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(
-                                    text: "R\$ ",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: '${item.preco}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${item.unidadeMedida}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                              TextSpan(
+                                text: '${item.preco}',
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              TextSpan(
+                                text: ' / ${item.unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              )
+                            ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -249,7 +238,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

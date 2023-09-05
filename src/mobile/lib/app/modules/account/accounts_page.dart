@@ -19,7 +19,7 @@ class AccountsPage extends StatefulWidget {
 class AccountsPageState extends State<AccountsPage> {
   String? usernameFilter;
   bool isSearchVisibled = false;
-
+  final searchController = TextEditingController();
   Timer? _debounce;
 
   PagingController<int, AccountDto> pagingController = PagingController(firstPageKey: 1);
@@ -40,6 +40,9 @@ class AccountsPageState extends State<AccountsPage> {
                 onPressed: () async {
                   setState(() {
                     isSearchVisibled = !isSearchVisibled;
+                    usernameFilter = "";
+                    searchController.clear();
+                    if (!isSearchVisibled) pagingController.refresh();
                   });
                 },
                 icon: const Icon(MdiIcons.magnify),
@@ -63,6 +66,7 @@ class AccountsPageState extends State<AccountsPage> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.only(),
                   child: TextFormField(
+                    controller: searchController,
                     onChanged: ((value) {
                       if (_debounce?.isActive ?? false) _debounce!.cancel();
                       _debounce = Timer(const Duration(milliseconds: 500), () {

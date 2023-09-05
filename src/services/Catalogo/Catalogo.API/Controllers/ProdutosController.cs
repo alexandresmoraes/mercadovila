@@ -38,8 +38,7 @@ namespace Catalogo.API.Controllers
 
       return Result.Ok(new ProdutoModel
       {
-        Id = produto!.Id,
-        Nome = produto.Nome,
+        Nome = produto!.Nome,
         Descricao = produto.Descricao,
         Preco = produto.Preco,
         UnidadeMedida = produto.UnidadeMedida,
@@ -108,10 +107,10 @@ namespace Catalogo.API.Controllers
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
     {
       var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
-      if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
+      if (isExistPorNome) return Result.Fail("Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
-      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
+      if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
 
       var produto = new Produto
       {
