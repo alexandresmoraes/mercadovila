@@ -205,7 +205,7 @@ namespace Auth.API.Controllers
 
       var currentDirectory = Directory.GetCurrentDirectory();
       var filename = Guid.NewGuid().ToString() + Path.GetExtension(foto.FileName);
-      var caminhoCompleto = Path.Combine(currentDirectory, "app", "uploads", filename);
+      var caminhoCompleto = Path.Combine(currentDirectory, "wwwroot/images/users", filename);
 
       string diretorio = Path.GetDirectoryName(caminhoCompleto)!;
       if (!Directory.Exists(diretorio))
@@ -233,7 +233,7 @@ namespace Auth.API.Controllers
     public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
       var currentDirectory = Directory.GetCurrentDirectory();
-      var fullFilename = Path.Combine(currentDirectory, "app", "uploads", filename);
+      var fullFilename = Path.Combine(currentDirectory, "wwwroot/images/users", filename);
 
       if (System.IO.File.Exists(fullFilename))
       {
