@@ -73,10 +73,11 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<ProdutoResponseModel>> PostAsync([FromBody] ProdutoModel produtoModel)
     {
-      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, null);
+      var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, null);
+      if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
 
-      if (isExist)
-        return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
+      var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, null);
+      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
 
       var produto = new Produto
       {
@@ -106,10 +107,11 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
     {
-      var isExist = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
+      var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
+      if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
 
-      if (isExist)
-        return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
+      var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
+      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
 
       var produto = new Produto
       {

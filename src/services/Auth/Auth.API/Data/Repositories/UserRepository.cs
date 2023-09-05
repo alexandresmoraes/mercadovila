@@ -19,20 +19,20 @@ namespace Auth.API.Data.Repositories
       var query = _context.Users
         .AsQueryable().AsNoTrackingWithIdentityResolution();
 
-      if (!string.IsNullOrWhiteSpace(userQuery.Username))
+      if (!string.IsNullOrWhiteSpace(userQuery.username))
       {
-        query = query.Where(x => x.NormalizedUserName.Contains(userQuery.Username.ToUpper())
-                      || x.NormalizedEmail.Contains(userQuery.Username.ToUpper()));
+        query = query.Where(x => x.NormalizedUserName.Contains(userQuery.username.ToUpper())
+                      || x.NormalizedEmail.Contains(userQuery.username.ToUpper()));
       }
 
       var total = await query.CountAsync();
 
-      var start = (userQuery.Page - 1) * userQuery.Limit;
+      var start = (userQuery.page - 1) * userQuery.limit;
 
       var users = query
         .OrderByDescending(u => u.IsAtivo)
         .ThenBy(u => u.NormalizedUserName)
-        .Skip(start).Take(userQuery.Limit)
+        .Skip(start).Take(userQuery.limit)
         .Select(account => new AccountDto()
         {
           Id = account.Id,
@@ -43,7 +43,7 @@ namespace Auth.API.Data.Repositories
         })
         .ToList();
 
-      return new PagedResult<AccountDto>(start, userQuery.Limit, total, users);
+      return new PagedResult<AccountDto>(start, userQuery.limit, total, users);
     }
   }
 }

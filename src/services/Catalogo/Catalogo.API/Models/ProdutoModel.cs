@@ -13,8 +13,10 @@ namespace Catalogo.API.Models
     [Required(ErrorMessage = "Descrição do produto está vazio.")]
     public string? Descricao { get; set; } = null!;
 
-    [RegularExpression(@"^\d+(\.\d{1,2})?$")]
-    [Range(0, 9999999999999999.99)]
+    [Required(ErrorMessage = "Preço do produto está vazio.")]
+    //[RegularExpression(@"^\d+\.\d+$", ErrorMessage = "Por favor, insira um número decimal válido com ponto, ex: 1.79.")]
+    [DecimalStringValidation(ErrorMessage = "Por favor, insira um número decimal válido.")]
+    [Range(0.01, 9999999999999999.99, ErrorMessage = "O preço deve estar entre 0.01 e 9999999999999999.99.")]
     public decimal Preco { get; set; }
 
     [Required(ErrorMessage = "Unidade de medida do produto está vazio.")]

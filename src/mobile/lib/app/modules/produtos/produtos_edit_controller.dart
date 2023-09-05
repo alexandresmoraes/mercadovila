@@ -171,14 +171,15 @@ abstract class ProdutosEditControllerBase with Store {
       produtoModel = await produtosRepository.getProduto(id!);
     } else {
       produtoModel = ProdutoModel(
-          nome: "",
-          descricao: "",
-          preco: 0,
-          unidadeMedida: "",
-          codigoBarras: "",
-          estoqueAlvo: 0,
-          estoque: 0,
-          isAtivo: true);
+        nome: "",
+        descricao: "",
+        preco: "",
+        unidadeMedida: "",
+        codigoBarras: "",
+        estoqueAlvo: 0,
+        estoque: 0,
+        isAtivo: true,
+      );
     }
 
     nome = produtoModel!.nome;
@@ -186,8 +187,8 @@ abstract class ProdutosEditControllerBase with Store {
     preco = produtoModel!.preco.toString();
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
-    estoqueAlvo = produtoModel!.estoqueAlvo.toString();
-    estoque = produtoModel!.estoque.toString();
+    estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "" : produtoModel!.estoqueAlvo.toString();
+    estoque = produtoModel!.estoque == 0 ? "" : produtoModel!.estoque.toString();
     isAtivo = produtoModel!.isAtivo;
 
     isLoading = false;
@@ -201,7 +202,7 @@ abstract class ProdutosEditControllerBase with Store {
       var produtoModel = ProdutoModel(
         nome: nome!,
         descricao: descricao!,
-        preco: double.parse(preco!),
+        preco: preco!,
         unidadeMedida: unidadeMedida!,
         codigoBarras: codigoBarras!,
         estoqueAlvo: int.parse(estoqueAlvo!),

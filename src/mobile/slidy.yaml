@@ -10,7 +10,7 @@ scripts:
     build:
         name: "Rebuild"
         description: 'Rebuild'
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build --delete-conflicting-outputs
 
     clean-rebuild:
         description: "Clean and rebuild"
@@ -24,7 +24,7 @@ scripts:
 
             - name: "Rebuild"
               description: "Rebuild"
-              run: flutter pub run build_runner build --delete-conflicting-outputs
+              run: dart run build_runner build --delete-conflicting-outputs
 
     cache-clean:
         name: "Cache Clean"

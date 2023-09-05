@@ -4,7 +4,9 @@ using Catalogo.API.Data.Queries;
 using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace Catalogo.API.Data.Repositories
 {
@@ -42,6 +44,20 @@ namespace Catalogo.API.Data.Repositories
     public async Task CreateAsync(Produto produto)
       => await Collection.InsertOneAsync(produto);
 
+    public async Task<bool> ExisteProdutoPorCodigoBarras(string codigoBarras, string? id)
+    {
+      var filtro = Builders<Produto>.Filter.Eq(p => p.CodigoBarras, codigoBarras);
+
+      if (!string.IsNullOrEmpty(id))
+      {
+        filtro &= Builders<Produto>.Filter.Ne(p => p.Id, id);
+      }
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return count > 0;
+    }
+
     public async Task<bool> ExisteProdutoPorNome(string nome, string? id)
     {
       var filtro = Builders<Produto>.Filter.Eq(p => p.Nome, nome);
@@ -63,12 +79,12 @@ namespace Catalogo.API.Data.Repositories
     {
       var filtro = Builders<Produto>.Filter.Empty;
 
-      if (!string.IsNullOrWhiteSpace(produtoQuery.Nome))
+      if (!string.IsNullOrWhiteSpace(produtoQuery.nome))
       {
-        filtro &= Builders<Produto>.Filter.Eq(p => p.Nome, produtoQuery.Nome);
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(produtoQuery.nome, RegexOptions.IgnoreCase)));
       }
 
-      var start = (produtoQuery.Page - 1) * produtoQuery.Limit;
+      var start = (produtoQuery.page - 1) * produtoQuery.limit;
 
       var projections = Builders<Produto>.Projection
         .Expression(p => new ProdutoDto
@@ -87,14 +103,14 @@ namespace Catalogo.API.Data.Repositories
 
       var produtos = await Collection.Find(filtro)
         .SortBy(p => p.Nome)
-        .Skip((produtoQuery.Page - 1) * produtoQuery.Limit)
-        .Limit(produtoQuery.Limit)
-        .Project<ProdutoDto>(projections)
+        .Skip((produtoQuery.page - 1) * produtoQuery.limit)
+        .Limit(produtoQuery.limit)
+        .Project(projections)
         .ToListAsync();
 
       var count = await Collection.CountDocumentsAsync(filtro);
 
-      return new PagedResult<ProdutoDto>(start, produtoQuery.Limit, count, produtos);
+      return new PagedResult<ProdutoDto>(start, produtoQuery.limit, count, produtos);
     }
 
     public async Task UpdateAsync(Produto produto)
