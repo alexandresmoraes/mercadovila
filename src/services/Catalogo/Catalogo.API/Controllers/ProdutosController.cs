@@ -144,8 +144,8 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Upload foto do produto
     /// </summary>
-    // POST api/produtos/photo
-    [HttpPost("photo/")]
+    // POST api/produtos/image
+    [HttpPost("image")]
     [ProducesResponseType(typeof(ImageUploadModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -170,9 +170,9 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Download imagem do produto
     /// </summary>
-    // GET api/produtos/photo/{filename}
+    // GET api/produtos/image/{filename}
     [AllowAnonymous]
-    [HttpGet("photo/{filename}")]
+    [HttpGet("image/{filename}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
