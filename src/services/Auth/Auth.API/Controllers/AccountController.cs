@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Headers;
 
 namespace Auth.API.Controllers
 {
@@ -24,12 +23,14 @@ namespace Auth.API.Controllers
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserRepository _userRepository;
     private readonly IAuthService<ApplicationUser> _authService;
+    private readonly IConfiguration _configuration;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService, IConfiguration configuration)
     {
       _userManager = userManager;
       _userRepository = userRepository;
       _authService = authService;
+      _configuration = configuration;
     }
 
     /// <summary>
@@ -106,7 +107,8 @@ namespace Auth.API.Controllers
         Email = newAccountModel.Email,
         PhoneNumber = newAccountModel.Telefone,
         EmailConfirmed = true,
-        IsAtivo = newAccountModel.IsAtivo
+        IsAtivo = newAccountModel.IsAtivo,
+        FotoUrl = newAccountModel.FotoUrl
       };
 
       var result = await _userManager.CreateAsync(user, newAccountModel.Password);
@@ -148,6 +150,7 @@ namespace Auth.API.Controllers
       user.PhoneNumber = updateAccountModel.Telefone;
       user.UserName = updateAccountModel.Username;
       user.IsAtivo = updateAccountModel.IsAtivo;
+      user.FotoUrl = updateAccountModel.FotoUrl;
 
       var result = await _userManager.UpdateAsync(user);
 
@@ -203,20 +206,7 @@ namespace Auth.API.Controllers
       if (user is null)
         return Result.NotFound<PhotoUploadResponseModel>();
 
-      var currentDirectory = Directory.GetCurrentDirectory();
-      var filename = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
-      var caminhoCompleto = Path.Combine(currentDirectory, "wwwroot/images/users", filename);
-
-      string diretorio = Path.GetDirectoryName(caminhoCompleto)!;
-      if (!Directory.Exists(diretorio))
-      {
-        Directory.CreateDirectory(diretorio);
-      }
-
-      using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-      {
-        await file.CopyToAsync(stream);
-      }
+      string filename = await SaveFile(file);
 
       return Result.Ok(new PhotoUploadResponseModel(filename));
     }
@@ -232,8 +222,9 @@ namespace Auth.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
+      var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
       var currentDirectory = Directory.GetCurrentDirectory();
-      var fullFilename = Path.Combine(currentDirectory, "wwwroot/images/users", filename);
+      var fullFilename = Path.Combine(currentDirectory, userImagePath, filename);
 
       if (System.IO.File.Exists(fullFilename))
       {
@@ -243,12 +234,6 @@ namespace Auth.API.Controllers
 
         if (_contentTypeProvider.TryGetContentType(extensao, out var contentType))
         {
-          var contentDisposition = new ContentDispositionHeaderValue("inline")
-          {
-            FileName = filename
-          };
-
-          Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
           Response.Headers.Add("Content-Type", contentType);
 
           var arquivoBytes = await System.IO.File.ReadAllBytesAsync(fullFilename);
@@ -271,6 +256,27 @@ namespace Auth.API.Controllers
       }
 
       return isValid;
+    }
+
+    private async Task<string> SaveFile(IFormFile? file)
+    {
+      var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var filename = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
+      var fullFilename = Path.Combine(currentDirectory, userImagePath, filename);
+      var directory = Path.GetDirectoryName(fullFilename)!;
+
+      if (!Directory.Exists(directory))
+      {
+        Directory.CreateDirectory(directory);
+      }
+
+      using (var stream = new FileStream(fullFilename, FileMode.Create))
+      {
+        await file.CopyToAsync(stream);
+      }
+
+      return filename;
     }
   }
 }

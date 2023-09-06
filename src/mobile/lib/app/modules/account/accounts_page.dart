@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -7,6 +9,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class AccountsPage extends StatefulWidget {
@@ -49,8 +53,8 @@ class AccountsPageState extends State<AccountsPage> {
               ),
               IconButton(
                 onPressed: () async {
-                  await Modular.to.pushNamed('/account/new');
-                  pagingController.refresh();
+                  var refresh = await Modular.to.pushNamed<bool>('/account/new');
+                  if (refresh ?? false) pagingController.refresh();
                 },
                 icon: const Icon(MdiIcons.plus),
               ),
@@ -171,14 +175,35 @@ class AccountsPageState extends State<AccountsPage> {
                   visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
                   contentPadding: const EdgeInsets.all(0),
                   minLeadingWidth: 0,
-                  leading: const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 21,
-                      backgroundImage: AssetImage('assets/person.png'),
-                    ),
-                  ),
+                  leading: isNullorEmpty(item.fotoUrl)
+                      ? const CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 21,
+                            backgroundImage: AssetImage('assets/person.png'),
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.white,
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => CircularProgress(
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                            errorWidget: (context, url, error) => const CircleAvatar(
+                              radius: 21,
+                              backgroundImage: AssetImage('assets/person.png'),
+                            ),
+                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.fotoUrl!}',
+                            imageBuilder: (context, imageProvider) {
+                              return CircleAvatar(
+                                radius: 21,
+                                backgroundImage: imageProvider,
+                              );
+                            },
+                          ),
+                        ),
                   title: Text(
                     item.username,
                     style: Theme.of(context).primaryTextTheme.bodyLarge,

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 class CircularProgress extends StatelessWidget {
   final double? width;
   final double? height;
+  final Color? color;
+  final double? strokeWidth;
 
-  const CircularProgress({super.key, this.width, this.height});
+  const CircularProgress({super.key, this.width, this.height, this.color, this.strokeWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,8 @@ class CircularProgress extends StatelessWidget {
         width: width ?? 50,
         height: height ?? 50,
         child: CurvedCircularProgressIndicator(
-          color: Theme.of(context).primaryTextTheme.displaySmall!.color,
+          strokeWidth: strokeWidth,
+          color: color ?? Theme.of(context).primaryTextTheme.displaySmall!.color,
         ),
       ),
     );

@@ -18,14 +18,10 @@ abstract class AccountEditControllerBase with Store {
   String? id;
 
   @observable
-  bool isFotoAlterada = false;
-
-  @observable
-  String? photoPath;
+  String? fotoPath;
   @action
-  void setPhotoPath(String v) {
-    isFotoAlterada = true;
-    photoPath = v;
+  void setFotoPath(String v) {
+    fotoPath = v;
   }
 
   @observable
@@ -190,6 +186,7 @@ abstract class AccountEditControllerBase with Store {
     telefone = accountModel!.telefone;
     password = "";
     confirmPassword = "";
+    fotoUrl = accountModel!.fotoUrl;
     isAtivo = accountModel!.isAtivo;
     isAdmin = accountModel!.isAdmin;
 
@@ -209,23 +206,28 @@ abstract class AccountEditControllerBase with Store {
       confirmPassword: confirmPassword!,
       isAtivo: isAtivo,
       isAdmin: isAdmin,
+      fotoUrl: fotoUrl,
     );
 
     if (isNullorEmpty(id)) {
       var result = await accountRepository.newAccount(newAndUpdateAccountModel);
 
-      result.fold(apiErrors, (accountResponse) async {
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (accountResponse) async {
         GlobalSnackbar.success('Criado com sucesso!');
-        Modular.to.pop();
+        Modular.to.pop(true);
       });
     } else {
       var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
 
-      result.fold(apiErrors, (accountResponse) async {
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (accountResponse) async {
         var me = await Modular.get<IAuthService>().me();
         Modular.get<AccountStore>().setAccount(me);
         GlobalSnackbar.success('Editado com sucesso!');
-        Modular.to.pop();
+        Modular.to.pop(true);
       });
     }
   }
@@ -236,10 +238,10 @@ abstract class AccountEditControllerBase with Store {
 
       var accountRepository = Modular.get<IAccountRepository>();
 
-      if (!isNullorEmpty(photoPath)) {
+      if (!isNullorEmpty(fotoPath)) {
         var globalAccount = Modular.get<AccountStore>();
         if (globalAccount.account!.isAdmin) {
-          var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, photoPath!);
+          var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
           await result.fold((fail) {
             if (fail.statusCode == 413) {
               GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
@@ -248,13 +250,13 @@ abstract class AccountEditControllerBase with Store {
           }, (response) async {
             fotoUrl = response.filename;
 
-            saveAccount();
+            await saveAccount();
           });
         }
       } else {
-        saveAccount();
+        await saveAccount();
       }
-    } catch (e) {
+    } finally {
       isSaving = false;
     }
   }
