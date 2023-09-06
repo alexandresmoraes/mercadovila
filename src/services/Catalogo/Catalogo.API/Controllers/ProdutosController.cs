@@ -4,8 +4,10 @@ using Catalogo.API.Data.Queries;
 using Catalogo.API.Data.Repositories;
 using Catalogo.API.Models;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Catalogo.API.Controllers
 {
@@ -18,16 +20,22 @@ namespace Catalogo.API.Controllers
   public class ProdutosController : ControllerBase
   {
     private readonly ProdutoRepository _produtoRepository;
+    private readonly IValidateUtils _validateUtils;
+    private readonly IFileUtils _fileUtils;
+    private readonly IConfiguration _configuration;
 
-    public ProdutosController(ProdutoRepository produtoService)
+    public ProdutosController(ProdutoRepository produtoRepository, IValidateUtils validateUtils, IFileUtils fileUtils, IConfiguration configuration)
     {
-      _produtoRepository = produtoService;
+      _produtoRepository = produtoRepository;
+      _validateUtils = validateUtils;
+      _fileUtils = fileUtils;
+      _configuration = configuration;
     }
 
     /// <summary>
     /// Pega informações do produto para edição
     /// </summary>
-    // GET api/catalogo/{id}
+    // GET api/produtos/{id}
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -55,7 +63,7 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Retorna produtos paginados
     /// </summary>
-    // GET api/catalogo
+    // GET api/produtos
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<ProdutoDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -67,7 +75,7 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Criação de novos produtos
     /// </summary>
-    // POST api/catalogo    
+    // POST api/produtos    
     [HttpPost]
     [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -101,7 +109,7 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Alteração de produto
     /// </summary>
-    // PUT api/catalogo/{id}    
+    // PUT api/produtos/{id}    
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -131,6 +139,63 @@ namespace Catalogo.API.Controllers
       await _produtoRepository.UpdateAsync(produto);
 
       return Result.Ok();
+    }
+
+    /// <summary>
+    /// Upload foto do produto
+    /// </summary>
+    // POST api/produtos/photo
+    [HttpPost("photo/")]
+    [ProducesResponseType(typeof(ImageUploadModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<ImageUploadResponseModel>> UploadImageAsync(IFormFile? file)
+    {
+      var imageUploadModel = new ImageUploadModel(file);
+
+      Result<ImageUploadResponseModel>? result = null;
+      var validation = _validateUtils.ValidateModel(imageUploadModel, ref result);
+
+      if (!validation)
+        return result!;
+
+      var produtoImagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
+      string filename = await _fileUtils.SaveFile(file!, produtoImagePath);
+
+      return Result.Ok(new ImageUploadResponseModel(filename));
+    }
+
+    /// <summary>
+    /// Download imagem do produto
+    /// </summary>
+    // GET api/produtos/photo/{filename}
+    [AllowAnonymous]
+    [HttpGet("photo/{filename}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
+    {
+      var produtoImagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var fullFilename = Path.Combine(currentDirectory, produtoImagePath, filename);
+
+      if (System.IO.File.Exists(fullFilename))
+      {
+        var _contentTypeProvider = new FileExtensionContentTypeProvider();
+
+        var extensao = Path.GetExtension(filename);
+
+        if (_contentTypeProvider.TryGetContentType(extensao, out var contentType))
+        {
+          Response.Headers.Add("Content-Type", contentType);
+
+          var arquivoBytes = await System.IO.File.ReadAllBytesAsync(fullFilename);
+          return File(arquivoBytes, contentType);
+        }
+      }
+
+      return NotFound();
     }
   }
 }

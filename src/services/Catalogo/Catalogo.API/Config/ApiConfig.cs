@@ -3,6 +3,7 @@ using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Common.WebAPI.WebApi;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,7 @@ namespace Catalogo.API.Config
         options.SuppressMapClientErrors = true;
         options.SuppressModelStateInvalidFilter = true;
       });
+      services.AddUtils();
 
       services.AddMvc(opt =>
       {

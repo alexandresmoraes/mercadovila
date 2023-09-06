@@ -44,6 +44,10 @@ namespace Catalogo.API.Data.Repositories
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
         Builders<Produto>.IndexKeys.Descending(_ => _.Rating)
       ));
+
+      Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
+        Builders<Produto>.IndexKeys.Descending(_ => _.IsAtivo)
+      ));
     }
 
     public async Task CreateAsync(Produto produto)
@@ -107,7 +111,8 @@ namespace Catalogo.API.Data.Repositories
         });
 
       var produtos = await Collection.Find(filtro)
-        .SortBy(p => p.Nome)
+        .SortByDescending(p => p.IsAtivo)
+        .ThenBy(p => p.Nome)
         .Skip((produtoQuery.page - 1) * produtoQuery.limit)
         .Limit(produtoQuery.limit)
         .Project(projections)

@@ -5,6 +5,7 @@ using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Common.WebAPI.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace Auth.API.Config
       services.AddDbContext<ApplicationDbContext>();
       services.AddScoped<DbContext, ApplicationDbContext>();
       services.AddUnitOfWorkPostgres();
+      services.AddUtils();
 
       services.AddMvc(opt =>
       {

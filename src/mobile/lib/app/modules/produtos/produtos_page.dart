@@ -8,6 +8,7 @@ import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class ProdutosPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class ProdutosPageState extends State<ProdutosPage> {
   String? nomeFilter;
   bool isSearchVisibled = false;
   final searchController = TextEditingController();
+  final searchNode = FocusNode();
   Timer? _debounce;
 
   PagingController<int, ProdutoDto> pagingController = PagingController(firstPageKey: 1);
@@ -46,9 +48,16 @@ class ProdutosPageState extends State<ProdutosPage> {
               onPressed: () async {
                 setState(() {
                   isSearchVisibled = !isSearchVisibled;
-                  nomeFilter = "";
-                  searchController.clear();
-                  if (!isSearchVisibled) pagingController.refresh();
+                  if (!isSearchVisibled && !isNullorEmpty(nomeFilter)) {
+                    nomeFilter = "";
+                    searchController.clear();
+                    pagingController.refresh();
+                  }
+                  if (isSearchVisibled) {
+                    searchNode.requestFocus();
+                  } else {
+                    searchNode.unfocus();
+                  }
                 });
               },
               icon: const Icon(MdiIcons.magnify),
@@ -71,6 +80,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.only(),
                 child: TextFormField(
+                  focusNode: searchNode,
                   controller: searchController,
                   onChanged: ((value) {
                     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -247,13 +257,37 @@ class ProdutosPageState extends State<ProdutosPage> {
                             color: Colors.lightBlue,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Estoque alvo ${item.estoqueAlvo}",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 20,
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(10),
                             ),
                           ),
-                          child: Text(
-                            "Estoque alvo ${item.estoqueAlvo}",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).primaryTextTheme.bodySmall,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Estoque ${item.estoque}",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -270,17 +304,22 @@ class ProdutosPageState extends State<ProdutosPage> {
                         Container(
                           height: 20,
                           width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.only(
+                          decoration: BoxDecoration(
+                            color: !item.isAtivo ? Colors.green : Colors.redAccent,
+                            borderRadius: const BorderRadius.only(
                               bottomRight: Radius.circular(10),
                               topLeft: Radius.circular(10),
                             ),
                           ),
-                          child: Text(
-                            "Estoque ${item.estoque}",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).primaryTextTheme.bodySmall,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                item.isAtivo ? "Ativo" : "Inativo",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                              ),
+                            ],
                           ),
                         )
                       ],

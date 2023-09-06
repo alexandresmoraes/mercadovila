@@ -5,11 +5,11 @@ using Auth.API.Data.Repositories;
 using Auth.API.Models;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using System.ComponentModel.DataAnnotations;
 
 namespace Auth.API.Controllers
 {
@@ -24,13 +24,17 @@ namespace Auth.API.Controllers
     private readonly IUserRepository _userRepository;
     private readonly IAuthService<ApplicationUser> _authService;
     private readonly IConfiguration _configuration;
+    private readonly IFileUtils _fileUtils;
+    private readonly IValidateUtils _validateUtils;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService, IConfiguration configuration)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils)
     {
       _userManager = userManager;
       _userRepository = userRepository;
       _authService = authService;
       _configuration = configuration;
+      _fileUtils = fileUtils;
+      _validateUtils = validateUtils;
     }
 
     /// <summary>
@@ -188,7 +192,7 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, [FromForm] IFormFile? file)
+    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile? file)
     {
       if (!_authService.GetUserId().Equals(userId) && !User.IsInRole("admin"))
         return Result.Forbidden<PhotoUploadResponseModel>();
@@ -196,7 +200,7 @@ namespace Auth.API.Controllers
       var photoUploadModel = new PhotoUploadModel(file);
 
       Result<PhotoUploadResponseModel>? result = null;
-      var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
+      var validation = _validateUtils.ValidateModel(photoUploadModel, ref result);
 
       if (!validation)
         return result!;
@@ -206,7 +210,7 @@ namespace Auth.API.Controllers
       if (user is null)
         return Result.NotFound<PhotoUploadResponseModel>();
 
-      string filename = await SaveFile(file);
+      string filename = await SaveFile(file!);
 
       return Result.Ok(new PhotoUploadResponseModel(filename));
     }
@@ -218,8 +222,6 @@ namespace Auth.API.Controllers
     [AllowAnonymous]
     [HttpGet("photo/{filename}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
       var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
@@ -244,39 +246,11 @@ namespace Auth.API.Controllers
       return NotFound();
     }
 
-    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result<PhotoUploadResponseModel>? result)
-    {
-      var context = new ValidationContext(photoUploadModel);
-      var validationResults = new List<ValidationResult>();
-      var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
-
-      if (!isValid)
-      {
-        result = Result.Fail<PhotoUploadResponseModel>(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
-      }
-
-      return isValid;
-    }
-
-    private async Task<string> SaveFile(IFormFile? file)
+    private async Task<string> SaveFile(IFormFile file)
     {
       var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
-      var currentDirectory = Directory.GetCurrentDirectory();
-      var filename = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
-      var fullFilename = Path.Combine(currentDirectory, userImagePath, filename);
-      var directory = Path.GetDirectoryName(fullFilename)!;
 
-      if (!Directory.Exists(directory))
-      {
-        Directory.CreateDirectory(directory);
-      }
-
-      using (var stream = new FileStream(fullFilename, FileMode.Create))
-      {
-        await file.CopyToAsync(stream);
-      }
-
-      return filename;
+      return await _fileUtils.SaveFile(file, userImagePath);
     }
   }
 }

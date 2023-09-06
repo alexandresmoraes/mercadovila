@@ -24,6 +24,7 @@ class AccountsPageState extends State<AccountsPage> {
   String? usernameFilter;
   bool isSearchVisibled = false;
   final searchController = TextEditingController();
+  final searchNode = FocusNode();
   Timer? _debounce;
 
   PagingController<int, AccountDto> pagingController = PagingController(firstPageKey: 1);
@@ -44,9 +45,16 @@ class AccountsPageState extends State<AccountsPage> {
                 onPressed: () async {
                   setState(() {
                     isSearchVisibled = !isSearchVisibled;
-                    usernameFilter = "";
-                    searchController.clear();
-                    if (!isSearchVisibled) pagingController.refresh();
+                    if (!isSearchVisibled && !isNullorEmpty(usernameFilter)) {
+                      usernameFilter = "";
+                      searchController.clear();
+                      pagingController.refresh();
+                    }
+                    if (isSearchVisibled) {
+                      searchNode.requestFocus();
+                    } else {
+                      searchNode.unfocus();
+                    }
                   });
                 },
                 icon: const Icon(MdiIcons.magnify),
@@ -70,6 +78,7 @@ class AccountsPageState extends State<AccountsPage> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.only(),
                   child: TextFormField(
+                    focusNode: searchNode,
                     controller: searchController,
                     onChanged: ((value) {
                       if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -224,9 +233,7 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
