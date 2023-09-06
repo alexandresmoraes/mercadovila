@@ -129,8 +129,9 @@ class AccountsPageState extends State<AccountsPage> {
         ),
         itemBuilder: (context, item, index) {
           return InkWell(
-            onTap: () {
-              Modular.to.pushNamed('/account/edit/${item.id}');
+            onTap: () async {
+              var refresh = await Modular.to.pushNamed<bool>('/account/edit/${item.id}');
+              if (refresh ?? false) pagingController.refresh();
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -223,7 +224,9 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                      : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
