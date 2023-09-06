@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
@@ -71,7 +73,11 @@ class AccountRepository implements IAccountRepository {
       var result = PhotoUploadResponseModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
-      return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+      if (err.response?.statusCode == 413) {
+        return Left(ResultFailModel.fromJson(null, err.response?.statusCode));
+      } else {
+        return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+      }
     }
   }
 }

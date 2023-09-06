@@ -29,6 +29,9 @@ abstract class AccountEditControllerBase with Store {
   }
 
   @observable
+  String? fotoUrl;
+
+  @observable
   String? nome;
   @observable
   String? _nomeApiError;
@@ -194,6 +197,39 @@ abstract class AccountEditControllerBase with Store {
     return accountModel!;
   }
 
+  Future saveAccount() async {
+    var accountRepository = Modular.get<IAccountRepository>();
+
+    var newAndUpdateAccountModel = NewAndUpdateAccountModel(
+      nome: nome!,
+      username: username!,
+      email: email!,
+      telefone: telefone!,
+      password: password!,
+      confirmPassword: confirmPassword!,
+      isAtivo: isAtivo,
+      isAdmin: isAdmin,
+    );
+
+    if (isNullorEmpty(id)) {
+      var result = await accountRepository.newAccount(newAndUpdateAccountModel);
+
+      result.fold(apiErrors, (accountResponse) async {
+        GlobalSnackbar.success('Criado com sucesso!');
+        Modular.to.pop();
+      });
+    } else {
+      var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
+
+      result.fold(apiErrors, (accountResponse) async {
+        var me = await Modular.get<IAuthService>().me();
+        Modular.get<AccountStore>().setAccount(me);
+        GlobalSnackbar.success('Editado com sucesso!');
+        Modular.to.pop();
+      });
+    }
+  }
+
   Future save() async {
     try {
       isSaving = true;
@@ -204,36 +240,19 @@ abstract class AccountEditControllerBase with Store {
         var globalAccount = Modular.get<AccountStore>();
         if (globalAccount.account!.isAdmin) {
           var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, photoPath!);
+          await result.fold((fail) {
+            if (fail.statusCode == 413) {
+              GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+              isSaving = false;
+            }
+          }, (response) async {
+            fotoUrl = response.filename;
+
+            saveAccount();
+          });
         }
-      }
-
-      var newAndUpdateAccountModel = NewAndUpdateAccountModel(
-        nome: nome!,
-        username: username!,
-        email: email!,
-        telefone: telefone!,
-        password: password!,
-        confirmPassword: confirmPassword!,
-        isAtivo: isAtivo,
-        isAdmin: isAdmin,
-      );
-
-      if (isNullorEmpty(id)) {
-        var result = await accountRepository.newAccount(newAndUpdateAccountModel);
-
-        result.fold(apiErrors, (accountResponse) async {
-          GlobalSnackbar.success('Criado com sucesso!');
-          Modular.to.pop();
-        });
       } else {
-        var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
-
-        result.fold(apiErrors, (accountResponse) async {
-          var me = await Modular.get<IAuthService>().me();
-          Modular.get<AccountStore>().setAccount(me);
-          GlobalSnackbar.success('Editado com sucesso!');
-          Modular.to.pop();
-        });
+        saveAccount();
       }
     } catch (e) {
       isSaving = false;

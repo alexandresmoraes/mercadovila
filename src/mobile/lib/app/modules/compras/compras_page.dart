@@ -179,7 +179,7 @@ class ComprasPageState extends State<ComprasPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text("Pedidos"),
+            title: const Text("Compras"),
           ),
           body: Column(
             children: [
@@ -193,23 +193,32 @@ class ComprasPageState extends State<ComprasPage> {
                         Radius.circular(10.0),
                       ),
                     ),
-                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                    backgroundColor:
+                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                     bottom: TabBar(
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(
                           width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColor
+                              : const Color(0xFFEF5656),
                         ),
                         insets: const EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                       indicatorWeight: 4,
                       unselectedLabelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w400),
                       labelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold),
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Theme.of(context).primaryColor
+                          : const Color(0xFFEF5656),
                       tabs: const [
                         Tab(
                             child: Text(
@@ -292,7 +301,8 @@ class ComprasPageState extends State<ComprasPage> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     '${_allItemsList[i].amount}',
@@ -331,7 +341,7 @@ class ComprasPageState extends State<ComprasPage> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - pedidos_page.dart - _allCategoryWidgetList():$e");
+        print("Exception - compras_page.dart - _allCategoryWidgetList():$e");
       }
       return widgetList;
     }
@@ -363,7 +373,9 @@ class ComprasPageState extends State<ComprasPage> {
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
-                            color: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                            color: Modular.get<ThemeStore>().isDarkModeEnable
+                                ? const Color(0xFF373C58)
+                                : const Color(0xFFF2F5F8),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
@@ -373,7 +385,9 @@ class ComprasPageState extends State<ComprasPage> {
                         ),
                         const Expanded(child: SizedBox()),
                         Icon(
-                          _orderListScreen[index].orderStatus == 'Cancelled' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                          _orderListScreen[index].orderStatus == 'Cancelled'
+                              ? MdiIcons.closeOctagon
+                              : MdiIcons.checkDecagram,
                           size: 20,
                           color: _orderListScreen[index].orderStatus == 'Cancelled'
                               ? Colors.red

@@ -90,6 +90,22 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
     });
   }
 
+  late final _$fotoUrlAtom =
+      Atom(name: 'AccountEditControllerBase.fotoUrl', context: context);
+
+  @override
+  String? get fotoUrl {
+    _$fotoUrlAtom.reportRead();
+    return super.fotoUrl;
+  }
+
+  @override
+  set fotoUrl(String? value) {
+    _$fotoUrlAtom.reportWrite(value, super.fotoUrl, () {
+      super.fotoUrl = value;
+    });
+  }
+
   late final _$nomeAtom =
       Atom(name: 'AccountEditControllerBase.nome', context: context);
 
@@ -489,6 +505,7 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
     return '''
 isFotoAlterada: ${isFotoAlterada},
 photoPath: ${photoPath},
+fotoUrl: ${fotoUrl},
 nome: ${nome},
 username: ${username},
 email: ${email},

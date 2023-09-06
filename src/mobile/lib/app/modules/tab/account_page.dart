@@ -166,7 +166,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    Modular.to.pushNamed('/pedidos/');
+                    Modular.to.pushNamed('/compras/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -178,7 +178,7 @@ class AccountPageState extends State<AccountPage> {
                   title: Transform.translate(
                     offset: const Offset(-10, 0),
                     child: Text(
-                      "Pedidos",
+                      "Compras",
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),

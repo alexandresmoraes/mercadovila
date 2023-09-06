@@ -7,7 +7,7 @@
         "auth.api": "StartDebugging",
         "catalogo.api": "StartDebugging",
         "compras.api": "StartDebugging",
-        "pedidos.api": "StartDebugging"
+        "vendas.api": "StartDebugging"
       }
     }
   }

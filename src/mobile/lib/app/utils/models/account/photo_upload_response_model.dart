@@ -1,8 +1,8 @@
 class PhotoUploadResponseModel {
-  PhotoUploadResponseModel({required this.id});
-  late final String id;
+  PhotoUploadResponseModel({required this.filename});
+  late final String filename;
 
   PhotoUploadResponseModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    filename = json['filename'];
   }
 }

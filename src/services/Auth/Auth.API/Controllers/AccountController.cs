@@ -185,7 +185,7 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile? file)
+    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, [FromForm] IFormFile? file)
     {
       if (!_authService.GetUserId().Equals(userId) && !User.IsInRole("admin"))
         return Result.Forbidden<PhotoUploadResponseModel>();
