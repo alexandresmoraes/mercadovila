@@ -142,7 +142,7 @@ namespace Catalogo.API.Controllers
     }
 
     /// <summary>
-    /// Upload foto do produto
+    /// Upload imagem do produto
     /// </summary>
     // POST api/produtos/image
     [HttpPost("image")]
