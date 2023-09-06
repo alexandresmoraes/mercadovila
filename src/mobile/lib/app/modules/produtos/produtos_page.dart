@@ -305,7 +305,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                           height: 20,
                           width: 100,
                           decoration: BoxDecoration(
-                            color: !item.isAtivo ? Colors.green : Colors.redAccent,
+                            color: item.isAtivo ? Colors.green : Colors.redAccent,
                             borderRadius: const BorderRadius.only(
                               bottomRight: Radius.circular(10),
                               topLeft: Radius.circular(10),
