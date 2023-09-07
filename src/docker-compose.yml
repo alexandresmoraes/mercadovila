@@ -19,8 +19,8 @@ services:
       context: .
       dockerfile: Services/Compras/Compras.API/Dockerfile
 
-  pedidos.api:
-    image: ${DOCKER_REGISTRY-}pedidosapi
+  vendas.api:
+    image: ${DOCKER_REGISTRY-}vendasapi
     build:
       context: .
-      dockerfile: Services/Pedidos/Pedidos.API/Dockerfile
+      dockerfile: Services/Vendas/Vendas.API/Dockerfile

@@ -3,6 +3,7 @@ class ProdutoDto {
     required this.id,
     required this.nome,
     required this.descricao,
+    required this.imageUrl,
     required this.preco,
     required this.unidadeMedida,
     required this.estoqueAlvo,
@@ -14,6 +15,7 @@ class ProdutoDto {
   late final String id;
   late final String nome;
   late final String descricao;
+  late final String imageUrl;
   late final double preco;
   late final String unidadeMedida;
   late final int estoqueAlvo;
@@ -26,6 +28,7 @@ class ProdutoDto {
     id = json['id'];
     nome = json['nome'];
     descricao = json['descricao'];
+    imageUrl = json['imageUrl'];
     preco = json['preco'];
     unidadeMedida = json['unidadeMedida'];
     estoqueAlvo = json['estoqueAlvo'];

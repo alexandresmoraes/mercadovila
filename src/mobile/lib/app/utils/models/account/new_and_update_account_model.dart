@@ -6,6 +6,7 @@ class NewAndUpdateAccountModel {
     required this.password,
     required this.confirmPassword,
     required this.telefone,
+    this.fotoUrl,
     required this.isAtivo,
     required this.isAdmin,
   });
@@ -15,6 +16,7 @@ class NewAndUpdateAccountModel {
   late final String password;
   late final String confirmPassword;
   late final String telefone;
+  String? fotoUrl;
   late final bool isAtivo;
   late final bool isAdmin;
 
@@ -26,6 +28,7 @@ class NewAndUpdateAccountModel {
     data['password'] = password;
     data['confirmPassword'] = confirmPassword;
     data['telefone'] = telefone;
+    data['fotoUrl'] = fotoUrl;
     data['isAtivo'] = isAtivo;
     data['isAdmin'] = isAdmin;
     return data;

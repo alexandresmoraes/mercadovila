@@ -38,6 +38,7 @@ namespace Auth.API.Data.Repositories
           Id = account.Id,
           Username = account.UserName,
           PhoneNumber = account.PhoneNumber,
+          FotoUrl = account.FotoUrl,
           Email = account.Email,
           IsAtivo = account.IsAtivo
         })

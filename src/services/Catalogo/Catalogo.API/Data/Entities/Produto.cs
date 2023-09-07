@@ -7,13 +7,15 @@ namespace Catalogo.API.Data.Entities
     [BsonId]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    public string ImageUrl { get; set; } = null!;
+
     public string Nome { get; set; } = null!;
 
     public string Descricao { get; set; } = null!;
 
     public decimal Preco { get; set; }
 
-    public string UnidadeMedida { get; set; } = null!;
+    public string UnidadeMedida { get; set; } = null!;    
 
     public string CodigoBarras { get; set; } = null!;
 

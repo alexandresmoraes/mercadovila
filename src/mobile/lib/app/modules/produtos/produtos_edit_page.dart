@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -23,6 +27,49 @@ class ProdutosEditPage extends StatefulWidget {
 class ProdutosEditPageState extends State<ProdutosEditPage> {
   bool isAdmin = false;
   late ProdutosEditController _controller;
+
+  _getImagePicker(ImageSource source) async {
+    var pickedFile = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 1920,
+      maxHeight: 1080,
+      imageQuality: 100,
+    );
+    if (pickedFile != null) _cropImage(pickedFile.path);
+  }
+
+  _cropImage(filePath) async {
+    var croppedImage = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        aspectRatioPresets: CropAspectRatioPreset.values,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(
+          ratioX: 1,
+          ratioY: 1,
+        ),
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.png,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Recortar',
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
+          IOSUiSettings(
+            title: 'Recortar',
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
+          ),
+          WebUiSettings(context: context)
+        ]);
+    if (croppedImage != null) {
+      _controller.setImagePath(croppedImage.path);
+      Modular.to.pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +116,44 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             radius: 60,
                             backgroundColor: Colors.white,
                             child: Observer(builder: (_) {
-                              if (_controller.isFotoAlterada) {
+                              if (!isNullorEmpty(_controller.imagePath)) {
                                 return CircleAvatar(
                                   radius: 100,
-                                  backgroundImage: Image.file(File(_controller.photoPath!)).image,
+                                  backgroundImage: Image.file(
+                                    File(
+                                      _controller.imagePath!,
+                                    ),
+                                  ).image,
+                                );
+                              } else if (!isNullorEmpty(_controller.imageUrl)) {
+                                return CachedNetworkImage(
+                                  placeholder: (context, url) => CircularProgress(
+                                    color: Theme.of(context).primaryColorLight,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                  errorWidget: (context, url, error) => const CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: AssetImage('assets/person.png'),
+                                  ),
+                                  imageUrl:
+                                      '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
+                                  imageBuilder: (context, imageProvider) {
+                                    return CircleAvatar(
+                                      radius: 100,
+                                      backgroundImage: imageProvider,
+                                    );
+                                  },
                                 );
                               }
+
                               return const CircleAvatar(
                                 radius: 100,
-                                backgroundImage: AssetImage('assets/person.png'),
+                                child: Icon(
+                                  MdiIcons.cameraPlus,
+                                  size: 70,
+                                  color: Colors.white,
+                                ),
                               );
                             }),
                           ),
@@ -93,24 +169,20 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             builder: (BuildContext context) => CupertinoActionSheet(
                               title: const Icon(Icons.camera_alt_rounded),
                               actions: <Widget>[
-                                Container(
-                                  color: Colors.white,
-                                  child: CupertinoActionSheetAction(
-                                    isDefaultAction: true,
-                                    onPressed: () {
-                                      //_getImagePicker(ImageSource.camera);
-                                    },
-                                    child: const Text(
-                                      'Camera',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    _getImagePicker(ImageSource.camera);
+                                  },
+                                  child: const Text(
+                                    'Camera',
+                                    style: TextStyle(
+                                      color: Colors.blue,
                                     ),
                                   ),
                                 ),
                                 CupertinoActionSheetAction(
                                   onPressed: () {
-                                    //_getImagePicker(ImageSource.gallery);
+                                    _getImagePicker(ImageSource.gallery);
                                   },
                                   child: const Text(
                                     'Galeria',
@@ -122,7 +194,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                 CupertinoActionSheetAction(
                                   isDestructiveAction: true,
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    Modular.to.pop();
                                   },
                                   child: const Text(
                                     'Cancelar',
@@ -135,10 +207,14 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             ),
                           );
                         },
-                        child: Text(
-                          'Trocar foto',
-                          style: Theme.of(context).primaryTextTheme.displayLarge,
-                        ),
+                        child: Observer(builder: (_) {
+                          return Text(
+                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
+                                ? 'Escolher imagem'
+                                : 'Trocar imagem',
+                            style: Theme.of(context).primaryTextTheme.displayLarge,
+                          );
+                        }),
                       ),
                     ),
                   ],

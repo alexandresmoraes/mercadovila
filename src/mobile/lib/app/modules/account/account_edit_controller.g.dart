@@ -58,35 +58,35 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
           name: 'AccountEditControllerBase.isValid'))
       .value;
 
-  late final _$isFotoAlteradaAtom =
-      Atom(name: 'AccountEditControllerBase.isFotoAlterada', context: context);
+  late final _$fotoPathAtom =
+      Atom(name: 'AccountEditControllerBase.fotoPath', context: context);
 
   @override
-  bool get isFotoAlterada {
-    _$isFotoAlteradaAtom.reportRead();
-    return super.isFotoAlterada;
+  String? get fotoPath {
+    _$fotoPathAtom.reportRead();
+    return super.fotoPath;
   }
 
   @override
-  set isFotoAlterada(bool value) {
-    _$isFotoAlteradaAtom.reportWrite(value, super.isFotoAlterada, () {
-      super.isFotoAlterada = value;
+  set fotoPath(String? value) {
+    _$fotoPathAtom.reportWrite(value, super.fotoPath, () {
+      super.fotoPath = value;
     });
   }
 
-  late final _$photoPathAtom =
-      Atom(name: 'AccountEditControllerBase.photoPath', context: context);
+  late final _$fotoUrlAtom =
+      Atom(name: 'AccountEditControllerBase.fotoUrl', context: context);
 
   @override
-  String? get photoPath {
-    _$photoPathAtom.reportRead();
-    return super.photoPath;
+  String? get fotoUrl {
+    _$fotoUrlAtom.reportRead();
+    return super.fotoUrl;
   }
 
   @override
-  set photoPath(String? value) {
-    _$photoPathAtom.reportWrite(value, super.photoPath, () {
-      super.photoPath = value;
+  set fotoUrl(String? value) {
+    _$fotoUrlAtom.reportWrite(value, super.fotoUrl, () {
+      super.fotoUrl = value;
     });
   }
 
@@ -386,11 +386,11 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
       ActionController(name: 'AccountEditControllerBase', context: context);
 
   @override
-  void setPhotoPath(String v) {
+  void setFotoPath(String v) {
     final _$actionInfo = _$AccountEditControllerBaseActionController
-        .startAction(name: 'AccountEditControllerBase.setPhotoPath');
+        .startAction(name: 'AccountEditControllerBase.setFotoPath');
     try {
-      return super.setPhotoPath(v);
+      return super.setFotoPath(v);
     } finally {
       _$AccountEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -487,8 +487,8 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
   @override
   String toString() {
     return '''
-isFotoAlterada: ${isFotoAlterada},
-photoPath: ${photoPath},
+fotoPath: ${fotoPath},
+fotoUrl: ${fotoUrl},
 nome: ${nome},
 username: ${username},
 email: ${email},

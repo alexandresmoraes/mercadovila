@@ -4,6 +4,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
+import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
 import 'package:vilasesmo/app/utils/models/produtos/produto_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
@@ -56,5 +57,24 @@ class ProdutosRepository implements IProdutosRepository {
     });
 
     return PagedResult.fromJson(response.data);
+  }
+
+  @override
+  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageProdutos(String filepath) async {
+    try {
+      String filename = filepath.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(filepath, filename: filename),
+      });
+      var response = await dio.post('/api/produtos/image', data: formData);
+      var result = ImageUploadResponseModel.fromJson(response.data);
+      return Right(result);
+    } on DioError catch (err) {
+      if (err.response?.statusCode == 413) {
+        return Left(ResultFailModel.fromJson(null, err.response?.statusCode));
+      } else {
+        return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+      }
+    }
   }
 }

@@ -1,9 +1,9 @@
 ﻿using Common.WebAPI.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace Auth.API.Models
+namespace Catalogo.API.Models
 {
-  public record PhotoUploadModel
+  public record ImageUploadModel
   {
     [Required(ErrorMessage = "File não pode ser vazio.")]
     [DataType(DataType.Upload)]
@@ -11,17 +11,17 @@ namespace Auth.API.Models
     [AllowedExtensions(new string[] { ".jpg", ".png" })]
     public IFormFile? File { get; set; }
 
-    public PhotoUploadModel(IFormFile? file)
+    public ImageUploadModel(IFormFile? file)
     {
       File = file;
     }
   }
 
-  public record PhotoUploadResponseModel
+  public record ImageUploadResponseModel
   {
     public string Filename { get; set; }
 
-    public PhotoUploadResponseModel(string filename)
+    public ImageUploadResponseModel(string filename)
     {
       Filename = filename;
     }

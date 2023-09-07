@@ -5,10 +5,11 @@ using Auth.API.Data.Repositories;
 using Auth.API.Models;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Auth.API.Controllers
 {
@@ -22,12 +23,18 @@ namespace Auth.API.Controllers
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserRepository _userRepository;
     private readonly IAuthService<ApplicationUser> _authService;
+    private readonly IConfiguration _configuration;
+    private readonly IFileUtils _fileUtils;
+    private readonly IValidateUtils _validateUtils;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils)
     {
       _userManager = userManager;
       _userRepository = userRepository;
       _authService = authService;
+      _configuration = configuration;
+      _fileUtils = fileUtils;
+      _validateUtils = validateUtils;
     }
 
     /// <summary>
@@ -104,7 +111,8 @@ namespace Auth.API.Controllers
         Email = newAccountModel.Email,
         PhoneNumber = newAccountModel.Telefone,
         EmailConfirmed = true,
-        IsAtivo = newAccountModel.IsAtivo
+        IsAtivo = newAccountModel.IsAtivo,
+        FotoUrl = newAccountModel.FotoUrl
       };
 
       var result = await _userManager.CreateAsync(user, newAccountModel.Password);
@@ -146,6 +154,7 @@ namespace Auth.API.Controllers
       user.PhoneNumber = updateAccountModel.Telefone;
       user.UserName = updateAccountModel.Username;
       user.IsAtivo = updateAccountModel.IsAtivo;
+      user.FotoUrl = updateAccountModel.FotoUrl;
 
       var result = await _userManager.UpdateAsync(user);
 
@@ -176,46 +185,72 @@ namespace Auth.API.Controllers
     /// <summary>
     /// Upload foto do usuário
     /// </summary>
-    // POST api/account/{id}/photo    
-    [HttpPost("{id}/photo")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    // POST api/account/photo/{userId}
+    [HttpPost("photo/{userId}")]
+    [ProducesResponseType(typeof(PhotoUploadResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result> UploadImageAsync([FromRoute] string id, IFormFile foto)
+    public async Task<Result<PhotoUploadResponseModel>> UploadImageAsync([FromRoute] string userId, IFormFile? file)
     {
-      if (!_authService.GetUserId().Equals(id) && !User.IsInRole("admin"))
-        return Result.Forbidden();
+      if (!_authService.GetUserId().Equals(userId) && !User.IsInRole("admin"))
+        return Result.Forbidden<PhotoUploadResponseModel>();
 
-      var photoUploadModel = new PhotoUploadModel(foto);
+      var photoUploadModel = new PhotoUploadModel(file);
 
-      Result? result = null;
-      var validation = ValidatePhotoUploadModel(photoUploadModel, ref result);
+      Result<PhotoUploadResponseModel>? result = null;
+      var validation = _validateUtils.ValidateModel(photoUploadModel, ref result);
 
       if (!validation)
         return result!;
 
-      var user = await _userManager.FindByIdAsync(id);
+      var user = await _userManager.FindByIdAsync(userId);
 
       if (user is null)
-        return Result.NotFound();
+        return Result.NotFound<PhotoUploadResponseModel>();
 
-      return Result.Ok();
+      string filename = await SaveFile(file!);
+
+      return Result.Ok(new PhotoUploadResponseModel(filename));
     }
 
-    private bool ValidatePhotoUploadModel(PhotoUploadModel photoUploadModel, ref Result? result)
+    /// <summary>
+    /// Download foto do usuário
+    /// </summary>
+    // GET api/account/photo/{filename}
+    [AllowAnonymous]
+    [HttpGet("photo/{filename}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
-      var context = new ValidationContext(photoUploadModel);
-      var validationResults = new List<ValidationResult>();
-      var isValid = Validator.TryValidateObject(photoUploadModel, context, validationResults, true);
+      var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var fullFilename = Path.Combine(currentDirectory, userImagePath, filename);
 
-      if (!isValid)
+      if (System.IO.File.Exists(fullFilename))
       {
-        result = Result.Fail(validationResults.Select(e => new ErrorResult(e.ErrorMessage!)).ToArray());
+        var _contentTypeProvider = new FileExtensionContentTypeProvider();
+
+        var extensao = Path.GetExtension(filename);
+
+        if (_contentTypeProvider.TryGetContentType(extensao, out var contentType))
+        {
+          Response.Headers.Add("Content-Type", contentType);
+
+          var arquivoBytes = await System.IO.File.ReadAllBytesAsync(fullFilename);
+          return File(arquivoBytes, contentType);
+        }
       }
 
-      return isValid;
+      return NotFound();
+    }
+
+    private async Task<string> SaveFile(IFormFile file)
+    {
+      var userImagePath = _configuration["ImagesSettings:UserImagePath"] ?? "wwwroot/images/users";
+
+      return await _fileUtils.SaveFile(file, userImagePath);
     }
   }
 }

@@ -17,12 +17,16 @@ abstract class ProdutosEditControllerBase with Store {
   bool isFotoAlterada = false;
 
   @observable
-  String? photoPath;
+  String? imagePath;
   @action
-  void setPhotoPath(String v) {
-    isFotoAlterada = true;
-    photoPath = v;
+  void setImagePath(String v) {
+    imagePath = v;
   }
+
+  @observable
+  String? imageUrl;
+  @computed
+  String? get getImageUrlError => isNullorEmpty(imageUrl) ? 'Imagem do produto não pode ser vazio.' : null;
 
   @observable
   String? nome;
@@ -151,14 +155,19 @@ abstract class ProdutosEditControllerBase with Store {
   bool isConfirmPasswordVisible = false;
 
   @computed
-  bool get isValid =>
-      isNullorEmpty(getNomeError) &&
-      isNullorEmpty(getDescricaoError) &&
-      isNullorEmpty(getPrecoError) &&
-      isNullorEmpty(getUnidadeMedidaError) &&
-      isNullorEmpty(getCodigoBarrasError) &&
-      isNullorEmpty(getEstoqueAlvoError) &&
-      isNullorEmpty(getEstoqueError);
+  bool get isValid {
+    var imageUrlError = getImageUrlError;
+    if (!isNullorEmpty(imageUrlError) && isNullorEmpty(imagePath)) {
+      GlobalSnackbar.error(imageUrlError!);
+    }
+    return isNullorEmpty(getNomeError) &&
+        isNullorEmpty(getDescricaoError) &&
+        isNullorEmpty(getPrecoError) &&
+        isNullorEmpty(getUnidadeMedidaError) &&
+        isNullorEmpty(getCodigoBarrasError) &&
+        isNullorEmpty(getEstoqueAlvoError) &&
+        isNullorEmpty(getEstoqueError);
+  }
 
   ProdutoModel? produtoModel;
 
@@ -173,6 +182,7 @@ abstract class ProdutosEditControllerBase with Store {
       produtoModel = ProdutoModel(
         nome: "",
         descricao: "",
+        imageUrl: "",
         preco: 0,
         unidadeMedida: "",
         codigoBarras: "",
@@ -184,6 +194,7 @@ abstract class ProdutosEditControllerBase with Store {
 
     nome = produtoModel!.nome;
     descricao = produtoModel!.descricao;
+    imageUrl = produtoModel!.imageUrl;
     preco = produtoModel!.preco == 0 ? "" : produtoModel!.preco.toString();
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
@@ -195,38 +206,62 @@ abstract class ProdutosEditControllerBase with Store {
     return produtoModel!;
   }
 
+  Future saveProduto() async {
+    var produtoModel = ProdutoModel(
+      nome: nome!,
+      descricao: descricao!,
+      imageUrl: imageUrl!,
+      preco: double.parse(preco!),
+      unidadeMedida: unidadeMedida!,
+      codigoBarras: codigoBarras!,
+      estoqueAlvo: int.parse(estoqueAlvo!),
+      estoque: int.parse(estoque!),
+      isAtivo: isAtivo,
+    );
+
+    var produtoRepository = Modular.get<IProdutosRepository>();
+    if (isNullorEmpty(id)) {
+      var result = await produtoRepository.createProduto(produtoModel);
+
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (response) async {
+        GlobalSnackbar.success('Criado com sucesso!');
+        Modular.to.pop(true);
+      });
+    } else {
+      var result = await produtoRepository.editProduto(id!, produtoModel);
+
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (accountResponse) async {
+        GlobalSnackbar.success('Editado com sucesso!');
+        Modular.to.pop(true);
+      });
+    }
+  }
+
   Future save() async {
     try {
       isSaving = true;
+      var produtosRepository = Modular.get<IProdutosRepository>();
 
-      var produtoModel = ProdutoModel(
-        nome: nome!,
-        descricao: descricao!,
-        preco: double.parse(preco!),
-        unidadeMedida: unidadeMedida!,
-        codigoBarras: codigoBarras!,
-        estoqueAlvo: int.parse(estoqueAlvo!),
-        estoque: int.parse(estoque!),
-        isAtivo: isAtivo,
-      );
+      if (!isNullorEmpty(imagePath)) {
+        var result = await produtosRepository.uploadImageProdutos(imagePath!);
+        await result.fold((fail) {
+          if (fail.statusCode == 413) {
+            GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+            isSaving = false;
+          }
+        }, (response) async {
+          imageUrl = response.filename;
 
-      var produtoRepository = Modular.get<IProdutosRepository>();
-      if (isNullorEmpty(id)) {
-        var result = await produtoRepository.createProduto(produtoModel);
-
-        result.fold(apiErrors, (response) async {
-          GlobalSnackbar.success('Criado com sucesso!');
-          Modular.to.pop();
+          await saveProduto();
         });
       } else {
-        var result = await produtoRepository.editProduto(id!, produtoModel);
-
-        result.fold(apiErrors, (accountResponse) async {
-          GlobalSnackbar.success('Editado com sucesso!');
-          Modular.to.pop();
-        });
+        await saveProduto();
       }
-    } catch (e) {
+    } finally {
       isSaving = false;
     }
   }

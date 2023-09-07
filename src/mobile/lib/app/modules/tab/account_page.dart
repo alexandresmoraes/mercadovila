@@ -1,8 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
 class AccountPage extends StatefulWidget {
   final String title;
@@ -12,6 +17,8 @@ class AccountPage extends StatefulWidget {
 }
 
 class AccountPageState extends State<AccountPage> {
+  final AccountStore accountStore = Modular.get<AccountStore>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,15 +53,44 @@ class AccountPageState extends State<AccountPage> {
                     ),
                   ),
                   alignment: Alignment.topCenter,
-                  child: const Center(
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 53,
-                        backgroundImage: AssetImage('assets/person.png'),
-                      ),
-                    ),
+                  child: Center(
+                    child: Observer(builder: (_) {
+                      if (!isNullorEmpty(accountStore.account!.fotoUrl)) {
+                        return CachedNetworkImage(
+                          placeholder: (context, url) => const CircularProgress(
+                            width: 60,
+                            height: 60,
+                          ),
+                          errorWidget: (context, url, error) => const CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 53,
+                              backgroundImage: AssetImage('assets/person.png'),
+                            ),
+                          ),
+                          imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${accountStore.account!.fotoUrl}',
+                          imageBuilder: (context, imageProvider) {
+                            return CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 53,
+                                backgroundImage: imageProvider,
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      return const CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 53,
+                          backgroundImage: AssetImage('assets/person.png'),
+                        ),
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -166,7 +202,7 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    Modular.to.pushNamed('/pedidos/');
+                    Modular.to.pushNamed('/compras/');
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -178,7 +214,7 @@ class AccountPageState extends State<AccountPage> {
                   title: Transform.translate(
                     offset: const Offset(-10, 0),
                     child: Text(
-                      "Pedidos",
+                      "Compras",
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),
@@ -281,8 +317,7 @@ class AccountPageState extends State<AccountPage> {
                 const Divider(),
                 SwitchListTile(
                   value: Modular.get<ThemeStore>().isDarkModeEnable,
-                  onChanged: (val) =>
-                      Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
+                  onChanged: (val) => Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   secondary: !Modular.get<ThemeStore>().isDarkModeEnable

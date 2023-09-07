@@ -14,6 +14,8 @@ namespace Auth.API.Models
     [EmailAddress(ErrorMessage = "Endereço de email inválido.")]
     public string? Email { get; set; }
 
+    public string? FotoUrl { get; set; }
+
     [Required(ErrorMessage = "Senha está vazio.")]
     [StringLength(50, ErrorMessage = "Senha deve ter entra 4 a 50 caracteres.", MinimumLength = 4)]
     public string? Password { get; set; }

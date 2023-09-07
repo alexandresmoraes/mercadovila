@@ -18,15 +18,14 @@ abstract class AccountEditControllerBase with Store {
   String? id;
 
   @observable
-  bool isFotoAlterada = false;
+  String? fotoPath;
+  @action
+  void setFotoPath(String v) {
+    fotoPath = v;
+  }
 
   @observable
-  String? photoPath;
-  @action
-  void setPhotoPath(String v) {
-    isFotoAlterada = true;
-    photoPath = v;
-  }
+  String? fotoUrl;
 
   @observable
   String? nome;
@@ -187,6 +186,7 @@ abstract class AccountEditControllerBase with Store {
     telefone = accountModel!.telefone;
     password = "";
     confirmPassword = "";
+    fotoUrl = accountModel!.fotoUrl;
     isAtivo = accountModel!.isAtivo;
     isAdmin = accountModel!.isAdmin;
 
@@ -194,47 +194,74 @@ abstract class AccountEditControllerBase with Store {
     return accountModel!;
   }
 
+  Future saveAccount() async {
+    var accountRepository = Modular.get<IAccountRepository>();
+
+    var newAndUpdateAccountModel = NewAndUpdateAccountModel(
+      nome: nome!,
+      username: username!,
+      email: email!,
+      telefone: telefone!,
+      password: password!,
+      confirmPassword: confirmPassword!,
+      isAtivo: isAtivo,
+      isAdmin: isAdmin,
+      fotoUrl: fotoUrl,
+    );
+
+    if (isNullorEmpty(id)) {
+      var result = await accountRepository.newAccount(newAndUpdateAccountModel);
+
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (accountResponse) async {
+        GlobalSnackbar.success('Criado com sucesso!');
+        Modular.to.pop(true);
+      });
+    } else {
+      var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
+
+      await result.fold((fail) {
+        apiErrors(fail);
+      }, (accountResponse) async {
+        var me = await Modular.get<IAuthService>().me();
+        Modular.get<AccountStore>().setAccount(me);
+        GlobalSnackbar.success('Editado com sucesso!');
+        Modular.to.pop(true);
+      });
+    }
+  }
+
   Future save() async {
     try {
       isSaving = true;
 
-      var newAndUpdateAccountModel = NewAndUpdateAccountModel(
-        nome: nome!,
-        username: username!,
-        email: email!,
-        telefone: telefone!,
-        password: password!,
-        confirmPassword: confirmPassword!,
-        isAtivo: isAtivo,
-        isAdmin: isAdmin,
-      );
-
       var accountRepository = Modular.get<IAccountRepository>();
-      if (isNullorEmpty(id)) {
-        var result = await accountRepository.newAccount(newAndUpdateAccountModel);
 
-        result.fold(apiErrors, (accountResponse) async {
-          GlobalSnackbar.success('Criado com sucesso!');
-          Modular.to.pop();
-        });
+      if (!isNullorEmpty(fotoPath)) {
+        var globalAccount = Modular.get<AccountStore>();
+        if (globalAccount.account!.isAdmin) {
+          var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
+          await result.fold((fail) {
+            if (fail.statusCode == 413) {
+              GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+              isSaving = false;
+            }
+          }, (response) async {
+            fotoUrl = response.filename;
+
+            await saveAccount();
+          });
+        }
       } else {
-        var result = await accountRepository.updateAccount(id!, newAndUpdateAccountModel);
-
-        result.fold(apiErrors, (accountResponse) async {
-          var me = await Modular.get<IAuthService>().me();
-          Modular.get<AccountStore>().setAccount(me);
-          GlobalSnackbar.success('Editado com sucesso!');
-          Modular.to.pop();
-        });
+        await saveAccount();
       }
-    } catch (e) {
+    } finally {
       isSaving = false;
     }
   }
 
   void apiErrors(ResultFailModel resultFail) {
-    isSaving = false;
-
     if (resultFail.statusCode == 400) {
       _nomeApiError = resultFail.getErrorByProperty('Nome');
       _usernameApiError = resultFail.getErrorByProperty('Username');
@@ -246,5 +273,7 @@ abstract class AccountEditControllerBase with Store {
       var message = resultFail.getErrorNotProperty();
       if (message.isNotEmpty) GlobalSnackbar.error(message);
     }
+
+    isSaving = false;
   }
 }

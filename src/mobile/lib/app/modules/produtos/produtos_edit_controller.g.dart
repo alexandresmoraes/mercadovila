@@ -9,6 +9,13 @@ part of 'produtos_edit_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
+  Computed<String?>? _$getImageUrlErrorComputed;
+
+  @override
+  String? get getImageUrlError => (_$getImageUrlErrorComputed ??=
+          Computed<String?>(() => super.getImageUrlError,
+              name: 'ProdutosEditControllerBase.getImageUrlError'))
+      .value;
   Computed<String?>? _$getNomeErrorComputed;
 
   @override
@@ -81,19 +88,35 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
     });
   }
 
-  late final _$photoPathAtom =
-      Atom(name: 'ProdutosEditControllerBase.photoPath', context: context);
+  late final _$imagePathAtom =
+      Atom(name: 'ProdutosEditControllerBase.imagePath', context: context);
 
   @override
-  String? get photoPath {
-    _$photoPathAtom.reportRead();
-    return super.photoPath;
+  String? get imagePath {
+    _$imagePathAtom.reportRead();
+    return super.imagePath;
   }
 
   @override
-  set photoPath(String? value) {
-    _$photoPathAtom.reportWrite(value, super.photoPath, () {
-      super.photoPath = value;
+  set imagePath(String? value) {
+    _$imagePathAtom.reportWrite(value, super.imagePath, () {
+      super.imagePath = value;
+    });
+  }
+
+  late final _$imageUrlAtom =
+      Atom(name: 'ProdutosEditControllerBase.imageUrl', context: context);
+
+  @override
+  String? get imageUrl {
+    _$imageUrlAtom.reportRead();
+    return super.imageUrl;
+  }
+
+  @override
+  set imageUrl(String? value) {
+    _$imageUrlAtom.reportWrite(value, super.imageUrl, () {
+      super.imageUrl = value;
     });
   }
 
@@ -413,11 +436,11 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
       ActionController(name: 'ProdutosEditControllerBase', context: context);
 
   @override
-  void setPhotoPath(String v) {
+  void setImagePath(String v) {
     final _$actionInfo = _$ProdutosEditControllerBaseActionController
-        .startAction(name: 'ProdutosEditControllerBase.setPhotoPath');
+        .startAction(name: 'ProdutosEditControllerBase.setImagePath');
     try {
-      return super.setPhotoPath(v);
+      return super.setImagePath(v);
     } finally {
       _$ProdutosEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -515,7 +538,8 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
   String toString() {
     return '''
 isFotoAlterada: ${isFotoAlterada},
-photoPath: ${photoPath},
+imagePath: ${imagePath},
+imageUrl: ${imageUrl},
 nome: ${nome},
 descricao: ${descricao},
 preco: ${preco},
@@ -528,6 +552,7 @@ isSaving: ${isSaving},
 isLoading: ${isLoading},
 isPasswordVisible: ${isPasswordVisible},
 isConfirmPasswordVisible: ${isConfirmPasswordVisible},
+getImageUrlError: ${getImageUrlError},
 getNomeError: ${getNomeError},
 getDescricaoError: ${getDescricaoError},
 getPrecoError: ${getPrecoError},

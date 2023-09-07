@@ -4,6 +4,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/models/account/new_and_update_account_model.dart';
+import 'package:vilasesmo/app/utils/models/account/photo_upload_response_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
@@ -57,5 +58,24 @@ class AccountRepository implements IAccountRepository {
     });
 
     return PagedResult.fromJson(response.data);
+  }
+
+  @override
+  Future<Either<ResultFailModel, PhotoUploadResponseModel>> uploadPhotoAccount(String id, String filepath) async {
+    try {
+      String filename = filepath.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(filepath, filename: filename),
+      });
+      var response = await dio.post('/api/account/photo/$id', data: formData);
+      var result = PhotoUploadResponseModel.fromJson(response.data);
+      return Right(result);
+    } on DioError catch (err) {
+      if (err.response?.statusCode == 413) {
+        return Left(ResultFailModel.fromJson(null, err.response?.statusCode));
+      } else {
+        return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+      }
+    }
   }
 }

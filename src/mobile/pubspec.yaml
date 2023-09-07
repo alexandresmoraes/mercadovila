@@ -32,6 +32,7 @@ dependencies:
   string_validator: ^1.0.0
   infinite_scroll_pagination: ^3.2.0
   curved_progress_bar: ^1.0.2
+  cached_network_image: ^3.2.3
   
 dev_dependencies:
   flutter_test:

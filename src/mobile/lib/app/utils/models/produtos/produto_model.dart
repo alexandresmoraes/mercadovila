@@ -2,6 +2,7 @@ class ProdutoModel {
   ProdutoModel({
     required this.nome,
     required this.descricao,
+    required this.imageUrl,
     required this.preco,
     required this.unidadeMedida,
     required this.codigoBarras,
@@ -12,6 +13,7 @@ class ProdutoModel {
   String? id;
   late final String nome;
   late final String descricao;
+  late final String imageUrl;
   late final double preco;
   late final String unidadeMedida;
   late final String codigoBarras;
@@ -23,6 +25,7 @@ class ProdutoModel {
     final data = <String, dynamic>{};
     data['nome'] = nome;
     data['descricao'] = descricao;
+    data['imageUrl'] = imageUrl;
     data['preco'] = preco;
     data['unidadeMedida'] = unidadeMedida;
     data['codigoBarras'] = codigoBarras;
@@ -36,6 +39,7 @@ class ProdutoModel {
     id = json['id'];
     nome = json['nome'];
     descricao = json['descricao'];
+    imageUrl = json['imageUrl'];
     preco = json['preco'];
     unidadeMedida = json['unidadeMedida'];
     codigoBarras = json['codigoBarras'];
