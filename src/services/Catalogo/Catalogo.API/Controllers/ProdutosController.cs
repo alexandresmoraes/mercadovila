@@ -51,6 +51,7 @@ namespace Catalogo.API.Controllers
       {
         Nome = produto!.Nome,
         Descricao = produto.Descricao,
+        ImageUrl = produto.ImageUrl,
         Preco = produto.Preco,
         UnidadeMedida = produto.UnidadeMedida,
         CodigoBarras = produto.CodigoBarras,
@@ -93,6 +94,7 @@ namespace Catalogo.API.Controllers
       {
         Nome = produtoModel.Nome!,
         Descricao = produtoModel.Descricao!,
+        ImageUrl = produtoModel.ImageUrl!,
         Preco = produtoModel.Preco!,
         UnidadeMedida = produtoModel.UnidadeMedida!,
         CodigoBarras = produtoModel.CodigoBarras!,
@@ -128,6 +130,7 @@ namespace Catalogo.API.Controllers
         Id = id,
         Nome = produtoModel.Nome!,
         Descricao = produtoModel.Descricao!,
+        ImageUrl = produtoModel.ImageUrl!,
         Preco = produtoModel.Preco!,
         UnidadeMedida = produtoModel.UnidadeMedida!,
         CodigoBarras = produtoModel.CodigoBarras!,

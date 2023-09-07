@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class ProdutosPage extends StatefulWidget {
@@ -26,15 +28,6 @@ class ProdutosPageState extends State<ProdutosPage> {
   Timer? _debounce;
 
   PagingController<int, ProdutoDto> pagingController = PagingController(firstPageKey: 1);
-
-  final List<Product> _productList = [
-    Product(imagePath: "assets/lamb.png"),
-    Product(imagePath: "assets/wheat.png"),
-    Product(imagePath: "assets/bakery.png"),
-    Product(imagePath: "assets/lamb.png"),
-    Product(imagePath: "assets/wheat.png"),
-    Product(imagePath: "assets/cheese.png"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +57,8 @@ class ProdutosPageState extends State<ProdutosPage> {
             ),
             IconButton(
               onPressed: () async {
-                await Modular.to.pushNamed('/produtos/edit');
+                var refresh = await Modular.to.pushNamed<bool>('/produtos/new');
+                if (refresh ?? false) pagingController.refresh();
               },
               icon: const Icon(MdiIcons.plus),
             ),
@@ -146,8 +140,9 @@ class ProdutosPageState extends State<ProdutosPage> {
               ),
             ),
             child: InkWell(
-              onTap: () {
-                Modular.to.pushNamed('/produtos/edit/${item.id}');
+              onTap: () async {
+                var refresh = await Modular.to.pushNamed<bool>('/produtos/edit/${item.id}');
+                if (refresh ?? false) pagingController.refresh();
               },
               borderRadius: const BorderRadius.all(
                 Radius.circular(10),
@@ -183,16 +178,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${item.preco}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "R\$ ",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${item.preco}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -242,85 +240,84 @@ class ProdutosPageState extends State<ProdutosPage> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          height: 20,
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                            ),
-                          ),
+                  item.isAtivo
+                      ? Positioned(
+                          right: 0,
+                          top: 0,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
-                                "Estoque alvo ${item.estoqueAlvo}",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                              Container(
+                                height: 20,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.lightBlue,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Estoque alvo ${item.estoqueAlvo}",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 20,
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Estoque ${item.estoque}",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).primaryTextTheme.bodySmall,
-                              ),
+                              Container(
+                                height: 20,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: item.estoque == 0 ? Colors.redAccent : Colors.green,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      item.estoque == 0 ? "Sem estoque" : "Estoque atual ${item.estoque}",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         )
-                      ],
-                    ),
-                  ),
+                      : const SizedBox.shrink(),
                   Positioned(
-                    right: 0,
-                    bottom: 0,
+                    left: 20,
+                    bottom: 10,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          height: 20,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            color: item.isAtivo ? Colors.green : Colors.redAccent,
-                            borderRadius: const BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                              topLeft: Radius.circular(10),
+                        SizedBox(
+                          height: 30,
+                          width: 80,
+                          child: Row(children: [
+                            Icon(
+                              !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                              size: 20,
+                              color: !item.isAtivo ? Colors.red : Colors.greenAccent,
                             ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
                                 item.isAtivo ? "Ativo" : "Inativo",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).primaryTextTheme.bodySmall,
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
                               ),
-                            ],
-                          ),
+                            )
+                          ]),
                         )
                       ],
                     ),
@@ -328,14 +325,32 @@ class ProdutosPageState extends State<ProdutosPage> {
                   Positioned(
                     left: 0,
                     top: -20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('${_productList[index].imagePath}'),
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => const SizedBox(
+                        width: 120,
+                        height: 100,
+                        child: CircularProgress(),
+                      ),
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        radius: 100,
+                        child: Icon(
+                          MdiIcons.cameraOff,
+                          size: 70,
+                          color: Colors.white,
                         ),
                       ),
-                      height: 100,
-                      width: 120,
+                      imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${item.imageUrl}',
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                            ),
+                          ),
+                          height: 100,
+                          width: 120,
+                        );
+                      },
                     ),
                   )
                 ],

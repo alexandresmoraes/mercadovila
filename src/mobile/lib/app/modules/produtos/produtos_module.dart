@@ -22,5 +22,6 @@ class ProdutosModule extends Module {
         transition: TransitionType.rightToLeft,
         duration: const Duration(milliseconds: 500)),
     ChildRoute('/edit/:id', child: (_, args) => ProdutosEditPage(id: args.params['id'])),
+    ChildRoute('/new', child: (_, args) => const ProdutosEditPage()),
   ];
 }

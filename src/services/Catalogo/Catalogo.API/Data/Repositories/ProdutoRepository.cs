@@ -101,6 +101,7 @@ namespace Catalogo.API.Data.Repositories
           Id = p.Id,
           Nome = p.Nome,
           Descricao = p.Descricao,
+          ImageUrl = p.ImageUrl,
           Preco = p.Preco,
           UnidadeMedida = p.UnidadeMedida,
           EstoqueAlvo = p.EstoqueAlvo,
