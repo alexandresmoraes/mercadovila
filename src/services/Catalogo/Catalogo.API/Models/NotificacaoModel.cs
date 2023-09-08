@@ -10,9 +10,7 @@ namespace Catalogo.API.Models
     [Required(ErrorMessage = "Mensagem da notificação está vazio.")]
     public string Mensagem { get; set; } = null!;
 
-    public string? ImageUrl { get; set; }
-
-    public DateTime DataCriacao { get; set; } = DateTime.Now;
+    public string? ImageUrl { get; set; }    
   }
 
   public record NotificacaoResponseModel

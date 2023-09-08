@@ -71,11 +71,11 @@ namespace Common.WebAPI.Auth
       var jti = Guid.NewGuid().ToString();
       var key = GetCurrentKey();
       var user = await _authService.GetUserByUsernameOrEmail(username);
-      var claims = new List<Claim>(2)
-        {
-            new(JwtRegisteredClaimNames.Sub, user!.Id.ToString()!),
-            new(JwtRegisteredClaimNames.Jti, jti)
-        };
+      var claims = new List<Claim>
+      {
+        new(JwtRegisteredClaimNames.Sub, user!.Id.ToString()!),
+        new(JwtRegisteredClaimNames.Jti, jti)
+      };
 
       var identityClaims = new ClaimsIdentity();
       identityClaims.AddClaims(claims);

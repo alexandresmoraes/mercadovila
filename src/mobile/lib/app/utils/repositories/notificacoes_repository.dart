@@ -8,7 +8,6 @@ import 'package:vilasesmo/app/utils/models/paged_result.dart';
 import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
 
 @Injectable()
 class NotificacoesRepository implements INotificacoesRepository {
