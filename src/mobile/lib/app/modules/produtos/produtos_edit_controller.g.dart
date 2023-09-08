@@ -72,22 +72,6 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
           name: 'ProdutosEditControllerBase.isValid'))
       .value;
 
-  late final _$isFotoAlteradaAtom =
-      Atom(name: 'ProdutosEditControllerBase.isFotoAlterada', context: context);
-
-  @override
-  bool get isFotoAlterada {
-    _$isFotoAlteradaAtom.reportRead();
-    return super.isFotoAlterada;
-  }
-
-  @override
-  set isFotoAlterada(bool value) {
-    _$isFotoAlteradaAtom.reportWrite(value, super.isFotoAlterada, () {
-      super.isFotoAlterada = value;
-    });
-  }
-
   late final _$imagePathAtom =
       Atom(name: 'ProdutosEditControllerBase.imagePath', context: context);
 
@@ -537,7 +521,6 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
   @override
   String toString() {
     return '''
-isFotoAlterada: ${isFotoAlterada},
 imagePath: ${imagePath},
 imageUrl: ${imageUrl},
 nome: ${nome},

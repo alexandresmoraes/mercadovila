@@ -3,7 +3,7 @@ import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
 import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
-import 'package:vilasesmo/app/modules/notifications/notifications_module.dart';
+import 'package:vilasesmo/app/modules/notificacoes/notificacoes_module.dart';
 import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
 import 'package:vilasesmo/app/modules/compras/compras_module.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
@@ -49,7 +49,6 @@ class AppModule extends Module {
     ModuleRoute(AccountModule.routeName, module: AccountModule()),
     ModuleRoute(CarrinhoModule.routeName, module: CarrinhoModule()),
     ModuleRoute(SearchModule.routeName, module: SearchModule()),
-    ModuleRoute(NotificationsModule.routeName, module: NotificationsModule()),
     ModuleRoute(ProdutosModule.routeName, module: ProdutosModule()),
     ModuleRoute(VendasModule.routeName, module: VendasModule()),
     ModuleRoute(ComprasModule.routeName, module: ComprasModule()),
@@ -57,5 +56,6 @@ class AppModule extends Module {
     ModuleRoute(PagamentosModule.routeName, module: PagamentosModule()),
     ModuleRoute(FavoritosModule.routeName, module: FavoritosModule()),
     ModuleRoute(ListaComprasModule.routeName, module: ListaComprasModule()),
+    ModuleRoute(NotificacoesModule.routeName, module: NotificacoesModule()),
   ];
 }
