@@ -5,7 +5,6 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
 
 class BearerInterceptor extends InterceptorsWrapper {
   @override
@@ -16,19 +15,6 @@ class BearerInterceptor extends InterceptorsWrapper {
       var token = await authService.getCurrentToken();
       var headerAuth = genToken(token!.accessToken);
       options.headers['Authorization'] = headerAuth;
-    }
-
-    if (kDebugMode) {
-      debugPrint(json.encode("========Begin Request========"));
-      debugPrint(json.encode("BaseURL: ${options.baseUrl}"));
-      debugPrint(json.encode("Endpoint: ${options.path}"));
-      if (options.headers['Authorization'] != null) {
-        debugPrint("Authorization: ${options.headers['Authorization']}");
-      }
-      if (options.data != null) {
-        debugPrint("Payload ${tryEncode(options.data)}");
-      }
-      debugPrint(json.encode("========End Request========"));
     }
 
     super.onRequest(options, handler);
@@ -51,7 +37,7 @@ class BearerInterceptor extends InterceptorsWrapper {
             },
             (tokenModel) async {
               if (kDebugMode) {
-                debugPrint(json.encode("========Refresh Token========"));
+                debugPrint(json.encode("========Success Refresh Token========"));
                 debugPrint("New Token: ${tokenModel.accessToken}");
               }
 
@@ -77,27 +63,6 @@ class BearerInterceptor extends InterceptorsWrapper {
     } catch (e) {
       authService.logout();
     }
-  }
-
-  @override
-  void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) {
-    if (kDebugMode) {
-      debugPrint(json.encode("========Begin Response========"));
-      if (response.data != null) {
-        debugPrint("Payload ${json.encode(response.data)}");
-      }
-    }
-
-    super.onResponse(response, handler);
-
-    if (kDebugMode) {
-      debugPrint(json.encode("========End Response========"));
-    }
-
-    return;
   }
 
   String genToken(String token) {

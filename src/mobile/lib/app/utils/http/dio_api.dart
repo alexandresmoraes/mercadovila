@@ -8,5 +8,6 @@ class DioApi extends DioForNative {
   DioApi(BaseOptions options) : super(options) {
     interceptors.add(BearerInterceptor());
     interceptors.add(ErrorInterceptor());
+    interceptors.add(LogInterceptor());
   }
 }
