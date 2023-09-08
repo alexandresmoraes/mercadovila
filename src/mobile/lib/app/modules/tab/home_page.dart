@@ -268,7 +268,7 @@ class HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          Modular.to.pushNamed('/notifications/');
+                          Modular.to.pushNamed('/notificacoes/');
                         },
                         icon: Modular.get<ThemeStore>().isDarkModeEnable
                             ? Image.asset('assets/notificationIcon_white.png')

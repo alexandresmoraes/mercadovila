@@ -25,9 +25,12 @@ namespace Catalogo.API.Config
       services.AddEndpointsApiExplorer();
       services.UseMongoDb(configuration);
       services.AddOpenApi();
+
       services.AddSingleton<ProdutoRepository>();
       services.AddSingleton<CarrinhoItemRepository>();
       services.AddSingleton<FavoritoItemRepository>();
+      services.AddSingleton<NotificacoesRepository>();
+
       services.Configure<ApiBehaviorOptions>(options =>
       {
         options.SuppressMapClientErrors = true;

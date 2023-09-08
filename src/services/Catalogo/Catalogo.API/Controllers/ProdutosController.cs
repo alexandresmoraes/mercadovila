@@ -78,7 +78,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // POST api/produtos    
     [HttpPost]
-    [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProdutoResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -88,7 +88,7 @@ namespace Catalogo.API.Controllers
       if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, null);
-      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
+      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");      
 
       var produto = new Produto
       {
@@ -119,25 +119,26 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
     {
+      var produto = await _produtoRepository.GetAsync(id);
+
+      if (produto is null)
+        return Result.NotFound();
+
       var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
       if (isExistPorNome) return Result.Fail("Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
       if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
-
-      var produto = new Produto
-      {
-        Id = id,
-        Nome = produtoModel.Nome!,
-        Descricao = produtoModel.Descricao!,
-        ImageUrl = produtoModel.ImageUrl!,
-        Preco = produtoModel.Preco!,
-        UnidadeMedida = produtoModel.UnidadeMedida!,
-        CodigoBarras = produtoModel.CodigoBarras!,
-        EstoqueAlvo = produtoModel.EstoqueAlvo,
-        Estoque = produtoModel.Estoque,
-        IsAtivo = produtoModel.IsAtivo
-      };
+     
+      produto.Nome = produtoModel.Nome!;
+      produto.Descricao = produtoModel.Descricao!;
+      produto.ImageUrl = produtoModel.ImageUrl!;
+      produto.Preco = produtoModel.Preco!;
+      produto.UnidadeMedida = produtoModel.UnidadeMedida!;
+      produto.CodigoBarras = produtoModel.CodigoBarras!;
+      produto.EstoqueAlvo = produtoModel.EstoqueAlvo;
+      produto.Estoque = produtoModel.Estoque;
+      produto.IsAtivo = produtoModel.IsAtivo;
 
       await _produtoRepository.UpdateAsync(produto);
 
@@ -164,8 +165,8 @@ namespace Catalogo.API.Controllers
       if (!validation)
         return result!;
 
-      var produtoImagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
-      string filename = await _fileUtils.SaveFile(file!, produtoImagePath);
+      var imagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
+      string filename = await _fileUtils.SaveFile(file!, imagePath);
 
       return Result.Ok(new ImageUploadResponseModel(filename));
     }
@@ -179,9 +180,9 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DownloadImageAsync([FromRoute] string filename)
     {
-      var produtoImagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
+      var imagePath = _configuration["ImagesSettings:ProdutoImagePath"] ?? "wwwroot/images/produtos";
       var currentDirectory = Directory.GetCurrentDirectory();
-      var fullFilename = Path.Combine(currentDirectory, produtoImagePath, filename);
+      var fullFilename = Path.Combine(currentDirectory, imagePath, filename);
 
       if (System.IO.File.Exists(fullFilename))
       {

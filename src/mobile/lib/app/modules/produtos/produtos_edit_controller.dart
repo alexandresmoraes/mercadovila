@@ -14,9 +14,6 @@ abstract class ProdutosEditControllerBase with Store {
   String? id;
 
   @observable
-  bool isFotoAlterada = false;
-
-  @observable
   String? imagePath;
   @action
   void setImagePath(String v) {
@@ -250,7 +247,7 @@ abstract class ProdutosEditControllerBase with Store {
         var result = await produtosRepository.uploadImageProdutos(imagePath!);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
-            GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+            GlobalSnackbar.error('Tamanho máximo da imagem é 8MB!');
             isSaving = false;
           }
         }, (response) async {
