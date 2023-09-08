@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 
-class LogInterceptor extends InterceptorsWrapper {
+class CustomLogInterceptor extends InterceptorsWrapper {
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (kDebugMode) {

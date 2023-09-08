@@ -5,6 +5,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
+import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
 import 'package:vilasesmo/app/utils/models/login_model.dart';
 import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
 import 'package:vilasesmo/app/utils/models/account_model.dart';
@@ -22,6 +23,7 @@ class AuthService implements IAuthService {
     dioWithoutJwt = Dio(Modular.get<BaseOptions>());
     dioWithoutJwt.interceptors.add(ErrorInterceptor());
     dioWithoutJwt.interceptors.add(LogInterceptor());
+    dioWithoutJwt.interceptors.add(CustomLogInterceptor());
     dio = Modular.get<DioForNative>();
   }
 
