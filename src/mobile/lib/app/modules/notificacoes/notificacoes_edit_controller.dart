@@ -85,7 +85,7 @@ abstract class NotificacoesEditControllerBase with Store {
 
     titulo = notificacaoModel!.titulo;
     mensagem = notificacaoModel!.mensagem;
-    imagePath = notificacaoModel!.imageUrl;
+    imageUrl = notificacaoModel!.imageUrl;
 
     isLoading = false;
     return notificacaoModel!;

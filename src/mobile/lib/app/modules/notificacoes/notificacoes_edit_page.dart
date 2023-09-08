@@ -263,6 +263,8 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                           padding: const EdgeInsets.only(),
                           child: Observer(builder: (_) {
                             return TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 8,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                               initialValue: _controller.mensagem,
                               onChanged: _controller.setMensagem,

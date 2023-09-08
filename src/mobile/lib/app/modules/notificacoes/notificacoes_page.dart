@@ -29,18 +29,6 @@ class NotificacoesPageState extends State<NotificacoesPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            onTap: () {
-              Modular.to.pop();
-            },
-            child: const Align(
-              alignment: Alignment.center,
-              child: Icon(MdiIcons.arrowLeft),
-            ),
-          ),
           centerTitle: true,
           title: const Text("Notificações"),
           actions: [
