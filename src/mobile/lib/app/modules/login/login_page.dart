@@ -8,6 +8,7 @@ import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/models/login_model.dart';
 import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class LoginPageState extends State<LoginPage> {
 
   final passwordController = TextEditingController();
 
-  bool isloading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -108,19 +109,6 @@ class LoginPageState extends State<LoginPage> {
                 icon: const Icon(MdiIcons.arrowLeft, color: Colors.white),
               ),
             ),
-            // Positioned(
-            //   top: MediaQuery.of(context).size.height * 0.07,
-            //   // left: MediaQuery.of(context).size.width / 4,
-            //   child: SizedBox(
-            //     height: MediaQuery.of(context).size.height * 0.50,
-            //     width: MediaQuery.of(context).size.width,
-            //     child: Text(
-            //       'Login',
-            //       textAlign: TextAlign.center,
-            //       style: Theme.of(context).primaryTextTheme.displaySmall,
-            //     ),
-            //   ),
-            // ),
             Positioned(
               // top: 50,
               // left: MediaQuery.of(context).size.width / 8,
@@ -153,7 +141,8 @@ class LoginPageState extends State<LoginPage> {
             Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
               height: MediaQuery.of(context).size.height * 0.60,
               width: MediaQuery.of(context).size.width,
@@ -219,27 +208,39 @@ class LoginPageState extends State<LoginPage> {
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
                           onPressed: () async {
-                            setState(() {
-                              animationType = 'hands_down';
-                            });
+                            try {
+                              setState(() {
+                                animationType = 'hands_down';
+                                isLoading = true;
+                              });
 
-                            var authService = Modular.get<IAuthService>();
+                              var authService = Modular.get<IAuthService>();
 
-                            var result = await authService.login(LoginModel(
-                              usernameOrEmail: _controller.username!,
-                              password: _controller.password,
-                            ));
+                              var result = await authService.login(LoginModel(
+                                usernameOrEmail: _controller.username!,
+                                password: _controller.password,
+                              ));
 
-                            result.fold((resultFail) {
-                              var message = resultFail.getErrorNotProperty();
-                              if (message.isNotEmpty) GlobalSnackbar.error(message);
-                            }, (r) async {
-                              await authService.setCurrentToken(r);
-                              Modular.get<AccountStore>().setAccount(await authService.me());
-                              Modular.to.pushReplacementNamed(TabModule.routeName);
-                            });
+                              await result.fold((resultFail) {
+                                var message = resultFail.getErrorNotProperty();
+                                if (message.isNotEmpty) GlobalSnackbar.error(message);
+                              }, (r) async {
+                                await authService.setCurrentToken(r);
+                                Modular.get<AccountStore>().setAccount(await authService.me());
+                                Modular.to.pushReplacementNamed(TabModule.routeName);
+                              });
+                            } finally {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
                           },
-                          child: const Text('Login')),
+                          child: isLoading
+                              ? const CircularProgress(
+                                  width: 21,
+                                  height: 21,
+                                )
+                              : const Text('Login')),
                     ),
                     // Padding(
                     //   padding: const EdgeInsets.only(top: 25),

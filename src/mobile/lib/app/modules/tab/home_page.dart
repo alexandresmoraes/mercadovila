@@ -350,7 +350,7 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Todos',
+                      'Novos',
                       style: Theme.of(context).primaryTextTheme.headlineSmall,
                     ),
                     InkWell(
@@ -362,7 +362,7 @@ class HomePageState extends State<HomePage> {
                         // );
                       },
                       child: Text(
-                        'abrir',
+                        'todos',
                         style: Theme.of(context).primaryTextTheme.displayLarge,
                       ),
                     )
@@ -450,39 +450,6 @@ class HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       'Últimos vendidos',
-                      style: Theme.of(context).primaryTextTheme.headlineSmall,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => ProductListScreen(a: widget.analytics, o: widget.observer),
-                        //   ),
-                        // );
-                      },
-                      child: Text(
-                        'todos',
-                        style: Theme.of(context).primaryTextTheme.displayLarge,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 210,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: _topSellingWidgetList(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Novos",
                       style: Theme.of(context).primaryTextTheme.headlineSmall,
                     ),
                     InkWell(
