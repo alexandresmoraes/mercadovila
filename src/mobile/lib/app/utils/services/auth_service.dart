@@ -69,7 +69,7 @@ class AuthService implements IAuthService {
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel) async {
     try {
       var response =
-          await dio.post('/api/auth/refresh-token', data: FormData.fromMap({'refreshToken': refreshTokenModel}));
+          await dioWithoutJwt.post('/api/auth/refresh-token', data: jsonEncode({'refreshToken': refreshTokenModel}));
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
