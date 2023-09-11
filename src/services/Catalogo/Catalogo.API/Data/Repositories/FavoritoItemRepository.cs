@@ -95,7 +95,10 @@ namespace Catalogo.API.Data.Repositories
           { "IsAtivo", "$produto.IsAtivo" },
         });
 
-      var pipeline = new[] { lookupStage, unwindStage, matchStage, projectStage };
+      var skipStage = new BsonDocument("$skip", start);
+      var limitStage = new BsonDocument("$limit", query.limit);
+
+      var pipeline = new[] { lookupStage, unwindStage, matchStage, projectStage, skipStage, limitStage };
 
       var aggregation = await Collection.Aggregate<FavoritoItemDto>(pipeline).ToListAsync();
 

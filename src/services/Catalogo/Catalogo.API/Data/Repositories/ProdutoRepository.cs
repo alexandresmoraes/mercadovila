@@ -169,7 +169,10 @@ namespace Catalogo.API.Data.Repositories
           { "IsAtivo", "$produto.IsAtivo" },
         });
 
-      var pipeline = new[] { lookupStage, unwindStage, matchStage, projectStage };
+      var skipStage = new BsonDocument("$skip", start);
+      var limitStage = new BsonDocument("$limit", query.limit);
+
+      var pipeline = new[] { lookupStage, unwindStage, matchStage, projectStage, skipStage, limitStage };
       var aggregation = await _favoriteItemRepository.Collection.Aggregate<CatalogoDto>(pipeline).ToListAsync();
 
       var count = await _favoriteItemRepository.Collection.CountDocumentsAsync(Builders<FavoritoItem>.Filter.Eq(_ => _.UserId, userId));
