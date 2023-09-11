@@ -87,6 +87,6 @@ services:
       image: nginx
       restart: always
       volumes:
-          - ${NGINX_DATA}:/etc/nginx/nginx.conf:ro
+          - ${NGINX_CONF}:/etc/nginx/nginx.conf:ro
       ports:
           - ${NGINX_PORT}:80

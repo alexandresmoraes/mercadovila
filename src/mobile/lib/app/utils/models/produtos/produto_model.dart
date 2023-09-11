@@ -7,7 +7,6 @@ class ProdutoModel {
     required this.unidadeMedida,
     required this.codigoBarras,
     required this.estoqueAlvo,
-    required this.estoque,
     required this.isAtivo,
   });
   String? id;
@@ -18,7 +17,6 @@ class ProdutoModel {
   late final String unidadeMedida;
   late final String codigoBarras;
   late final int estoqueAlvo;
-  late final int estoque;
   late final bool isAtivo;
 
   Map<String, dynamic> toJson() {
@@ -30,7 +28,6 @@ class ProdutoModel {
     data['unidadeMedida'] = unidadeMedida;
     data['codigoBarras'] = codigoBarras;
     data['estoqueAlvo'] = estoqueAlvo;
-    data['estoque'] = estoque;
     data['isAtivo'] = isAtivo;
     return data;
   }
@@ -44,7 +41,6 @@ class ProdutoModel {
     unidadeMedida = json['unidadeMedida'];
     codigoBarras = json['codigoBarras'];
     estoqueAlvo = json['estoqueAlvo'];
-    estoque = json['estoque'];
     isAtivo = json['isAtivo'];
   }
 }

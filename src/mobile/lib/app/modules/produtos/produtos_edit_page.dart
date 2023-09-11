@@ -39,34 +39,39 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
   }
 
   _cropImage(filePath) async {
-    var croppedImage = await ImageCropper().cropImage(
-        sourcePath: filePath,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        aspectRatioPresets: CropAspectRatioPreset.values,
-        compressQuality: 100,
-        aspectRatio: const CropAspectRatio(
-          ratioX: 1,
-          ratioY: 1,
-        ),
-        cropStyle: CropStyle.circle,
-        compressFormat: ImageCompressFormat.png,
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Recortar',
-              initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: true,
-              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
-          IOSUiSettings(
-            title: 'Recortar',
-            minimumAspectRatio: 1.0,
-            aspectRatioLockEnabled: true,
+    if (Theme.of(context).platform == TargetPlatform.android || Theme.of(context).platform == TargetPlatform.iOS) {
+      var croppedImage = await ImageCropper().cropImage(
+          sourcePath: filePath,
+          maxWidth: 1920,
+          maxHeight: 1080,
+          aspectRatioPresets: CropAspectRatioPreset.values,
+          compressQuality: 100,
+          aspectRatio: const CropAspectRatio(
+            ratioX: 1,
+            ratioY: 1,
           ),
-          WebUiSettings(context: context)
-        ]);
-    if (croppedImage != null) {
-      _controller.setImagePath(croppedImage.path);
+          cropStyle: CropStyle.circle,
+          compressFormat: ImageCompressFormat.png,
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Recortar',
+                initAspectRatio: CropAspectRatioPreset.square,
+                lockAspectRatio: true,
+                toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+                toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
+            IOSUiSettings(
+              title: 'Recortar',
+              minimumAspectRatio: 1.0,
+              aspectRatioLockEnabled: true,
+            ),
+            WebUiSettings(context: context)
+          ]);
+      if (croppedImage != null) {
+        _controller.setImagePath(croppedImage.path);
+        Modular.to.pop();
+      }
+    } else {
+      _controller.setImagePath(filePath);
       Modular.to.pop();
     }
   }
@@ -75,9 +80,8 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(isNullorEmpty(widget.id) ? "Criando produto" : "Editando produto"),
@@ -114,16 +118,20 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 60,
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.transparent,
                             child: Observer(builder: (_) {
                               if (!isNullorEmpty(_controller.imagePath)) {
-                                return CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: Image.file(
-                                    File(
-                                      _controller.imagePath!,
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                    image: DecorationImage(
+                                      image: Image.file(
+                                        File(
+                                          _controller.imagePath!,
+                                        ),
+                                      ).image,
                                     ),
-                                  ).image,
+                                  ),
                                 );
                               } else if (!isNullorEmpty(_controller.imageUrl)) {
                                 return CachedNetworkImage(
@@ -136,12 +144,15 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                     radius: 100,
                                     backgroundImage: AssetImage('assets/person.png'),
                                   ),
-                                  imageUrl:
-                                      '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
+                                  imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
                                   imageBuilder: (context, imageProvider) {
-                                    return CircleAvatar(
-                                      radius: 100,
-                                      backgroundImage: imageProvider,
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                        ),
+                                      ),
                                     );
                                   },
                                 );
@@ -209,9 +220,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                         },
                         child: Observer(builder: (_) {
                           return Text(
-                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
-                                ? 'Escolher imagem'
-                                : 'Trocar imagem',
+                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath) ? 'Escolher imagem' : 'Trocar imagem',
                             style: Theme.of(context).primaryTextTheme.displayLarge,
                           );
                         }),
@@ -379,30 +388,6 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                 hintText: '5',
                                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                 errorText: _controller.getEstoqueAlvoError,
-                              ),
-                            );
-                          }),
-                        ),
-                        Text(
-                          "Estoque",
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
-                          margin: const EdgeInsets.only(top: 5, bottom: 15),
-                          padding: const EdgeInsets.only(),
-                          child: Observer(builder: (_) {
-                            return TextFormField(
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              initialValue: _controller.estoque,
-                              onChanged: _controller.setEstoque,
-                              decoration: InputDecoration(
-                                fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                    ? Theme.of(context).inputDecorationTheme.fillColor
-                                    : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: '3',
-                                contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                errorText: _controller.getEstoqueError,
                               ),
                             );
                           }),

@@ -201,10 +201,12 @@ class AccountsPageState extends State<AccountsPage> {
                             placeholder: (context, url) => CircularProgress(
                               color: Theme.of(context).primaryColorLight,
                             ),
-                            errorWidget: (context, url, error) => const CircleAvatar(
-                              radius: 21,
-                              backgroundImage: AssetImage('assets/person.png'),
-                            ),
+                            errorWidget: (context, url, error) {
+                              return const CircleAvatar(
+                                radius: 21,
+                                backgroundImage: AssetImage('assets/person.png'),
+                              );
+                            },
                             imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.fotoUrl!}',
                             imageBuilder: (context, imageProvider) {
                               return CircleAvatar(

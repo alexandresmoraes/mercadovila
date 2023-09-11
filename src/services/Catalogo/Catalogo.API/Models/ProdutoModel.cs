@@ -30,9 +30,6 @@ namespace Catalogo.API.Models
     [Range(0, 999, ErrorMessage = "O número deve estar entre 0 e 999.")]
     public int EstoqueAlvo { get; set; }
 
-    [Required(ErrorMessage = "Estoque do produto está vazio.")]
-    [Range(0, 999, ErrorMessage = "O número deve estar entre 0 e 999.")]
-    public int Estoque { get; set; }
     public bool IsAtivo { get; set; }
   }
 

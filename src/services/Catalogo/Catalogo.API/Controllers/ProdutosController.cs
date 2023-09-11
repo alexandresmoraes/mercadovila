@@ -56,7 +56,6 @@ namespace Catalogo.API.Controllers
         UnidadeMedida = produto.UnidadeMedida,
         CodigoBarras = produto.CodigoBarras,
         EstoqueAlvo = produto.EstoqueAlvo,
-        Estoque = produto.Estoque,
         IsAtivo = produto.IsAtivo
       });
     }
@@ -88,7 +87,7 @@ namespace Catalogo.API.Controllers
       if (isExistPorNome) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, null);
-      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");      
+      if (isExistPorCodigoBarras) return Result.Fail<ProdutoResponseModel>("Produto já existente com o mesmo código de barras.");
 
       var produto = new Produto
       {
@@ -99,7 +98,6 @@ namespace Catalogo.API.Controllers
         UnidadeMedida = produtoModel.UnidadeMedida!,
         CodigoBarras = produtoModel.CodigoBarras!,
         EstoqueAlvo = produtoModel.EstoqueAlvo,
-        Estoque = produtoModel.Estoque,
         IsAtivo = produtoModel.IsAtivo
       };
 
@@ -129,7 +127,7 @@ namespace Catalogo.API.Controllers
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
       if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
-     
+
       produto.Nome = produtoModel.Nome!;
       produto.Descricao = produtoModel.Descricao!;
       produto.ImageUrl = produtoModel.ImageUrl!;
@@ -137,7 +135,6 @@ namespace Catalogo.API.Controllers
       produto.UnidadeMedida = produtoModel.UnidadeMedida!;
       produto.CodigoBarras = produtoModel.CodigoBarras!;
       produto.EstoqueAlvo = produtoModel.EstoqueAlvo;
-      produto.Estoque = produtoModel.Estoque;
       produto.IsAtivo = produtoModel.IsAtivo;
 
       await _produtoRepository.UpdateAsync(produto);

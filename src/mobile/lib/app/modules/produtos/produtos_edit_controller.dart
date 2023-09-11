@@ -122,22 +122,6 @@ abstract class ProdutosEditControllerBase with Store {
   }
 
   @observable
-  String? estoque;
-  @observable
-  String? _estoqueApiError;
-  @computed
-  String? get getEstoqueError => !isNullorEmpty(_estoqueAlvoApiError)
-      ? _estoqueApiError
-      : isNullorEmpty(estoque)
-          ? 'Estoque do produto não pode ser vazio.'
-          : null;
-  @action
-  void setEstoque(String? v) {
-    estoque = v;
-    _estoqueApiError = null;
-  }
-
-  @observable
   bool isAtivo = false;
   @action
   void setIsAtivo(bool v) => isAtivo = v;
@@ -162,8 +146,7 @@ abstract class ProdutosEditControllerBase with Store {
         isNullorEmpty(getPrecoError) &&
         isNullorEmpty(getUnidadeMedidaError) &&
         isNullorEmpty(getCodigoBarrasError) &&
-        isNullorEmpty(getEstoqueAlvoError) &&
-        isNullorEmpty(getEstoqueError);
+        isNullorEmpty(getEstoqueAlvoError);
   }
 
   ProdutoModel? produtoModel;
@@ -184,7 +167,6 @@ abstract class ProdutosEditControllerBase with Store {
         unidadeMedida: "",
         codigoBarras: "",
         estoqueAlvo: 0,
-        estoque: 0,
         isAtivo: true,
       );
     }
@@ -196,7 +178,6 @@ abstract class ProdutosEditControllerBase with Store {
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
     estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "" : produtoModel!.estoqueAlvo.toString();
-    estoque = produtoModel!.estoque == 0 ? "" : produtoModel!.estoque.toString();
     isAtivo = produtoModel!.isAtivo;
 
     isLoading = false;
@@ -212,7 +193,6 @@ abstract class ProdutosEditControllerBase with Store {
       unidadeMedida: unidadeMedida!,
       codigoBarras: codigoBarras!,
       estoqueAlvo: int.parse(estoqueAlvo!),
-      estoque: int.parse(estoque!),
       isAtivo: isAtivo,
     );
 
@@ -273,7 +253,6 @@ abstract class ProdutosEditControllerBase with Store {
       _unidadeMedidaApiError = resultFail.getErrorByProperty('UnidadeMedida');
       _codigoBarrasApiError = resultFail.getErrorByProperty('CodigoBarras');
       _estoqueAlvoApiError = resultFail.getErrorByProperty('EstoqueAlvo');
-      _estoqueApiError = resultFail.getErrorByProperty('Estoque');
 
       var message = resultFail.getErrorNotProperty();
       if (message.isNotEmpty) GlobalSnackbar.error(message);

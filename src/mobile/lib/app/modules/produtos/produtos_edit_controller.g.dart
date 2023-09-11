@@ -58,13 +58,6 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
           Computed<String?>(() => super.getEstoqueAlvoError,
               name: 'ProdutosEditControllerBase.getEstoqueAlvoError'))
       .value;
-  Computed<String?>? _$getEstoqueErrorComputed;
-
-  @override
-  String? get getEstoqueError => (_$getEstoqueErrorComputed ??=
-          Computed<String?>(() => super.getEstoqueError,
-              name: 'ProdutosEditControllerBase.getEstoqueError'))
-      .value;
   Computed<bool>? _$isValidComputed;
 
   @override
@@ -302,38 +295,6 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
     });
   }
 
-  late final _$estoqueAtom =
-      Atom(name: 'ProdutosEditControllerBase.estoque', context: context);
-
-  @override
-  String? get estoque {
-    _$estoqueAtom.reportRead();
-    return super.estoque;
-  }
-
-  @override
-  set estoque(String? value) {
-    _$estoqueAtom.reportWrite(value, super.estoque, () {
-      super.estoque = value;
-    });
-  }
-
-  late final _$_estoqueApiErrorAtom = Atom(
-      name: 'ProdutosEditControllerBase._estoqueApiError', context: context);
-
-  @override
-  String? get _estoqueApiError {
-    _$_estoqueApiErrorAtom.reportRead();
-    return super._estoqueApiError;
-  }
-
-  @override
-  set _estoqueApiError(String? value) {
-    _$_estoqueApiErrorAtom.reportWrite(value, super._estoqueApiError, () {
-      super._estoqueApiError = value;
-    });
-  }
-
   late final _$isAtivoAtom =
       Atom(name: 'ProdutosEditControllerBase.isAtivo', context: context);
 
@@ -497,17 +458,6 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
   }
 
   @override
-  void setEstoque(String? v) {
-    final _$actionInfo = _$ProdutosEditControllerBaseActionController
-        .startAction(name: 'ProdutosEditControllerBase.setEstoque');
-    try {
-      return super.setEstoque(v);
-    } finally {
-      _$ProdutosEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setIsAtivo(bool v) {
     final _$actionInfo = _$ProdutosEditControllerBaseActionController
         .startAction(name: 'ProdutosEditControllerBase.setIsAtivo');
@@ -529,7 +479,6 @@ preco: ${preco},
 unidadeMedida: ${unidadeMedida},
 codigoBarras: ${codigoBarras},
 estoqueAlvo: ${estoqueAlvo},
-estoque: ${estoque},
 isAtivo: ${isAtivo},
 isSaving: ${isSaving},
 isLoading: ${isLoading},
@@ -542,7 +491,6 @@ getPrecoError: ${getPrecoError},
 getUnidadeMedidaError: ${getUnidadeMedidaError},
 getCodigoBarrasError: ${getCodigoBarrasError},
 getEstoqueAlvoError: ${getEstoqueAlvoError},
-getEstoqueError: ${getEstoqueError},
 isValid: ${isValid}
     ''';
   }
