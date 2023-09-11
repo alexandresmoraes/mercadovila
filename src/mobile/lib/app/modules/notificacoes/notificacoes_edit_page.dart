@@ -360,9 +360,37 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                     child: Observer(builder: (_) {
                                       return TextButton(
                                         onPressed: () async {
-                                          if (!_controller.isDeleting && !_controller.isSaving && _controller.isValid) {
-                                            await _controller.delete();
-                                          }
+                                          showCupertinoModalPopup<void>(
+                                            context: context,
+                                            builder: (BuildContext context) => CupertinoAlertDialog(
+                                              title: const Text('Atenção!'),
+                                              content: const Text('Deseja excluir a notificação?'),
+                                              actions: <CupertinoDialogAction>[
+                                                CupertinoDialogAction(
+                                                  isDefaultAction: true,
+                                                  onPressed: () {},
+                                                  child: const Text(
+                                                    'Não',
+                                                    style: TextStyle(
+                                                      color: Colors.blue,
+                                                    ),
+                                                  ),
+                                                ),
+                                                CupertinoDialogAction(
+                                                  isDestructiveAction: true,
+                                                  onPressed: () async {
+                                                    Modular.to.pop();
+                                                    if (!_controller.isDeleting &&
+                                                        !_controller.isSaving &&
+                                                        _controller.isValid) {
+                                                      await _controller.delete();
+                                                    }
+                                                  },
+                                                  child: const Text('Sim'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
                                         child: _controller.isDeleting
                                             ? const CircularProgress(
