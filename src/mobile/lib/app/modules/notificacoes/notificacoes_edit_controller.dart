@@ -147,7 +147,7 @@ abstract class NotificacoesEditControllerBase with Store {
 
   Future delete() async {
     try {
-      isDeleting = false;
+      isDeleting = true;
 
       var notificacoesRepository = Modular.get<INotificacoesRepository>();
       var result = await notificacoesRepository.deleteNotificacao(id!);

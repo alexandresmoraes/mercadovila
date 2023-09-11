@@ -368,7 +368,9 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                               actions: <CupertinoDialogAction>[
                                                 CupertinoDialogAction(
                                                   isDefaultAction: true,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Modular.to.pop();
+                                                  },
                                                   child: const Text(
                                                     'Não',
                                                     style: TextStyle(
