@@ -15,7 +15,7 @@ namespace Catalogo.API.Data.Entities
 
     public decimal Preco { get; set; }
 
-    public string UnidadeMedida { get; set; } = null!;    
+    public string UnidadeMedida { get; set; } = null!;
 
     public string CodigoBarras { get; set; } = null!;
 
@@ -27,7 +27,8 @@ namespace Catalogo.API.Data.Entities
 
     public int RatingCount { get; set; }
 
-    public DateTime? DataUltimaCompra { get; set; }
+    public DateTime? DataUltimaVenda { get; set; }
+    public int QuantidadeVendida { get; set; }
 
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 

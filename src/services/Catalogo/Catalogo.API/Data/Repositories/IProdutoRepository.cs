@@ -13,5 +13,10 @@ namespace Catalogo.API.Data.Repositories
     Task<PagedResult<ProdutoDto>> GetProdutosAsync(ProdutoQuery produtoQuery);
     Task<bool> ExisteProdutoPorNome(string nome, string? id);
     Task<bool> ExisteProdutoPorCodigoBarras(string codigoBarras, string? id);
+
+    Task<PagedResult<CatalogoDto>> GetProdutosNovosAsync(CatalogoQuery query);
+    Task<PagedResult<CatalogoDto>> GetProdutosMaisVendidosAsync(CatalogoQuery query);
+    Task<PagedResult<CatalogoDto>> GetProdutosFavoritosAsync(string userId, CatalogoQuery query);
+    Task<PagedResult<CatalogoDto>> GetProdutosUltimosVendidosAsync(CatalogoQuery query);
   }
 }

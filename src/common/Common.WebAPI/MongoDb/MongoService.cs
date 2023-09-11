@@ -16,6 +16,6 @@ namespace Common.WebAPI.MongoDb
       _collectionName = collectionName;
     }
 
-    protected IMongoCollection<T> Collection => _database.GetCollection<T>(_collectionName);
+    public IMongoCollection<T> Collection => _database.GetCollection<T>(_collectionName);
   }
 }

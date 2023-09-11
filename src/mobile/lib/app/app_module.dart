@@ -20,6 +20,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/http/dio_api.dart';
 import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 
 class AppModule extends Module {
@@ -39,6 +40,7 @@ class AppModule extends Module {
     BindInject((i) => DioApi(i.get<BaseOptions>()), isSingleton: true, isLazy: true),
     BindInject((i) => AuthService(), isSingleton: true, isLazy: true),
     BindInject((i) => AccountRepository(), isSingleton: true, isLazy: true),
+    BindInject((i) => CatalogoRepository(), isSingleton: true, isLazy: true),
   ];
 
   @override

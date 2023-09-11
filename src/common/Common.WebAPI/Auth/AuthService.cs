@@ -1,35 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 
 namespace Common.WebAPI.Auth
 {
-  public class AuthService<TIdentityUser, TKey> : IAuthService<TIdentityUser>
-    where TIdentityUser : IdentityUser<TKey>
-    where TKey : IEquatable<TKey>
+  public interface IAuthService
   {
-    private readonly UserManager<TIdentityUser> _userManager;
-    private readonly IHttpContextAccessor _accessor;
-    private readonly IOptions<AuthSettings> _settings;
+    string GetUserId();
+    string GetUserEmail();
+    bool IsAuthenticated();
+  }
 
-    public AuthService(UserManager<TIdentityUser> userManager, IHttpContextAccessor accessor, IOptions<AuthSettings> settings)
+  public class AuthService : IAuthService
+  {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AuthService(IHttpContextAccessor httpContextAccessor)
     {
-      _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-      _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
-      _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+      _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<int> GetFailedAccessAttempts(TIdentityUser user)
-      => _settings.Value.MaxFailedAccessAttempts - await _userManager.GetAccessFailedCountAsync(user);
+    public string GetUserEmail() => _httpContextAccessor.HttpContext?.User.GetUserEmail() ?? "";
 
-    public async Task<TIdentityUser?> GetUserByUsernameOrEmail(string usernameOrEmail)
-      => (await _userManager.FindByEmailAsync(usernameOrEmail)
-        ?? await _userManager.FindByNameAsync(usernameOrEmail))!;
+    public string GetUserId() => _httpContextAccessor.HttpContext?.User.GetUserId() ?? "";
 
-    public string GetUserEmail() => _accessor.HttpContext?.User.GetUserEmail() ?? "";
-
-    public string GetUserId() => _accessor.HttpContext?.User.GetUserId() ?? "";
-
-    public bool IsAuthenticated() => _accessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+    public bool IsAuthenticated() => _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
   }
 }

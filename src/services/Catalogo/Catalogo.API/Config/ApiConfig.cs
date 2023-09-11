@@ -30,6 +30,9 @@ namespace Catalogo.API.Config
       services.AddSingleton<CarrinhoItemRepository>();
       services.AddSingleton<FavoritoItemRepository>();
       services.AddSingleton<NotificacoesRepository>();
+      services.AddSingleton<FavoritoItemRepository>();
+
+      services.AddAuthServices();
 
       services.Configure<ApiBehaviorOptions>(options =>
       {

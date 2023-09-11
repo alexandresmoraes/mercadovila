@@ -14,16 +14,17 @@ namespace Catalogo.API.Data.Repositories
      : base(mongoClient, opt, "notificacoes")
     {
       Collection.Indexes.CreateOne(new CreateIndexModel<Notificacao>(
-        Builders<Notificacao>.IndexKeys.Descending(_ => _.DataCriacao)        
-      ));      
+        Builders<Notificacao>.IndexKeys.Descending(_ => _.DataCriacao)
+      ));
     }
 
     public async Task CreateAsync(Notificacao notificacao)
       => await Collection.InsertOneAsync(notificacao);
 
-    public async Task<bool> DeleteAsync(string id) {      
+    public async Task<bool> DeleteAsync(string id)
+    {
       var filter = Builders<Notificacao>.Filter.Eq(x => x.Id, id);
-      
+
       var result = await Collection.DeleteOneAsync(filter);
 
       return result.DeletedCount > 0;
@@ -34,7 +35,7 @@ namespace Catalogo.API.Data.Repositories
 
     public async Task<PagedResult<NotificacaoDto>> GetNotificacoesAsync(NotificacaoQuery notificacaoQuery)
     {
-      var filtro = Builders<Notificacao>.Filter.Empty;      
+      var filtro = Builders<Notificacao>.Filter.Empty;
 
       var start = (notificacaoQuery.page - 1) * notificacaoQuery.limit;
 
@@ -49,7 +50,7 @@ namespace Catalogo.API.Data.Repositories
         });
 
       var notificacoes = await Collection.Find(filtro)
-        .SortByDescending(n => n.DataCriacao)        
+        .SortByDescending(n => n.DataCriacao)
         .Skip((notificacaoQuery.page - 1) * notificacaoQuery.limit)
         .Limit(notificacaoQuery.limit)
         .Project(projections)

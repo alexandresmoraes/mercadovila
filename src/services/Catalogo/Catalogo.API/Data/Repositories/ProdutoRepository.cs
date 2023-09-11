@@ -12,7 +12,9 @@ namespace Catalogo.API.Data.Repositories
 {
   public class ProdutoRepository : MongoService<Produto>, IProdutoRepository
   {
-    public ProdutoRepository(IMongoClient mongoClient, IOptions<MongoDbSettings> opt)
+    private FavoritoItemRepository _favoriteItemRepository;
+
+    public ProdutoRepository(IMongoClient mongoClient, IOptions<MongoDbSettings> opt, FavoritoItemRepository favoriteItemRepository)
      : base(mongoClient, opt, "produtos")
     {
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
@@ -30,7 +32,7 @@ namespace Catalogo.API.Data.Repositories
       ));
 
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
-        Builders<Produto>.IndexKeys.Descending(_ => _.DataUltimaCompra)
+        Builders<Produto>.IndexKeys.Descending(_ => _.DataUltimaVenda)
       ));
 
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
@@ -48,6 +50,8 @@ namespace Catalogo.API.Data.Repositories
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
         Builders<Produto>.IndexKeys.Descending(_ => _.IsAtivo)
       ));
+
+      _favoriteItemRepository = favoriteItemRepository;
     }
 
     public async Task CreateAsync(Produto produto)
@@ -126,5 +130,143 @@ namespace Catalogo.API.Data.Repositories
 
     public async Task UpdateAsync(Produto produto)
       => await Collection.ReplaceOneAsync(p => p.Id == produto.Id, produto);
+
+    public async Task<PagedResult<CatalogoDto>> GetProdutosFavoritosAsync(string userId, CatalogoQuery query)
+    {
+      var start = (query.page - 1) * query.limit;
+
+      var lookupStage = new BsonDocument("$lookup",
+        new BsonDocument
+        {
+          { "from", "produtos" },
+          { "localField", "ProdutoId" },
+          { "foreignField", "_id" },
+          { "as", "produto" }
+        });
+
+      var unwindStage = new BsonDocument("$unwind", "$produto");
+
+      var matchStage = new BsonDocument
+      {
+        {
+          "$match",
+          new BsonDocument
+          {
+            { "UserId", userId }
+          }
+       }
+      };
+
+      var projectStage = new BsonDocument("$project",
+        new BsonDocument
+        {
+          { "Id", "$ProdutoId" },
+          { "Nome", "$produto.Nome" },
+          { "UnidadeMedida", "$produto.UnidadeMedida" },
+          { "ImageUrl", "$produto.ImageUrl" },
+          { "Estoque", "$produto.Estoque" },
+          { "Preco", "$produto.Preco" },
+          { "IsAtivo", "$produto.IsAtivo" },
+        });
+
+      var pipeline = new[] { lookupStage, unwindStage, matchStage, projectStage };
+      var aggregation = await _favoriteItemRepository.Collection.Aggregate<CatalogoDto>(pipeline).ToListAsync();
+
+      var count = await _favoriteItemRepository.Collection.CountDocumentsAsync(Builders<FavoritoItem>.Filter.Eq(_ => _.UserId, userId));
+
+      return new PagedResult<CatalogoDto>(start, query.limit, count, aggregation);
+    }
+
+    public async Task<PagedResult<CatalogoDto>> GetProdutosMaisVendidosAsync(CatalogoQuery catalogoQuery)
+    {
+      var filtro = Builders<Produto>.Filter.Ne(p => p.QuantidadeVendida, 0);
+      filtro &= Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
+
+      var start = (catalogoQuery.page - 1) * catalogoQuery.limit;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new CatalogoDto
+        {
+          Id = p.Id,
+          Nome = p.Nome,
+          ImageUrl = p.ImageUrl,
+          Preco = p.Preco,
+          UnidadeMedida = p.UnidadeMedida,
+          Estoque = p.Estoque,
+          IsAtivo = p.IsAtivo
+        });
+
+      var catalogo = await Collection.Find(filtro)
+        .SortByDescending(p => p.QuantidadeVendida)
+        .Skip((catalogoQuery.page - 1) * catalogoQuery.limit)
+        .Limit(catalogoQuery.limit)
+        .Project(projections)
+        .ToListAsync();
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return new PagedResult<CatalogoDto>(start, catalogoQuery.limit, count, catalogo);
+    }
+
+    public async Task<PagedResult<CatalogoDto>> GetProdutosNovosAsync(CatalogoQuery catalogoQuery)
+    {
+      var filtro = Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
+
+      var start = (catalogoQuery.page - 1) * catalogoQuery.limit;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new CatalogoDto
+        {
+          Id = p.Id,
+          Nome = p.Nome,
+          ImageUrl = p.ImageUrl,
+          Preco = p.Preco,
+          UnidadeMedida = p.UnidadeMedida,
+          Estoque = p.Estoque,
+          IsAtivo = p.IsAtivo
+        });
+
+      var catalogo = await Collection.Find(filtro)
+        .SortByDescending(p => p.DataCriacao)
+        .Skip((catalogoQuery.page - 1) * catalogoQuery.limit)
+        .Limit(catalogoQuery.limit)
+        .Project(projections)
+        .ToListAsync();
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return new PagedResult<CatalogoDto>(start, catalogoQuery.limit, count, catalogo);
+    }
+
+    public async Task<PagedResult<CatalogoDto>> GetProdutosUltimosVendidosAsync(CatalogoQuery catalogoQuery)
+    {
+      var filtro = Builders<Produto>.Filter.Ne(p => p.DataUltimaVenda, null);
+      filtro &= Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
+
+      var start = (catalogoQuery.page - 1) * catalogoQuery.limit;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new CatalogoDto
+        {
+          Id = p.Id,
+          Nome = p.Nome,
+          ImageUrl = p.ImageUrl,
+          Preco = p.Preco,
+          UnidadeMedida = p.UnidadeMedida,
+          Estoque = p.Estoque,
+          IsAtivo = p.IsAtivo
+        });
+
+      var catalogo = await Collection.Find(filtro)
+        .SortByDescending(p => p.DataUltimaVenda)
+        .Skip((catalogoQuery.page - 1) * catalogoQuery.limit)
+        .Limit(catalogoQuery.limit)
+        .Project(projections)
+        .ToListAsync();
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return new PagedResult<CatalogoDto>(start, catalogoQuery.limit, count, catalogo);
+    }
   }
 }

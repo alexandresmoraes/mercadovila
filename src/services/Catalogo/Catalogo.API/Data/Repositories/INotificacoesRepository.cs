@@ -1,5 +1,4 @@
-﻿using System;
-using Catalogo.API.Data.Dto;
+﻿using Catalogo.API.Data.Dto;
 using Catalogo.API.Data.Entities;
 using Catalogo.API.Data.Queries;
 using Common.WebAPI.Results;

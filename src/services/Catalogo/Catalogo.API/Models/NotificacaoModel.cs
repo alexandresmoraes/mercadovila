@@ -2,7 +2,7 @@
 
 namespace Catalogo.API.Models
 {
-  public class NotificacaoModel
+  public record NotificacaoModel
   {
     [Required(ErrorMessage = "Título da notificação está vazio.")]
     public string Titulo { get; set; } = null!;
@@ -10,7 +10,7 @@ namespace Catalogo.API.Models
     [Required(ErrorMessage = "Mensagem da notificação está vazio.")]
     public string Mensagem { get; set; } = null!;
 
-    public string? ImageUrl { get; set; }    
+    public string? ImageUrl { get; set; }
   }
 
   public record NotificacaoResponseModel

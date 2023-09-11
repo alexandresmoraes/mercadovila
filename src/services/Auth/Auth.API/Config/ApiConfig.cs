@@ -39,6 +39,8 @@ namespace Auth.API.Config
       services.AddUnitOfWorkPostgres();
       services.AddUtils();
 
+      services.AddAuthServices();
+
       services.AddMvc(opt =>
       {
 #if DEBUG

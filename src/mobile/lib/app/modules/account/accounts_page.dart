@@ -123,19 +123,21 @@ class AccountsPageState extends State<AccountsPage> {
         },
         cast: AccountDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
-        emptyBuilder: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/empty_list.png',
-                width: 300,
-                height: 300,
-              ),
-            ],
-          ),
-        ),
+        emptyBuilder: (_) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/empty_list.png',
+                  width: 300,
+                  height: 300,
+                ),
+              ],
+            ),
+          );
+        },
         itemBuilder: (context, item, index) {
           return InkWell(
             onTap: () async {
