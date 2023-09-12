@@ -47,7 +47,6 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
   @override
   void dispose() {
-    _pagingController?.dispose();
     super.dispose();
   }
 
@@ -78,7 +77,8 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       child: PagedListView.separated(
         scrollDirection: widget.scrollDirection ?? Axis.vertical,
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          firstPageProgressIndicatorBuilder: (context) =>
+              widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
           itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
           newPageErrorIndicatorBuilder: (context) {
