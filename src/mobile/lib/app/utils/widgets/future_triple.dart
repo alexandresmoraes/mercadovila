@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class FutureTriple<T> extends StatelessWidget {
   final Future<T> future;
-  final Widget data;
+  final Widget Function(BuildContext, AsyncSnapshot<T>) data;
   final Widget error;
   final Widget loading;
 
@@ -20,7 +20,7 @@ class FutureTriple<T> extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return data;
+          return data(context, snapshot);
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return loading;
         } else if (snapshot.hasError) {

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Catalogo.API.Controllers
 {
+  /// <summary>
+  /// Adiciona, remove e lista os favoritos
+  /// </summary>
   [Route("api/favoritos")]
   [ApiController]
   [Authorize]
@@ -35,9 +38,9 @@ namespace Catalogo.API.Controllers
       var userId = _authService.GetUserId();
 
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
-      if (existeFavorito) return Result.Fail("Favorito já existente.");
 
-      await _favoritosRepository.CreateAsync(userId, produtoId);
+      if (!existeFavorito)
+        await _favoritosRepository.CreateAsync(userId, produtoId);
 
       return Result.Ok();
     }
@@ -56,9 +59,8 @@ namespace Catalogo.API.Controllers
       var userId = _authService.GetUserId();
 
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
-      if (!existeFavorito) return Result.Fail("Favorito não existe.");
-
-      await _favoritosRepository.DeleteAsync(userId, produtoId);
+      if (existeFavorito)
+        await _favoritosRepository.DeleteAsync(userId, produtoId);
 
       return Result.Ok();
     }

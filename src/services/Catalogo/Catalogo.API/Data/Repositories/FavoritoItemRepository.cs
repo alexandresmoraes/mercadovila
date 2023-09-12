@@ -15,8 +15,8 @@ namespace Catalogo.API.Data.Repositories
      : base(mongoClient, opt, "favoritos")
     {
       var indexKeysDefinition = Builders<FavoritoItem>.IndexKeys
-        .Text(_ => _.UserId)
-        .Text(_ => _.ProdutoId);
+        .Ascending(_ => _.UserId)
+        .Ascending(_ => _.ProdutoId);
       var indexOptions = new CreateIndexOptions { Unique = true };
       var indexModel = new CreateIndexModel<FavoritoItem>(indexKeysDefinition, indexOptions);
 

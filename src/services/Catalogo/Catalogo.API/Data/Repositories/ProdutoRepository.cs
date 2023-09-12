@@ -271,5 +271,39 @@ namespace Catalogo.API.Data.Repositories
 
       return new PagedResult<CatalogoDto>(start, catalogoQuery.limit, count, catalogo);
     }
+
+    public async Task<ProdutoDetailDto?> GetProdutoDetailAsync(string userId, string produtoId)
+    {
+      var filtro = Builders<Notificacao>.Filter.Empty;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new ProdutoDetailDto
+        {
+          Id = p.Id,
+          ImageUrl = p.ImageUrl,
+          Nome = p.Nome,
+          Descricao = p.Descricao,
+          Preco = p.Preco,
+          UnidadeMedida = p.UnidadeMedida,
+          CodigoBarras = p.CodigoBarras,
+          Rating = p.Rating,
+          RatingCount = p.RatingCount,
+          Estoque = p.Estoque,
+          IsAtivo = p.IsAtivo
+        });
+
+      var produtoDetailDto = await Collection
+        .Find(p => p.Id == produtoId)
+        .Project(projections)
+        .SingleOrDefaultAsync();
+
+      if (produtoDetailDto is not null)
+      {
+        produtoDetailDto.IsFavorito = _favoriteItemRepository
+          .Collection.Find(f => f.ProdutoId == produtoId && f.UserId == userId).Any();
+      }
+
+      return produtoDetailDto;
+    }
   }
 }
