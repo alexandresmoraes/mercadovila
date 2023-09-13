@@ -2,7 +2,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
 
 part 'produtos_detail_controller.g.dart';
 
@@ -16,6 +15,9 @@ abstract class ProdutosDetailControllerBase with Store {
 
   @observable
   bool isFavorito = false;
+
+  @observable
+  bool isVisibleFavoritos = false;
 
   ProdutoDetailDto? produtoDetailDto;
 

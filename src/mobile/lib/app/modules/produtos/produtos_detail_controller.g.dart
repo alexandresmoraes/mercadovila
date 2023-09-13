@@ -41,11 +41,29 @@ mixin _$ProdutosDetailController on ProdutosDetailControllerBase, Store {
     });
   }
 
+  late final _$isVisibleFavoritosAtom = Atom(
+      name: 'ProdutosDetailControllerBase.isVisibleFavoritos',
+      context: context);
+
+  @override
+  bool get isVisibleFavoritos {
+    _$isVisibleFavoritosAtom.reportRead();
+    return super.isVisibleFavoritos;
+  }
+
+  @override
+  set isVisibleFavoritos(bool value) {
+    _$isVisibleFavoritosAtom.reportWrite(value, super.isVisibleFavoritos, () {
+      super.isVisibleFavoritos = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
-isFavorito: ${isFavorito}
+isFavorito: ${isFavorito},
+isVisibleFavoritos: ${isVisibleFavoritos}
     ''';
   }
 }

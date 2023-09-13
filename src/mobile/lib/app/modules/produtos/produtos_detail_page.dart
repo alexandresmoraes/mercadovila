@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -22,36 +23,11 @@ class ProdutosDetailPage extends StatefulWidget {
   ProdutosDetailPageState createState() => ProdutosDetailPageState();
 }
 
-class Product {
-  String? name;
-  int? qty;
-  bool? isFavourite = false;
-  String? rating;
-  String? amount;
-  String? unitName;
-  String? ratingCount;
-  String? description;
-  String? discount;
-  String? imagePath;
-  Product(
-      {this.amount,
-      this.description,
-      this.discount,
-      this.isFavourite,
-      this.name,
-      this.qty,
-      this.rating,
-      this.ratingCount,
-      this.unitName,
-      this.imagePath});
-}
-
 class ProdutosDetailPageState extends State<ProdutosDetailPage> {
   ProdutosDetailPageState() : super();
 
   final ProdutosDetailController _controller = Modular.get<ProdutosDetailController>();
   PagingController<int, CatalogoDto> pagingFavoritosController = PagingController(firstPageKey: 1);
-  bool isVisibleFavoritos = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +62,10 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [const Color(0xFF545975).withOpacity(0.44), const Color(0xFF333550).withOpacity(0.22)],
+                                    colors: [
+                                      const Color(0xFF545975).withOpacity(0.44),
+                                      const Color(0xFF333550).withOpacity(0.22)
+                                    ],
                                   ),
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(5),
@@ -97,7 +76,10 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [const Color(0xFF7C96AA).withOpacity(0.33), const Color(0xFFA6C1D6).withOpacity(0.07)],
+                                    colors: [
+                                      const Color(0xFF7C96AA).withOpacity(0.33),
+                                      const Color(0xFFA6C1D6).withOpacity(0.07)
+                                    ],
                                   ),
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(5),
@@ -112,7 +94,10 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 Text(
                                   snapshot.data!.nome,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyLarge!
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -235,7 +220,8 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 color: Colors.white,
                               ),
                             ),
-                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
+                            imageUrl:
+                                '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 215,
@@ -312,7 +298,9 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
 
                                   setState(() {});
                                 },
-                                icon: _controller.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                                icon: _controller.isFavorito
+                                    ? Image.asset('assets/fav_red.png')
+                                    : Image.asset('assets/fav_grey.png'),
                               ),
                             ],
                           ),
@@ -320,18 +308,32 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                       ],
                     ),
                   ),
-                  isVisibleFavoritos
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Text(
-                              "Favoritos",
-                              style: Theme.of(context).primaryTextTheme.headlineSmall,
+                  Observer(builder: (_) {
+                    return _controller.isVisibleFavoritos
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(0),
+                              title: Text(
+                                "Favoritos",
+                                style: Theme.of(context).primaryTextTheme.headlineSmall,
+                              ),
                             ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                          )
+                        : const SizedBox.shrink();
+                  }),
+                  // isVisibleFavoritos
+                  //     ? Padding(
+                  //         padding: const EdgeInsets.only(top: 10.0),
+                  //         child: ListTile(
+                  //           contentPadding: const EdgeInsets.all(0),
+                  //           title: Text(
+                  //             "Favoritos",
+                  //             style: Theme.of(context).primaryTextTheme.headlineSmall,
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const SizedBox.shrink(),
                   listaFavoritos()
                 ],
               ),
@@ -355,7 +357,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
             return await Modular.get<ICatalogoRepository>().getProdutosFavoritos(page);
           },
           itemBuilder: (context, item, index) {
-            isVisibleFavoritos = true;
+            _controller.isVisibleFavoritos = true;
 
             return SizedBox(
               height: 200,
@@ -484,7 +486,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
           },
           cast: CatalogoDto.fromJson,
           emptyBuilder: (context) {
-            isVisibleFavoritos = false;
+            _controller.isVisibleFavoritos = false;
             return const SizedBox.shrink();
           },
           errorBuilder: (context) {
