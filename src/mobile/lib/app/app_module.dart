@@ -6,7 +6,9 @@ import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart'
 import 'package:vilasesmo/app/modules/notificacoes/notificacoes_module.dart';
 import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
 import 'package:vilasesmo/app/modules/compras/compras_module.dart';
+import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
+import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
 import 'package:vilasesmo/app/modules/search/search_module.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/modules/vendas/vendas_module.dart';
@@ -22,6 +24,7 @@ import 'package:vilasesmo/app/utils/http/dio_api.dart';
 import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 
 class AppModule extends Module {
@@ -30,6 +33,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => CarrinhoStore()),
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
+    Bind.lazySingleton((i) => SearchFilterStore()),
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
@@ -43,6 +47,9 @@ class AppModule extends Module {
     BindInject((i) => AccountRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => CatalogoRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => FavoritosRepository(), isSingleton: true, isLazy: true),
+    //TODO: remover itens
+    Bind.factory((i) => ProdutosEditController()),
+    BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),
   ];
 
   @override

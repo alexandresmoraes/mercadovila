@@ -76,5 +76,19 @@ namespace Catalogo.API.Controllers
 
       return Result.Ok(await _produtoRepository.GetProdutosFavoritosAsync(userId, query));
     }
+
+    /// <summary>
+    /// Retorna todos os produtos ativos
+    /// </summary>
+    // GET api/catalogo/todos
+    [HttpGet("todos")]
+    [ProducesResponseType(typeof(PagedResult<CatalogoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<PagedResult<CatalogoDto>>> GetTodosProdutosAsync([FromQuery] CatalogoTodosQuery query)
+    {
+      return Result.Ok(await _produtoRepository.GetTodosProdutosAtivosAsync(query));
+    }
   }
 }

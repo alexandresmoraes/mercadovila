@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/produtos/produtos_page.dart';
 import 'package:vilasesmo/app/modules/tab/account_page.dart';
 import 'package:vilasesmo/app/modules/tab/home_page.dart';
 import 'package:vilasesmo/app/modules/tab/search_page.dart';
@@ -84,7 +85,7 @@ class _TabPageState extends State<TabPage> {
   List<Widget> _screens() => [
         const HomePage(),
         const SearchPage(),
-        const AccountPage(),
+        const ProdutosPage(),
         const AccountPage(),
       ];
 }

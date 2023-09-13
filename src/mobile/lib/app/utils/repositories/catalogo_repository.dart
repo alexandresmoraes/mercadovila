@@ -2,6 +2,7 @@ import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
+import 'package:vilasesmo/app/utils/queries/catalogo_todos_query.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
 
 @Injectable()
@@ -51,6 +52,13 @@ class CatalogoRepository implements ICatalogoRepository {
       "page": page.toString(),
       "limit": 10,
     });
+
+    return PagedResult.fromJson(response.data);
+  }
+
+  @override
+  Future<PagedResult<CatalogoDto>> getProdutosTodos(CatalogoTodosQuery query) async {
+    var response = await dio.get('/api/catalogo/todos', queryParameters: query.toMap());
 
     return PagedResult.fromJson(response.data);
   }

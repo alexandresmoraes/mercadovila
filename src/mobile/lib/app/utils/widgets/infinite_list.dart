@@ -14,6 +14,7 @@ class InfiniteList<T> extends StatefulWidget {
   final Widget? firstPageProgressIndicatorWidget;
   final PagingController<int, T>? pagingController;
   final Axis? scrollDirection;
+  final Function(int total)? setTotal;
 
   const InfiniteList({
     Key? key,
@@ -26,6 +27,7 @@ class InfiniteList<T> extends StatefulWidget {
     this.pagingController,
     this.scrollDirection,
     this.errorBuilder,
+    this.setTotal,
   }) : super(key: key);
 
   @override
@@ -56,6 +58,8 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
       var newItems = pagedResult.data.map((item) => widget.cast(item)).toList();
 
+      if (widget.setTotal != null) widget.setTotal!(pagedResult.total);
+
       final isLastPage = pagedResult.total == pagedResult.lastRowOnPage;
       if (isLastPage) {
         _pagingController!.appendLastPage(newItems);
@@ -77,10 +81,9 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
       child: PagedListView.separated(
         scrollDirection: widget.scrollDirection ?? Axis.vertical,
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) =>
-              widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
-          itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
+          itemBuilder: widget.itemBuilder,
           newPageErrorIndicatorBuilder: (context) {
             if (widget.errorBuilder != null) {
               return widget.errorBuilder!(context);

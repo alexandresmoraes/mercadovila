@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
 
 class SearchFilterPage extends StatefulWidget {
   final String title;
-  const SearchFilterPage({Key? key, this.title = 'CartFilterPage'}) : super(key: key);
+  const SearchFilterPage({Key? key, this.title = 'Opções'}) : super(key: key);
   @override
   SearchFilterPageState createState() => SearchFilterPageState();
 }
 
 class SearchFilterPageState extends State<SearchFilterPage> {
   SearchFilterPageState() : super();
-  int? _selectedName = 0;
-  int? _selectedPrice = 7;
-  bool? _inStock = true;
-  bool? _inOutOfStock = false;
+
+  SearchFilterStore searchFilterStore = Modular.get<SearchFilterStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,12 @@ class SearchFilterPageState extends State<SearchFilterPage> {
           centerTitle: true,
           title: const Text("Opções"),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(MdiIcons.syncIcon)),
+            IconButton(
+              onPressed: () {
+                searchFilterStore.clean();
+              },
+              icon: const Icon(MdiIcons.syncIcon),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -42,50 +48,50 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Radio(
-                      value: 1,
-                      groupValue: _selectedName,
-                      onChanged: (dynamic val) {
-                        _selectedName = val;
-                        setState(() {});
-                      },
-                    ),
-                    Text(
-                      "A a Z",
-                      style: _selectedName == 1
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Radio(
-                          value: 2,
-                          groupValue: _selectedName,
-                          onChanged: (dynamic val) {
-                            _selectedName = val;
-                            setState(() {});
-                          }),
-                    ),
-                    Text(
-                      "Z a A",
-                      style: _selectedName == 2
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                  ],
-                ),
+                Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Radio(
+                        value: ECatalogoTodosQueryOrder.nameAsc.index,
+                        groupValue: searchFilterStore.selectOrder,
+                        onChanged: (_) {
+                          searchFilterStore.setSelectedOrder(ECatalogoTodosQueryOrder.nameAsc.index);
+                        },
+                      ),
+                      Text(
+                        "A a Z",
+                        style: searchFilterStore.selectOrder == ECatalogoTodosQueryOrder.nameAsc.index
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Radio(
+                            value: ECatalogoTodosQueryOrder.nameDesc.index,
+                            groupValue: searchFilterStore.selectOrder,
+                            onChanged: (_) {
+                              searchFilterStore.setSelectedOrder(ECatalogoTodosQueryOrder.nameDesc.index);
+                            }),
+                      ),
+                      Text(
+                        "Z a A",
+                        style: searchFilterStore.selectOrder == ECatalogoTodosQueryOrder.nameDesc.index
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    ],
+                  );
+                }),
                 const Divider(),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -97,50 +103,50 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Radio(
-                      value: 7,
-                      groupValue: _selectedPrice,
-                      onChanged: (dynamic val) {
-                        _selectedPrice = val;
-                        setState(() {});
-                      },
-                    ),
-                    Text(
-                      "Menor p/ maior",
-                      style: _selectedPrice == 7
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Radio(
-                          value: 8,
-                          groupValue: _selectedPrice,
-                          onChanged: (dynamic val) {
-                            _selectedPrice = val;
-                            setState(() {});
-                          }),
-                    ),
-                    Text(
-                      "Maior p/ menor",
-                      style: _selectedPrice == 8
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                  ],
-                ),
+                Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Radio(
+                        value: ECatalogoTodosQueryOrder.priceLowToHigh.index,
+                        groupValue: searchFilterStore.selectOrder,
+                        onChanged: (dynamic val) {
+                          searchFilterStore.setSelectedOrder(ECatalogoTodosQueryOrder.priceLowToHigh.index);
+                        },
+                      ),
+                      Text(
+                        "Menor p/ maior",
+                        style: searchFilterStore.selectOrder == ECatalogoTodosQueryOrder.priceLowToHigh.index
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Radio(
+                            value: ECatalogoTodosQueryOrder.priceHighToLow.index,
+                            groupValue: searchFilterStore.selectOrder,
+                            onChanged: (dynamic val) {
+                              searchFilterStore.setSelectedOrder(ECatalogoTodosQueryOrder.priceHighToLow.index);
+                            }),
+                      ),
+                      Text(
+                        "Maior p/ menor",
+                        style: searchFilterStore.selectOrder == ECatalogoTodosQueryOrder.priceHighToLow.index
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    ],
+                  );
+                }),
                 const Divider(),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -152,44 +158,44 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Checkbox(
-                        value: _inStock,
-                        onChanged: (val) {
-                          _inStock = val;
-                          setState(() {});
-                        }),
-                    Text(
-                      "Em estoque",
-                      style: _inStock!
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                    Checkbox(
-                        value: _inOutOfStock,
-                        onChanged: (val) {
-                          _inOutOfStock = val;
-                          setState(() {});
-                        }),
-                    Text(
-                      "Fora de estoque",
-                      style: _inOutOfStock!
-                          ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'PoppinsMedium',
-                                color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                              )
-                          : Theme.of(context).primaryTextTheme.displayMedium,
-                    ),
-                  ],
-                ),
+                Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Checkbox(
+                          value: searchFilterStore.inStock,
+                          onChanged: (val) {
+                            searchFilterStore.inStock = val!;
+                          }),
+                      Text(
+                        "Em estoque",
+                        style: searchFilterStore.inStock
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Checkbox(
+                          value: searchFilterStore.outOfStock,
+                          onChanged: (val) {
+                            searchFilterStore.outOfStock = val!;
+                          }),
+                      Text(
+                        "Fora de estoque",
+                        style: searchFilterStore.outOfStock
+                            ? Theme.of(context).primaryTextTheme.displayMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
+                                )
+                            : Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    ],
+                  );
+                }),
               ],
             ),
           ),
@@ -210,10 +216,11 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Aplicar (99 Total de itens)')),
+                  onPressed: () {
+                    Modular.to.pop(true);
+                  },
+                  child: Text('Aplicar (${searchFilterStore.totalProdutos} Total de itens)'),
+                ),
               ),
             ),
           ],

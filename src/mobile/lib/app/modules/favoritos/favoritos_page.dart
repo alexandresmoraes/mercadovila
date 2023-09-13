@@ -6,7 +6,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/favoritos/favorito_item_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
