@@ -69,7 +69,7 @@ class _TabPageState extends State<TabPage> {
           elevation: 0,
           backgroundColor: const Color(0xFFFA692C),
           onPressed: () {
-            Modular.to.pushNamed('/cart/');
+            Modular.to.pushNamed('/carrinho/');
           },
           child: Icon(
             MdiIcons.shopping,

@@ -1,4 +1,5 @@
-﻿using Catalogo.API.Data.Entities;
+﻿using Catalogo.API.Data.Dto;
+using Catalogo.API.Data.Entities;
 using Common.WebAPI.MongoDb;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -17,6 +18,21 @@ namespace Catalogo.API.Data.Repositories
       var indexModel = new CreateIndexModel<CarrinhoItem>(indexKeysDefinition, indexOptions);
 
       Collection.Indexes.CreateOne(indexModel);
+    }
+
+    public Task CreateAsync(string userId, string produtoId, int quantidade)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteAsync(string userId, string produtoId, int quantidade)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<CarrinhoDto> GetCarrinhoPorUsuarioAsync(string userId)
+    {
+      throw new NotImplementedException();
     }
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class CarrinhoPage extends StatefulWidget {
@@ -42,6 +44,8 @@ class Address {
 }
 
 class CarrinhoPageState extends State<CarrinhoPage> {
+  final carrinhoController = Modular.get<CarrinhoStore>();
+
   GlobalKey<ScaffoldState>? _scaffoldKey;
 
   String? selectedCouponCode;
@@ -312,13 +316,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                         }
                       },
                       child: Text(
-                        _currentIndex == 0
-                            ? 'Checkout'
-                            : _currentIndex == 1
-                                ? 'Select Time'
-                                : _currentIndex == 2
-                                    ? 'Proced pay'
-                                    : 'Pagamento',
+                        _currentIndex == 0 ? 'Checkout' : 'Pagamento',
                       )),
                 ),
               ),
@@ -748,79 +746,14 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Todal",
+                "Subtotal",
                 style: Theme.of(context).primaryTextTheme.labelSmall,
               ),
               Text(
-                "\$80.62",
+                "R\$80.62",
                 style: Theme.of(context).primaryTextTheme.labelSmall,
               ),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Desconto",
-                  style: Theme.of(context).primaryTextTheme.labelSmall,
-                ),
-                Text(
-                  " - \$20.02",
-                  style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.blue),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Cupom",
-                  style: Theme.of(context).primaryTextTheme.labelSmall,
-                ),
-                Text(
-                  "Aplicar Cupom",
-                  style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Theme.of(context).primaryColorLight),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Entrega",
-                      style: Theme.of(context).primaryTextTheme.labelSmall,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: Icon(
-                        Icons.error_outline,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    )
-                  ],
-                ),
-                Text(
-                  " - \$20.02",
-                  style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Colors.blue),
-                )
-              ],
-            ),
           ),
           const Divider(),
           ListTile(
@@ -833,7 +766,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
             ),
             trailing: Text(
-              "\$61.27",
+              "R\$ 61.27",
               style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
@@ -878,133 +811,75 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                top: 5,
-                bottom: 7,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Offer discount',
-                  style: Theme.of(context).primaryTextTheme.headlineSmall,
-                ),
-              ),
-            ),
-            ListTile(
-              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-              minLeadingWidth: 30,
-              contentPadding: const EdgeInsets.all(0),
-              leading: Icon(
-                MdiIcons.brightnessPercent,
-                size: 20,
-                color: Theme.of(context).primaryColorLight,
-              ),
-              title: Text(
-                "Offer desc",
-                style: Theme.of(context).primaryTextTheme.labelSmall,
-              ),
-              subtitle: InkWell(
-                onTap: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => OfferListScreen(a: widget.analytics, o: widget.observer),
-                  //   ),
-                  // );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(
-                    "show offers",
-                    style: Theme.of(context).primaryTextTheme.displayLarge,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
                 top: 10,
                 bottom: 7,
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Payment options',
+                  'Opções de pagamento',
                   style: Theme.of(context).primaryTextTheme.headlineSmall,
                 ),
               ),
             ),
-            RadioListTile(
-                contentPadding: EdgeInsets.zero,
-                value: 3,
-                groupValue: _selectedPaymentOption,
-                onChanged: (dynamic val) {
-                  _selectedPaymentOption = val;
-                  setState(() {});
+            Observer(builder: (_) {
+              return InkWell(
+                onTap: () {
+                  carrinhoController.toggleSelectOpcaoPagamento();
                 },
-                title: Text(
-                  "HDFC Credit Card",
-                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                ),
-                subtitle: Text(
-                  "•••• •••• •••• 5229",
-                  style: Theme.of(context).primaryTextTheme.displayMedium,
-                ),
-                secondary: Image.asset('assets/master_card.png')),
-            RadioListTile(
-                contentPadding: EdgeInsets.zero,
-                value: 4,
-                groupValue: _selectedPaymentOption,
-                onChanged: (dynamic val) {
-                  _selectedPaymentOption = val;
-                  setState(() {});
-                },
-                title: Text(
-                  "ICICI Credit Card",
-                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                ),
-                subtitle: Text(
-                  "•••• •••• •••• 4421",
-                  style: Theme.of(context).primaryTextTheme.displayMedium,
-                ),
-                secondary: Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Image.asset('assets/visa_card_dark.png')
-                    : Image.asset('assets/visa_card_light.png')),
-            InkWell(
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => AddPaymentScreen(a: widget.analytics, o: widget.observer),
-                //   ),
-                // );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                child: ListTile(
+                  leading: Radio(
+                    value: true,
+                    groupValue: carrinhoController.selectOpcaoPagamento ? true : null,
+                    onChanged: (_) {
+                      carrinhoController.toggleSelectOpcaoPagamento();
+                    },
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  title: Text(
+                    "Desconto em folha",
+                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  ),
+                  subtitle: Text(
+                    "Autorizar o desconto em folha no próximo mês útil",
+                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                  ),
+                  trailing: Image.asset('assets/dinheiro.png'),
                 ),
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Payment options",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
-                    )),
-              ),
-            ),
+              );
+            }),
+            Observer(builder: (_) {
+              return !carrinhoController.selectOpcaoPagamento
+                  ? Container(
+                      padding: const EdgeInsets.all(2),
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Selecione a opção de pagamento",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color:
+                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    )
+                  : const SizedBox.shrink();
+            }),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -1012,11 +887,11 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Delivery",
+                    "Data e Hora",
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                   Text(
-                    "26.03.2021, 12 - 4PM",
+                    "26/03/2021 12:40 PM",
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                 ],
@@ -1026,7 +901,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
               contentPadding: const EdgeInsets.all(0),
               title: Text(
-                "Details",
+                "Detalhes",
                 style: Theme.of(context).primaryTextTheme.headlineSmall,
               ),
             ),
@@ -1039,78 +914,10 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   style: Theme.of(context).primaryTextTheme.labelSmall,
                 ),
                 Text(
-                  "\$80.62",
+                  "R\$ 80.62",
                   style: Theme.of(context).primaryTextTheme.labelSmall,
                 ),
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Preço",
-                    style: Theme.of(context).primaryTextTheme.labelSmall,
-                  ),
-                  Text(
-                    " - \$20.02",
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(color: Colors.blue),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Desconto",
-                    style: Theme.of(context).primaryTextTheme.labelSmall,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      "Cupom",
-                      style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Theme.of(context).primaryColorLight),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Charges",
-                        style: Theme.of(context).primaryTextTheme.labelSmall,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Icon(
-                          Icons.error_outline,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      )
-                    ],
-                  ),
-                  Text(
-                    " - \$20.02",
-                    style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Colors.blue),
-                  )
-                ],
-              ),
             ),
             const Divider(),
             ListTile(
@@ -1123,7 +930,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
               ),
               trailing: Text(
-                "\$61.27",
+                "R\$ 61.27",
                 style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
