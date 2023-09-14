@@ -7,11 +7,13 @@ import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 class InfiniteList<T> extends StatefulWidget {
   final Future<PagedResult<T>> Function(int nextIndex) request;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
-  final Widget emptyBuilder;
+  final Widget Function(BuildContext context) emptyBuilder;
+  final Widget Function(BuildContext context)? errorBuilder;
   final T Function(Map<String, dynamic>) cast;
   final Widget? noMoreItemsBuilder;
   final Widget? firstPageProgressIndicatorWidget;
   final PagingController<int, T>? pagingController;
+  final Axis? scrollDirection;
 
   const InfiniteList({
     Key? key,
@@ -22,6 +24,8 @@ class InfiniteList<T> extends StatefulWidget {
     this.firstPageProgressIndicatorWidget,
     this.noMoreItemsBuilder,
     this.pagingController,
+    this.scrollDirection,
+    this.errorBuilder,
   }) : super(key: key);
 
   @override
@@ -43,7 +47,6 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
 
   @override
   void dispose() {
-    _pagingController!.dispose();
     super.dispose();
   }
 
@@ -72,17 +75,31 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
         () => _pagingController!.refresh(),
       ),
       child: PagedListView.separated(
+        scrollDirection: widget.scrollDirection ?? Axis.vertical,
         builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
+          firstPageProgressIndicatorBuilder: (context) =>
+              widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
-          itemBuilder: (context, item, index) => widget.itemBuilder(context, item, index),
-          newPageErrorIndicatorBuilder: (_) => RefreshWidget(
-            onTap: () => _pagingController!.refresh(),
-          ),
-          firstPageErrorIndicatorBuilder: (_) => RefreshWidget(
-            onTap: () => _pagingController!.refresh(),
-          ),
-          noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder,
+          itemBuilder: widget.itemBuilder,
+          newPageErrorIndicatorBuilder: (context) {
+            if (widget.errorBuilder != null) {
+              return widget.errorBuilder!(context);
+            } else {
+              return RefreshWidget(
+                onTap: () => _pagingController!.refresh(),
+              );
+            }
+          },
+          firstPageErrorIndicatorBuilder: (context) {
+            if (widget.errorBuilder != null) {
+              return widget.errorBuilder!(context);
+            } else {
+              return RefreshWidget(
+                onTap: () => _pagingController!.refresh(),
+              );
+            }
+          },
+          noItemsFoundIndicatorBuilder: (context) => widget.emptyBuilder(context),
           noMoreItemsIndicatorBuilder: (context) =>
               widget.noMoreItemsBuilder ??
               Padding(

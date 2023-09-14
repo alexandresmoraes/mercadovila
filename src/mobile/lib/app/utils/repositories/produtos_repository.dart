@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
 import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
@@ -76,5 +77,12 @@ class ProdutosRepository implements IProdutosRepository {
         return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
       }
     }
+  }
+
+  @override
+  Future<ProdutoDetailDto> getProdutoDetail(String id) async {
+    var response = await dio.get('/api/produtos/detail/$id');
+
+    return ProdutoDetailDto.fromJson(response.data);
   }
 }

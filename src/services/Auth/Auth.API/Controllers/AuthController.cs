@@ -16,27 +16,23 @@ namespace Auth.API.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly IAuthService<ApplicationUser> _authService;
+    private readonly IAuthUserService<ApplicationUser> _authService;
+    private readonly IAuthService _authServiceWithoutUserType;
     private readonly IJwtService _jwtService;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AuthController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuthController(
-      IAuthService<ApplicationUser> authService,
-      IJwtService jwtService,
-      SignInManager<ApplicationUser> signInManager,
-      IUnitOfWork unitOfWork,
-      ILogger<AuthController> logger,
-      UserManager<ApplicationUser> userManager)
+    public AuthController(IAuthUserService<ApplicationUser> authService, IAuthService authServiceWithoutUserType, IJwtService jwtService, SignInManager<ApplicationUser> signInManager, IUnitOfWork unitOfWork, ILogger<AuthController> logger, UserManager<ApplicationUser> userManager)
     {
-      _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-      _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
-      _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-      _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-      _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+      _authService = authService;
+      _authServiceWithoutUserType = authServiceWithoutUserType;
+      _jwtService = jwtService;
+      _signInManager = signInManager;
+      _unitOfWork = unitOfWork;
+      _logger = logger;
+      _userManager = userManager;
     }
 
     /// <summary>
@@ -48,7 +44,7 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccountModel>> GetAsync()
     {
-      var user = await _userManager.FindByIdAsync(_authService.GetUserId());
+      var user = await _userManager.FindByIdAsync(_authServiceWithoutUserType.GetUserId());
 
       return Result.Ok(new AccountModel(
         id: user.Id,

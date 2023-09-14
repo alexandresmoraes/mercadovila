@@ -10,7 +10,15 @@ namespace Common.WebAPI.Auth
       where TKey : IEquatable<TKey>
     {
       services.AddScoped<IJwtService, JwtService<TIdentityUser, TKey>>();
-      services.AddScoped<IAuthService<TIdentityUser>, AuthService<TIdentityUser, TKey>>();
+      services.AddScoped<IAuthUserService<TIdentityUser>, AuthUserService<TIdentityUser, TKey>>();
+
+      return services;
+    }
+
+    public static IServiceCollection AddAuthServices(this IServiceCollection services)
+    {
+      services.AddHttpContextAccessor();
+      services.AddScoped<IAuthService, AuthService>();
 
       return services;
     }

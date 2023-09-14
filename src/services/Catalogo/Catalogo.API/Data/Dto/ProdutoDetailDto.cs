@@ -1,11 +1,12 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
-namespace Catalogo.API.Data.Entities
+namespace Catalogo.API.Data.Dto
 {
-  public class Produto
+  public record ProdutoDetailDto
   {
     [BsonId]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; } = null!;
 
     public string ImageUrl { get; set; } = null!;
 
@@ -19,20 +20,18 @@ namespace Catalogo.API.Data.Entities
 
     public string CodigoBarras { get; set; } = null!;
 
-    public int EstoqueAlvo { get; set; }
-
-    public int Estoque { get; set; }
-
     public double Rating { get; set; }
 
     public int RatingCount { get; set; }
 
-    public DateTime? DataUltimaVenda { get; set; }
-
-    public int QuantidadeVendida { get; set; }
-
-    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+    public int Estoque { get; set; }
 
     public bool IsAtivo { get; set; }
+
+    [JsonIgnore]
+    public int FavoritoCount { get; set; }
+
+    //public bool IsFavorito { get => FavoritoCount > 0; }
+    public bool IsFavorito { get; set; }
   }
 }

@@ -3,6 +3,7 @@ using Catalogo.API.Data.Entities;
 using Catalogo.API.Data.Queries;
 using Catalogo.API.Data.Repositories;
 using Catalogo.API.Models;
+using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using Common.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -23,13 +24,20 @@ namespace Catalogo.API.Controllers
     private readonly IValidateUtils _validateUtils;
     private readonly IFileUtils _fileUtils;
     private readonly IConfiguration _configuration;
+    private readonly IAuthService _authService;
 
-    public ProdutosController(ProdutoRepository produtoRepository, IValidateUtils validateUtils, IFileUtils fileUtils, IConfiguration configuration)
+    public ProdutosController(
+      ProdutoRepository produtoRepository,
+      IValidateUtils validateUtils,
+      IFileUtils fileUtils,
+      IConfiguration configuration,
+      IAuthService authService)
     {
       _produtoRepository = produtoRepository;
       _validateUtils = validateUtils;
       _fileUtils = fileUtils;
       _configuration = configuration;
+      _authService = authService;
     }
 
     /// <summary>
@@ -71,6 +79,26 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<ProdutoDto>>> GetProdutosAsync([FromQuery] ProdutoQuery query)
       => Result.Ok(await _produtoRepository.GetProdutosAsync(query));
+
+    /// <summary>
+    /// Retorna detalhe do produto
+    /// </summary>
+    // GET api/produtos/detail
+    [HttpGet("detail/{id}")]
+    [ProducesResponseType(typeof(ProdutoDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<ProdutoDetailDto>> GetProdutoDetailAsync([FromRoute] string id)
+    {
+      var userId = _authService.GetUserId();
+
+      var produtoDetail = await _produtoRepository.GetProdutoDetailAsync(userId, id);
+
+      if (produtoDetail is null) return Result.NotFound<ProdutoDetailDto>();
+
+      return Result.Ok(produtoDetail);
+    }
 
     /// <summary>
     /// Criação de novos produtos

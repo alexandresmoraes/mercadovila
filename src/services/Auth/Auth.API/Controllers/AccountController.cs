@@ -22,12 +22,12 @@ namespace Auth.API.Controllers
   {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserRepository _userRepository;
-    private readonly IAuthService<ApplicationUser> _authService;
+    private readonly IAuthService _authService;
     private readonly IConfiguration _configuration;
     private readonly IFileUtils _fileUtils;
     private readonly IValidateUtils _validateUtils;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService<ApplicationUser> authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils)
     {
       _userManager = userManager;
       _userRepository = userRepository;
