@@ -3,6 +3,7 @@ using Catalogo.API.Data.Entities;
 using Catalogo.API.Data.Queries;
 using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
+using Common.WebAPI.Utils;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -320,8 +321,7 @@ namespace Catalogo.API.Data.Repositories
 
     public async Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(CatalogoTodosQuery query)
     {
-      var filtro = Builders<Produto>.Filter.Empty;
-      filtro &= Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
+      var filtro = Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
 
       if (!query.inStock || !query.outOfStock)
       {
@@ -334,56 +334,66 @@ namespace Catalogo.API.Data.Repositories
 
       var start = (query.page - 1) * query.limit;
 
-      var projections = Builders<Produto>.Projection
-          .Expression(p => new CatalogoDto
+      var catalogoPipeline = new BsonDocument[]
+      {
+        new BsonDocument
+        {
           {
-            Id = p.Id,
-            Nome = p.Nome,
-            Descricao = p.Descricao,
-            ImageUrl = p.ImageUrl,
-            Preco = p.Preco,
-            UnidadeMedida = p.UnidadeMedida,
-            Estoque = p.Estoque,
-            Rating = p.Rating,
-            RatingCount = p.RatingCount,
-            IsAtivo = p.IsAtivo
-          });
+            "$match", filtro.RenderToBsonDocument()
+          }
+        },
+        new BsonDocument("$lookup", new BsonDocument
+            {
+              { "from", "favoritos" },
+              { "let", new BsonDocument("produtoId", "$_id") },
+              { "pipeline", new BsonArray
+              {
+                new BsonDocument("$match", new BsonDocument
+                {
+                  { "$expr", new BsonDocument("$and", new BsonArray
+                    {
+                      new BsonDocument("$eq", new BsonArray { "$ProdutoId", "$$produtoId" }),
+                      new BsonDocument("$eq", new BsonArray { "$UserId", "0f76aa88-6a46-41cd-805d-a6d87b19f481" })
+                    })
+                  }
+                })
+            }
+          },
+          { "as", "Favoritos" }
+        }),
+        new BsonDocument("$project", new BsonDocument
+        {
+            { "Id", 1 },
+            { "Nome", 1 },
+            { "Descricao", 1 },
+            { "ImageUrl", 1 },
+            { "Preco", 1 },
+            { "UnidadeMedida", 1 },
+            { "Estoque", 1 },
+            { "Rating", 1 },
+            { "RatingCount", 1 },
+            { "IsAtivo", 1 },
+            { "IsFavorito", new BsonDocument("$cond", new BsonArray
+                {
+                    new BsonDocument("$gt", new BsonArray { new BsonDocument("$size", "$Favoritos"), 0 }),
+                    true,
+                    false
+                })
+            }
+        }),
+        new BsonDocument("$sort", new BsonDocument(query.order switch
+        {
+          ECatalogoTodosQueryOrder.NameAsc => new BsonDocument("Nome", 1),
+          ECatalogoTodosQueryOrder.NameDesc => new BsonDocument("Nome", -1),
+          ECatalogoTodosQueryOrder.PriceHighToLow => new BsonDocument("Preco", -1),
+          ECatalogoTodosQueryOrder.PriceLowToHigh => new BsonDocument("Preco", 1),
+          _ => new BsonDocument("Nome", 1)
+        })),
+        new BsonDocument("$skip", start),
+        new BsonDocument("$limit", query.limit)
+      };
 
-      var queryMongo = Collection.Find(filtro);
-
-      switch (query.order)
-      {
-        case ECatalogoTodosQueryOrder.NameAsc:
-          queryMongo.SortBy(p => p.Nome);
-          break;
-        case ECatalogoTodosQueryOrder.NameDesc:
-          queryMongo.SortByDescending(p => p.Nome);
-          break;
-        case ECatalogoTodosQueryOrder.PriceHighToLow:
-          queryMongo.SortBy(p => p.Preco);
-          break;
-        case ECatalogoTodosQueryOrder.PriceLowToHigh:
-          queryMongo.SortBy(p => p.Preco);
-          break;
-      }
-
-      var catalogo = await queryMongo
-          .Skip((query.page - 1) * query.limit)
-          .Limit(query.limit)
-          .Project(projections)
-          .ToListAsync();
-
-      var produtoIds = catalogo.Select(dto => dto.Id).ToList();
-
-      var favoritosFilter = Builders<FavoritoItem>.Filter.In(f => f.ProdutoId, produtoIds)
-        & Builders<FavoritoItem>.Filter.Eq(f => f.UserId, "0f76aa88-6a46-41cd-805d-a6d87b19f481");
-      var favoritos = await _favoriteItemRepository.Collection.Find(favoritosFilter).ToListAsync();
-      var produtoIdsFavoritos = favoritos.Select(f => f.ProdutoId).ToList();
-
-      foreach (var produtoDto in catalogo)
-      {
-        produtoDto.IsFavorito = produtoIdsFavoritos.Contains(produtoDto.Id);
-      }
+      var catalogo = await Collection.Aggregate<CatalogoDto>(catalogoPipeline).ToListAsync();
 
       var count = await Collection.CountDocumentsAsync(filtro);
 
