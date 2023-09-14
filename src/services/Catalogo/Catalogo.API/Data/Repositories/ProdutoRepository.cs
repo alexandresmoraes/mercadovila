@@ -319,7 +319,7 @@ namespace Catalogo.API.Data.Repositories
       return new PagedResult<CatalogoDto>(start, catalogoQuery.limit, count, catalogo);
     }
 
-    public async Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(CatalogoTodosQuery query)
+    public async Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(string userId, CatalogoTodosQuery query)
     {
       var filtro = Builders<Produto>.Filter.Eq(p => p.IsAtivo, true);
 
@@ -353,7 +353,7 @@ namespace Catalogo.API.Data.Repositories
                   { "$expr", new BsonDocument("$and", new BsonArray
                     {
                       new BsonDocument("$eq", new BsonArray { "$ProdutoId", "$$produtoId" }),
-                      new BsonDocument("$eq", new BsonArray { "$UserId", "0f76aa88-6a46-41cd-805d-a6d87b19f481" })
+                      new BsonDocument("$eq", new BsonArray { "$UserId", userId })
                     })
                   }
                 })
@@ -363,7 +363,7 @@ namespace Catalogo.API.Data.Repositories
         }),
         new BsonDocument("$project", new BsonDocument
         {
-            { "Id", 1 },
+            { "Id", "$_id" },
             { "Nome", 1 },
             { "Descricao", 1 },
             { "ImageUrl", 1 },

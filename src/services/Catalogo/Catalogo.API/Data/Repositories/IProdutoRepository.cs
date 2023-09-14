@@ -19,6 +19,6 @@ namespace Catalogo.API.Data.Repositories
     Task<PagedResult<CatalogoDto>> GetProdutosMaisVendidosAsync(CatalogoQuery query);
     Task<PagedResult<CatalogoDto>> GetProdutosFavoritosAsync(string userId, CatalogoQuery query);
     Task<PagedResult<CatalogoDto>> GetProdutosUltimosVendidosAsync(CatalogoQuery query);
-    Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(CatalogoTodosQuery query);
+    Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(string userId, CatalogoTodosQuery query);
   }
 }

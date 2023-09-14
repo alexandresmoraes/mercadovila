@@ -88,7 +88,9 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<CatalogoDto>>> GetTodosProdutosAsync([FromQuery] CatalogoTodosQuery query)
     {
-      return Result.Ok(await _produtoRepository.GetTodosProdutosAtivosAsync(query));
+      var userId = _authService.GetUserId();
+
+      return Result.Ok(await _produtoRepository.GetTodosProdutosAtivosAsync(userId, query));
     }
   }
 }
