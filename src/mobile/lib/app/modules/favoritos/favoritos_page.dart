@@ -111,16 +111,19 @@ class FavoritosPageState extends State<FavoritosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${item.preco}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "\$",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${item.preco}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -187,7 +190,7 @@ class FavoritosPageState extends State<FavoritosPage> {
                               context: context,
                               builder: (BuildContext context) => CupertinoAlertDialog(
                                 title: const Text('Atenção!'),
-                                content: const Text('Deseja excluir o favorito?'),
+                                content: const Text('Deseja remover o favorito?'),
                                 actions: <CupertinoDialogAction>[
                                   CupertinoDialogAction(
                                     isDefaultAction: true,
@@ -215,7 +218,8 @@ class FavoritosPageState extends State<FavoritosPage> {
                               ),
                             );
                           },
-                          icon: item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                          icon:
+                              item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                         )
                       ],
                     ),

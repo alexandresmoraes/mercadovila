@@ -37,7 +37,9 @@ class SearchPageState extends State<SearchPage> {
                   var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
                   if (refresh ?? false) pagingController.refresh();
                 },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
+                icon: Modular.get<ThemeStore>().isDarkModeEnable
+                    ? Image.asset('assets/filter_white.png')
+                    : Image.asset('assets/filter_black.png')),
           ],
         ),
         body: Column(
@@ -60,7 +62,6 @@ class SearchPageState extends State<SearchPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<CatalogoDto>(
-        setTotal: store.setTotalProdutos,
         pagingController: pagingController,
         request: (page) async {
           return await Modular.get<ICatalogoRepository>().getProdutosTodos(CatalogoTodosQuery(
@@ -134,16 +135,19 @@ class SearchPageState extends State<SearchPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${item.preco}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "R\$ ",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${item.preco}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(

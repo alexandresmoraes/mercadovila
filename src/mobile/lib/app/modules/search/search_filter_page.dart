@@ -219,7 +219,7 @@ class SearchFilterPageState extends State<SearchFilterPage> {
                   onPressed: () {
                     Modular.to.pop(true);
                   },
-                  child: Text('Aplicar (${searchFilterStore.totalProdutos} Total de itens)'),
+                  child: const Text('Aplicar'),
                 ),
               ),
             ),

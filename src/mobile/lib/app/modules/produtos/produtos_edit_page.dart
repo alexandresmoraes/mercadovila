@@ -80,8 +80,9 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(isNullorEmpty(widget.id) ? "Criando produto" : "Editando produto"),
@@ -149,7 +150,8 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
+                                    imageUrl:
+                                        '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
                                     imageBuilder: (context, imageProvider) {
                                       return Container(
                                         decoration: BoxDecoration(
@@ -225,7 +227,9 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                           },
                           child: Observer(builder: (_) {
                             return Text(
-                              isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath) ? 'Escolher imagem' : 'Trocar imagem',
+                              isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
+                                  ? 'Escolher imagem'
+                                  : 'Trocar imagem',
                               style: Theme.of(context).primaryTextTheme.displayLarge,
                             );
                           }),
@@ -279,7 +283,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             child: Observer(builder: (_) {
                               return TextFormField(
                                 keyboardType: TextInputType.multiline,
-                                maxLines: 2,
+                                maxLines: 4,
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 initialValue: _controller.descricao,
                                 onChanged: _controller.setDescricao,

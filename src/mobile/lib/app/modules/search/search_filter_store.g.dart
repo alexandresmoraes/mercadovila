@@ -25,22 +25,6 @@ mixin _$SearchFilterStore on SearchFilterStoreBase, Store {
     });
   }
 
-  late final _$totalProdutosAtom =
-      Atom(name: 'SearchFilterStoreBase.totalProdutos', context: context);
-
-  @override
-  int get totalProdutos {
-    _$totalProdutosAtom.reportRead();
-    return super.totalProdutos;
-  }
-
-  @override
-  set totalProdutos(int value) {
-    _$totalProdutosAtom.reportWrite(value, super.totalProdutos, () {
-      super.totalProdutos = value;
-    });
-  }
-
   late final _$inStockAtom =
       Atom(name: 'SearchFilterStoreBase.inStock', context: context);
 
@@ -88,17 +72,6 @@ mixin _$SearchFilterStore on SearchFilterStoreBase, Store {
   }
 
   @override
-  void setTotalProdutos(int value) {
-    final _$actionInfo = _$SearchFilterStoreBaseActionController.startAction(
-        name: 'SearchFilterStoreBase.setTotalProdutos');
-    try {
-      return super.setTotalProdutos(value);
-    } finally {
-      _$SearchFilterStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void clean() {
     final _$actionInfo = _$SearchFilterStoreBaseActionController.startAction(
         name: 'SearchFilterStoreBase.clean');
@@ -113,7 +86,6 @@ mixin _$SearchFilterStore on SearchFilterStoreBase, Store {
   String toString() {
     return '''
 selectOrder: ${selectOrder},
-totalProdutos: ${totalProdutos},
 inStock: ${inStock},
 outOfStock: ${outOfStock}
     ''';

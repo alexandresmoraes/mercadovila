@@ -18,5 +18,6 @@ namespace Catalogo.API.Data.Dto
     public double Rating { get; set; }
     public int RatingCount { get; set; }
     public bool IsAtivo { get; set; }
+    public bool IsFavorito { get; set; } = false;
   }
 }

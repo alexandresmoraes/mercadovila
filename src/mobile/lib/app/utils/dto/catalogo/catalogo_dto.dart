@@ -10,6 +10,7 @@ class CatalogoDto {
     required this.rating,
     required this.ratingCount,
     required this.isAtivo,
+    required this.isFavorito,
   });
   late final String id;
   late final String nome;
@@ -21,6 +22,7 @@ class CatalogoDto {
   late final int rating;
   late final int ratingCount;
   late final bool isAtivo;
+  late final bool isFavorito;
 
   CatalogoDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -33,6 +35,7 @@ class CatalogoDto {
     rating = json['rating'];
     ratingCount = json['ratingCount'];
     isAtivo = json['isAtivo'];
+    isFavorito = json['isFavorito'];
   }
 
   String getDisponiveis() => estoque == 0

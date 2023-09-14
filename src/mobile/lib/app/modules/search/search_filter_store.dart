@@ -20,13 +20,6 @@ abstract class SearchFilterStoreBase with Store {
   }
 
   @observable
-  int totalProdutos = 0;
-  @action
-  void setTotalProdutos(int value) {
-    totalProdutos = value;
-  }
-
-  @observable
   bool inStock = true;
 
   @observable
