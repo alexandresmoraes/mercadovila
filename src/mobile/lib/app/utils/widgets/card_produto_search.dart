@@ -154,10 +154,9 @@ class CardProdutoSearchState extends State<CardProdutoSearch> {
                           await favoritoRepository.adicionarFavorito(widget.item.id);
                           isFavorito = true;
                         }
+                        setState(() {});
                         // ignore: empty_catches
                       } catch (e) {}
-
-                      setState(() {});
                     },
                     icon: isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                   )
