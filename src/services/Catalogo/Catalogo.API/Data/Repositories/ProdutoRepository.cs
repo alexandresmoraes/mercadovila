@@ -335,19 +335,19 @@ namespace Catalogo.API.Data.Repositories
       var start = (query.page - 1) * query.limit;
 
       var projections = Builders<Produto>.Projection
-        .Expression(p => new CatalogoDto
-        {
-          Id = p.Id,
-          Nome = p.Nome,
-          Descricao = p.Descricao,
-          ImageUrl = p.ImageUrl,
-          Preco = p.Preco,
-          UnidadeMedida = p.UnidadeMedida,
-          Estoque = p.Estoque,
-          Rating = p.Rating,
-          RatingCount = p.RatingCount,
-          IsAtivo = p.IsAtivo
-        });
+          .Expression(p => new CatalogoDto
+          {
+            Id = p.Id,
+            Nome = p.Nome,
+            Descricao = p.Descricao,
+            ImageUrl = p.ImageUrl,
+            Preco = p.Preco,
+            UnidadeMedida = p.UnidadeMedida,
+            Estoque = p.Estoque,
+            Rating = p.Rating,
+            RatingCount = p.RatingCount,
+            IsAtivo = p.IsAtivo
+          });
 
       var queryMongo = Collection.Find(filtro);
 
@@ -368,10 +368,22 @@ namespace Catalogo.API.Data.Repositories
       }
 
       var catalogo = await queryMongo
-        .Skip((query.page - 1) * query.limit)
-        .Limit(query.limit)
-        .Project(projections)
-        .ToListAsync();
+          .Skip((query.page - 1) * query.limit)
+          .Limit(query.limit)
+          .Project(projections)
+          .ToListAsync();
+
+      var produtoIds = catalogo.Select(dto => dto.Id).ToList();
+
+      var favoritosFilter = Builders<FavoritoItem>.Filter.In(f => f.ProdutoId, produtoIds)
+        & Builders<FavoritoItem>.Filter.Eq(f => f.UserId, "0f76aa88-6a46-41cd-805d-a6d87b19f481");
+      var favoritos = await _favoriteItemRepository.Collection.Find(favoritosFilter).ToListAsync();
+      var produtoIdsFavoritos = favoritos.Select(f => f.ProdutoId).ToList();
+
+      foreach (var produtoDto in catalogo)
+      {
+        produtoDto.IsFavorito = produtoIdsFavoritos.Contains(produtoDto.Id);
+      }
 
       var count = await Collection.CountDocumentsAsync(filtro);
 
