@@ -56,17 +56,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
   int? selectedCoupon;
   PageController? _pageController;
   ScrollController? _scrollController;
-  int? _selectedPaymentOption = 3;
   DateTime? selectedDate;
   bool step1Done = false;
   bool step2Done = false;
   TextEditingController textController1 = TextEditingController();
   TextEditingController textController2 = TextEditingController();
-  List<Address> addressList = [
-    Address(title: "Home", address: "Dn 53 Madison Building, Roy Enclave, lane 02 Nearest Landmark - Water park New York, USA"),
-    Address(title: "Office", address: "STP 02 Building sector 05, Module 02, Nearest landmark- New york , USA"),
-    Address(title: "Home 02", address: "STP 02 Building sector 05, Module 02, Nearest landmark- New york , USA"),
-  ];
+
   CarrinhoPageState() : super();
   @override
   @override
@@ -130,7 +125,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   if (_currentIndex == 0) {
                     Modular.to.pop();
                   } else {
-                    _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _pageController!.animateToPage(_currentIndex - 1,
+                        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     if (_currentIndex == 0) {
                       step1Done = false;
                     } else if (_currentIndex == 1) {
@@ -187,7 +183,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -218,9 +216,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -241,8 +242,11 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -275,7 +279,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!
+                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -312,7 +317,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           //   ),
                           // );
                         } else {
-                          _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                          _pageController!.animateToPage(_currentIndex + 1,
+                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                         }
                       },
                       child: Text(
@@ -382,16 +388,19 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${_productList[0].amount}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${_productList[0].unitName}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "\$",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${_productList[0].amount}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${_productList[0].unitName}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -462,7 +471,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             _productList[0].isFavourite = !_productList[0].isFavourite!;
                             setState(() {});
                           },
-                          icon: _productList[0].isFavourite! ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                          icon: _productList[0].isFavourite!
+                              ? Image.asset('assets/fav_red.png')
+                              : Image.asset('assets/fav_grey.png'),
                         )
                       ],
                     ),
@@ -501,7 +512,10 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                               )),
                           Text(
                             "${_productList[0].qty}",
-                            style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyLarge!
+                                .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
                           ),
                           IconButton(
                               padding: const EdgeInsets.all(0),
@@ -582,16 +596,19 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${_productList[1].amount}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${_productList[1].unitName}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "\$",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${_productList[1].amount}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${_productList[1].unitName}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -662,7 +679,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             _productList[1].isFavourite = !_productList[1].isFavourite!;
                             setState(() {});
                           },
-                          icon: _productList[1].isFavourite! ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                          icon: _productList[1].isFavourite!
+                              ? Image.asset('assets/fav_red.png')
+                              : Image.asset('assets/fav_grey.png'),
                         )
                       ],
                     ),
@@ -701,7 +720,10 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                               )),
                           Text(
                             "${_productList[1].qty}",
-                            style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyLarge!
+                                .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
                           ),
                           IconButton(
                               padding: const EdgeInsets.all(0),
@@ -825,14 +847,14 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             Observer(builder: (_) {
               return InkWell(
                 onTap: () {
-                  carrinhoController.toggleSelectOpcaoPagamento();
+                  carrinhoController.setSelectOpcaoPagamento(true);
                 },
                 child: ListTile(
                   leading: Radio(
                     value: true,
-                    groupValue: carrinhoController.selectOpcaoPagamento ? true : null,
-                    onChanged: (_) {
-                      carrinhoController.toggleSelectOpcaoPagamento();
+                    groupValue: carrinhoController.selectOpcaoPagamento,
+                    onChanged: (value) {
+                      carrinhoController.setSelectOpcaoPagamento(value!);
                     },
                   ),
                   title: Text(
@@ -843,7 +865,10 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     "Autorizar o desconto em folha no próximo mês útil",
                     style: Theme.of(context).primaryTextTheme.displayMedium,
                   ),
-                  trailing: Image.asset('assets/dinheiro.png'),
+                  trailing: Image.asset(
+                    'assets/dinheiro.png',
+                    scale: 1.5,
+                  ),
                 ),
               );
             }),
@@ -873,8 +898,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             "Selecione a opção de pagamento",
                             style: TextStyle(
                                 fontSize: 14,
-                                color:
-                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                                color: Modular.get<ThemeStore>().isDarkModeEnable
+                                    ? Theme.of(context).primaryColorLight
+                                    : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           )),
                     )

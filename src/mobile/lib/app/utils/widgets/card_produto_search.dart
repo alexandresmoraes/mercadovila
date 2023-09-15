@@ -69,16 +69,19 @@ class CardProdutoSearchState extends State<CardProdutoSearch> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       RichText(
-                          text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                        TextSpan(
-                          text: '${widget.item.preco}',
-                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                        ),
-                        TextSpan(
-                          text: ' / ${widget.item.unidadeMedida}',
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        )
-                      ])),
+                          text: TextSpan(
+                              text: "R\$ ",
+                              style: Theme.of(context).primaryTextTheme.displayMedium,
+                              children: [
+                            TextSpan(
+                              text: '${widget.item.preco}',
+                              style: Theme.of(context).primaryTextTheme.bodyLarge,
+                            ),
+                            TextSpan(
+                              text: ' / ${widget.item.unidadeMedida}',
+                              style: Theme.of(context).primaryTextTheme.displayMedium,
+                            )
+                          ])),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Row(
@@ -148,15 +151,21 @@ class CardProdutoSearchState extends State<CardProdutoSearch> {
                       var favoritoRepository = Modular.get<IFavoritosRepository>();
                       try {
                         if (isFavorito) {
+                          setState(() {
+                            isFavorito = !isFavorito;
+                          });
                           await favoritoRepository.removerFavorito(widget.item.id);
-                          isFavorito = false;
                         } else {
+                          setState(() {
+                            isFavorito = !isFavorito;
+                          });
                           await favoritoRepository.adicionarFavorito(widget.item.id);
-                          isFavorito = true;
                         }
-                        setState(() {});
-                        // ignore: empty_catches
-                      } catch (e) {}
+                      } catch (e) {
+                        setState(() {
+                          isFavorito = !isFavorito;
+                        });
+                      }
                     },
                     icon: isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                   )

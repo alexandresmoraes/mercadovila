@@ -47,11 +47,11 @@ mixin _$CarrinhoStore on CarrinhoStoreBase, Store {
       ActionController(name: 'CarrinhoStoreBase', context: context);
 
   @override
-  void toggleSelectOpcaoPagamento() {
+  void setSelectOpcaoPagamento(bool value) {
     final _$actionInfo = _$CarrinhoStoreBaseActionController.startAction(
-        name: 'CarrinhoStoreBase.toggleSelectOpcaoPagamento');
+        name: 'CarrinhoStoreBase.setSelectOpcaoPagamento');
     try {
-      return super.toggleSelectOpcaoPagamento();
+      return super.setSelectOpcaoPagamento(value);
     } finally {
       _$CarrinhoStoreBaseActionController.endAction(_$actionInfo);
     }

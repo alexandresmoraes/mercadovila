@@ -282,26 +282,27 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                   style: Theme.of(context).primaryTextTheme.bodySmall,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () async {
-                                  var favoritoRepository = Modular.get<IFavoritosRepository>();
-                                  try {
-                                    if (_controller.isFavorito) {
-                                      await favoritoRepository.removerFavorito(snapshot.data!.id);
-                                      _controller.isFavorito = false;
-                                    } else {
-                                      await favoritoRepository.adicionarFavorito(snapshot.data!.id);
-                                      _controller.isFavorito = true;
+                              Observer(builder: (_) {
+                                return IconButton(
+                                  onPressed: () async {
+                                    var favoritoRepository = Modular.get<IFavoritosRepository>();
+                                    try {
+                                      if (_controller.isFavorito) {
+                                        _controller.isFavorito = !_controller.isFavorito;
+                                        await favoritoRepository.removerFavorito(_controller.id!);
+                                      } else {
+                                        _controller.isFavorito = !_controller.isFavorito;
+                                        await favoritoRepository.adicionarFavorito(_controller.id!);
+                                      }
+                                    } catch (e) {
+                                      _controller.isFavorito = !_controller.isFavorito;
                                     }
-                                    // ignore: empty_catches
-                                  } catch (e) {}
-
-                                  setState(() {});
-                                },
-                                icon: _controller.isFavorito
-                                    ? Image.asset('assets/fav_red.png')
-                                    : Image.asset('assets/fav_grey.png'),
-                              ),
+                                  },
+                                  icon: _controller.isFavorito
+                                      ? Image.asset('assets/fav_red.png')
+                                      : Image.asset('assets/fav_grey.png'),
+                                );
+                              }),
                             ],
                           ),
                         ),

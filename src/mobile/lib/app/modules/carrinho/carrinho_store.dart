@@ -12,7 +12,7 @@ abstract class CarrinhoStoreBase with Store {
   bool selectOpcaoPagamento = false;
 
   @action
-  void toggleSelectOpcaoPagamento() {
-    selectOpcaoPagamento = !selectOpcaoPagamento;
+  void setSelectOpcaoPagamento(bool value) {
+    selectOpcaoPagamento = value;
   }
 }
