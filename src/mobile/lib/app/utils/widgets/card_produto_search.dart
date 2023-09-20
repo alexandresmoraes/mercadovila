@@ -133,6 +133,7 @@ class CardProdutoSearchState extends State<CardProdutoSearch> {
                       color: widget.item.estoque == 0 ? Colors.redAccent : Colors.green,
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                       ),
                     ),
                     child: Column(
