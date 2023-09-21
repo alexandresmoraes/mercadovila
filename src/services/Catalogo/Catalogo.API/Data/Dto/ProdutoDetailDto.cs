@@ -31,7 +31,6 @@ namespace Catalogo.API.Data.Dto
     [JsonIgnore]
     public int FavoritoCount { get; set; }
 
-    //public bool IsFavorito { get => FavoritoCount > 0; }
     public bool IsFavorito { get; set; }
   }
 }

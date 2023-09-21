@@ -40,7 +40,7 @@ namespace Catalogo.API.Controllers
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
 
       if (!existeFavorito)
-        await _favoritosRepository.CreateAsync(userId, produtoId);
+        await _favoritosRepository.AdicionarAsync(userId, produtoId);
 
       return Result.Ok();
     }
@@ -60,7 +60,7 @@ namespace Catalogo.API.Controllers
 
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
       if (existeFavorito)
-        await _favoritosRepository.DeleteAsync(userId, produtoId);
+        await _favoritosRepository.RemoverAsync(userId, produtoId);
 
       return Result.Ok();
     }

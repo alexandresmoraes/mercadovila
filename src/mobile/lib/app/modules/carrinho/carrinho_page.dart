@@ -5,6 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
+import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
+import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
@@ -44,7 +49,7 @@ class Address {
 }
 
 class CarrinhoPageState extends State<CarrinhoPage> {
-  final carrinhoController = Modular.get<CarrinhoStore>();
+  final carrinhoStore = Modular.get<CarrinhoStore>();
 
   GlobalKey<ScaffoldState>? _scaffoldKey;
 
@@ -76,6 +81,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     _scrollController = ScrollController(initialScrollOffset: _currentIndex.toDouble());
     _pageController = PageController(initialPage: _currentIndex);
     _pageController!.addListener(() {});
+
+    carrinhoStore.isLoading = true;
+    carrinhoStore.load().then((carrinho) {});
   }
 
   final List<Product> _productList = [
@@ -125,8 +133,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   if (_currentIndex == 0) {
                     Modular.to.pop();
                   } else {
-                    _pageController!.animateToPage(_currentIndex - 1,
-                        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     if (_currentIndex == 0) {
                       step1Done = false;
                     } else if (_currentIndex == 1) {
@@ -183,9 +190,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(
-                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
-                                              width: 1.5),
+                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -216,12 +221,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color:
-                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i
-                                                  ? const Color(0xFF4A4352)
-                                                  : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -242,11 +244,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border: Border.all(
-                                              color: _currentIndex >= i
-                                                  ? const Color(0xFF4A4352)
-                                                  : const Color(0xFFBcc8d2),
-                                              width: 1.5),
+                                          border:
+                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -279,8 +278,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!
-                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -317,8 +315,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           //   ),
                           // );
                         } else {
-                          _pageController!.animateToPage(_currentIndex + 1,
-                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                          _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                         }
                       },
                       child: Text(
@@ -339,421 +336,25 @@ class CarrinhoPageState extends State<CarrinhoPage> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 10, bottom: 10),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            child: InkWell(
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => ProductDetailScreen(a: widget.analytics, o: widget.observer),
-                //   ),
-                // );
+          FutureTriple<CarrinhoDto>(
+            future: carrinhoStore.load(),
+            data: (context, snapshot) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.itens.length,
+                itemBuilder: (_, index) {
+                  var item = snapshot.data!.itens[index];
+
+                  return CardProdutoCarrinho(item: item);
+                },
+              );
+            },
+            error: RefreshWidget(
+              onTap: () async {
+                //await carrinhoStore.load();
               },
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    height: 110,
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10, left: 120),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${_productList[0].name}',
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                            ),
-                            Text(
-                              '${_productList[0].description}',
-                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            RichText(
-                                text: TextSpan(
-                                    text: "\$",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: '${_productList[0].amount}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${_productList[0].unitName}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 18,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "${_productList[0].rating} ",
-                                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                      children: [
-                                        TextSpan(
-                                          text: '|',
-                                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                                        ),
-                                        TextSpan(
-                                          text: ' ${_productList[0].ratingCount} ratings',
-                                          style: Theme.of(context).primaryTextTheme.displayLarge,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _productList[0].discount != null
-                            ? Container(
-                                height: 20,
-                                width: 60,
-                                decoration: const BoxDecoration(
-                                  color: Colors.lightBlue,
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                  ),
-                                ),
-                                child: Text(
-                                  "${_productList[0].discount} off",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodySmall,
-                                ),
-                              )
-                            : const SizedBox(
-                                height: 20,
-                                width: 60,
-                              ),
-                        IconButton(
-                          onPressed: () {
-                            _productList[0].isFavourite = !_productList[0].isFavourite!;
-                            setState(() {});
-                          },
-                          icon: _productList[0].isFavourite!
-                              ? Image.asset('assets/fav_red.png')
-                              : Image.asset('assets/fav_grey.png'),
-                        )
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 28,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          stops: const [0, .90],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorLight],
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                              onPressed: () {},
-                              icon: Icon(
-                                FontAwesomeIcons.minus,
-                                size: 11,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              )),
-                          Text(
-                            "${_productList[0].qty}",
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .bodyLarge!
-                                .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
-                          ),
-                          IconButton(
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                              onPressed: () {},
-                              icon: Icon(
-                                FontAwesomeIcons.plus,
-                                size: 11,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    top: -20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('${_productList[0].imagePath}'),
-                        ),
-                      ),
-                      height: 100,
-                      width: 120,
-                    ),
-                  )
-                ],
-              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, bottom: 10),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            child: InkWell(
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => ProductDetailScreen(a: widget.analytics, o: widget.observer),
-                //   ),
-                // );
-              },
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    height: 110,
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10, left: 120),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${_productList[1].name}',
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                            ),
-                            Text(
-                              '${_productList[1].description}',
-                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            RichText(
-                                text: TextSpan(
-                                    text: "\$",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: '${_productList[1].amount}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${_productList[1].unitName}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 18,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "${_productList[1].rating} ",
-                                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                      children: [
-                                        TextSpan(
-                                          text: '|',
-                                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                                        ),
-                                        TextSpan(
-                                          text: ' ${_productList[1].ratingCount} ratings',
-                                          style: Theme.of(context).primaryTextTheme.displayLarge,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _productList[1].discount != null
-                            ? Container(
-                                height: 20,
-                                width: 60,
-                                decoration: const BoxDecoration(
-                                  color: Colors.lightBlue,
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                  ),
-                                ),
-                                child: Text(
-                                  "${_productList[1].discount} off",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodySmall,
-                                ),
-                              )
-                            : const SizedBox(
-                                height: 20,
-                                width: 60,
-                              ),
-                        IconButton(
-                          onPressed: () {
-                            _productList[1].isFavourite = !_productList[1].isFavourite!;
-                            setState(() {});
-                          },
-                          icon: _productList[1].isFavourite!
-                              ? Image.asset('assets/fav_red.png')
-                              : Image.asset('assets/fav_grey.png'),
-                        )
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 28,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          stops: const [0, .90],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorLight],
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                              onPressed: () {},
-                              icon: Icon(
-                                FontAwesomeIcons.minus,
-                                size: 11,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              )),
-                          Text(
-                            "${_productList[1].qty}",
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .bodyLarge!
-                                .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
-                          ),
-                          IconButton(
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                              onPressed: () {},
-                              icon: Icon(
-                                FontAwesomeIcons.plus,
-                                size: 11,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    top: -20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('${_productList[1].imagePath}'),
-                        ),
-                      ),
-                      height: 100,
-                      width: 120,
-                    ),
-                  )
-                ],
-              ),
-            ),
+            loading: const CircularProgress(),
           ),
           ListTile(
             visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -772,7 +373,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 style: Theme.of(context).primaryTextTheme.labelSmall,
               ),
               Text(
-                "R\$80.62",
+                "R\$ 80.62",
                 style: Theme.of(context).primaryTextTheme.labelSmall,
               ),
             ],
@@ -847,14 +448,14 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             Observer(builder: (_) {
               return InkWell(
                 onTap: () {
-                  carrinhoController.setSelectOpcaoPagamento(true);
+                  carrinhoStore.setSelectOpcaoPagamento(true);
                 },
                 child: ListTile(
                   leading: Radio(
                     value: true,
-                    groupValue: carrinhoController.selectOpcaoPagamento,
+                    groupValue: carrinhoStore.selectOpcaoPagamento,
                     onChanged: (value) {
-                      carrinhoController.setSelectOpcaoPagamento(value!);
+                      carrinhoStore.setSelectOpcaoPagamento(value!);
                     },
                   ),
                   title: Text(
@@ -873,7 +474,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               );
             }),
             Observer(builder: (_) {
-              return !carrinhoController.selectOpcaoPagamento
+              return !carrinhoStore.selectOpcaoPagamento
                   ? Container(
                       padding: const EdgeInsets.all(2),
                       width: MediaQuery.of(context).size.width,
@@ -898,9 +499,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             "Selecione a opção de pagamento",
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Modular.get<ThemeStore>().isDarkModeEnable
-                                    ? Theme.of(context).primaryColorLight
-                                    : Theme.of(context).primaryColor,
+                                color:
+                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           )),
                     )

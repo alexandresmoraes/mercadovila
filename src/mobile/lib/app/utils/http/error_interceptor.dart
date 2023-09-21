@@ -10,15 +10,16 @@ class ErrorInterceptor extends InterceptorsWrapper {
     DioError err,
     ErrorInterceptorHandler handler,
   ) {
+    var error = _handleError(err);
+
     if (kDebugMode) {
       debugPrint(json.encode("========Begin ErrorInterceptor========"));
-      debugPrint(json.encode(_handleError(err)));
+      debugPrint(error);
     }
 
-    var error = _handleError(err);
     if (error.isNotEmpty) {
       AnimatedSnackBar.material(
-        _handleError(err),
+        error,
         type: AnimatedSnackBarType.error,
         mobileSnackBarPosition: MobileSnackBarPosition.bottom,
         desktopSnackBarPosition: DesktopSnackBarPosition.topRight,

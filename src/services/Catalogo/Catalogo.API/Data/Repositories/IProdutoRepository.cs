@@ -12,6 +12,7 @@ namespace Catalogo.API.Data.Repositories
     Task<Produto?> GetAsync(string id);
     Task<PagedResult<ProdutoDto>> GetProdutosAsync(ProdutoQuery produtoQuery);
     Task<bool> ExisteProdutoPorNome(string nome, string? id);
+    Task<bool> ExisteProdutoPorId(string id);
     Task<bool> ExisteProdutoPorCodigoBarras(string codigoBarras, string? id);
     Task<ProdutoDetailDto?> GetProdutoDetailAsync(string userId, string produtoId);
 

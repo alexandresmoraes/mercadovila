@@ -86,6 +86,15 @@ namespace Catalogo.API.Data.Repositories
       return count > 0;
     }
 
+    public async Task<bool> ExisteProdutoPorId(string id)
+    {
+      var filtro = Builders<Produto>.Filter.Eq(p => p.Id, id);
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return count > 0;
+    }
+
     public async Task<Produto?> GetAsync(string id)
       => await Collection.Find(p => p.Id == id).FirstOrDefaultAsync();
 
@@ -195,7 +204,8 @@ namespace Catalogo.API.Data.Repositories
       var projectStage = new BsonDocument("$project",
         new BsonDocument
         {
-          { "Id", "$ProdutoId" },
+          { "_id", 0 },
+          { "ProdutoId", "$ProdutoId" },
           { "Nome", "$produto.Nome" },
           { "Descricao", "$produto.Descricao" },
           { "UnidadeMedida", "$produto.UnidadeMedida" },
@@ -228,7 +238,7 @@ namespace Catalogo.API.Data.Repositories
       var projections = Builders<Produto>.Projection
         .Expression(p => new CatalogoDto
         {
-          Id = p.Id,
+          ProdutoId = p.Id,
           Nome = p.Nome,
           Descricao = p.Descricao,
           ImageUrl = p.ImageUrl,
@@ -261,7 +271,7 @@ namespace Catalogo.API.Data.Repositories
       var projections = Builders<Produto>.Projection
         .Expression(p => new CatalogoDto
         {
-          Id = p.Id,
+          ProdutoId = p.Id,
           Nome = p.Nome,
           Descricao = p.Descricao,
           ImageUrl = p.ImageUrl,
@@ -295,7 +305,7 @@ namespace Catalogo.API.Data.Repositories
       var projections = Builders<Produto>.Projection
         .Expression(p => new CatalogoDto
         {
-          Id = p.Id,
+          ProdutoId = p.Id,
           Nome = p.Nome,
           Descricao = p.Descricao,
           ImageUrl = p.ImageUrl,
@@ -363,23 +373,24 @@ namespace Catalogo.API.Data.Repositories
         }),
         new BsonDocument("$project", new BsonDocument
         {
-            { "Id", "$_id" },
-            { "Nome", 1 },
-            { "Descricao", 1 },
-            { "ImageUrl", 1 },
-            { "Preco", 1 },
-            { "UnidadeMedida", 1 },
-            { "Estoque", 1 },
-            { "Rating", 1 },
-            { "RatingCount", 1 },
-            { "IsAtivo", 1 },
-            { "IsFavorito", new BsonDocument("$cond", new BsonArray
-                {
-                    new BsonDocument("$gt", new BsonArray { new BsonDocument("$size", "$Favoritos"), 0 }),
-                    true,
-                    false
-                })
-            }
+          { "_id", 0 },
+          { "ProdutoId", "$_id" },
+          { "Nome", 1 },
+          { "Descricao", 1 },
+          { "ImageUrl", 1 },
+          { "Preco", 1 },
+          { "UnidadeMedida", 1 },
+          { "Estoque", 1 },
+          { "Rating", 1 },
+          { "RatingCount", 1 },
+          { "IsAtivo", 1 },
+          { "IsFavorito", new BsonDocument("$cond", new BsonArray
+              {
+                  new BsonDocument("$gt", new BsonArray { new BsonDocument("$size", "$Favoritos"), 0 }),
+                  true,
+                  false
+              })
+          }
         }),
         new BsonDocument("$sort", new BsonDocument(query.order switch
         {
@@ -399,5 +410,7 @@ namespace Catalogo.API.Data.Repositories
 
       return new PagedResult<CatalogoDto>(start, query.limit, count, catalogo);
     }
+
+
   }
 }
