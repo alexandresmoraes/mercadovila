@@ -20,20 +20,23 @@ abstract class CarrinhoStoreBase with Store {
   }
 
   @observable
+  ObservableList<CarrinhoItemDto> carrinhoItens = ObservableList<CarrinhoItemDto>();
+
+  @observable
   CarrinhoDto? carrinhoDto;
 
   @observable
   bool isLoading = false;
 
+  @action
   Future<CarrinhoDto> load() async {
     try {
-      if (carrinhoDto != null) return carrinhoDto!;
-
       isLoading = true;
 
       var carrinhoRepository = Modular.get<ICarrinhoRepository>();
 
       carrinhoDto = await carrinhoRepository.getCarrinho();
+      carrinhoItens = ObservableList.of(carrinhoDto!.itens);
 
       return carrinhoDto!;
     } finally {

@@ -1,7 +1,6 @@
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_carrinho_repository.dart';
 
 @Injectable()

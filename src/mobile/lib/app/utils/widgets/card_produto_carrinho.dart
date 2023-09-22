@@ -2,19 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoCarrinho extends StatefulWidget {
   final CarrinhoItemDto item;
 
-  const CardProdutoCarrinho({
-    super.key,
-    required this.item,
-  });
+  const CardProdutoCarrinho(this.item, {super.key});
 
   @override
   CardProdutoCarrinhoState createState() => CardProdutoCarrinhoState();
@@ -22,6 +19,7 @@ class CardProdutoCarrinho extends StatefulWidget {
 
 class CardProdutoCarrinhoState extends State<CardProdutoCarrinho> {
   bool isFavorito = false;
+  int quantidade = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -166,55 +164,20 @@ class CardProdutoCarrinhoState extends State<CardProdutoCarrinho> {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 28,
-                width: 80,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    stops: const [0, .90],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorLight],
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        padding: const EdgeInsets.all(0),
-                        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                        onPressed: () {},
-                        icon: Icon(
-                          FontAwesomeIcons.minus,
-                          size: 11,
-                          color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                        )),
-                    Text(
-                      "${widget.item.quantidade}",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
-                    ),
-                    IconButton(
-                      padding: const EdgeInsets.all(0),
-                      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                      onPressed: () {},
-                      icon: Icon(
-                        FontAwesomeIcons.plus,
-                        size: 11,
-                        color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            CardCountProduto(
+              quantidade: widget.item.quantidade,
+              increment: () {
+                setState(() {
+                  quantidade++;
+                  widget.item.quantidade = quantidade;
+                });
+              },
+              decrement: () {
+                setState(() {
+                  quantidade--;
+                  widget.item.quantidade = quantidade;
+                });
+              },
             ),
             Positioned(
               left: 0,
@@ -256,6 +219,7 @@ class CardProdutoCarrinhoState extends State<CardProdutoCarrinho> {
   @override
   void initState() {
     isFavorito = widget.item.isFavorito;
+    quantidade = widget.item.quantidade;
 
     super.initState();
   }

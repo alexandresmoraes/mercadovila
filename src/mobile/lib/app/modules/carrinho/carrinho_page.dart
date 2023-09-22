@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
-  const CarrinhoPage({Key? key, this.title = 'CartPage'}) : super(key: key);
+  const CarrinhoPage({Key? key, this.title = 'Carrinho'}) : super(key: key);
   @override
   CarrinhoPageState createState() => CarrinhoPageState();
 }
@@ -68,7 +64,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
   TextEditingController textController2 = TextEditingController();
 
   CarrinhoPageState() : super();
-  @override
+
   @override
   void dispose() {
     super.dispose();
@@ -82,34 +78,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     _pageController = PageController(initialPage: _currentIndex);
     _pageController!.addListener(() {});
 
-    carrinhoStore.isLoading = true;
-    carrinhoStore.load().then((carrinho) {});
+    carrinhoStore.load();
   }
 
-  final List<Product> _productList = [
-    Product(
-        name: "Hersheys",
-        amount: "15.08",
-        description: "Fresh meat, ready to eat",
-        discount: "20%",
-        isFavourite: true,
-        unitName: "kg",
-        rating: "2",
-        ratingCount: "102",
-        imagePath: "assets/lamb.png",
-        qty: 1),
-    Product(
-        name: "Pé de moça",
-        amount: "11.08",
-        description: "Fresh Chicken, ready to eat",
-        discount: "20%",
-        isFavourite: true,
-        unitName: "kg",
-        rating: "4.5",
-        ratingCount: "12",
-        imagePath: "assets/wheat.png",
-        qty: 3),
-  ];
   @override
   Widget build(BuildContext context) {
     List<String> orderProcess = ['Carrinho', 'Pagamento'];
@@ -117,7 +88,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
+        Modular.to.pop();
         return false;
       },
       child: SafeArea(
@@ -309,11 +280,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   child: TextButton(
                       onPressed: () {
                         if (_currentIndex == 3) {
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => OrderSuccessScreen(a: widget.analytics, o: widget.observer),
-                          //   ),
-                          // );
+                          //
                         } else {
                           _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                         }
@@ -331,98 +298,101 @@ class CarrinhoPageState extends State<CarrinhoPage> {
   }
 
   Widget _cartWidget() {
-    return SingleChildScrollView(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          FutureTriple<CarrinhoDto>(
-            future: carrinhoStore.load(),
-            data: (context, snapshot) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.itens.length,
-                itemBuilder: (_, index) {
-                  var item = snapshot.data!.itens[index];
-
-                  return CardProdutoCarrinho(item: item);
-                },
-              );
-            },
-            error: RefreshWidget(
-              onTap: () async {
-                //await carrinhoStore.load();
-              },
-            ),
-            loading: const CircularProgress(),
-          ),
-          ListTile(
-            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-            contentPadding: const EdgeInsets.all(0),
-            title: Text(
-              "Preço",
-              style: Theme.of(context).primaryTextTheme.headlineSmall,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Subtotal",
-                style: Theme.of(context).primaryTextTheme.labelSmall,
-              ),
-              Text(
-                "R\$ 80.62",
-                style: Theme.of(context).primaryTextTheme.labelSmall,
-              ),
-            ],
-          ),
-          const Divider(),
-          ListTile(
-            minVerticalPadding: 0,
-            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-            minLeadingWidth: 30,
-            contentPadding: const EdgeInsets.all(0),
-            leading: Text(
-              "Total",
-              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
-            ),
-            trailing: Text(
-              "R\$ 61.27",
-              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
-            ),
-          ),
-          Modular.get<ThemeStore>().isDarkModeEnable
-              ? Container(
-                  height: 120,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/checkout_cart_dark.png',
+    return Observer(builder: (_) {
+      return Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: carrinhoStore.isLoading
+                ? const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircularProgress(),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Observer(builder: (_) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: carrinhoStore.carrinhoItens.length,
+                          itemBuilder: (_, index) {
+                            var item = carrinhoStore.carrinhoItens[index];
+                            return CardProdutoCarrinho(item);
+                          },
+                        );
+                      }),
+                      ListTile(
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.all(0),
+                        title: Text(
+                          "Preço",
+                          style: Theme.of(context).primaryTextTheme.headlineSmall,
+                        ),
                       ),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                )
-              : Container(
-                  height: 120,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/checkout_cart_light.png',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Subtotal",
+                            style: Theme.of(context).primaryTextTheme.labelSmall,
+                          ),
+                          Text(
+                            "R\$ ${carrinhoStore.carrinhoDto!.total}",
+                            style: Theme.of(context).primaryTextTheme.labelSmall,
+                          ),
+                        ],
                       ),
-                      fit: BoxFit.fitWidth,
-                    ),
+                      const Divider(),
+                      ListTile(
+                        minVerticalPadding: 0,
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        minLeadingWidth: 30,
+                        contentPadding: const EdgeInsets.all(0),
+                        leading: Text(
+                          "Total",
+                          style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        trailing: Text(
+                          "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
+                          style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Container(
+                              height: 120,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/checkout_cart_dark.png',
+                                  ),
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 120,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/checkout_cart_light.png',
+                                  ),
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                    ],
                   ),
-                )
-        ],
-      ),
-    ));
+          ),
+        ),
+      );
+    });
   }
 
   Widget _payment() {
