@@ -29,6 +29,7 @@ namespace Catalogo.API.Controllers
     // POST api/carrinho/{produtoId}/{quantidade}
     [HttpPost("{produtoId}/{quantidade}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PostAsync([FromRoute] CarrinhoItemModel model)
@@ -50,6 +51,7 @@ namespace Catalogo.API.Controllers
     [HttpDelete("{produtoId}/{quantidade}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> DeleteAsync([FromRoute] CarrinhoItemModel model)
@@ -75,7 +77,6 @@ namespace Catalogo.API.Controllers
     // GET api/carrinho
     [HttpGet]
     [ProducesResponseType(typeof(CarrinhoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<CarrinhoDto>> GetCarrinhoPorUsuarioAsync()
