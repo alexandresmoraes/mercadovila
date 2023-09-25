@@ -29,6 +29,8 @@ abstract class CarrinhoStoreBase with Store {
   @observable
   bool isLoading = false;
 
+  bool isAdicionandoCarrinhoItem = false;
+
   @action
   Future<CarrinhoDto> load() async {
     try {
@@ -60,7 +62,6 @@ abstract class CarrinhoStoreBase with Store {
       isLoading = true;
 
       var carrinhoRepository = Modular.get<CarrinhoRepository>();
-
       await carrinhoRepository.adicionarCarrinho(produtoId, quantidade);
 
       await load();
@@ -74,7 +75,6 @@ abstract class CarrinhoStoreBase with Store {
       isLoading = true;
 
       var carrinhoRepository = Modular.get<CarrinhoRepository>();
-
       await carrinhoRepository.removerCarrinho(produtoId, quantidade);
 
       await load();

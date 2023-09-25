@@ -8,6 +8,8 @@ part 'card_count_produto_controller.g.dart';
 class CardCountProdutoController = CardCountProdutoControllerBase with _$CardCountProdutoController;
 
 abstract class CardCountProdutoControllerBase with Store {
+  CarrinhoStore carrinhoStore = Modular.get<CarrinhoStore>();
+
   String? produtoId;
   int estoqueDisponivel = 0;
 
@@ -19,32 +21,29 @@ abstract class CardCountProdutoControllerBase with Store {
     this.estoqueDisponivel = estoqueDisponivel;
   }
 
-  bool isAdicionandoCarrinhoItem = false;
-
   @action
   Future<void> adicionarCarrinhoItem() async {
-    if (!isAdicionandoCarrinhoItem) {
-      isAdicionandoCarrinhoItem = true;
+    if (!carrinhoStore.isAdicionandoCarrinhoItem) {
+      carrinhoStore.isAdicionandoCarrinhoItem = true;
       try {
         if (estoqueDisponivel <= quantidade) {
           GlobalSnackbar.error('Sem estoque');
         } else {
           quantidade++;
           await Modular.get<CarrinhoStore>().adicionarCarrinhoItem(produtoId!, 1);
-          quantidade++;
         }
       } catch (e) {
         quantidade--;
       } finally {
-        isAdicionandoCarrinhoItem = false;
+        carrinhoStore.isAdicionandoCarrinhoItem = false;
       }
     }
   }
 
   @action
   Future<void> removerCarrinhoItem() async {
-    if (!isAdicionandoCarrinhoItem) {
-      isAdicionandoCarrinhoItem = true;
+    if (!carrinhoStore.isAdicionandoCarrinhoItem) {
+      carrinhoStore.isAdicionandoCarrinhoItem = true;
       final itensFaltando = quantidade - estoqueDisponivel;
       try {
         if (itensFaltando > 0) {
@@ -61,7 +60,7 @@ abstract class CardCountProdutoControllerBase with Store {
           quantidade++;
         }
       } finally {
-        isAdicionandoCarrinhoItem = false;
+        carrinhoStore.isAdicionandoCarrinhoItem = false;
       }
     }
   }

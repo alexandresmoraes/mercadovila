@@ -40,7 +40,7 @@ namespace Catalogo.API.Controllers
       var userId = _authService.GetUserId();
 
       var existeProduto = await _produtoRepository.ExisteProdutoPorId(produtoId);
-      if (existeProduto)
+      if (!existeProduto)
         return Result.NotFound();
 
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
@@ -64,7 +64,7 @@ namespace Catalogo.API.Controllers
       var userId = _authService.GetUserId();
 
       var existeProduto = await _produtoRepository.ExisteProdutoPorId(produtoId);
-      if (existeProduto)
+      if (!existeProduto)
         return Result.NotFound();
 
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);

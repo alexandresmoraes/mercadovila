@@ -11,12 +11,14 @@ class CardCountProduto extends StatelessWidget {
   final String produtoId;
   final int estoqueDisponivel;
   final bool isAtivo;
+  final bool isTop;
 
   CardCountProduto({
     super.key,
     required this.produtoId,
     required this.estoqueDisponivel,
     required this.isAtivo,
+    this.isTop = false,
   }) {
     controller.produtoId = produtoId;
     controller.quantidade = Modular.get<CarrinhoStore>().getCarrinhoItemQuantidade(produtoId);
@@ -26,20 +28,22 @@ class CardCountProduto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      if (controller.estoqueDisponivel == 0) {
+      if (controller.estoqueDisponivel == 0 && controller.quantidade == 0) {
         return const SizedBox.shrink();
       } else if (controller.quantidade == 0) {
         return Positioned(
-          bottom: 0,
+          top: isTop ? 0 : null,
+          bottom: isTop ? null : 0,
           right: 0,
           child: Container(
             height: 30,
             width: 30,
             decoration: BoxDecoration(
               color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(10),
-                topLeft: Radius.circular(10),
+              borderRadius: BorderRadius.only(
+                bottomRight: isTop ? Radius.zero : const Radius.circular(10),
+                topLeft: isTop ? Radius.zero : const Radius.circular(10),
+                bottomLeft: isTop ? const Radius.circular(10) : Radius.zero,
               ),
             ),
             child: IconButton(
@@ -57,7 +61,8 @@ class CardCountProduto extends StatelessWidget {
         );
       } else {
         return Positioned(
-          bottom: 0,
+          top: isTop ? 0 : null,
+          bottom: isTop ? null : 0,
           right: 0,
           child: Container(
             height: 28,
@@ -68,17 +73,16 @@ class CardCountProduto extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  !isAtivo || controller.quantidade > controller.estoqueDisponivel
-                      ? Colors.redAccent
-                      : Theme.of(context).primaryColorLight,
+                  !isAtivo || controller.quantidade > controller.estoqueDisponivel ? Colors.redAccent : Theme.of(context).primaryColorLight,
                   controller.quantidade < controller.estoqueDisponivel && isAtivo
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).iconTheme.color!
                 ],
               ),
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(10),
-                topLeft: Radius.circular(10),
+              borderRadius: BorderRadius.only(
+                bottomRight: isTop ? Radius.zero : const Radius.circular(10),
+                topLeft: isTop ? Radius.zero : const Radius.circular(10),
+                bottomLeft: isTop ? const Radius.circular(10) : Radius.zero,
               ),
             ),
             child: Row(
@@ -90,7 +94,6 @@ class CardCountProduto extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                     visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
                     onPressed: () async {
-                      if (controller.isAdicionandoCarrinhoItem) return;
                       if (controller.quantidade == 1) {
                         showCupertinoModalPopup<void>(
                           context: context,
@@ -101,7 +104,7 @@ class CardCountProduto extends StatelessWidget {
                                 isDestructiveAction: true,
                                 onPressed: () async {
                                   Modular.to.pop();
-                                  controller.removerCarrinhoItem();
+                                  await controller.removerCarrinhoItem();
                                 },
                                 child: const Text(
                                   'Remover',
@@ -133,10 +136,7 @@ class CardCountProduto extends StatelessWidget {
                     )),
                 Text(
                   "${controller.quantidade}",
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .bodyLarge!
-                      .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
                 ),
                 IconButton(
                   padding: const EdgeInsets.all(0),

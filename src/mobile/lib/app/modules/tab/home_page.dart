@@ -9,6 +9,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
@@ -16,6 +17,7 @@ import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 class HomePage extends StatefulWidget {
   final String title;
   const HomePage({Key? key, this.title = 'Home'}) : super(key: key);
+
   @override
   HomePageState createState() => HomePageState();
 }
@@ -31,17 +33,18 @@ class Product {
   String? description;
   String? discount;
   String? imagePath;
-  Product(
-      {this.amount,
-      this.description,
-      this.discount,
-      this.isFavourite,
-      this.name,
-      this.qty,
-      this.rating,
-      this.ratingCount,
-      this.unitName,
-      this.imagePath});
+  Product({
+    this.amount,
+    this.description,
+    this.discount,
+    this.isFavourite,
+    this.name,
+    this.qty,
+    this.rating,
+    this.ratingCount,
+    this.unitName,
+    this.imagePath,
+  });
 }
 
 class HomePageState extends State<HomePage> {
@@ -106,23 +109,20 @@ class HomePageState extends State<HomePage> {
                       ),
                 title: Text('Bom dia', style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@alexandre',
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .displayMedium!
-                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                        onPressed: () {
-                          Modular.to.pushNamed('/notificacoes/');
-                        },
-                        icon: Modular.get<ThemeStore>().isDarkModeEnable
-                            ? Image.asset('assets/notificationIcon_white.png')
-                            : Image.asset('assets/notificationIcon_black.png')),
+                      onPressed: () {
+                        Modular.to.pushNamed('/notificacoes/');
+                      },
+                      icon: Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Image.asset('assets/notificationIcon_white.png')
+                          : Image.asset('assets/notificationIcon_black.png'),
+                    ),
                     Container(
-                      decoration: const BoxDecoration(
-                          color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       width: 84,
@@ -176,8 +176,7 @@ class HomePageState extends State<HomePage> {
                 position: _currentIndex.toDouble(),
                 onTap: (i) {
                   _currentIndex = i.toInt();
-                  _carouselController.animateToPage(_currentIndex,
-                      duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
+                  _carouselController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
                 },
                 decorator: DotsDecorator(
                   activeSize: const Size(6, 6),
@@ -387,9 +386,7 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',
@@ -923,29 +920,11 @@ class HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                          color: Colors.white60,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : index % 3 == 1
-                                  ? const Color(0XFF9EEEFF)
-                                  : index % 3 == 2
-                                      ? const Color(0XFFFFF1C0)
-                                      : const Color(0XFFFFD4D7),
-                        ),
-                      ),
+                    CardCountProduto(
+                      produtoId: item.produtoId,
+                      estoqueDisponivel: item.estoque,
+                      isAtivo: item.isAtivo,
+                      isTop: true,
                     ),
                     Positioned(
                       bottom: 0,
