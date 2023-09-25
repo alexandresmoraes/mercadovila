@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
@@ -8,7 +9,7 @@ import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;
-  const SplashPage({Key? key, this.title = 'SplashPage'}) : super(key: key);
+  const SplashPage({Key? key, this.title = 'Splash'}) : super(key: key);
   @override
   SplashPageState createState() => SplashPageState();
 }
@@ -25,6 +26,7 @@ class SplashPageState extends State<SplashPage> {
       var authService = Modular.get<IAuthService>();
 
       if (await authService.isAuthenticated()) {
+        Modular.get<CarrinhoStore>().load();
         Modular.get<AccountStore>().setAccount(await authService.me());
         Modular.to.pushReplacementNamed(TabModule.routeName);
       } else {

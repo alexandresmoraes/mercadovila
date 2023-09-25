@@ -177,7 +177,7 @@ abstract class ProdutosEditControllerBase with Store {
     preco = produtoModel!.preco == 0 ? "" : produtoModel!.preco.toString();
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
-    estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "" : produtoModel!.estoqueAlvo.toString();
+    estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "0" : produtoModel!.estoqueAlvo.toString();
     isAtivo = produtoModel!.isAtivo;
 
     isLoading = false;

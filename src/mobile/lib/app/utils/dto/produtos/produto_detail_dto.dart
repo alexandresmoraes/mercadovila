@@ -38,8 +38,10 @@ class ProdutoDetailDto {
     isFavorito = json['isFavorito'];
   }
 
-  String getDisponiveis() => estoque == 0
-      ? 'Fora de estoque'
+  bool isDisponivel() => isAtivo && estoque > 0;
+
+  String getDisponiveis() => !isDisponivel()
+      ? 'Indisponível'
       : estoque == 1
           ? '1 disponível'
           : '$estoque disponíveis';

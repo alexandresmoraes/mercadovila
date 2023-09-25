@@ -10,6 +10,7 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
@@ -236,28 +237,13 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                             },
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).iconTheme.color,
-                                borderRadius: const BorderRadius.only(
-                                  bottomRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              ),
-                            ),
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return CardCountProduto(
+                            produtoId: widget.id,
+                            estoqueDisponivel: _controller.produtoDetailDto!.estoque,
+                            isAtivo: _controller.produtoDetailDto!.isAtivo,
+                          );
+                        }),
                         Positioned(
                           right: 0,
                           top: 0,
@@ -270,16 +256,21 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 height: 20,
                                 width: 100,
                                 decoration: BoxDecoration(
-                                  color: snapshot.data!.estoque == 0 ? Colors.redAccent : Colors.green,
+                                  color: !snapshot.data!.isDisponivel() ? Colors.redAccent : Colors.green,
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomLeft: Radius.circular(10),
                                   ),
                                 ),
-                                child: Text(
-                                  snapshot.data!.getDisponiveis(),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodySmall,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      snapshot.data!.getDisponiveis(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ],
                                 ),
                               ),
                               Observer(builder: (_) {
@@ -323,18 +314,6 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                           )
                         : const SizedBox.shrink();
                   }),
-                  // isVisibleFavoritos
-                  //     ? Padding(
-                  //         padding: const EdgeInsets.only(top: 10.0),
-                  //         child: ListTile(
-                  //           contentPadding: const EdgeInsets.all(0),
-                  //           title: Text(
-                  //             "Favoritos",
-                  //             style: Theme.of(context).primaryTextTheme.headlineSmall,
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : const SizedBox.shrink(),
                   listaFavoritos()
                 ],
               ),

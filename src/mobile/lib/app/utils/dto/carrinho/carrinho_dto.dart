@@ -5,8 +5,8 @@ class CarrinhoDto {
     required this.total,
   });
 
-  late final double subtotal;
-  late final double total;
+  late final num subtotal;
+  late final num total;
   late final List<CarrinhoItemDto> itens;
 
   CarrinhoDto.fromJson(Map<String, dynamic> json) {
@@ -59,8 +59,10 @@ class CarrinhoItemDto {
     quantidade = json['quantidade'];
   }
 
-  String getDisponiveis() => estoque == 0
-      ? 'Fora de estoque'
+  bool isDisponivel() => isAtivo && estoque > 0;
+
+  String getDisponiveis() => !isDisponivel()
+      ? 'Indisponível'
       : estoque == 1
           ? '1 disponível'
           : '$estoque disponíveis';

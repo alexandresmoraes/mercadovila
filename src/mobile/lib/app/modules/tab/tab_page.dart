@@ -2,9 +2,9 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/produtos/produtos_page.dart';
 import 'package:vilasesmo/app/modules/tab/account_page.dart';
 import 'package:vilasesmo/app/modules/tab/home_page.dart';
+import 'package:vilasesmo/app/modules/tab/scanner_page.dart';
 import 'package:vilasesmo/app/modules/tab/search_page.dart';
 
 class TabPage extends StatefulWidget {
@@ -40,10 +40,15 @@ class _TabPageState extends State<TabPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  _iconDataList[index],
-                  color: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.color,
-                  size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
+                IconButton(
+                  icon: Icon(
+                    _iconDataList[index],
+                    color: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.color,
+                    size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
+                  ),
+                  onPressed: () async {
+                    setState(() => _bottomNavIndex = index);
+                  },
                 ),
                 const SizedBox(height: 5),
                 isActive
@@ -62,7 +67,7 @@ class _TabPageState extends State<TabPage> {
           activeIndex: _bottomNavIndex,
           notchSmoothness: NotchSmoothness.softEdge,
           gapLocation: GapLocation.center,
-          onTap: (index) => setState(() => _bottomNavIndex = index),
+          onTap: (index) {},
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
@@ -85,7 +90,7 @@ class _TabPageState extends State<TabPage> {
   List<Widget> _screens() => [
         const HomePage(),
         const SearchPage(),
-        const ProdutosPage(),
+        const ScannerPage(),
         const AccountPage(),
       ];
 }

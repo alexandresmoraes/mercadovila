@@ -84,8 +84,9 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(widget.id != null ? "Editando usuário" : "Criando usuário"),
@@ -145,7 +146,8 @@ class AccountEditPageState extends State<AccountEditPage> {
                                       radius: 100,
                                       backgroundImage: AssetImage('assets/person.png'),
                                     ),
-                                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
+                                    imageUrl:
+                                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
                                     imageBuilder: (context, imageProvider) {
                                       return CircleAvatar(
                                         radius: 100,
@@ -213,7 +215,9 @@ class AccountEditPageState extends State<AccountEditPage> {
                           },
                           child: Observer(builder: (_) {
                             return Text(
-                              isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath) ? 'Escolher foto' : 'Trocar foto',
+                              isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath)
+                                  ? 'Escolher foto'
+                                  : 'Trocar foto',
                               style: Theme.of(context).primaryTextTheme.displayLarge,
                             );
                           }),

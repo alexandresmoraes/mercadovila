@@ -17,7 +17,7 @@ class CircularProgress extends StatelessWidget {
         height: height ?? 50,
         child: CurvedCircularProgressIndicator(
           strokeWidth: strokeWidth,
-          color: color ?? Theme.of(context).primaryTextTheme.displaySmall!.color,
+          color: color ?? Theme.of(context).primaryIconTheme.color,
         ),
       ),
     );

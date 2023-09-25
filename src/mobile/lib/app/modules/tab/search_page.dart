@@ -11,7 +11,7 @@ import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class SearchPage extends StatefulWidget {
   final String title;
-  const SearchPage({Key? key, this.title = 'Search'}) : super(key: key);
+  const SearchPage({Key? key, this.title = 'Todos'}) : super(key: key);
   @override
   SearchPageState createState() => SearchPageState();
 }
@@ -34,7 +34,9 @@ class SearchPageState extends State<SearchPage> {
                   var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
                   if (refresh ?? false) pagingController.refresh();
                 },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
+                icon: Modular.get<ThemeStore>().isDarkModeEnable
+                    ? Image.asset('assets/filter_white.png')
+                    : Image.asset('assets/filter_black.png')),
           ],
         ),
         body: Column(
@@ -85,7 +87,7 @@ class SearchPageState extends State<SearchPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return CardProdutoSearch(item: item);
+          return CardProdutoSearch(item);
         },
       ),
     );

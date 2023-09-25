@@ -68,9 +68,9 @@ class HomePageState extends State<HomePage> {
   HomePageState() : super();
 
   PagingController<int, CatalogoDto> pagingNovosController = PagingController(firstPageKey: 1);
+  PagingController<int, CatalogoDto> pagingFavoritosController = PagingController(firstPageKey: 1);
   PagingController<int, CatalogoDto> pagingMaisVendidosController = PagingController(firstPageKey: 1);
   PagingController<int, CatalogoDto> pagingUltimosVendidosController = PagingController(firstPageKey: 1);
-  PagingController<int, CatalogoDto> pagingFavoritosController = PagingController(firstPageKey: 1);
 
   bool isVisibleNovos = false;
   bool isVisibleMaisVendidos = false;
@@ -106,7 +106,10 @@ class HomePageState extends State<HomePage> {
                       ),
                 title: Text('Bom dia', style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@alexandre',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -118,7 +121,8 @@ class HomePageState extends State<HomePage> {
                             ? Image.asset('assets/notificationIcon_white.png')
                             : Image.asset('assets/notificationIcon_black.png')),
                     Container(
-                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(
+                          color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       width: 84,
@@ -172,7 +176,8 @@ class HomePageState extends State<HomePage> {
                 position: _currentIndex.toDouble(),
                 onTap: (i) {
                   _currentIndex = i.toInt();
-                  _carouselController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
+                  _carouselController.animateToPage(_currentIndex,
+                      duration: const Duration(milliseconds: 800), curve: Curves.easeInOut);
                 },
                 decorator: DotsDecorator(
                   activeSize: const Size(6, 6),
@@ -210,30 +215,6 @@ class HomePageState extends State<HomePage> {
                     )
                   : const SizedBox.shrink(),
               listaNovos(),
-              isVisibleMaisVendidos
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Mais vendidos',
-                            style: Theme.of(context).primaryTextTheme.headlineSmall,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              //
-                            },
-                            child: Text(
-                              'todos',
-                              style: Theme.of(context).primaryTextTheme.displayLarge,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-              isVisibleMaisVendidos ? listaMaisVendidos() : const SizedBox.shrink(),
               isVisibleFavoritos
                   ? Padding(
                       padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -258,6 +239,30 @@ class HomePageState extends State<HomePage> {
                     )
                   : const SizedBox.shrink(),
               listaFavoritos(),
+              isVisibleMaisVendidos
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Mais vendidos',
+                            style: Theme.of(context).primaryTextTheme.headlineSmall,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              //
+                            },
+                            child: Text(
+                              'todos',
+                              style: Theme.of(context).primaryTextTheme.displayLarge,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+              isVisibleMaisVendidos ? listaMaisVendidos() : const SizedBox.shrink(),
               isVisibleUltimosVendidos
                   ? Padding(
                       padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -382,7 +387,9 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',

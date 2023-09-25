@@ -34,6 +34,8 @@ dependencies:
   curved_progress_bar: ^1.0.2
   cached_network_image: ^3.2.3
   timeago: ^3.5.0
+  flutter_slidable: ^3.0.0
+  qr_code_scanner: ^1.0.1
   
 dev_dependencies:
   flutter_test:
