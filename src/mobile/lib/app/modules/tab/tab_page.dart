@@ -88,7 +88,7 @@ class _TabPageState extends State<TabPage> {
   }
 
   List<Widget> _screens() => [
-        const HomePage(),
+        HomePage(),
         const SearchPage(),
         const ScannerPage(),
         const AccountPage(),

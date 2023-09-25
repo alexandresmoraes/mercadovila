@@ -10,6 +10,7 @@ import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
 import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
 import 'package:vilasesmo/app/modules/search/search_module.dart';
+import 'package:vilasesmo/app/modules/tab/home_page_controller.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/modules/vendas/vendas_module.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -39,6 +40,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => SearchFilterStore()),
     Bind.factory((i) => CardCountProdutoController()),
     Bind.factory((i) => FavoritoController()),
+    Bind.factory((i) => HomePageController()),
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
