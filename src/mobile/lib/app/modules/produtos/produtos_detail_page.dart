@@ -1,8 +1,10 @@
+import 'package:barcode/barcode.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_detail_controller.dart';
@@ -50,7 +52,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
               child: Column(
                 children: [
                   Container(
-                    height: 260,
+                    height: 350,
                     margin: const EdgeInsets.only(top: 25),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -78,12 +80,12 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                     colors: [
-                                      const Color(0xFF7C96AA).withOpacity(0.33),
-                                      const Color(0xFFA6C1D6).withOpacity(0.07)
+                                      const Color(0xFFA6C1D6).withOpacity(0.07),
+                                      const Color(0xFF7C96AA).withOpacity(0.33)
                                     ],
                                   ),
                                   borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                                    Radius.circular(10),
                                   ),
                                 ),
                           child: Padding(
@@ -186,7 +188,11 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                           Icon(
                                             !snapshot.data!.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                                             size: 20,
-                                            color: !snapshot.data!.isAtivo ? Colors.red : Colors.greenAccent,
+                                            color: !snapshot.data!.isAtivo
+                                                ? Colors.red
+                                                : Modular.get<ThemeStore>().isDarkModeEnable
+                                                    ? Colors.greenAccent
+                                                    : Colors.green,
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 8.0),
@@ -200,6 +206,24 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     ],
                                   ),
                                 ),
+                                Observer(builder: (_) {
+                                  if (_controller.svgCodigoBarras != null) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.string(_controller.svgCodigoBarras!),
+                                        ),
+                                      ),
+                                    );
+                                  }
+
+                                  return const SizedBox.shrink();
+                                })
                               ],
                             ),
                           ),

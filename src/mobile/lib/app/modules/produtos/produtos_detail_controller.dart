@@ -1,4 +1,6 @@
+import 'package:barcode/barcode.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
@@ -9,6 +11,9 @@ class ProdutosDetailController = ProdutosDetailControllerBase with _$ProdutosDet
 
 abstract class ProdutosDetailControllerBase with Store {
   String? id;
+
+  @observable
+  String? svgCodigoBarras;
 
   @observable
   bool isLoading = false;
@@ -28,9 +33,16 @@ abstract class ProdutosDetailControllerBase with Store {
     var produtosRepository = Modular.get<IProdutosRepository>();
     produtoDetailDto = await produtosRepository.getProdutoDetail(id!);
 
+    final ean = Barcode.ean13();
+    svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 200, height: 80);
+    pictureInfo = await vg.loadPicture(SvgStringLoader(svgCodigoBarras!), null);
+
     isFavorito = produtoDetailDto!.isFavorito;
 
     isLoading = false;
     return produtoDetailDto!;
   }
+
+  @observable
+  PictureInfo? pictureInfo;
 }

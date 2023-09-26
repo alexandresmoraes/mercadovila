@@ -179,16 +179,19 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: '${item.preco}',
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "R\$ ",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: '${item.preco}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -306,7 +309,11 @@ class ProdutosPageState extends State<ProdutosPage> {
                             Icon(
                               !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                               size: 20,
-                              color: !item.isAtivo ? Colors.red : Colors.greenAccent,
+                              color: !item.isAtivo
+                                  ? Colors.red
+                                  : Modular.get<ThemeStore>().isDarkModeEnable
+                                      ? Colors.greenAccent
+                                      : Colors.green,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),

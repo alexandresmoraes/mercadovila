@@ -18,6 +18,7 @@ class ProdutoDetailDto {
   late final String imageUrl;
   late final double preco;
   late final String unidadeMedida;
+  late final String codigoBarras;
   late final int estoque;
   late final num rating;
   late final int ratingCount;
@@ -31,6 +32,7 @@ class ProdutoDetailDto {
     imageUrl = json['imageUrl'];
     preco = json['preco'];
     unidadeMedida = json['unidadeMedida'];
+    codigoBarras = json['codigoBarras'];
     estoque = json['estoque'];
     rating = json['rating'];
     ratingCount = json['ratingCount'];

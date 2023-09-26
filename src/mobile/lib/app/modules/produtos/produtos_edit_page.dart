@@ -370,9 +370,11 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                   contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                   errorText: _controller.getCodigoBarrasError,
                                   suffixIcon: IconButton(
-                                    icon: const Icon(
+                                    icon: Icon(
                                       MdiIcons.barcode,
-                                      color: Colors.white,
+                                      color: !Modular.get<ThemeStore>().isDarkModeEnable
+                                          ? const Color(0xFF373C58)
+                                          : const Color(0xFFF2F5F8),
                                     ),
                                     onPressed: () async {
                                       var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');
