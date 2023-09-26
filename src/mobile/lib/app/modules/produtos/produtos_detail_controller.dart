@@ -34,7 +34,7 @@ abstract class ProdutosDetailControllerBase with Store {
     produtoDetailDto = await produtosRepository.getProdutoDetail(id!);
 
     final ean = Barcode.ean13();
-    svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 200, height: 80);
+    svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 180, height: 70);
     pictureInfo = await vg.loadPicture(SvgStringLoader(svgCodigoBarras!), null);
 
     isFavorito = produtoDetailDto!.isFavorito;
