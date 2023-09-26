@@ -441,24 +441,14 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                         },
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
-                    ),
+                    Observer(builder: (_) {
+                      return CardCountProduto(
+                        produtoId: item.produtoId,
+                        estoqueDisponivel: item.estoque,
+                        isAtivo: item.isAtivo,
+                        isTop: true,
+                      );
+                    }),
                   ],
                 ),
               ),

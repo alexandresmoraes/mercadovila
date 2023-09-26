@@ -7,9 +7,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/tab/home_page_controller.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 
 import 'package:vilasesmo/app/utils/widgets/card_produto_color.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
@@ -92,9 +95,12 @@ class HomePage extends StatelessWidget {
                         height: 60,
                         width: 30,
                       ),
-                title: Text('Bom dia', style: Theme.of(context).primaryTextTheme.bodyLarge),
-                subtitle: Text('@alexandre',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
+                subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -107,7 +113,8 @@ class HomePage extends StatelessWidget {
                           : Image.asset('assets/notificationIcon_black.png'),
                     ),
                     Container(
-                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(
+                          color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       width: 84,
@@ -264,7 +271,7 @@ class HomePage extends StatelessWidget {
                       : const SizedBox.shrink();
                 },
               ),
-              controller.isVisibleMaisVendidos ? listaMaisVendidos() : const SizedBox.shrink(),
+              listaMaisVendidos(),
               Observer(builder: (_) {
                 return controller.isVisibleUltimosVendidos
                     ? Padding(
@@ -391,7 +398,9 @@ class HomePage extends StatelessWidget {
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',
@@ -492,162 +501,9 @@ class HomePage extends StatelessWidget {
         itemBuilder: (context, item, index) {
           controller.isVisibleMaisVendidos = true;
 
-          return SizedBox(
-            height: 200,
-            child: InkWell(
-              onTap: () {
-                //
-              },
-              child: Container(
-                height: 210,
-                margin: const EdgeInsets.only(top: 10, left: 10),
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      height: 160,
-                      width: 140,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: index % 3 == 1
-                              ? const LinearGradient(
-                                  stops: [0, .90],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Color(0XFF9EEEFF), Color(0XFFC0F4FF)],
-                                )
-                              : index % 3 == 2
-                                  ? const LinearGradient(
-                                      stops: [0, .90],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [Color(0XFFFFF1C0), Color(0XFFFFF1C0)],
-                                    )
-                                  : const LinearGradient(
-                                      stops: [0, .90],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [Color(0XFFFFD4D7), Color(0XFFFFD4D7)],
-                                    ),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(17),
-                            bottomLeft: Radius.circular(17),
-                            bottomRight: Radius.circular(17),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 27, left: 10, right: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.nome,
-                                style: Theme.of(context).primaryTextTheme.titleMedium,
-                              ),
-                              Text(
-                                item.getDisponiveis(),
-                                style: Theme.of(context).primaryTextTheme.titleSmall,
-                              ),
-                              Container(
-                                width: 130,
-                                padding: const EdgeInsets.only(top: 2),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "R\$",
-                                          style: Theme.of(context).primaryTextTheme.titleSmall,
-                                        ),
-                                        Text(
-                                          '${item.preco} ',
-                                          style: Theme.of(context).primaryTextTheme.titleMedium,
-                                        ),
-                                        Text(
-                                          '/ ${item.unidadeMedida}',
-                                          style: Theme.of(context).primaryTextTheme.titleSmall,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                          color: Colors.white60,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : index % 3 == 1
-                                  ? const Color(0XFF9EEEFF)
-                                  : index % 3 == 2
-                                      ? const Color(0XFFFFF1C0)
-                                      : const Color(0XFFFFD4D7),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => Container(
-                          alignment: Alignment.center,
-                          height: 120,
-                          width: 130,
-                          child: CircularProgress(
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => const SizedBox(
-                          height: 120,
-                          width: 130,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                              radius: 100,
-                              child: Icon(
-                                MdiIcons.cameraOff,
-                                size: 70,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${item.imageUrl}',
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                              ),
-                            ),
-                            height: 120,
-                            width: 130,
-                          );
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+          return CardProdutoColor(
+            item,
+            index: index,
           );
         },
         cast: CatalogoDto.fromJson,
@@ -785,24 +641,14 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ),
-                      ),
+                      Observer(builder: (_) {
+                        return CardCountProduto(
+                          produtoId: item.produtoId,
+                          estoqueDisponivel: item.estoque,
+                          isAtivo: item.isAtivo,
+                          isTop: true,
+                        );
+                      }),
                     ],
                   ),
                 ),

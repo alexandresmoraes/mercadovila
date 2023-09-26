@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
@@ -107,12 +108,15 @@ class CardProdutoColor extends StatelessWidget {
                   ),
                 ),
               ),
-              CardCountProduto(
-                produtoId: item.produtoId,
-                estoqueDisponivel: item.estoque,
-                isAtivo: item.isAtivo,
-                isTop: true,
-              ),
+              Observer(builder: (_) {
+                return CardCountProduto(
+                  produtoId: item.produtoId,
+                  estoqueDisponivel: item.estoque,
+                  isAtivo: item.isAtivo,
+                  isTop: true,
+                  backgroundColor: Colors.white,
+                );
+              }),
               Positioned(
                 bottom: 0,
                 child: CachedNetworkImage(

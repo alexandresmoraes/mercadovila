@@ -1,3 +1,4 @@
+import 'package:vilasesmo/app/modules/produtos/produto_scanner_page.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_detail_controller.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_detail_page.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
@@ -18,9 +19,13 @@ class ProdutosModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute('/', child: (_, args) => const ProdutosPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
+    ChildRoute('/',
+        child: (_, args) => const ProdutosPage(),
+        transition: TransitionType.rightToLeft,
+        duration: const Duration(milliseconds: 500)),
     ChildRoute('/edit/:id', child: (_, args) => ProdutosEditPage(id: args.params['id'])),
     ChildRoute('/new', child: (_, args) => const ProdutosEditPage()),
     ChildRoute('/details/:id', child: (_, args) => ProdutosDetailPage(id: args.params['id'])),
+    ChildRoute('/scanner', child: (_, args) => const ScannerPageProduto()),
   ];
 }

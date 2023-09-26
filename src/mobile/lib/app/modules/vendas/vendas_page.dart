@@ -416,7 +416,7 @@ class VendasPageState extends State<VendasPage> {
                     ),
                   ),
                   ListTile(
-                    visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                    visualDensity: const VisualDensity(vertical: -1, horizontal: -4),
                     contentPadding: const EdgeInsets.all(0),
                     minLeadingWidth: 0,
                     leading: const CircleAvatar(
@@ -454,7 +454,7 @@ class VendasPageState extends State<VendasPage> {
                             margin: const EdgeInsets.only(right: 10, top: 5),
                             padding: const EdgeInsets.only(left: 5, right: 5),
                             width: 80,
-                            height: 23,
+                            height: 25,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

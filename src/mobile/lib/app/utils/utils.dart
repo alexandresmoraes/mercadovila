@@ -18,3 +18,11 @@ String? tryEncode(data) {
 bool isDarkModeEnabled() {
   return Modular.get<ThemeStore>().isDarkModeEnable;
 }
+
+String greetingMessage() {
+  var h = DateTime.now().hour;
+  if (h <= 5) return 'Boa noite';
+  if (h < 12) return 'Bom dia';
+  if (h < 18) return 'Boa tarde';
+  return 'Boa noite';
+}

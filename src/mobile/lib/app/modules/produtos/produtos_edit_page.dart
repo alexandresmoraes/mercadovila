@@ -26,7 +26,8 @@ class ProdutosEditPage extends StatefulWidget {
 
 class ProdutosEditPageState extends State<ProdutosEditPage> {
   bool isAdmin = false;
-  late ProdutosEditController _controller;
+  final ProdutosEditController _controller = Modular.get<ProdutosEditController>();
+  TextEditingController barcodeController = TextEditingController();
 
   _getImagePicker(ImageSource source) async {
     var pickedFile = await ImagePicker().pickImage(
@@ -355,9 +356,11 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             margin: const EdgeInsets.only(top: 5, bottom: 15),
                             padding: const EdgeInsets.only(),
                             child: Observer(builder: (_) {
+                              barcodeController.text = _controller.codigoBarras!;
+
                               return TextFormField(
+                                controller: barcodeController,
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                initialValue: _controller.codigoBarras,
                                 onChanged: _controller.setCodigoBarras,
                                 decoration: InputDecoration(
                                   fillColor: Modular.get<ThemeStore>().isDarkModeEnable
@@ -371,8 +374,9 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                       MdiIcons.barcode,
                                       color: Colors.white,
                                     ),
-                                    onPressed: () {
-                                      //
+                                    onPressed: () async {
+                                      var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');
+                                      if (!isNullorEmpty(barcode)) _controller.setCodigoBarras(barcode);
                                     },
                                   ),
                                 ),
@@ -479,7 +483,6 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
 
   @override
   void initState() {
-    _controller = Modular.get<ProdutosEditController>();
     _controller.id = widget.id;
 
     super.initState();

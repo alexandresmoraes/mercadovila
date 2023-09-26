@@ -11,6 +11,8 @@ class CardCountProduto extends StatelessWidget {
   final String produtoId;
   final int estoqueDisponivel;
   final bool isAtivo;
+  final Color? backgroundColor;
+  final Color? color;
   final bool isTop;
 
   CardCountProduto({
@@ -18,6 +20,8 @@ class CardCountProduto extends StatelessWidget {
     required this.produtoId,
     required this.estoqueDisponivel,
     required this.isAtivo,
+    this.backgroundColor,
+    this.color,
     this.isTop = false,
   }) {
     controller.produtoId = produtoId;
@@ -39,7 +43,7 @@ class CardCountProduto extends StatelessWidget {
             height: 30,
             width: 30,
             decoration: BoxDecoration(
-              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+              color: backgroundColor ?? Theme.of(context).bottomNavigationBarTheme.backgroundColor,
               borderRadius: BorderRadius.only(
                 bottomRight: isTop ? Radius.zero : const Radius.circular(10),
                 topLeft: isTop ? Radius.zero : const Radius.circular(10),
@@ -54,7 +58,7 @@ class CardCountProduto extends StatelessWidget {
               },
               icon: Icon(
                 Icons.add,
-                color: Theme.of(context).primaryColorLight,
+                color: color ?? Theme.of(context).primaryColorLight,
               ),
             ),
           ),
@@ -73,7 +77,9 @@ class CardCountProduto extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  !isAtivo || controller.quantidade > controller.estoqueDisponivel ? Colors.redAccent : Theme.of(context).primaryColorLight,
+                  !isAtivo || controller.quantidade > controller.estoqueDisponivel
+                      ? Colors.redAccent
+                      : Theme.of(context).primaryColorLight,
                   controller.quantidade < controller.estoqueDisponivel && isAtivo
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).iconTheme.color!
@@ -136,7 +142,10 @@ class CardCountProduto extends StatelessWidget {
                     )),
                 Text(
                   "${controller.quantidade}",
-                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyLarge!
+                      .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
                 ),
                 IconButton(
                   padding: const EdgeInsets.all(0),
