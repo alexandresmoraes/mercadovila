@@ -35,20 +35,6 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
           backgroundColor: Colors.transparent,
           centerTitle: true,
           title: const Text("Produtos"),
-          // actions: [
-          //   IconButton(
-          //     onPressed: () async {
-          //       //
-          //     },
-          //     icon: const Icon(MdiIcons.magnify),
-          //   ),
-          //   IconButton(
-          //     onPressed: () async {
-          //       //
-          //     },
-          //     icon: const Icon(MdiIcons.plus),
-          //   ),
-          // ],
         ),
         body: _buildQrView(context),
       ),
@@ -56,8 +42,7 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea =
-        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,

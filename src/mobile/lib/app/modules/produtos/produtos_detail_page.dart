@@ -1,4 +1,3 @@
-import 'package:barcode/barcode.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -65,10 +64,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [
-                                      const Color(0xFF545975).withOpacity(0.44),
-                                      const Color(0xFF333550).withOpacity(0.22)
-                                    ],
+                                    colors: [const Color(0xFF545975).withOpacity(0.44), const Color(0xFF333550).withOpacity(0.22)],
                                   ),
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(5),
@@ -79,10 +75,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [
-                                      const Color(0xFFA6C1D6).withOpacity(0.07),
-                                      const Color(0xFF7C96AA).withOpacity(0.33)
-                                    ],
+                                    colors: [const Color(0xFFA6C1D6).withOpacity(0.07), const Color(0xFF7C96AA).withOpacity(0.33)],
                                   ),
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(10),
@@ -97,10 +90,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 Text(
                                   snapshot.data!.nome,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .bodyLarge!
-                                      .copyWith(fontWeight: FontWeight.bold),
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -245,8 +235,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 color: Colors.white,
                               ),
                             ),
-                            imageUrl:
-                                '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
+                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 215,
@@ -313,9 +302,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                       _controller.isFavorito = !_controller.isFavorito;
                                     }
                                   },
-                                  icon: _controller.isFavorito
-                                      ? Image.asset('assets/fav_red.png')
-                                      : Image.asset('assets/fav_grey.png'),
+                                  icon: _controller.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                                 );
                               }),
                             ],
