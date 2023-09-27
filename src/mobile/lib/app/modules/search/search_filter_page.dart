@@ -26,7 +26,7 @@ class SearchFilterPageState extends State<SearchFilterPage> {
           actions: [
             IconButton(
               onPressed: () {
-                searchFilterStore.clean();
+                searchFilterStore.reset();
               },
               icon: const Icon(MdiIcons.syncIcon),
             ),

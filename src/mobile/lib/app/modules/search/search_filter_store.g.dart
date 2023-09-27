@@ -72,11 +72,11 @@ mixin _$SearchFilterStore on SearchFilterStoreBase, Store {
   }
 
   @override
-  void clean() {
+  void reset() {
     final _$actionInfo = _$SearchFilterStoreBaseActionController.startAction(
-        name: 'SearchFilterStoreBase.clean');
+        name: 'SearchFilterStoreBase.reset');
     try {
-      return super.clean();
+      return super.reset();
     } finally {
       _$SearchFilterStoreBaseActionController.endAction(_$actionInfo);
     }

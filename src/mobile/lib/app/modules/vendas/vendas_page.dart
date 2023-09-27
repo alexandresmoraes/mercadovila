@@ -371,14 +371,10 @@ class VendasPageState extends State<VendasPage> {
                 Modular.to.pushNamed('/vendas/venda-detalhes');
               },
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 0.0),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           decoration: BoxDecoration(
@@ -420,14 +416,14 @@ class VendasPageState extends State<VendasPage> {
                     ),
                   ),
                   ListTile(
-                    visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                    visualDensity: const VisualDensity(vertical: -1, horizontal: -4),
                     contentPadding: const EdgeInsets.all(0),
                     minLeadingWidth: 0,
                     leading: const CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
-                        radius: 21,
+                        radius: 25,
                         backgroundImage: AssetImage('assets/person.png'),
                       ),
                     ),
@@ -457,22 +453,21 @@ class VendasPageState extends State<VendasPage> {
                                 color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                             margin: const EdgeInsets.only(right: 10, top: 5),
                             padding: const EdgeInsets.only(left: 5, right: 5),
-                            width: 60,
-                            height: 20,
-                            child: Center(
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 0,
-                                    ),
-                                    child: Text(
-                                      'Detalhes',
-                                      style: Theme.of(context).primaryTextTheme.bodySmall,
-                                    ),
+                            width: 80,
+                            height: 25,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 0,
                                   ),
-                                ],
-                              ),
+                                  child: Text(
+                                    'Detalhes',
+                                    style: Theme.of(context).primaryTextTheme.bodySmall,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

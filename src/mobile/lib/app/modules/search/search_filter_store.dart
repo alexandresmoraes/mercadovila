@@ -26,7 +26,7 @@ abstract class SearchFilterStoreBase with Store {
   bool outOfStock = false;
 
   @action
-  void clean() {
+  void reset() {
     selectOrder = 0;
     inStock = true;
     outOfStock = false;

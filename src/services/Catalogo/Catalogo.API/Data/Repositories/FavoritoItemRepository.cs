@@ -23,7 +23,7 @@ namespace Catalogo.API.Data.Repositories
       Collection.Indexes.CreateOne(indexModel);
     }
 
-    public async Task CreateAsync(string userId, string produtoId)
+    public async Task AdicionarAsync(string userId, string produtoId)
     {
       var favorito = new FavoritoItem()
       {
@@ -34,7 +34,7 @@ namespace Catalogo.API.Data.Repositories
       await Collection.InsertOneAsync(favorito);
     }
 
-    public async Task<bool> DeleteAsync(string userId, string produtoId)
+    public async Task<bool> RemoverAsync(string userId, string produtoId)
     {
       var filter = Builders<FavoritoItem>.Filter.Eq(_ => _.UserId, userId);
       filter &= Builders<FavoritoItem>.Filter.Eq(_ => _.ProdutoId, produtoId);

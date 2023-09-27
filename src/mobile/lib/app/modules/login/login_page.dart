@@ -2,6 +2,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/login/login_controller.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
@@ -156,7 +157,6 @@ class LoginPageState extends State<LoginPage> {
                       child: TextFormField(
                         focusNode: usernameFocusNode,
                         textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.phone,
                         maxLength: 10,
                         onChanged: _controller.setUsername,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -180,7 +180,6 @@ class LoginPageState extends State<LoginPage> {
                         controller: passwordController,
                         focusNode: passwordFocusNode,
                         textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.phone,
                         maxLength: 10,
                         onChanged: _controller.setPassword,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -226,6 +225,7 @@ class LoginPageState extends State<LoginPage> {
                                 if (message.isNotEmpty) GlobalSnackbar.error(message);
                               }, (r) async {
                                 await authService.setCurrentToken(r);
+                                Modular.get<CarrinhoStore>().load();
                                 Modular.get<AccountStore>().setAccount(await authService.me());
                                 Modular.to.pushReplacementNamed(TabModule.routeName);
                               });

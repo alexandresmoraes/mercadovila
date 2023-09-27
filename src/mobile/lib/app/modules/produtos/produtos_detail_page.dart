@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_detail_controller.dart';
@@ -10,6 +11,7 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
@@ -49,7 +51,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
               child: Column(
                 children: [
                   Container(
-                    height: 260,
+                    height: 350,
                     margin: const EdgeInsets.only(top: 25),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -62,10 +64,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [
-                                      const Color(0xFF545975).withOpacity(0.44),
-                                      const Color(0xFF333550).withOpacity(0.22)
-                                    ],
+                                    colors: [const Color(0xFF545975).withOpacity(0.44), const Color(0xFF333550).withOpacity(0.22)],
                                   ),
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(5),
@@ -76,13 +75,10 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     stops: const [0, .90],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
-                                    colors: [
-                                      const Color(0xFF7C96AA).withOpacity(0.33),
-                                      const Color(0xFFA6C1D6).withOpacity(0.07)
-                                    ],
+                                    colors: [const Color(0xFFA6C1D6).withOpacity(0.07), const Color(0xFF7C96AA).withOpacity(0.33)],
                                   ),
                                   borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                                    Radius.circular(10),
                                   ),
                                 ),
                           child: Padding(
@@ -94,10 +90,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 Text(
                                   snapshot.data!.nome,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .bodyLarge!
-                                      .copyWith(fontWeight: FontWeight.bold),
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -185,7 +178,11 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                           Icon(
                                             !snapshot.data!.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                                             size: 20,
-                                            color: !snapshot.data!.isAtivo ? Colors.red : Colors.greenAccent,
+                                            color: !snapshot.data!.isAtivo
+                                                ? Colors.red
+                                                : Modular.get<ThemeStore>().isDarkModeEnable
+                                                    ? Colors.greenAccent
+                                                    : Colors.green,
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 8.0),
@@ -199,6 +196,24 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     ],
                                   ),
                                 ),
+                                Observer(builder: (_) {
+                                  if (_controller.svgCodigoBarras != null) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.string(_controller.svgCodigoBarras!),
+                                        ),
+                                      ),
+                                    );
+                                  }
+
+                                  return const SizedBox.shrink();
+                                })
                               ],
                             ),
                           ),
@@ -220,8 +235,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 color: Colors.white,
                               ),
                             ),
-                            imageUrl:
-                                '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
+                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 215,
@@ -236,28 +250,13 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                             },
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).iconTheme.color,
-                                borderRadius: const BorderRadius.only(
-                                  bottomRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: Theme.of(context).primaryTextTheme.bodySmall!.color,
-                              ),
-                            ),
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return CardCountProduto(
+                            produtoId: widget.id,
+                            estoqueDisponivel: _controller.produtoDetailDto!.estoque,
+                            isAtivo: _controller.produtoDetailDto!.isAtivo,
+                          );
+                        }),
                         Positioned(
                           right: 0,
                           top: 0,
@@ -270,38 +269,42 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                 height: 20,
                                 width: 100,
                                 decoration: BoxDecoration(
-                                  color: snapshot.data!.estoque == 0 ? Colors.redAccent : Colors.green,
+                                  color: !snapshot.data!.isDisponivel() ? Colors.redAccent : Colors.green,
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomLeft: Radius.circular(10),
                                   ),
                                 ),
-                                child: Text(
-                                  snapshot.data!.getDisponiveis(),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodySmall,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      snapshot.data!.getDisponiveis(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () async {
-                                  var favoritoRepository = Modular.get<IFavoritosRepository>();
-                                  try {
-                                    if (_controller.isFavorito) {
-                                      await favoritoRepository.removerFavorito(snapshot.data!.id);
-                                      _controller.isFavorito = false;
-                                    } else {
-                                      await favoritoRepository.adicionarFavorito(snapshot.data!.id);
-                                      _controller.isFavorito = true;
+                              Observer(builder: (_) {
+                                return IconButton(
+                                  onPressed: () async {
+                                    var favoritoRepository = Modular.get<IFavoritosRepository>();
+                                    try {
+                                      if (_controller.isFavorito) {
+                                        _controller.isFavorito = !_controller.isFavorito;
+                                        await favoritoRepository.removerFavorito(_controller.id!);
+                                      } else {
+                                        _controller.isFavorito = !_controller.isFavorito;
+                                        await favoritoRepository.adicionarFavorito(_controller.id!);
+                                      }
+                                    } catch (e) {
+                                      _controller.isFavorito = !_controller.isFavorito;
                                     }
-                                    // ignore: empty_catches
-                                  } catch (e) {}
-
-                                  setState(() {});
-                                },
-                                icon: _controller.isFavorito
-                                    ? Image.asset('assets/fav_red.png')
-                                    : Image.asset('assets/fav_grey.png'),
-                              ),
+                                  },
+                                  icon: _controller.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -322,18 +325,6 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                           )
                         : const SizedBox.shrink();
                   }),
-                  // isVisibleFavoritos
-                  //     ? Padding(
-                  //         padding: const EdgeInsets.only(top: 10.0),
-                  //         child: ListTile(
-                  //           contentPadding: const EdgeInsets.all(0),
-                  //           title: Text(
-                  //             "Favoritos",
-                  //             style: Theme.of(context).primaryTextTheme.headlineSmall,
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : const SizedBox.shrink(),
                   listaFavoritos()
                 ],
               ),
@@ -461,24 +452,14 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                         },
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
-                    ),
+                    Observer(builder: (_) {
+                      return CardCountProduto(
+                        produtoId: item.produtoId,
+                        estoqueDisponivel: item.estoque,
+                        isAtivo: item.isAtivo,
+                        isTop: true,
+                      );
+                    }),
                   ],
                 ),
               ),

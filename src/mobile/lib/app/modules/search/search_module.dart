@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/search/search_filter_page.dart';
+import 'package:vilasesmo/app/modules/tab/search_page.dart';
 
 class SearchModule extends Module {
   static const routeName = '/search/';
@@ -9,6 +10,7 @@ class SearchModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => const SearchPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
     ChildRoute('/search-filter', child: (_, args) => const SearchFilterPage()),
   ];
 }

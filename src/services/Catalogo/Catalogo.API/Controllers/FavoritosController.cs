@@ -17,11 +17,13 @@ namespace Catalogo.API.Controllers
   public class FavoritosController : ControllerBase
   {
     private readonly FavoritoItemRepository _favoritosRepository;
+    private readonly ProdutoRepository _produtoRepository;
     private readonly IAuthService _authService;
 
-    public FavoritosController(FavoritoItemRepository favoritosRepository, IAuthService authService)
+    public FavoritosController(FavoritoItemRepository favoritosRepository, ProdutoRepository produtoRepository, IAuthService authService)
     {
       _favoritosRepository = favoritosRepository;
+      _produtoRepository = produtoRepository;
       _authService = authService;
     }
 
@@ -37,10 +39,13 @@ namespace Catalogo.API.Controllers
     {
       var userId = _authService.GetUserId();
 
-      var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
+      var existeProduto = await _produtoRepository.ExisteProdutoPorId(produtoId);
+      if (!existeProduto)
+        return Result.NotFound();
 
+      var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
       if (!existeFavorito)
-        await _favoritosRepository.CreateAsync(userId, produtoId);
+        await _favoritosRepository.AdicionarAsync(userId, produtoId);
 
       return Result.Ok();
     }
@@ -58,9 +63,13 @@ namespace Catalogo.API.Controllers
     {
       var userId = _authService.GetUserId();
 
+      var existeProduto = await _produtoRepository.ExisteProdutoPorId(produtoId);
+      if (!existeProduto)
+        return Result.NotFound();
+
       var existeFavorito = await _favoritosRepository.ExisteFavoritoPorUserId(userId, produtoId);
       if (existeFavorito)
-        await _favoritosRepository.DeleteAsync(userId, produtoId);
+        await _favoritosRepository.RemoverAsync(userId, produtoId);
 
       return Result.Ok();
     }

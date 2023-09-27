@@ -171,7 +171,11 @@ class AccountsPageState extends State<AccountsPage> {
                       Icon(
                         !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                         size: 20,
-                        color: !item.isAtivo ? Colors.red : Colors.greenAccent,
+                        color: !item.isAtivo
+                            ? Colors.red
+                            : Modular.get<ThemeStore>().isDarkModeEnable
+                                ? Colors.greenAccent
+                                : Colors.green,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -237,7 +241,9 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                      : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),

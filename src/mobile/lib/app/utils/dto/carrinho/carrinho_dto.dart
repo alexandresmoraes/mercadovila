@@ -1,5 +1,23 @@
-class CatalogoDto {
-  CatalogoDto({
+class CarrinhoDto {
+  CarrinhoDto({
+    required this.itens,
+    required this.subtotal,
+    required this.total,
+  });
+
+  late final num subtotal;
+  late final num total;
+  late final List<CarrinhoItemDto> itens;
+
+  CarrinhoDto.fromJson(Map<String, dynamic> json) {
+    subtotal = json['subtotal'];
+    total = json['total'];
+    itens = List<CarrinhoItemDto>.from(json["itens"].map((_) => CarrinhoItemDto.fromJson(_)));
+  }
+}
+
+class CarrinhoItemDto {
+  CarrinhoItemDto({
     required this.produtoId,
     required this.nome,
     required this.descricao,
@@ -11,6 +29,7 @@ class CatalogoDto {
     required this.ratingCount,
     required this.isAtivo,
     required this.isFavorito,
+    required this.quantidade,
   });
   late final String produtoId;
   late final String nome;
@@ -23,8 +42,9 @@ class CatalogoDto {
   late final int ratingCount;
   late final bool isAtivo;
   late final bool isFavorito;
+  late final int quantidade;
 
-  CatalogoDto.fromJson(Map<String, dynamic> json) {
+  CarrinhoItemDto.fromJson(Map<String, dynamic> json) {
     produtoId = json['produtoId'];
     nome = json['nome'];
     descricao = json['descricao'];
@@ -36,6 +56,7 @@ class CatalogoDto {
     ratingCount = json['ratingCount'];
     isAtivo = json['isAtivo'];
     isFavorito = json['isFavorito'];
+    quantidade = json['quantidade'];
   }
 
   bool isDisponivel() => isAtivo && estoque > 0;
