@@ -232,6 +232,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                               ),
                               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                               child: Text(
+                                overflow: TextOverflow.ellipsis,
                                 item.id,
                                 style: Theme.of(context).primaryTextTheme.displayMedium,
                               ),
