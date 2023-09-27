@@ -23,8 +23,8 @@ class CardProdutoColor extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: InkWell(
-        onTap: () {
-          //
+        onTap: () async {
+          await Modular.to.pushNamed('/produtos/details/${item.produtoId}');
         },
         child: Container(
           height: 210,

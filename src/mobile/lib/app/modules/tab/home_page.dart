@@ -97,10 +97,7 @@ class HomePage extends StatelessWidget {
                       ),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .displayMedium!
-                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -113,8 +110,7 @@ class HomePage extends StatelessWidget {
                           : Image.asset('assets/notificationIcon_black.png'),
                     ),
                     Container(
-                      decoration: const BoxDecoration(
-                          color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       width: 84,
@@ -398,9 +394,7 @@ class HomePage extends StatelessWidget {
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',
@@ -538,8 +532,8 @@ class HomePage extends StatelessWidget {
             return SizedBox(
               height: 200,
               child: InkWell(
-                onTap: () {
-                  //
+                onTap: () async {
+                  await Modular.to.pushNamed('/produtos/details/${item.produtoId}');
                 },
                 child: Container(
                   margin: const EdgeInsets.only(top: 10, left: 10),
