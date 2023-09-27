@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class ScannerPageProduto extends StatefulWidget {
   final String title;
@@ -42,7 +43,8 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    var scanArea =
+        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
@@ -74,9 +76,7 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sem permissão da câmera')),
-      );
+      GlobalSnackbar.error('Sem permissão da câmera');
     }
   }
 

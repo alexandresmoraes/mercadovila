@@ -423,7 +423,7 @@ class VendasPageState extends State<VendasPage> {
                       radius: 35,
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
-                        radius: 21,
+                        radius: 25,
                         backgroundImage: AssetImage('assets/person.png'),
                       ),
                     ),

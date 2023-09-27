@@ -43,7 +43,7 @@ class AppModule extends Module {
     Bind.factory((i) => HomePageController()),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.0.100:8081',
         connectTimeout: kReleaseMode ? 20000 : 0,
         receiveTimeout: kReleaseMode ? 20000 : 0,
         sendTimeout: kReleaseMode ? 20000 : 0,

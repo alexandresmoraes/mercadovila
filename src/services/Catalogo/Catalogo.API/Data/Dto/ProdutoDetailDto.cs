@@ -26,10 +26,7 @@ namespace Catalogo.API.Data.Dto
 
     public int Estoque { get; set; }
 
-    public bool IsAtivo { get; set; }
-
-    [JsonIgnore]
-    public int FavoritoCount { get; set; }
+    public bool IsAtivo { get; set; }    
 
     public bool IsFavorito { get; set; }
   }
