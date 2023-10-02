@@ -20,6 +20,7 @@ namespace Common.WebAPI.Shared
 
     private List<INotification> _domainEvents = new List<INotification>();
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
+    public virtual bool HasDomainEvents => _domainEvents is not null && _domainEvents.Any();
 
     public void AddDomainEvent(INotification eventItem)
     {

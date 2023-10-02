@@ -4,6 +4,6 @@ namespace Common.EventBus
 {
   public interface IConsumer
   {
-    Task Consume<TEvent>(Action<TEvent> onEventReceived, CancellationToken cancellationToken = default) where TEvent : Event;
+    Task Consume<TIntegrationEvent>(Action<TIntegrationEvent> onEventReceived, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent;
   }
 }

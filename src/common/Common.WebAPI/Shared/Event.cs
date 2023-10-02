@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Common.EventBus.Integrations
+namespace Common.WebAPI.Shared
 {
   public abstract class Event
   {

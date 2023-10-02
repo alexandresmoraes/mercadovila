@@ -44,7 +44,7 @@ namespace Common.EventBus
       _policyWrap = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
     }
 
-    public Task Consume<TEvent>(Action<TEvent> onEventReceived, CancellationToken cancellationToken = default) where TEvent : Event
+    public Task Consume<TIntegrationEvent>(Action<TIntegrationEvent> onEventReceived, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent
     {
       using (var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build())
       {
@@ -63,9 +63,10 @@ namespace Common.EventBus
                    + $"offset: {result.Offset} \n"
                    + $"timestamp: {result.Message.Timestamp.UtcDateTime}");
 
-              var @event = JsonSerializer.Deserialize<TEvent>(result.Message.Value);
+              var @event = JsonSerializer.Deserialize<TIntegrationEvent>(result.Message.Value);
+              var integrationEvent = @event! as IntegrationEvent;
 
-              _logger.LogInformation($"Consumer event: {@event!.AggregateId} - ({@event})");
+              _logger.LogInformation($"Consumer eventId: {integrationEvent!.Id} - ({@event})");
 
               onEventReceived(@event!);
             }

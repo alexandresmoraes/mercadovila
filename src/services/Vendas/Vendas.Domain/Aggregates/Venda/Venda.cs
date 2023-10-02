@@ -15,12 +15,13 @@ namespace Vendas.Domain.Aggregates
 
     public Venda() { }
 
-    public Venda(Comprador comprador, List<VendaItem> vendaItens, EnumVendaStatus status)
+    public Venda(Comprador comprador, IEnumerable<VendaItem> vendaItens, EnumVendaStatus status)
     {
       Comprador = comprador;
-      _vendaItens = vendaItens;
+      _vendaItens = vendaItens.ToList();
       Status = status;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
+      DataHora = DateTime.Now;
     }
   }
 }

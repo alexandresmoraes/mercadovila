@@ -26,32 +26,30 @@ namespace Common.EventBus
       };
 
       _retryPolicy = Policy
-        .Handle<ProduceException<string, string>>()
+        .Handle<Exception>()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, retryCount, context) =>
         {
-          _logger.LogError($"Producer try: {retryCount}, exception: {exception.Message}");
+          _logger.LogError("Producer try: {retryCount}, exception: {exception}", retryCount, nameof(exception));
         });
     }
 
-    public async Task PublishAsync<TEvent>(string key, TEvent @event, CancellationToken cancellationToken = default) where TEvent : Event
+    public async Task PublishAsync<TIntegrationEvent>(string key, TIntegrationEvent @event, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent
     {
-      using (var producer = new ProducerBuilder<string, string>(_producerConfig).Build())
+      using var producer = new ProducerBuilder<string, string>(_producerConfig).Build();
+      var serialized = JsonSerializer.Serialize(@event);
+
+      await _retryPolicy.ExecuteAsync(async () =>
       {
-        var serialized = JsonSerializer.Serialize(@event);
+        _logger.LogInformation($"Producer message: {nameof(TIntegrationEvent)}");
 
-        await _retryPolicy.ExecuteAsync(async () =>
+        await producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
         {
-          _logger.LogInformation($"Producer message: {serialized}");
+          Key = key,
+          Value = serialized
+        }, cancellationToken);
+      });
 
-          await producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
-          {
-            Key = key,
-            Value = serialized
-          }, cancellationToken);
-        });
-
-        producer.Flush();
-      }
+      producer.Flush();
     }
   }
 }

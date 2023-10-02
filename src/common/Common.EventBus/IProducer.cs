@@ -4,6 +4,6 @@ namespace Common.EventBus
 {
   public interface IProducer
   {
-    Task PublishAsync<TEvent>(string key, TEvent @event, CancellationToken cancellationToken = default) where TEvent : Event;
+    Task PublishAsync<TIntegrationEvent>(string key, TIntegrationEvent @event, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent;
   }
 }

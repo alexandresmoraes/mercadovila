@@ -30,7 +30,7 @@ namespace Common.WebAPI.PostgreSql
 
       try
       {
-        if (_uow.IsActive)
+        if (_uow.HasActiveTransaction)
         {
           if (result.Result is ObjectResult objectResult
             && objectResult.Value is Result resultValue
@@ -72,7 +72,7 @@ namespace Common.WebAPI.PostgreSql
 
       var result = await next();
 
-      if (result.Exception is not null && _uow.IsActive)
+      if (result.Exception is not null && _uow.HasActiveTransaction)
       {
         await _uow.RollbackAsync(cancellationToken);
         _logger.LogInformation("postgres: rollbacked exception.");
