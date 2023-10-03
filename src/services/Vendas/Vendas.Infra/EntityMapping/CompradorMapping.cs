@@ -6,16 +6,25 @@ namespace Vendas.Infra.EntityMapping
 {
   class CompradorMapping : IEntityTypeConfiguration<Comprador>
   {
-    public void Configure(EntityTypeBuilder<Comprador> builder)
+    public void Configure(EntityTypeBuilder<Comprador> b)
     {
-      builder.HasKey(c => c.Id);
+      b.ToTable("compradores");
 
-      builder.Property(p => p.UserId).HasMaxLength(36);
-      builder.HasIndex(p => p.UserId)
+      b.HasKey(c => c.Id);
+      b.Property(e => e.Id).ValueGeneratedOnAdd();
+
+      b.Property(p => p.UserId)
+        .HasMaxLength(36);
+
+      b.HasIndex(p => p.UserId)
         .HasDatabaseName("comprador_userid_index")
         .IsUnique();
 
-      builder.Property(c => c.Nome).IsRequired().HasMaxLength(256);
+      b.Property(c => c.Nome)
+        .IsRequired()
+        .HasMaxLength(256);
+
+      b.Ignore(_ => _.DomainEvents);
     }
   }
 }

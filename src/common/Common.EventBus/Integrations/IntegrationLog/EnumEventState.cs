@@ -1,6 +1,6 @@
 ﻿namespace Common.EventBus.Integrations
 {
-  public enum EventStateEnum
+  public enum EnumEventState
   {
     NotPublished = 0,
     InProgress = 1,

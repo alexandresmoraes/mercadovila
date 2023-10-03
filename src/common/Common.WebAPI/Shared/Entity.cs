@@ -5,16 +5,16 @@ namespace Common.WebAPI.Shared
   public abstract class Entity
   {
     int? _requestedHashCode;
-    int _Id;
-    public virtual int Id
+    long _id;
+    public virtual long Id
     {
       get
       {
-        return _Id;
+        return _id;
       }
       protected set
       {
-        _Id = value;
+        _id = value;
       }
     }
 

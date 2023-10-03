@@ -20,6 +20,8 @@ namespace Common.WebAPI.Notifications
     public List<ErrorResult> Errors { get; private set; } = new List<ErrorResult>();
     public List<WarningResult> Warnings { get; private set; } = new List<WarningResult>();
     public List<InformationResult> Informations { get; private set; } = new List<InformationResult>();
+
+    public bool IsValid => !HasErrors;
   }
 
   public record ResultNotifications<TDataResponse> : ResultNotifications

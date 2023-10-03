@@ -17,10 +17,6 @@ namespace Vendas.Infra.EntityMapping
         .WithMany()
         .IsRequired();
 
-      b.HasMany(_ => _.VendaItens)
-        .WithOne()
-        .OnDelete(DeleteBehavior.Cascade);
-
       b.Property(_ => _.Status)
        .IsRequired()
        .HasConversion(

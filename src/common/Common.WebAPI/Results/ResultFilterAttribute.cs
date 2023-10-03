@@ -132,7 +132,7 @@ namespace Common.WebAPI.Results
 
       if (context.Result is ObjectResult objectResult)
       {
-        if (objectResult.Value is Result result && result.HasError)
+        if (objectResult.Value is Result result && result.HasErrors)
         {
           context.Result = new BadRequestObjectResult(result);
         }

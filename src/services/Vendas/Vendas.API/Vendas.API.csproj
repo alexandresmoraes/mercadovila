@@ -18,17 +18,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\common\Common.EventBus\Common.EventBus.csproj" />
     <ProjectReference Include="..\Vendas.Domain\Vendas.Domain.csproj" />
     <ProjectReference Include="..\Vendas.Infra\Vendas.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\" />
+    <Folder Include="Application\Validators\" />
   </ItemGroup>
 
 </Project>

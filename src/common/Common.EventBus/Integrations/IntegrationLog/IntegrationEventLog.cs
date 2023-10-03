@@ -14,7 +14,7 @@ namespace Common.EventBus.Integrations
       {
         WriteIndented = true
       });
-      State = EventStateEnum.NotPublished;
+      State = EnumEventState.NotPublished;
       TimesSent = 0;
       TransactionId = transactionId.ToString();
     }
@@ -24,7 +24,7 @@ namespace Common.EventBus.Integrations
     public string? EventTypeShortName => EventTypeName.Split('.')?.Last();
     [NotMapped]
     public IntegrationEvent IntegrationEvent { get; private set; } = null!;
-    public EventStateEnum State { get; set; }
+    public EnumEventState State { get; set; }
     public int TimesSent { get; set; }
     public DateTime CreationTime { get; private set; }
     public string Content { get; private set; }

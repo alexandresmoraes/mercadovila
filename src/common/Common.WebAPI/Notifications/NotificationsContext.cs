@@ -5,8 +5,8 @@ namespace Common.WebAPI.Notifications
   public class NotificationsContext : INotificationsContext
   {
     private ResultNotifications _notifications = new();
-
     public ResultNotifications Notifications => _notifications;
+
     public bool HasErrors => _notifications.HasErrors;
 
     public bool HasWarnings => _notifications.HasWarnings;

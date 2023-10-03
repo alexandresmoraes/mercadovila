@@ -7,18 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.WebAPI.Shared.Pipeline
 {
-  public class TransactionBehavior<TRequest, TResponse, TDbContext> : IPipelineBehavior<TRequest, TResponse>
+  public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TDbContext : DbContext
   {
-    private readonly ILogger<TransactionBehavior<TRequest, TResponse, TDbContext>> _logger;
+    private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
     private readonly IUnitOfWork _uow;
-    private readonly TDbContext _context;
+    private readonly DbContext _context;
 
     public TransactionBehavior(
-      ILogger<TransactionBehavior<TRequest, TResponse, TDbContext>> logger,
+      ILogger<TransactionBehavior<TRequest, TResponse>> logger,
       IUnitOfWork uow,
-      TDbContext context)
+      DbContext context)
     {
       _logger = logger;
       _uow = uow;

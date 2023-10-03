@@ -5,9 +5,7 @@ namespace Common.EventBus.Integrations
 {
   public class IntegrationEventContext : DbContext
   {
-    public IntegrationEventContext(DbContextOptions<IntegrationEventContext> options) : base(options)
-    {
-    }
+    public IntegrationEventContext(DbContextOptions<IntegrationEventContext> options) : base(options) { }
 
     public DbSet<IntegrationEventLog> IntegrationEventLogs { get; set; } = null!;
 

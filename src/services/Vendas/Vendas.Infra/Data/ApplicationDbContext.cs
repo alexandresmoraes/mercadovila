@@ -9,6 +9,7 @@ namespace Vendas.Infra.Data
 {
   public class ApplicationDbContext : DbContext
   {
+    public DbSet<Comprador> Compradores { get; set; } = null!;
     public DbSet<Venda> Vendas { get; set; } = null!;
     public DbSet<VendaItem> VendaItens { get; set; } = null!;
     public DbSet<Pagamento> Pagamentos { get; set; } = null!;
