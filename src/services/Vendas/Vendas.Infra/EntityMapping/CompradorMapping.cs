@@ -11,7 +11,9 @@ namespace Vendas.Infra.EntityMapping
       b.ToTable("compradores");
 
       b.HasKey(c => c.Id);
-      b.Property(e => e.Id).ValueGeneratedOnAdd();
+      b.Property(e => e.Id)
+        .HasColumnName("id")
+        .ValueGeneratedOnAdd();
 
       b.Property(p => p.UserId)
         .HasMaxLength(36);
@@ -21,6 +23,7 @@ namespace Vendas.Infra.EntityMapping
         .IsUnique();
 
       b.Property(c => c.Nome)
+        .HasColumnName("nome")
         .IsRequired()
         .HasMaxLength(256);
 

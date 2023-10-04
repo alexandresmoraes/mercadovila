@@ -39,6 +39,8 @@ namespace Common.WebAPI.Shared.Pipeline
         return Errors(errors);
       }
 
+      _logger.LogInformation("----- Validated command {CommandType}", typeName);
+
       return await next();
     }
 

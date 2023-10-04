@@ -2,7 +2,7 @@
 {
   public interface ICompradorRepository
   {
-    Task CreateAsync(Comprador comprador);
+    Task AddAsync(Comprador comprador);
     Task<Comprador?> GetAsync(string userId);
   }
 }

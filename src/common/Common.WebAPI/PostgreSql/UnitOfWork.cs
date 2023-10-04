@@ -42,7 +42,7 @@ namespace Common.WebAPI.PostgreSql
       _context?.Dispose();
     }
 
-    public T GetTransaction<T>() => (T)_context.Database.CurrentTransaction!;
+    public TTransaction GetTransaction<TTransaction>() => (TTransaction)_context.Database.CurrentTransaction!;
 
     public IEnumerable<Entity> GetEntitiesPersistenceContext()
     {

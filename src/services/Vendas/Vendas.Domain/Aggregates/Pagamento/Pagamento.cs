@@ -1,4 +1,5 @@
 ﻿using Common.WebAPI.Shared;
+using System.Text.Json;
 
 namespace Vendas.Domain.Aggregates.Pagamento
 {
@@ -22,6 +23,11 @@ namespace Vendas.Domain.Aggregates.Pagamento
       Tipo = tipo;
       Valor = valor;
       DataHora = DateTime.Now;
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }

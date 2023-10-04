@@ -11,26 +11,33 @@ namespace Vendas.Infra.EntityMapping
       b.ToTable("pagamentos");
 
       b.HasKey(_ => _.Id);
-      b.Property(_ => _.Id).ValueGeneratedOnAdd();
+      b.Property(_ => _.Id)
+        .HasColumnName("id")
+        .ValueGeneratedOnAdd();
 
       b.HasOne(_ => _.Comprador)
         .WithMany()
+        .HasForeignKey("comprador_id")
         .IsRequired();
 
       b.HasMany(v => v.Vendas)
         .WithOne()
+        .HasForeignKey("venda_id")
         .OnDelete(DeleteBehavior.Cascade);
 
       b.Property(_ => _.Tipo)
-       .IsRequired()
-       .HasConversion(
-           v => (int)v,
-           v => (EnumTipoPagamento)v);
+        .HasColumnName("tipo")
+        .IsRequired()
+        .HasConversion(
+          v => (int)v,
+          v => (EnumTipoPagamento)v);
 
       b.Property(_ => _.DataHora)
+        .HasColumnName("datahora")
         .IsRequired();
 
       b.Property(_ => _.Valor)
+        .HasColumnName("valor")
         .IsRequired();
 
       b.Ignore(_ => _.DomainEvents);

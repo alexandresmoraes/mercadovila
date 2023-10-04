@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +18,8 @@ namespace Common.WebAPI.PostgreSql
     public static DbContextOptionsBuilder UseNpgsql(this DbContextOptionsBuilder options, IConfiguration configuration)
     {
       options
-        .UseNpgsql(configuration.GetConnectionString("Default"))
-        .ReplaceService<ISqlGenerationHelper, NpgsqlSqlGenerationLowercasingHelper>();
+        .UseNpgsql(configuration.GetConnectionString("Default"));
+      //.ReplaceService<ISqlGenerationHelper, NpgsqlSqlGenerationLowercasingHelper>();
 
       AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

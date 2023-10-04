@@ -8,7 +8,7 @@ namespace Common.WebAPI.PostgreSql
     public Task CommitAsync(CancellationToken cancellationToken = default);
     public Task RollbackAsync(CancellationToken cancellationToken = default);
     public bool HasActiveTransaction { get; }
-    public T GetTransaction<T>();
+    public TTransaction GetTransaction<TTransaction>();
     IEnumerable<Entity> GetEntitiesPersistenceContext();
   }
 }

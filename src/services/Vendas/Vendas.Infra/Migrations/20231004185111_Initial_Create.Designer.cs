@@ -12,14 +12,14 @@ using Vendas.Infra.Data;
 namespace Vendas.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231003180105_Initial_Create")]
+    [Migration("20231004185111_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -28,14 +28,16 @@ namespace Vendas.Infra.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("nome");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -55,25 +57,29 @@ namespace Vendas.Infra.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CompradorId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("datahora");
 
                     b.Property<int>("Tipo")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("tipo");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("valor");
+
+                    b.Property<long>("comprador_id")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompradorId");
+                    b.HasIndex("comprador_id");
 
                     b.ToTable("pagamentos", (string)null);
                 });
@@ -82,30 +88,34 @@ namespace Vendas.Infra.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CompradorId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long?>("PagamentoId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("datahora");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("total");
+
+                    b.Property<long>("comprador_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("venda_id")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompradorId");
+                    b.HasIndex("comprador_id");
 
-                    b.HasIndex("PagamentoId");
+                    b.HasIndex("venda_id");
 
                     b.ToTable("vendas", (string)null);
                 });
@@ -114,47 +124,55 @@ namespace Vendas.Infra.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("nome");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("preco");
 
                     b.Property<int>("Quantidade")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("quantidade");
 
                     b.Property<string>("UnidadeMedida")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("unidade_medida");
 
                     b.Property<long>("VendaId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("venda_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("VendaId");
 
-                    b.ToTable("VendaItens");
+                    b.ToTable("venda_itens", (string)null);
                 });
 
             modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento.Pagamento", b =>
                 {
                     b.HasOne("Vendas.Domain.Aggregates.Comprador", "Comprador")
                         .WithMany()
-                        .HasForeignKey("CompradorId")
+                        .HasForeignKey("comprador_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -165,13 +183,13 @@ namespace Vendas.Infra.Migrations
                 {
                     b.HasOne("Vendas.Domain.Aggregates.Comprador", "Comprador")
                         .WithMany()
-                        .HasForeignKey("CompradorId")
+                        .HasForeignKey("comprador_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Vendas.Domain.Aggregates.Pagamento.Pagamento", null)
                         .WithMany("Vendas")
-                        .HasForeignKey("PagamentoId")
+                        .HasForeignKey("venda_id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Comprador");

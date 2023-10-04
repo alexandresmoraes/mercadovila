@@ -1,4 +1,5 @@
 ﻿using Common.WebAPI.Shared;
+using System.Text.Json;
 
 namespace Vendas.Domain.Aggregates
 {
@@ -23,6 +24,11 @@ namespace Vendas.Domain.Aggregates
       Preco = preco;
       Quantidade = quantidade;
       UnidadeMedida = unidadeMedida;
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }

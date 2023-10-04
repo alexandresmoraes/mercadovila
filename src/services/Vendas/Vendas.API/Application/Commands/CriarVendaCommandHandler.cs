@@ -1,4 +1,5 @@
-﻿using Common.WebAPI.Results;
+﻿using Common.WebAPI.Auth;
+using Common.WebAPI.Results;
 using MediatR;
 using Vendas.API.Application.Responses;
 using Vendas.Domain.Aggregates;
@@ -10,22 +11,28 @@ namespace Vendas.API.Application.Commands
   {
     private readonly ICompradorRepository _compradorRepository;
     private readonly IVendaRepository _vendaRepository;
+    private readonly IAuthService _authService;
 
-    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository)
+    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;
+      _authService = authService;
     }
 
     public async Task<Result<CriarVendaCommandResponse>> Handle(CriarVendaCommand request, CancellationToken cancellationToken)
     {
+      var userId = _authService.GetUserId();
+
+      var comprador = await _compradorRepository.GetAsync(userId) ?? new Comprador(userId, request.CompradorNome);
+
       var venda = new Venda(
-        comprador: new Comprador("123", request.CompradorNome),
+        comprador: comprador,
         vendaItens: GerarVendaItensAleatorios(5),
         status: EnumVendaStatus.PendentePagamento
       );
 
-      await _vendaRepository.CreateAsync(venda);
+      await _vendaRepository.AddAsync(venda);
 
       return Result.Ok(new CriarVendaCommandResponse
       {

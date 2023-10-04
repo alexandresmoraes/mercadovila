@@ -1,4 +1,5 @@
 ﻿using Common.WebAPI.Shared;
+using System.Text.Json;
 
 namespace Vendas.Domain.Aggregates
 {
@@ -13,6 +14,11 @@ namespace Vendas.Domain.Aggregates
     {
       UserId = userId;
       Nome = nome;
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }

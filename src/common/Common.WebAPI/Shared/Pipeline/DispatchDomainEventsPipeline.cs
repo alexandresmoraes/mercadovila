@@ -33,7 +33,7 @@ namespace Common.WebAPI.Shared.Pipeline
 
         foreach (var entity in entities)
         {
-          _logger.LogInformation($"Dispatch entity domain events {entity.GetType().Name}");
+          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
 
           if (entity.HasDomainEvents)
           {
@@ -46,7 +46,7 @@ namespace Common.WebAPI.Shared.Pipeline
               if (_notificationsContext.HasErrors)
                 return (TResponse)(object)_notificationsContext.Notifications;
 
-              _logger.LogInformation($"Dispatch domain event {domainEvent}");
+              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
 
               await _mediator.Publish(domainEvent);
             }

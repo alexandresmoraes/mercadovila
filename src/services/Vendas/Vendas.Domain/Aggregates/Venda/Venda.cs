@@ -1,4 +1,5 @@
 ﻿using Common.WebAPI.Shared;
+using System.Text.Json;
 
 namespace Vendas.Domain.Aggregates
 {
@@ -22,6 +23,11 @@ namespace Vendas.Domain.Aggregates
       Status = status;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
       DataHora = DateTime.Now;
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }

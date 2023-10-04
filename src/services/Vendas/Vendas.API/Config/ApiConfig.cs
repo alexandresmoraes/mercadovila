@@ -37,7 +37,7 @@ namespace Vendas.API.Config
         options.SuppressModelStateInvalidFilter = true;
       });
       services.AddDbContext<ApplicationDbContext>();
-      services.AddScoped<DbContext, ApplicationDbContext>();
+      services.AddScoped<DbContext>(_ => _.GetRequiredService<ApplicationDbContext>());
       services.AddScoped<IUnitOfWork, UnitOfWork>();
       services.AddUtils();
 
@@ -45,6 +45,9 @@ namespace Vendas.API.Config
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
       services.AddScoped<ICompradorRepository, CompradorRepository>();
       services.AddScoped<IVendaRepository, VendaRepository>();
+
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
       services.AddMvc(opt =>

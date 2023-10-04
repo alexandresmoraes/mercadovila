@@ -11,22 +11,28 @@ namespace Vendas.Infra.EntityMapping
       b.ToTable("vendas");
 
       b.HasKey(_ => _.Id);
-      b.Property(e => e.Id).ValueGeneratedOnAdd();
+      b.Property(_ => _.Id)
+        .HasColumnName("id")
+        .ValueGeneratedOnAdd();
 
       b.HasOne(_ => _.Comprador)
         .WithMany()
+        .HasForeignKey("comprador_id")
         .IsRequired();
 
       b.Property(_ => _.Status)
+        .HasColumnName("status")
        .IsRequired()
        .HasConversion(
            v => (int)v,
            v => (EnumVendaStatus)v);
 
       b.Property(_ => _.DataHora)
+        .HasColumnName("datahora")
         .IsRequired();
 
       b.Property(_ => _.Total)
+        .HasColumnName("total")
         .IsRequired();
 
       b.Ignore(_ => _.DomainEvents);

@@ -13,9 +13,10 @@ namespace Vendas.Infra.Repositories
       _context = context;
     }
 
-    public async Task CreateAsync(Comprador comprador)
+    public async Task AddAsync(Comprador comprador)
     {
-      await _context.AddAsync(comprador);
+      await _context.Compradores.AddAsync(comprador);
+      await _context.SaveChangesAsync();
     }
 
     public async Task<Comprador?> GetAsync(string userId)
