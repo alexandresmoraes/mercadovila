@@ -28,7 +28,7 @@ namespace Common.EventBus
       };
 
       var retryPolicy = Policy
-        .Handle<ConsumeException>()
+        .Handle<Exception>()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, retryCount, context) =>
         {
           _logger.LogError($"Consumer try: {retryCount}, exception: {exception.Message}");

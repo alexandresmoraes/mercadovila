@@ -40,7 +40,7 @@ namespace Common.EventBus
 
       await _retryPolicy.ExecuteAsync(async () =>
       {
-        _logger.LogInformation($"Producer message: {nameof(TIntegrationEvent)}");
+        _logger.LogInformation("Producer message: {IntegrationEvent}", nameof(TIntegrationEvent));
 
         await producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
         {
