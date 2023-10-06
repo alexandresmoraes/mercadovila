@@ -1,4 +1,5 @@
-﻿using Common.WebAPI.Auth;
+﻿using Common.EventBus;
+using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Results;
@@ -49,6 +50,8 @@ namespace Vendas.API.Config
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+
+      services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
 
       services.AddMvc(opt =>
       {

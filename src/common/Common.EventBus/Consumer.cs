@@ -1,7 +1,6 @@
 ﻿using Common.EventBus.Integrations;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Wrap;
 using System.Text.Json;
@@ -15,10 +14,10 @@ namespace Common.EventBus
     private readonly EventBusSettings _eventBusSettings = null!;
     private readonly AsyncPolicyWrap _policyWrap;
 
-    public Consumer(ILogger<Consumer> logger, IOptions<EventBusSettings> settings)
+    public Consumer(ILogger<Consumer> logger, EventBusSettings settings)
     {
       _logger = logger;
-      _eventBusSettings = settings.Value;
+      _eventBusSettings = settings;
 
       _consumerConfig = new ConsumerConfig
       {

@@ -1,7 +1,6 @@
 ﻿using Common.EventBus.Integrations;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 using System.Text.Json;
@@ -15,9 +14,9 @@ namespace Common.EventBus
     private readonly EventBusSettings _eventBusSettings = null!;
     private readonly ILogger<Producer> _logger;
 
-    public Producer(ILogger<Producer> logger, IOptions<EventBusSettings> settings)
+    public Producer(ILogger<Producer> logger, EventBusSettings settings)
     {
-      _eventBusSettings = settings.Value;
+      _eventBusSettings = settings;
       _logger = logger;
 
       _producerConfig = new ProducerConfig
