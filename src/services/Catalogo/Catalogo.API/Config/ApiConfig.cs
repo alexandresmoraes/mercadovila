@@ -5,6 +5,7 @@ using Common.WebAPI.MongoDb;
 using Common.WebAPI.Results;
 using Common.WebAPI.Utils;
 using Common.WebAPI.WebApi;
+using GrpcCatalogo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalogo.API.Config
@@ -17,7 +18,7 @@ namespace Catalogo.API.Config
       services.Configure<AuthSettings>(authSettings);
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddMongoHealthCheck(configuration);
-      services.AddDefaultHealthCheckUI();
+      //services.AddDefaultHealthCheckUI();
       services.AddControllers().AddJsonOptions(options =>
       {
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
@@ -32,6 +33,12 @@ namespace Catalogo.API.Config
       services.AddSingleton<NotificacoesRepository>();
       services.AddSingleton<FavoritoItemRepository>();
 
+      services.AddTransient<IProdutoRepository>(sp => sp.GetRequiredService<ProdutoRepository>());
+      services.AddTransient<ICarrinhoItemRepository>(sp => sp.GetRequiredService<CarrinhoItemRepository>());
+      services.AddTransient<IFavoritoItemRepository>(sp => sp.GetRequiredService<FavoritoItemRepository>());
+      services.AddTransient<INotificacoesRepository>(sp => sp.GetRequiredService<NotificacoesRepository>());
+      services.AddTransient<IFavoritoItemRepository>(sp => sp.GetRequiredService<FavoritoItemRepository>());
+
       services.AddAuthServices();
 
       services.Configure<ApiBehaviorOptions>(options =>
@@ -40,6 +47,8 @@ namespace Catalogo.API.Config
         options.SuppressModelStateInvalidFilter = true;
       });
       services.AddUtils();
+
+      services.AddGrpc();
 
       services.AddMvc(opt =>
       {
@@ -65,6 +74,7 @@ namespace Catalogo.API.Config
       app.UseRouting();
       app.UseAuthentication();
       app.UseAuthorization();
+      app.MapGrpcService<CarrinhoService>();
       app.MapControllers();
 
       return app;

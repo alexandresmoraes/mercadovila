@@ -45,34 +45,33 @@ namespace Common.EventBus
 
     public Task Consume<TIntegrationEvent>(Action<TIntegrationEvent> onEventReceived, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent
     {
-      using (var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build())
+      using var consumer = new ConsumerBuilder<string, string>(_consumerConfig).Build();
+
+      consumer.Subscribe(_eventBusSettings.Topic);
+
+      while (true)
       {
-        consumer.Subscribe(_eventBusSettings.Topic);
-
-        while (true)
+        _policyWrap.ExecuteAsync(() =>
         {
-          _policyWrap.ExecuteAsync(() =>
+          var result = consumer.Consume(cancellationToken);
+
+          if (result is not null)
           {
-            var result = consumer.Consume(cancellationToken);
+            _logger.LogInformation($"Consumer event started \n"
+                 + $"partition: {result.Partition} \n"
+                 + $"offset: {result.Offset} \n"
+                 + $"timestamp: {result.Message.Timestamp.UtcDateTime}");
 
-            if (result is not null)
-            {
-              _logger.LogInformation($"Consumer event started \n"
-                   + $"partition: {result.Partition} \n"
-                   + $"offset: {result.Offset} \n"
-                   + $"timestamp: {result.Message.Timestamp.UtcDateTime}");
+            var @event = JsonSerializer.Deserialize<TIntegrationEvent>(result.Message.Value);
+            var integrationEvent = @event! as IntegrationEvent;
 
-              var @event = JsonSerializer.Deserialize<TIntegrationEvent>(result.Message.Value);
-              var integrationEvent = @event! as IntegrationEvent;
+            _logger.LogInformation($"Consumer eventId: {integrationEvent!.Id} - ({@event})");
 
-              _logger.LogInformation($"Consumer eventId: {integrationEvent!.Id} - ({@event})");
+            onEventReceived(@event!);
+          }
 
-              onEventReceived(@event!);
-            }
-
-            return Task.CompletedTask;
-          });
-        }
+          return Task.CompletedTask;
+        });
       }
     }
   }

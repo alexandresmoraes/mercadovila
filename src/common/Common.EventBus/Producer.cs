@@ -48,7 +48,7 @@ namespace Common.EventBus
         }, cancellationToken);
       });
 
-      producer.Flush();
+      producer.Flush(cancellationToken);
     }
   }
 }

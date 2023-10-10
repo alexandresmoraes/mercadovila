@@ -16,7 +16,8 @@ namespace Vendas.Infra.EntityMapping
         .ValueGeneratedOnAdd();
 
       b.Property(p => p.UserId)
-        .HasMaxLength(36);
+        .HasMaxLength(36)
+        .IsRequired();
 
       b.HasIndex(p => p.UserId)
         .HasDatabaseName("comprador_userid_index")

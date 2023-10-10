@@ -12,7 +12,7 @@ using Vendas.Infra.Data;
 namespace Vendas.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231004185111_Initial_Create")]
+    [Migration("20231010194341_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,6 +147,12 @@ namespace Vendas.Infra.Migrations
                     b.Property<decimal>("Preco")
                         .HasColumnType("numeric")
                         .HasColumnName("preco");
+
+                    b.Property<string>("ProdutoId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("produto_id");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("integer")

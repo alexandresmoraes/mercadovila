@@ -19,7 +19,6 @@ namespace Common.WebAPI.PostgreSql
     {
       options
         .UseNpgsql(configuration.GetConnectionString("Default"));
-      //.ReplaceService<ISqlGenerationHelper, NpgsqlSqlGenerationLowercasingHelper>();
 
       AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

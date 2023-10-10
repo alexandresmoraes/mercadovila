@@ -1,0 +1,29 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcCatalogo";
+
+package CatalogoApi;
+
+service Catalogo {
+	rpc GetCarrinhoPorUsuario(CarrinhoRequest) returns (CarrinhoUsuarioResponse) {}	
+}
+
+message CarrinhoRequest {
+	string user_id = 1;
+}
+
+message CarrinhoUsuarioResponse {
+	string user_id = 1;
+	repeated CarrinhoItemResponse itens = 2;
+}
+
+message CarrinhoItemResponse {
+	string id = 1;
+	string nome = 2;
+	string image_url = 3;
+	string descricao = 4;
+	double preco = 5;
+	int32 quantidade = 6;
+	string unidade_medida = 7;
+	bool disponibilidade_estoque = 8;
+}

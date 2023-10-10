@@ -1,5 +1,6 @@
 ﻿using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
+using Common.WebAPI.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -45,6 +46,68 @@ namespace Common.WebAPI.Shared.Pipeline
             {
               if (_notificationsContext.HasErrors)
                 return (TResponse)(object)_notificationsContext.Notifications;
+
+              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
+
+              await _mediator.Publish(domainEvent);
+            }
+          }
+        }
+
+        return response;
+      }
+      else if (typeof(TResponse) == typeof(ResultNotifications))
+      {
+        var response = await next();
+
+        var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+
+        foreach (var entity in entities)
+        {
+          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+
+          if (entity.HasDomainEvents)
+          {
+            var domainEvents = entity.DomainEvents!.ToList();
+
+            entity.ClearDomainEvents();
+
+            foreach (var domainEvent in domainEvents)
+            {
+              if (_notificationsContext.HasErrors)
+                return (TResponse)(object)_notificationsContext.Notifications;
+
+              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
+
+              await _mediator.Publish(domainEvent);
+            }
+          }
+        }
+
+        return response;
+      }
+      else if (typeof(TResponse) == typeof(Result))
+      {
+        var response = await next();
+
+        var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+
+        var responseResult = (Result)(object)response!;
+
+        foreach (var entity in entities)
+        {
+          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+
+          if (entity.HasDomainEvents)
+          {
+            var domainEvents = entity.DomainEvents!.ToList();
+
+            entity.ClearDomainEvents();
+
+            foreach (var domainEvent in domainEvents)
+            {
+              if (!responseResult.IsValid)
+                return response;
 
               _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
 

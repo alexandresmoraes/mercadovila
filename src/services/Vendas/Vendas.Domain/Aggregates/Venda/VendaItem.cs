@@ -5,6 +5,7 @@ namespace Vendas.Domain.Aggregates
 {
   public class VendaItem : Entity
   {
+    public string ProdutoId { get; private set; } = null!;
     public string Nome { get; private set; } = null!;
     public string ImageUrl { get; private set; } = null!;
     public string Descricao { get; private set; } = null!;
@@ -16,8 +17,9 @@ namespace Vendas.Domain.Aggregates
 
     public VendaItem() { }
 
-    public VendaItem(string nome, string imageUrl, string descricao, decimal preco, int quantidade, string unidadeMedida)
+    public VendaItem(string produtoId, string nome, string imageUrl, string descricao, decimal preco, int quantidade, string unidadeMedida)
     {
+      ProdutoId = produtoId;
       Nome = nome;
       ImageUrl = imageUrl;
       Descricao = descricao;

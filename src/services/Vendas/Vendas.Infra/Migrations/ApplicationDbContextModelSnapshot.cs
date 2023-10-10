@@ -146,6 +146,12 @@ namespace Vendas.Infra.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("preco");
 
+                    b.Property<string>("ProdutoId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("produto_id");
+
                     b.Property<int>("Quantidade")
                         .HasColumnType("integer")
                         .HasColumnName("quantidade");

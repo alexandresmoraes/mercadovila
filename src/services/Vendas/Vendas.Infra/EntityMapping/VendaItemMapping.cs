@@ -15,6 +15,11 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("id")
         .ValueGeneratedOnAdd();
 
+      b.Property(_ => _.ProdutoId)
+        .HasColumnName("produto_id")
+        .HasMaxLength(36)
+        .IsRequired();
+
       b.Property(_ => _.Nome)
         .HasColumnName("nome")
         .IsRequired();

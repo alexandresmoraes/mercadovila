@@ -81,6 +81,7 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    produto_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     nome = table.Column<string>(type: "text", nullable: false),
                     image_url = table.Column<string>(type: "text", nullable: false),
                     descricao = table.Column<string>(type: "text", nullable: false),
