@@ -2,7 +2,7 @@
 
 namespace Vendas.API.Services
 {
-  public interface ICatalogoService
+  public interface ICarrinhoService
   {
     Task<CarrinhoUsuarioResponseDto?> GetCarrinhoPorUsuario(string userId);
   }

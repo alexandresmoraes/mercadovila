@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Text.Json;
 
 namespace Common.WebAPI.Shared
 {
@@ -18,7 +19,7 @@ namespace Common.WebAPI.Shared
       }
     }
 
-    private List<INotification> _domainEvents = new List<INotification>();
+    private readonly List<INotification> _domainEvents = new List<INotification>();
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
     public virtual bool HasDomainEvents => _domainEvents is not null && _domainEvents.Any();
 
@@ -84,6 +85,11 @@ namespace Common.WebAPI.Shared
     public static bool operator !=(Entity left, Entity right)
     {
       return !(left == right);
+    }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
     }
   }
 }

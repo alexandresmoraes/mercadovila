@@ -30,7 +30,7 @@ namespace Common.EventBus
         .Handle<Exception>()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, retryCount, context) =>
         {
-          _logger.LogError($"Consumer try: {retryCount}, exception: {exception.Message}");
+          _logger.LogError("Consumer try: {retryCount}, exception: {exception}", retryCount, exception.Message);
         });
 
       var circuitBreakerPolicy = Policy
@@ -57,15 +57,15 @@ namespace Common.EventBus
 
           if (result is not null)
           {
-            _logger.LogInformation($"Consumer event started \n"
-                 + $"partition: {result.Partition} \n"
-                 + $"offset: {result.Offset} \n"
-                 + $"timestamp: {result.Message.Timestamp.UtcDateTime}");
+            _logger.LogInformation("Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
+              result.Partition,
+              result.Offset,
+              result.Message.Timestamp.UtcDateTime);
 
             var @event = JsonSerializer.Deserialize<TIntegrationEvent>(result.Message.Value);
             var integrationEvent = @event! as IntegrationEvent;
 
-            _logger.LogInformation($"Consumer eventId: {integrationEvent!.Id} - ({@event})");
+            _logger.LogInformation("Consumer eventId: {IntegrationEventId} - ({@event})", integrationEvent!.Id, @event);
 
             onEventReceived(@event!);
           }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GrpcCatalogo;
 
-public class CarrinhoService : Catalogo.CatalogoBase
+public class CarrinhoService : Carrinho.CarrinhoBase
 {
   private readonly ILogger<CarrinhoService> _logger;
   private readonly ICarrinhoItemRepository _carrinhoItemRepository;
@@ -17,18 +17,18 @@ public class CarrinhoService : Catalogo.CatalogoBase
   }
 
   [AllowAnonymous]
-  public override async Task<CarrinhoUsuarioResponse> GetCarrinhoPorUsuario(CarrinhoRequest request, ServerCallContext context)
+  public override async Task<CarrinhoResponse> GetCarrinhoPorUsuario(CarrinhoRequest request, ServerCallContext context)
   {
     _logger.LogInformation("Begin grpc call from method {Method} for user id {UserId}", context.Method, request.UserId);
 
     var carrinho = await _carrinhoItemRepository.GetCarrinhoPorUsuarioAsync(request.UserId);
 
-    return MapToCarrinhoUsuarioResponse(request.UserId, carrinho);
+    return MapToCarrinhoResponse(request.UserId, carrinho);
   }
 
-  private CarrinhoUsuarioResponse MapToCarrinhoUsuarioResponse(string userId, CarrinhoDto dto)
+  private static CarrinhoResponse MapToCarrinhoResponse(string userId, CarrinhoDto dto)
   {
-    var map = new CarrinhoUsuarioResponse
+    var map = new CarrinhoResponse
     {
       UserId = userId,
     };

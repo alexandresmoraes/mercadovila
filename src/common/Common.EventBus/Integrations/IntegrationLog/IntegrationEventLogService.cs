@@ -67,7 +67,7 @@ namespace Common.EventBus.Integrations.IntegrationLog
             .Select(e => e.DeserializeJsonContent(_eventTypes.Find(t => t.Name == e.EventTypeShortName)!));
       }
 
-      return new List<IntegrationEventLog>();
+      return Enumerable.Empty<IntegrationEventLog>();
     }
 
     public Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction)

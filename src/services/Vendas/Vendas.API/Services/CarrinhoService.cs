@@ -3,14 +3,14 @@ using Vendas.API.Models;
 
 namespace Vendas.API.Services
 {
-  public class CatalogoService : ICatalogoService
+  public class CarrinhoService : ICarrinhoService
   {
-    private readonly Catalogo.CatalogoClient _catalogoClient;
-    private readonly ILogger<CatalogoService> _logger;
+    private readonly Carrinho.CarrinhoClient _carrinhoClient;
+    private readonly ILogger<CarrinhoService> _logger;
 
-    public CatalogoService(Catalogo.CatalogoClient catalogoClient, ILogger<CatalogoService> logger)
+    public CarrinhoService(Carrinho.CarrinhoClient carrinhoClient, ILogger<CarrinhoService> logger)
     {
-      _catalogoClient = catalogoClient;
+      _carrinhoClient = carrinhoClient;
       _logger = logger;
     }
 
@@ -18,13 +18,13 @@ namespace Vendas.API.Services
     {
       _logger.LogDebug("grpc client created, request = {@id}", userId);
       var request = new CarrinhoRequest { UserId = userId };
-      var response = await _catalogoClient.GetCarrinhoPorUsuarioAsync(request);
+      var response = await _carrinhoClient.GetCarrinhoPorUsuarioAsync(request);
       _logger.LogDebug("grpc response {@response}", response);
 
       return MapToCarrinhoDto(response);
     }
 
-    private CarrinhoUsuarioResponseDto? MapToCarrinhoDto(CarrinhoUsuarioResponse response)
+    private static CarrinhoUsuarioResponseDto? MapToCarrinhoDto(CarrinhoResponse response)
     {
       if (response == null)
       {

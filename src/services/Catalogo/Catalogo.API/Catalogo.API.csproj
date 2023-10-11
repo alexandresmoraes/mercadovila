@@ -38,9 +38,10 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\catalogo.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
-		<Content Include="Protos\catalogo.proto" />
+		<Protobuf Include="Protos\carrinho.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
+		<Content Include="Protos\carrinho.proto" />
 		<None Remove="@(Protobuf)" />
+		<None Remove="Protos\carrinho.proto" />
 	</ItemGroup>
 	
   <ItemGroup>

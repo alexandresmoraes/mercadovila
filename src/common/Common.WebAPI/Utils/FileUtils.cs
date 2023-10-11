@@ -11,10 +11,9 @@ namespace Common.WebAPI.Utils
   {
     public async Task<string> SaveFile(IFormFile file, string path)
     {
-      var userImagePath = path;
       var currentDirectory = Directory.GetCurrentDirectory();
       var filename = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
-      var fullFilename = Path.Combine(currentDirectory, userImagePath, filename);
+      var fullFilename = Path.Combine(currentDirectory, path, filename);
       var directory = Path.GetDirectoryName(fullFilename)!;
 
       if (!Directory.Exists(directory))

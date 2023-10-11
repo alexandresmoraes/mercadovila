@@ -42,7 +42,7 @@ namespace Common.WebAPI.Shared.Pipeline
         {
           Guid transactionId;
 
-          await _uow.BeginTransactionAsync();
+          await _uow.BeginTransactionAsync(cancellationToken);
           using var transaction = _uow.GetTransaction<IDbContextTransaction>();
           using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new("TransactionContext", transaction.TransactionId) }))
           {

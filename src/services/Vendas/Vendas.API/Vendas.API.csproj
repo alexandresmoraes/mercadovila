@@ -37,13 +37,13 @@
 
   <ItemGroup>
     <Folder Include="Application\Validators\" />
-    <Folder Include="Protos\" />
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\catalogo.proto" Generator="MSBuild:Compile" />
-		<Content Include="Protos\catalogo.proto" />
+		<Protobuf Include="Protos\carrinho.proto" Generator="MSBuild:Compile" />
+		<Content Include="Protos\carrinho.proto" />
 		<None Remove="@(Protobuf)" />
+		<None Remove="Protos\carrinho.proto" />
 	</ItemGroup>
 
 </Project>

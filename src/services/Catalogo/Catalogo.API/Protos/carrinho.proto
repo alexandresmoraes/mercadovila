@@ -2,17 +2,15 @@
 
 option csharp_namespace = "GrpcCatalogo";
 
-package CatalogoApi;
-
-service Catalogo {
-	rpc GetCarrinhoPorUsuario(CarrinhoRequest) returns (CarrinhoUsuarioResponse) {}	
+service Carrinho {
+	rpc GetCarrinhoPorUsuario(CarrinhoRequest) returns (CarrinhoResponse) {}	
 }
 
 message CarrinhoRequest {
 	string user_id = 1;
 }
 
-message CarrinhoUsuarioResponse {
+message CarrinhoResponse {
 	string user_id = 1;
 	repeated CarrinhoItemResponse itens = 2;
 }

@@ -13,14 +13,14 @@ namespace Vendas.API.Application.Commands
     private readonly ICompradorRepository _compradorRepository;
     private readonly IVendaRepository _vendaRepository;
     private readonly IAuthService _authService;
-    private readonly Catalogo.CatalogoClient _catalogoClient;
+    private readonly Carrinho.CarrinhoClient _carrinhoClient;
 
-    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Catalogo.CatalogoClient catalogoClient)
+    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;
       _authService = authService;
-      _catalogoClient = catalogoClient;
+      _carrinhoClient = carrinhoClient;
     }
 
     public async Task<Result<CriarVendaCommandResponse>> Handle(CriarVendaCommand request, CancellationToken cancellationToken)
@@ -28,12 +28,16 @@ namespace Vendas.API.Application.Commands
       var userId = _authService.GetUserId();
 
       var carrinhoRequest = new CarrinhoRequest { UserId = userId };
-      var carrinho = await _catalogoClient.GetCarrinhoPorUsuarioAsync(carrinhoRequest);
+      var carrinho = await _carrinhoClient.GetCarrinhoPorUsuarioAsync(carrinhoRequest);
+
+      var countIndisponiveis = carrinho.Itens.Count(_ => _.DisponibilidadeEstoque == false);
+      if (countIndisponiveis > 0)
+      {
+        var failMessage = countIndisponiveis > 1 ? "Itens indisponíveis, confira o carrinho." : "Item indisponível, confira o carrinho.";
+        return Result.Fail<CriarVendaCommandResponse>(failMessage);
+      }
 
       var comprador = await _compradorRepository.GetAsync(userId) ?? new Comprador(userId, request.CompradorNome);
-
-      if (carrinho.Itens.Any(_ => _.DisponibilidadeEstoque == false))
-        return Result.Fail<CriarVendaCommandResponse>("Produto(s) fora de estoque");
 
       var venda = new Venda(
         comprador: comprador,

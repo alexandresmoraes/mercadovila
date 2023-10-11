@@ -15,7 +15,7 @@ builder.Services.AddSerilog();
 
 builder.Services.AddTransient<GrpcExceptionInterceptor>();
 
-builder.Services.AddGrpcClient<Catalogo.CatalogoClient>((services, options) =>
+builder.Services.AddGrpcClient<Carrinho.CarrinhoClient>((services, options) =>
 {
   var grpcUrl = builder.Configuration.GetSection("CatalogoUrlGrpc").Value;
   options.Address = new Uri(grpcUrl);
