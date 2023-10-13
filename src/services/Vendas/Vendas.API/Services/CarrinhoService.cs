@@ -18,7 +18,7 @@ namespace Vendas.API.Services
     {
       _logger.LogDebug("grpc client created, request = {@id}", userId);
       var request = new CarrinhoRequest { UserId = userId };
-      var response = await _carrinhoClient.GetCarrinhoPorUsuarioAsync(request);
+      var response = await _carrinhoClient.GetCarrinhoReservarEstoquePorUsuarioAsync(request);
       _logger.LogDebug("grpc response {@response}", response);
 
       return MapToCarrinhoDto(response);

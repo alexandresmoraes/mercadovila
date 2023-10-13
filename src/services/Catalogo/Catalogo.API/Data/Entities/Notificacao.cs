@@ -1,5 +1,5 @@
-﻿using System;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json;
 
 namespace Catalogo.API.Data.Entities
 {
@@ -15,6 +15,11 @@ namespace Catalogo.API.Data.Entities
     public string? ImageUrl { get; set; }
 
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }
 

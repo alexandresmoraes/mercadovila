@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Catalogo.API.Data.Dto
 {
@@ -26,8 +26,13 @@ namespace Catalogo.API.Data.Dto
 
     public int Estoque { get; set; }
 
-    public bool IsAtivo { get; set; }    
+    public bool IsAtivo { get; set; }
 
     public bool IsFavorito { get; set; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

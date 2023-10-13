@@ -3,7 +3,7 @@
 option csharp_namespace = "GrpcCatalogo";
 
 service Carrinho {
-	rpc GetCarrinhoPorUsuario(CarrinhoRequest) returns (CarrinhoResponse) {}	
+	rpc GetCarrinhoReservarEstoquePorUsuario(CarrinhoRequest) returns (CarrinhoResponse) {}	
 }
 
 message CarrinhoRequest {

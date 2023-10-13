@@ -12,7 +12,6 @@ builder.Services.AddAuthConfig(builder.Configuration);
 builder.Logging.AddSerilog(builder.Configuration);
 builder.Services.AddSerilog();
 
-
 builder.Services.AddTransient<GrpcExceptionInterceptor>();
 
 builder.Services.AddGrpcClient<Carrinho.CarrinhoClient>((services, options) =>

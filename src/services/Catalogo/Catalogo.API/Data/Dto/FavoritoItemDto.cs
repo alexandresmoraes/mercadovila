@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Catalogo.API.Data.Dto
@@ -19,5 +20,10 @@ namespace Catalogo.API.Data.Dto
     public int RatingCount { get; set; }
     public bool IsAtivo { get; set; }
     public bool IsFavorito { get; set; } = true;
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

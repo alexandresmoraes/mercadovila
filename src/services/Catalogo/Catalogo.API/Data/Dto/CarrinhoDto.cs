@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Catalogo.API.Data.Dto
@@ -13,6 +14,11 @@ namespace Catalogo.API.Data.Dto
     public IEnumerable<CarrinhoItemDto> Itens { get; set; }
     public decimal Subtotal { get => Itens.Sum(i => i.Preco * i.Quantidade); }
     public decimal Total { get => Subtotal; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 
   public record CarrinhoItemDto
@@ -33,5 +39,10 @@ namespace Catalogo.API.Data.Dto
     public int Quantidade { get; set; }
     public bool IsFavorito { get; set; }
     public decimal Subtotal { get => Preco * Quantidade; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

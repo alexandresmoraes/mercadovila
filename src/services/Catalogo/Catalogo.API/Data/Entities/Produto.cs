@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json;
 
 namespace Catalogo.API.Data.Entities
 {
@@ -34,5 +35,10 @@ namespace Catalogo.API.Data.Entities
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
     public bool IsAtivo { get; set; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

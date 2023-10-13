@@ -28,7 +28,7 @@ namespace Vendas.API.Application.Commands
       var userId = _authService.GetUserId();
 
       var carrinhoRequest = new CarrinhoRequest { UserId = userId };
-      var carrinho = await _carrinhoClient.GetCarrinhoPorUsuarioAsync(carrinhoRequest);
+      var carrinho = await _carrinhoClient.GetCarrinhoReservarEstoquePorUsuarioAsync(carrinhoRequest);
 
       var countIndisponiveis = carrinho.Itens.Count(_ => _.DisponibilidadeEstoque == false);
       if (countIndisponiveis > 0)
