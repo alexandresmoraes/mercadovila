@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using Common.EventBus.Integrations.IntegrationEvents;
 
 namespace Common.EventBus.Integrations
 {
-  public class IntegrationEventLog
+    public class IntegrationEventLog
   {
     public IntegrationEventLog(IntegrationEvent @event, Guid transactionId)
     {

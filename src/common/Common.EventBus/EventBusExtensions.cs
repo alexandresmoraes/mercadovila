@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.EventBus.Abstractions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.EventBus
 {
-  public static class EventBusExtensions
+    public static class EventBusExtensions
   {
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
     {

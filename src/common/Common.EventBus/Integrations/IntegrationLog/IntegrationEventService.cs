@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.EventBus.Abstractions;
+using Common.EventBus.Integrations.IntegrationEvents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
 
 namespace Common.EventBus.Integrations.IntegrationLog
 {
-  public class IntegrationEventService : IIntegrationEventService
+    public class IntegrationEventService : IIntegrationEventService
   {
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly IProducer _producer;

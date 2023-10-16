@@ -1,4 +1,5 @@
-﻿using Common.EventBus.Integrations;
+﻿using Common.EventBus.Abstractions;
+using Common.EventBus.Integrations.IntegrationEvents;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -7,7 +8,7 @@ using System.Text.Json;
 
 namespace Common.EventBus
 {
-  public class Producer : IProducer
+    public class Producer : IProducer
   {
     private readonly ProducerConfig _producerConfig;
     private readonly AsyncRetryPolicy _retryPolicy;

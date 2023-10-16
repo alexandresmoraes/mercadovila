@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Common.EventBus.Integrations.IntegrationEvents;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Common.EventBus.Integrations
 {
-  public interface IIntegrationEventLogService
+    public interface IIntegrationEventLogService
   {
     Task<IEnumerable<IntegrationEventLog>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId);
     Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction);

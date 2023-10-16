@@ -1,4 +1,5 @@
-﻿using Common.EventBus.Integrations;
+﻿using Common.EventBus.Abstractions;
+using Common.EventBus.Integrations.IntegrationEvents;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -36,9 +37,10 @@ namespace Common.EventBus
       var circuitBreakerPolicy = Policy
         .Handle<Exception>()
         .CircuitBreakerAsync(3, TimeSpan.FromMinutes(3),
-        onBreak: (_, _) => _logger.LogWarning("Consumer Open (onBreak)"),
-        onReset: () => _logger.LogWarning("Closed (onReset)"),
-        onHalfOpen: () => _logger.LogWarning("Half Open (onHalfOpen)"));
+          onBreak: (_, _) => _logger.LogWarning("Consumer Open (onBreak)"),
+          onReset: () => _logger.LogWarning("Closed (onReset)"),
+          onHalfOpen: () => _logger.LogWarning("Half Open (onHalfOpen)")
+        );
 
       _policyWrap = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
     }

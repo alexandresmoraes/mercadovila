@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.EventBus.Integrations.IntegrationEvents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data.Common;
 using System.Reflection;
 
 namespace Common.EventBus.Integrations.IntegrationLog
 {
-  public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
+    public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
   {
     private readonly IntegrationEventContext _integrationEventContext;
     private readonly DbConnection _dbConnection;
