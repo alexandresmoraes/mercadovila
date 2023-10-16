@@ -4,7 +4,7 @@ using System.Data.Common;
 
 namespace Common.EventBus.Integrations.IntegrationLog
 {
-  public class IntegrationEventService
+  public class IntegrationEventService : IIntegrationEventService
   {
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly IProducer _producer;
