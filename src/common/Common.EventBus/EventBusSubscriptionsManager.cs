@@ -8,8 +8,6 @@ public partial class EventBusSubscriptionsManager : IEventBusSubscriptionsManage
   private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
   private readonly List<Type> _eventTypes;
 
-  public event EventHandler<string>? OnEventRemoved;
-
   public EventBusSubscriptionsManager()
   {
     _handlers = new Dictionary<string, List<SubscriptionInfo>>();
@@ -76,7 +74,6 @@ public partial class EventBusSubscriptionsManager : IEventBusSubscriptionsManage
         {
           _eventTypes.Remove(eventType);
         }
-        RaiseOnEventRemoved(eventName);
       }
     }
   }
@@ -87,12 +84,6 @@ public partial class EventBusSubscriptionsManager : IEventBusSubscriptionsManage
     return GetHandlersForEvent(key);
   }
   public IEnumerable<SubscriptionInfo> GetHandlersForEvent(string eventName) => _handlers[eventName];
-
-  private void RaiseOnEventRemoved(string eventName)
-  {
-    var handler = OnEventRemoved;
-    handler?.Invoke(this, eventName);
-  }
 
   private SubscriptionInfo? FindSubscriptionToRemove<T, TH>()
           where T : IntegrationEvent

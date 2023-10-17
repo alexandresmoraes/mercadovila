@@ -6,20 +6,20 @@ using System.Data.Common;
 
 namespace Common.EventBus.Integrations.IntegrationLog
 {
-    public class IntegrationEventService : IIntegrationEventService
+  public class IntegrationEventService : IIntegrationEventService
   {
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
-    private readonly IProducer _producer;
+    private readonly IEventBus _eventBus;
     private readonly DbContext _dbContext;
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<IntegrationEventService> _logger;
     private readonly string _appName;
     private readonly string _userId;
 
-    public IntegrationEventService(Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory, IProducer producer, DbContext dbContext, ILogger<IntegrationEventService> logger, Func<string> appName, Func<string> userId)
+    public IntegrationEventService(Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory, IEventBus eventBus, DbContext dbContext, ILogger<IntegrationEventService> logger, Func<string> appName, Func<string> userId)
     {
       _integrationEventLogServiceFactory = integrationEventLogServiceFactory;
-      _producer = producer;
+      _eventBus = eventBus;
       _dbContext = dbContext;
       _eventLogService = _integrationEventLogServiceFactory(_dbContext.Database.GetDbConnection());
       _logger = logger;
@@ -38,7 +38,7 @@ namespace Common.EventBus.Integrations.IntegrationLog
         try
         {
           await _eventLogService.MarkEventAsInProgressAsync(logEvt.EventId);
-          await _producer.PublishAsync(_userId, logEvt.IntegrationEvent);
+          await _eventBus.PublishAsync(logEvt.IntegrationEvent);
           await _eventLogService.MarkEventAsPublishedAsync(logEvt.EventId);
         }
         catch (Exception ex)

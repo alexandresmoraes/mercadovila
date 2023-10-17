@@ -22,5 +22,8 @@ namespace Common.EventBus.Integrations.IntegrationEvents
 
     [JsonInclude]
     public DateTime CreationDate { get; private init; }
+
+    [JsonInclude]
+    public string? Key { get; private init; }
   }
 }

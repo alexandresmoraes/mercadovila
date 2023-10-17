@@ -1,10 +1,9 @@
-﻿using Common.EventBus.Abstractions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.EventBus
 {
-    public static class EventBusExtensions
+  public static class EventBusExtensions
   {
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
     {
@@ -15,8 +14,8 @@ namespace Common.EventBus
 
       services.Configure<EventBusSettings>(eventBusSettings);
 
-      services.AddScoped<IConsumer, Consumer>();
-      services.AddScoped<IProducer, Producer>();
+      //services.AddScoped<IConsumer, Consumer>();
+      //services.AddScoped<IProducer, Producer>();
 
       return services;
     }

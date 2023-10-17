@@ -7,10 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Abstractions\IConsumer.cs" />
+    <Compile Remove="Abstractions\IProducer.cs" />
+    <Compile Remove="Producer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Confluent.Kafka" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
     <PackageReference Include="Polly" Version="7.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.WebAPI\Common.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

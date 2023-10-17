@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.EventBus.Kafka
 {
-  public class DefaultKafkaPersistentConnection
-       : IKafkaPersistentConnection
+  public class DefaultKafkaPersistentConnection : IKafkaPersistentConnection, IDisposable
   {
     private static object _syncRoot = new object();
     private readonly ILogger<IKafkaPersistentConnection> _logger;
@@ -37,25 +36,16 @@ namespace Common.EventBus.Kafka
       return consumer!;
     }
 
-    public DefaultKafkaPersistentConnection(
-     ILogger<IKafkaPersistentConnection> logger,
-     EventBusSettings settings)
+    public DefaultKafkaPersistentConnection(ILogger<IKafkaPersistentConnection> logger,
+      ProducerConfig producerConfig)
     {
-      var producerConfig = new ProducerConfig
-      {
-        BootstrapServers = settings.BootstrapServer
-      };
-
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _producerBuilder = new ProducerBuilder<string, string>(producerConfig);
     }
 
-    public DefaultKafkaPersistentConnection(
-        ILogger<IKafkaPersistentConnection> logger,
+    public DefaultKafkaPersistentConnection(ILogger<IKafkaPersistentConnection> logger,
         ConsumerConfig consumerConfig)
     {
-      consumerConfig.EnableAutoOffsetStore = false;
-      consumerConfig.EnableAutoCommit = false;
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _consumers = new List<IConsumer<string, string>>();
       _consumerBuilder = new ConsumerBuilder<string, string>(consumerConfig);

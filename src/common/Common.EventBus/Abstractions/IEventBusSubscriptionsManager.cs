@@ -5,7 +5,6 @@ namespace Common.EventBus.Abstractions;
 public interface IEventBusSubscriptionsManager
 {
   bool IsEmpty { get; }
-  event EventHandler<string>? OnEventRemoved;
 
   void AddSubscription<T, TH>()
       where T : IntegrationEvent
