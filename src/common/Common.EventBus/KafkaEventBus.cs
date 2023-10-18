@@ -153,7 +153,7 @@ namespace Common.EventBus
           var handler = scope.ServiceProvider.GetService(subscription.HandlerType);
           if (handler == null) continue;
           var eventType = _subsManager.GetEventTypeByName(eventName)!;
-          var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+          var integrationEvent = JsonSerializer.Deserialize(message, eventType);
           var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
           await Task.Yield();
