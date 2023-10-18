@@ -40,7 +40,8 @@ namespace Vendas.Infra.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 

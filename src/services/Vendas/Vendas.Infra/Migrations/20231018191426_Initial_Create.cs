@@ -16,7 +16,7 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
@@ -104,7 +104,7 @@ namespace Vendas.Infra.Migrations
             migrationBuilder.CreateIndex(
                 name: "comprador_userid_index",
                 table: "compradores",
-                column: "UserId",
+                column: "user_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
