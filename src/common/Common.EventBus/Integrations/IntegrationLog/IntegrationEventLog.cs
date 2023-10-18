@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Common.EventBus.Integrations.IntegrationEvents;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
-using Common.EventBus.Integrations.IntegrationEvents;
 
 namespace Common.EventBus.Integrations
 {
-    public class IntegrationEventLog
+  public class IntegrationEventLog
   {
-    public IntegrationEventLog(IntegrationEvent @event, Guid transactionId)
+    private IntegrationEventLog() { }
+
+    public IntegrationEventLog(IntegrationEvent @event, string transactionId)
     {
       EventId = @event.Id;
       CreationTime = @event.CreationDate;
@@ -17,9 +19,9 @@ namespace Common.EventBus.Integrations
       });
       State = EnumEventState.NotPublished;
       TimesSent = 0;
-      TransactionId = transactionId.ToString();
+      TransactionId = transactionId;
     }
-    public Guid EventId { get; private set; }
+    public string EventId { get; private set; } = null!;
     public string EventTypeName { get; private set; } = null!;
     [NotMapped]
     public string? EventTypeShortName => EventTypeName.Split('.')?.Last();
@@ -28,8 +30,8 @@ namespace Common.EventBus.Integrations
     public EnumEventState State { get; set; }
     public int TimesSent { get; set; }
     public DateTime CreationTime { get; private set; }
-    public string Content { get; private set; }
-    public string TransactionId { get; private set; }
+    public string Content { get; private set; } = null!;
+    public string TransactionId { get; private set; } = null!;
 
     public IntegrationEventLog DeserializeJsonContent(Type type)
     {

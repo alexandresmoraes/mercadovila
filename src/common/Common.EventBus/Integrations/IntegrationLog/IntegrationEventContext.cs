@@ -16,28 +16,37 @@ namespace Common.EventBus.Integrations
 
     void ConfigureIntegrationEventLogEntry(EntityTypeBuilder<IntegrationEventLog> b)
     {
-      b.ToTable("IntegrationEvent");
+      b.ToTable("integration_event");
 
       b.HasKey(e => e.EventId);
 
       b.Property(e => e.EventId)
-          .IsRequired();
+        .HasColumnName("entity_id")
+        .IsRequired();
 
       b.Property(e => e.Content)
-          .IsRequired();
+        .HasColumnName("content")
+        .IsRequired();
 
       b.Property(e => e.CreationTime)
-          .IsRequired();
+        .HasColumnName("creation_time")
+        .IsRequired();
 
       b.Property(e => e.State)
-          .IsRequired();
+        .HasColumnName("state")
+        .IsRequired();
 
       b.Property(e => e.TimesSent)
-          .IsRequired();
+        .HasColumnName("times_sent")
+        .IsRequired();
 
       b.Property(e => e.EventTypeName)
-          .IsRequired();
+        .HasColumnName("event_type_name")
+        .IsRequired();
 
+      b.Property(e => e.TransactionId)
+        .HasColumnName("transaction_id")
+        .IsRequired();
     }
   }
 }

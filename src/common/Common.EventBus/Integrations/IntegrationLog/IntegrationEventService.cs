@@ -14,17 +14,15 @@ namespace Common.EventBus.Integrations.IntegrationLog
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<IntegrationEventService> _logger;
     private readonly string _appName;
-    private readonly string _userId;
 
-    public IntegrationEventService(Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory, IEventBus eventBus, DbContext dbContext, ILogger<IntegrationEventService> logger, Func<string> appName, Func<string> userId)
+    public IntegrationEventService(Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory, IEventBus eventBus, DbContext dbContext, ILogger<IntegrationEventService> logger, string appName)
     {
       _integrationEventLogServiceFactory = integrationEventLogServiceFactory;
       _eventBus = eventBus;
       _dbContext = dbContext;
       _eventLogService = _integrationEventLogServiceFactory(_dbContext.Database.GetDbConnection());
       _logger = logger;
-      _appName = appName();
-      _userId = userId();
+      _appName = appName;
     }
 
     public async Task PublishEventsThroughEventBusAsync(Guid transactionId)

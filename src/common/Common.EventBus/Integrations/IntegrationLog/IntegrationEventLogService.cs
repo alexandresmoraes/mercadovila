@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Common.EventBus.Integrations.IntegrationLog
 {
-    public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
+  public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
   {
     private readonly IntegrationEventContext _integrationEventContext;
     private readonly DbConnection _dbConnection;
@@ -27,22 +27,22 @@ namespace Common.EventBus.Integrations.IntegrationLog
           .ToList();
     }
 
-    public Task MarkEventAsFailedAsync(Guid eventId)
+    public Task MarkEventAsFailedAsync(string eventId)
     {
       return UpdateEventStatus(eventId, EnumEventState.PublishedFailed);
     }
 
-    public Task MarkEventAsInProgressAsync(Guid eventId)
+    public Task MarkEventAsInProgressAsync(string eventId)
     {
       return UpdateEventStatus(eventId, EnumEventState.InProgress);
     }
 
-    public Task MarkEventAsPublishedAsync(Guid eventId)
+    public Task MarkEventAsPublishedAsync(string eventId)
     {
       return UpdateEventStatus(eventId, EnumEventState.Published);
     }
 
-    private Task UpdateEventStatus(Guid eventId, EnumEventState status)
+    private Task UpdateEventStatus(string eventId, EnumEventState status)
     {
       var eventLogEntry = _integrationEventContext.IntegrationEventLogs.Single(ie => ie.EventId == eventId);
       eventLogEntry.State = status;
@@ -75,7 +75,7 @@ namespace Common.EventBus.Integrations.IntegrationLog
     {
       if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
-      var eventLogEntry = new IntegrationEventLog(@event, transaction.TransactionId);
+      var eventLogEntry = new IntegrationEventLog(@event, transaction.TransactionId.ToString());
 
       _integrationEventContext.Database.UseTransaction(transaction.GetDbTransaction());
       _integrationEventContext.IntegrationEventLogs.Add(eventLogEntry);

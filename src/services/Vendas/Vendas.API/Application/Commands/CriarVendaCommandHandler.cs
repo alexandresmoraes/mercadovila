@@ -1,4 +1,6 @@
-﻿using Common.WebAPI.Auth;
+﻿using Common.EventBus.Integrations.IntegrationEvents;
+using Common.EventBus.Integrations.IntegrationLog;
+using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using GrpcVendas;
 using MediatR;
@@ -14,13 +16,15 @@ namespace Vendas.API.Application.Commands
     private readonly IVendaRepository _vendaRepository;
     private readonly IAuthService _authService;
     private readonly Carrinho.CarrinhoClient _carrinhoClient;
+    private readonly IIntegrationEventService _integrationEventService;
 
-    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient)
+    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;
       _authService = authService;
       _carrinhoClient = carrinhoClient;
+      _integrationEventService = integrationEventService;
     }
 
     public async Task<Result<CriarVendaCommandResponse>> Handle(CriarVendaCommand request, CancellationToken cancellationToken)
@@ -54,6 +58,9 @@ namespace Vendas.API.Application.Commands
       );
 
       await _vendaRepository.AddAsync(venda);
+
+      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
+      await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
       return Result.Ok(new CriarVendaCommandResponse
       {

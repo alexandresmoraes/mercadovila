@@ -25,7 +25,7 @@ namespace Vendas.Infra.Data
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-      options.UseNpgsql(_configuration);
+      options.UseNpgsqlExtension(_configuration);
       options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddSerilog()));
     }
 

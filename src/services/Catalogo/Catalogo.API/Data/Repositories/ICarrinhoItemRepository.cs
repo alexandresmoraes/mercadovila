@@ -8,5 +8,6 @@ namespace Catalogo.API.Data.Repositories
     Task RemoverAsync(string userId, string produtoId, int quantidade);
     Task<CarrinhoDto> GetCarrinhoPorUsuarioAsync(string userId);
     Task<int> GetQuantidadeCarrinhoItem(string userId, string produtoId);
+    Task RemoverCarrinhoPorUsuarioAsync(string userId);
   }
 }

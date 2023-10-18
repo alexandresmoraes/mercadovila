@@ -17,7 +17,7 @@ namespace Auth.API.Data
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-      options.UseNpgsql(_configuration);
+      options.UseNpgsqlExtension(_configuration);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
