@@ -35,6 +35,11 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("total")
         .IsRequired();
 
+      b.HasMany(_ => _.VendaItens)
+        .WithOne(_ => _.Venda)
+        .HasForeignKey(_ => _.VendaId)
+        .OnDelete(DeleteBehavior.Cascade);
+
       b.Ignore(_ => _.DomainEvents);
     }
   }

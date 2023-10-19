@@ -56,7 +56,7 @@ namespace Vendas.Infra.Migrations
                     status = table.Column<int>(type: "integer", nullable: false),
                     datahora = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     total = table.Column<decimal>(type: "numeric", nullable: false),
-                    venda_id = table.Column<long>(type: "bigint", nullable: true)
+                    pagamento_id = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,8 +68,8 @@ namespace Vendas.Infra.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_vendas_pagamentos_venda_id",
-                        column: x => x.venda_id,
+                        name: "FK_vendas_pagamentos_pagamento_id",
+                        column: x => x.pagamento_id,
                         principalTable: "pagamentos",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -123,9 +123,9 @@ namespace Vendas.Infra.Migrations
                 column: "comprador_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_vendas_venda_id",
+                name: "IX_vendas_pagamento_id",
                 table: "vendas",
-                column: "venda_id");
+                column: "pagamento_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

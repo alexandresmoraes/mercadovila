@@ -107,14 +107,14 @@ namespace Vendas.Infra.Migrations
                     b.Property<long>("comprador_id")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("venda_id")
+                    b.Property<long?>("pagamento_id")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("comprador_id");
 
-                    b.HasIndex("venda_id");
+                    b.HasIndex("pagamento_id");
 
                     b.ToTable("vendas", (string)null);
                 });
@@ -194,7 +194,7 @@ namespace Vendas.Infra.Migrations
 
                     b.HasOne("Vendas.Domain.Aggregates.Pagamento.Pagamento", null)
                         .WithMany("Vendas")
-                        .HasForeignKey("venda_id")
+                        .HasForeignKey("pagamento_id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Comprador");

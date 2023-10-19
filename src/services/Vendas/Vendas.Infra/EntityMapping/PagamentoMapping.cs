@@ -22,7 +22,7 @@ namespace Vendas.Infra.EntityMapping
 
       b.HasMany(v => v.Vendas)
         .WithOne()
-        .HasForeignKey("venda_id")
+        .HasForeignKey("pagamento_id")
         .OnDelete(DeleteBehavior.Cascade);
 
       b.Property(_ => _.Tipo)

@@ -46,10 +46,6 @@ namespace Vendas.Infra.EntityMapping
 
       b.Property(_ => _.VendaId)
         .HasColumnName("venda_id");
-      b.HasOne(_ => _.Venda)
-        .WithMany(_ => _.VendaItens)
-        .HasForeignKey(_ => _.VendaId)
-        .OnDelete(DeleteBehavior.Cascade);
 
       b.Ignore(_ => _.DomainEvents);
     }
