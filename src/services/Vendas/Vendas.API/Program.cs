@@ -51,7 +51,7 @@ builder.Services.AddDbContext<IntegrationEventContext>(options =>
   options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),
     opt =>
     {
-      opt.MigrationsAssembly("Vendas.Infra");
+      opt.MigrationsAssembly(Assembly.GetAssembly(typeof(ApplicationDbContext))!.GetName().Name);
       opt.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
     });
 });
@@ -75,8 +75,8 @@ builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
 
   return new KafkaEventBus(logger, kafkaConsumer, kafkaProducer, eventBusSettings, sp, subManager);
 });
-builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
-builder.Services.AddTransient<IIntegrationEventService, IntegrationEventService>((sp) =>
+builder.Services.AddScoped<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
+builder.Services.AddScoped<IIntegrationEventService, IntegrationEventService>((sp) =>
 {
   var integrationEventLogServiceFactory = (DbConnection connection) =>
   {
@@ -99,12 +99,8 @@ try
   app.UseApiConfiguration();
 
   Log.Information("Applying migrations ({ApplicationContext})...", appName);
-  app.MigrateDbContext<ApplicationDbContext>((context, services) =>
-  {
-  })
-  .MigrateDbContext<IntegrationEventContext>((context, services) =>
-  {
-  });
+  app.MigrateDbContext<ApplicationDbContext>((_, __) => { })
+  .MigrateDbContext<IntegrationEventContext>((_, __) => { });
 
   Log.Information("Starting web app ({ApplicationContext})...", appName);
   app.Run();
