@@ -28,6 +28,15 @@ services:
     depends_on:
       - zookeeper
 
+  kafdrop:
+    image: obsidiandynamics/kafdrop:4.0.0  
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
   seq:
       image: datalust/seq:2023.3
       restart: unless-stopped

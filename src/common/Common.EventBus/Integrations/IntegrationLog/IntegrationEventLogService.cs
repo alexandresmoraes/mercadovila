@@ -21,7 +21,7 @@ namespace Common.EventBus.Integrations.IntegrationLog
               .UseNpgsql(_dbConnection)
               .Options);
 
-      _eventTypes = Assembly.Load(Assembly.GetEntryAssembly()!.FullName!)
+      _eventTypes = Assembly.GetAssembly(typeof(IntegrationEvent))!
           .GetTypes()
           .Where(t => t.Name.EndsWith(nameof(IntegrationEvent)))
           .ToList();

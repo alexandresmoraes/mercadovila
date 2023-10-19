@@ -1,7 +1,7 @@
 ﻿using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations.IntegrationEvents;
 using Common.EventBus.Kafka;
-using Common.WebAPI.Utils;
+using Common.EventBus.Utils;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

@@ -73,7 +73,7 @@ builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
   });
   var subManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-  return new KafkaEventBus(logger, kafkaProducer, kafkaConsumer, eventBusSettings, sp, subManager);
+  return new KafkaEventBus(logger, kafkaConsumer, kafkaProducer, eventBusSettings, sp, subManager);
 });
 builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
 builder.Services.AddTransient<IIntegrationEventService, IntegrationEventService>((sp) =>

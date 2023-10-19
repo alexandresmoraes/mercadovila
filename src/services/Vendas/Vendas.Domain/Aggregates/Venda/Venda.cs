@@ -22,7 +22,7 @@ namespace Vendas.Domain.Aggregates
       _vendaItens = vendaItens.ToList();
       Status = status;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
-      DataHora = DateTime.Now;
+      DataHora = DateTime.UtcNow;
     }
 
     public override string ToString()

@@ -1,4 +1,5 @@
-﻿using Common.WebAPI.PostgreSql;
+﻿using Common.EventBus.Integrations.IntegrationLog;
+using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Utils;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +14,14 @@ namespace Common.WebAPI.Shared.Pipeline
     private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
     private readonly IUnitOfWork _uow;
     private readonly DbContext _context;
+    private readonly IIntegrationEventService _integrationEventService;
 
-    public TransactionBehavior(
-      ILogger<TransactionBehavior<TRequest, TResponse>> logger,
-      IUnitOfWork uow,
-      DbContext context)
+    public TransactionBehavior(ILogger<TransactionBehavior<TRequest, TResponse>> logger, IUnitOfWork uow, DbContext context, IIntegrationEventService integrationEventService)
     {
       _logger = logger;
       _uow = uow;
       _context = context;
+      _integrationEventService = integrationEventService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ namespace Common.WebAPI.Shared.Pipeline
           }
 
           // TODO
-          //await _orderingIntegrationEventService.PublishEventsThroughEventBusAsync(transactionId);
+          await _integrationEventService.PublishEventsThroughEventBusAsync(transactionId);
         });
 
         return response!;
