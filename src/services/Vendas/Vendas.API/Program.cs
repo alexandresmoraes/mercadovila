@@ -2,11 +2,9 @@ using Common.EventBus;
 using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations;
 using Common.EventBus.Integrations.IntegrationLog;
-using Common.EventBus.Kafka;
 using Common.Grpc;
 using Common.WebAPI.Logs;
 using Common.WebAPI.PostgreSql;
-using Confluent.Kafka;
 using GrpcVendas;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -61,19 +59,9 @@ builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
 {
   var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
   var eventBusSettings = sp.GetRequiredService<EventBusSettings>();
-  var loggerKafka = sp.GetRequiredService<ILogger<IKafkaPersistentConnection>>();
-  var kafkaConsumer = new DefaultKafkaPersistentConnection(loggerKafka, new ConsumerConfig
-  {
-    BootstrapServers = eventBusSettings.BootstrapServer,
-    GroupId = eventBusSettings.Group
-  });
-  var kafkaProducer = new DefaultKafkaPersistentConnection(loggerKafka, new ProducerConfig
-  {
-    BootstrapServers = eventBusSettings.BootstrapServer
-  });
   var subManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-  return new KafkaEventBus(logger, kafkaConsumer, kafkaProducer, eventBusSettings, sp, subManager);
+  return new KafkaEventBus(logger, eventBusSettings, sp, subManager);
 });
 builder.Services.AddScoped<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
 builder.Services.AddScoped<IIntegrationEventService, IntegrationEventService>((sp) =>

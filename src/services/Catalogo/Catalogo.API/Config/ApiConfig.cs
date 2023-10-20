@@ -1,4 +1,5 @@
 ﻿using Catalogo.API.Data.Repositories;
+using Common.EventBus;
 using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.MongoDb;
@@ -18,7 +19,6 @@ namespace Catalogo.API.Config
       services.Configure<AuthSettings>(authSettings);
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddMongoHealthCheck(configuration);
-      //services.AddDefaultHealthCheckUI();
       services.AddControllers().AddJsonOptions(options =>
       {
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
@@ -49,6 +49,8 @@ namespace Catalogo.API.Config
       services.AddUtils();
 
       services.AddGrpc();
+
+      services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
 
       services.AddMvc(opt =>
       {

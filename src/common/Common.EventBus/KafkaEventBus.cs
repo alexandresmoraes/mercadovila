@@ -1,6 +1,5 @@
 ﻿using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations.IntegrationEvents;
-using Common.EventBus.Kafka;
 using Common.EventBus.Utils;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,26 +13,22 @@ namespace Common.EventBus
   public class KafkaEventBus : IEventBus, IDisposable
   {
     private readonly ILogger<KafkaEventBus> _logger;
-    private readonly IKafkaPersistentConnection _consumerBuilder;
-    private readonly IKafkaPersistentConnection _producerBuilder;
     private readonly EventBusSettings _eventBusSettings;
     private readonly IServiceProvider _serviceProvider;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly AsyncPolicyWrap _policyWrap;
+    private readonly IProducer<string, string> _producer;
+    private readonly IConsumer<string, string> _consumer;
     private readonly int _retryCount;
 
     public KafkaEventBus(
       ILogger<KafkaEventBus> logger,
-      IKafkaPersistentConnection consumerBuilder,
-      IKafkaPersistentConnection producerBuilder,
       EventBusSettings eventBusSettings,
       IServiceProvider serviceProvider,
       IEventBusSubscriptionsManager subsManager,
       int retryCount = 5)
     {
       _logger = logger;
-      _consumerBuilder = consumerBuilder;
-      _producerBuilder = producerBuilder;
       _eventBusSettings = eventBusSettings;
       _serviceProvider = serviceProvider;
       _subsManager = subsManager;
@@ -48,6 +43,20 @@ namespace Common.EventBus
           .CircuitBreakerAsync(3, TimeSpan.FromMinutes(1), OnBreak, OnReset, OnHalfOpen);
 
       _policyWrap = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
+
+      var producerConfig = new ProducerConfig
+      {
+        BootstrapServers = eventBusSettings.BootstrapServer
+      };
+      _producer = new ProducerBuilder<string, string>(producerConfig).Build();
+
+      var consumerConfig = new ConsumerConfig
+      {
+        BootstrapServers = eventBusSettings.BootstrapServer,
+        GroupId = eventBusSettings.Group,
+        AutoOffsetReset = AutoOffsetReset.Earliest
+      };
+      _consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
     }
 
     public async Task PublishAsync(IntegrationEvent @event)
@@ -62,15 +71,13 @@ namespace Common.EventBus
 
       _logger.LogTrace("Creating Kafka producer to publish event: {EventId} ({EventName})", @event.Id, eventName);
 
-      using var producer = _producerBuilder.GetProducer();
-
-      var message = JsonSerializer.Serialize(@event);
+      var message = JsonSerializer.Serialize(@event, @event.GetType());
 
       await policy.ExecuteAsync(async () =>
       {
         _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
 
-        await producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
+        await _producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
         {
           Key = @event.Key ?? Guid.NewGuid().ToString(),
           Value = message
@@ -105,36 +112,32 @@ namespace Common.EventBus
     {
       _logger.LogTrace("Starting Kafka basic consume");
 
-      using var consumer = _consumerBuilder.GetConsumer();
-
-      consumer.Subscribe(_eventBusSettings.Topic);
-
       Task.Run(async () =>
       {
+        _consumer.Subscribe(_eventBusSettings.Topic);
+
         while (true)
         {
           try
           {
-            var result = consumer.Consume();
+            var result = _consumer.Consume();
 
             if (result is not null)
             {
               _logger.LogInformation("Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
-              result.Partition,
-              result.Offset,
-              result.Message.Timestamp.UtcDateTime);
+                result.Partition,
+                result.Offset,
+                result.Message.Timestamp.UtcDateTime);
 
               await _policyWrap.ExecuteAsync(async () =>
               {
                 await ProcessEvent(eventName, result.Message.Value);
               });
-
-              consumer.Commit();
             }
           }
           catch (Exception ex)
           {
-            _logger.LogWarning(ex, "----- ERROR Processing event \"{@eventName}\"", eventName);
+            _logger.LogError(ex, "----- ERROR Processing event \"{@eventName}\"", eventName);
           }
         }
       });
@@ -168,8 +171,8 @@ namespace Common.EventBus
 
     public void Dispose()
     {
-      _producerBuilder?.Dispose();
-      _consumerBuilder?.Dispose();
+      _producer?.Dispose();
+      _consumer?.Dispose();
     }
 
     private void OnBreak(Exception exception, TimeSpan timespan)

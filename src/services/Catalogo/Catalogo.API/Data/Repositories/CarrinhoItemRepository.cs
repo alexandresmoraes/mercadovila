@@ -162,7 +162,7 @@ namespace Catalogo.API.Data.Repositories
     {
       var filter = Builders<CarrinhoItem>.Filter.Eq(x => x.UserId, userId);
 
-      await Collection.DeleteOneAsync(filter);
+      await Collection.DeleteManyAsync(filter);
     }
   }
 }
