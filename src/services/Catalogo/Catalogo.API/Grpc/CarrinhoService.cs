@@ -27,7 +27,7 @@ public class CarrinhoService : Carrinho.CarrinhoBase
 
     var response = MapToCarrinhoResponse(request.UserId, carrinho);
 
-    if (!response.Itens.Any(_ => _.DisponibilidadeEstoque == false))
+    if (response.Itens.Any() && !response.Itens.Any(_ => _.DisponibilidadeEstoque == false))
     {
       await _produtoRepository.UpdateReservarEstoque(response.Itens.ToDictionary(_ => _.Id, _ => _.Quantidade));
     }
@@ -44,7 +44,7 @@ public class CarrinhoService : Carrinho.CarrinhoBase
 
     dto.Itens.ToList().ForEach(item => map.Itens.Add(new CarrinhoItemResponse
     {
-      Id = item.Id,
+      Id = item.ProdutoId,
       Nome = item.Nome,
       Descricao = item.Descricao,
       Preco = decimal.ToDouble(item.Preco),

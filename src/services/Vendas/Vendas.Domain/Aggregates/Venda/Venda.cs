@@ -5,22 +5,20 @@ namespace Vendas.Domain.Aggregates
 {
   public class Venda : Entity, IAggregateRoot
   {
-    public Comprador Comprador { get; set; } = null!;
-
     private readonly List<VendaItem> _vendaItens = new List<VendaItem>();
     public IReadOnlyCollection<VendaItem> VendaItens => _vendaItens;
-    public EnumVendaStatus Status { get; set; }
-    public DateTime DataHora { get; set; }
-
-    public decimal Total { get; set; }
+    public Comprador Comprador { get; private set; } = null!;
+    public EnumVendaStatus Status { get; private set; }
+    public DateTime DataHora { get; private set; }
+    public decimal Total { get; private set; }
 
     public Venda() { }
 
-    public Venda(Comprador comprador, IEnumerable<VendaItem> vendaItens, EnumVendaStatus status)
+    public Venda(Comprador comprador, IEnumerable<VendaItem> vendaItens)
     {
       Comprador = comprador;
       _vendaItens = vendaItens.ToList();
-      Status = status;
+      Status = EnumVendaStatus.PendentePagamento;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
       DataHora = DateTime.UtcNow;
     }

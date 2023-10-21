@@ -34,6 +34,12 @@ namespace Vendas.API.Application.Commands
       var carrinhoRequest = new CarrinhoRequest { UserId = userId };
       var carrinho = await _carrinhoClient.GetCarrinhoReservarEstoquePorUsuarioAsync(carrinhoRequest);
 
+      if (carrinho is null)
+        return Result.Fail<CriarVendaCommandResponse>("Não foi possível obter o carrinho de compras");
+
+      if (!carrinho.Itens.Any())
+        return Result.Fail<CriarVendaCommandResponse>("Sem itens no carrinho de compras");
+
       var countIndisponiveis = carrinho.Itens.Count(_ => _.DisponibilidadeEstoque == false);
       if (countIndisponiveis > 0)
       {
@@ -41,7 +47,15 @@ namespace Vendas.API.Application.Commands
         return Result.Fail<CriarVendaCommandResponse>(failMessage);
       }
 
-      var comprador = await _compradorRepository.GetAsync(userId) ?? new Comprador(userId, request.CompradorNome);
+      var comprador = await _compradorRepository.GetAsync(userId);
+      if (comprador is null)
+      {
+        comprador = new Comprador(userId, request.CompradorNome);
+      }
+      else
+      {
+        comprador.Nome = request.CompradorNome;
+      }
 
       var venda = new Venda(
         comprador: comprador,
@@ -53,8 +67,7 @@ namespace Vendas.API.Application.Commands
           (decimal)item.Preco,
           item.Quantidade,
           item.UnidadeMedida
-        )),
-        status: EnumVendaStatus.PendentePagamento
+        ))
       );
 
       await _vendaRepository.AddAsync(venda);

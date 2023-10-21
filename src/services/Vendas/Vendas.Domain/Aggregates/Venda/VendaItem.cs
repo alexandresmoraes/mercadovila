@@ -11,9 +11,9 @@ namespace Vendas.Domain.Aggregates
     public string Descricao { get; private set; } = null!;
     public decimal Preco { get; private set; }
     public int Quantidade { get; private set; }
-    public string UnidadeMedida { get; set; } = null!;
-    public long VendaId { get; set; }
-    public Venda Venda { get; set; } = null!;
+    public string UnidadeMedida { get; private set; } = null!;
+    public long VendaId { get; private set; }
+    public Venda Venda { get; private set; } = null!;
 
     public VendaItem() { }
 

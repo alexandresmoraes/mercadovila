@@ -34,38 +34,38 @@ builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
   return new KafkaEventBus(logger, eventBusSettings, sp, subManager);
 });
 
-//Log.Logger = CreateSerilogLogger(builder.Configuration);
+Log.Logger = CreateSerilogLogger(builder.Configuration);
 
 try
 {
-  //Log.Information("Configuring web app ({ApplicationContext})...", appName);
+  Log.Information("Configuring web app ({ApplicationContext})...", appName);
   var app = builder.Build();
 
   ConfigureEventBus(app);
 
   app.UseApiConfiguration();
 
-  //Log.Information("Starting web app ({ApplicationContext})...", appName);
+  Log.Information("Starting web app ({ApplicationContext})...", appName);
   app.Run();
 
   return 0;
 }
 catch (Exception ex)
 {
-  //Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", appName);
+  Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", appName);
   return 1;
 }
 finally
 {
-  //Log.CloseAndFlush();
+  Log.CloseAndFlush();
 }
 
-//Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
-//{
-//  return new LoggerConfiguration()
-//        .ReadFrom.Configuration(configuration)
-//        .CreateLogger();
-//}
+Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+{
+  return new LoggerConfiguration()
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
 
 void ConfigureEventBus(IApplicationBuilder app)
 {
