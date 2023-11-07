@@ -12,9 +12,10 @@ services:
       - ${ZOOKEEPER_LOG_DIR}:/var/lib/zookeeper/log
 
   kafka:
-    image: confluentinc/cp-kafka:6.0.14
+    image: confluentinc/cp-kafka:6.2.0
     ports:
       - 9092:9092
+    user: root
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
