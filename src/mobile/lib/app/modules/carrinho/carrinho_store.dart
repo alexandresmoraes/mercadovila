@@ -97,12 +97,14 @@ abstract class CarrinhoStoreBase with Store {
       var compradorNome = Modular.get<AccountStore>().account!.nome;
       var result = await vendasRepository.createVenda(VendaModel(compradorNome: compradorNome));
 
-      await result.fold((fail) {
-        var message = fail.getErrorNotProperty();
+      await result.fold((resultFail) {
+        var message = resultFail.getErrorNotProperty();
         if (message.isNotEmpty) GlobalSnackbar.error(message);
       }, (response) async {
         GlobalSnackbar.success("Compra efetuada com sucesso.");
+        await load();
         Modular.to.pop();
+        setSelectOpcaoPagamento(false);
       });
     } finally {
       isLoading = false;

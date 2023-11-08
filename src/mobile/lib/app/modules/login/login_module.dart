@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/login/login_page.dart';
 
 class LoginModule extends Module {
-  static const routeName = '/login';
+  static const routeName = '/login/';
 
   @override
   final List<Bind> binds = [

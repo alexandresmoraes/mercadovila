@@ -17,7 +17,7 @@ class VendaModel {
 
 class VendaResponseModel {
   VendaResponseModel({required this.id});
-  late final String id;
+  late final int id;
 
   VendaResponseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

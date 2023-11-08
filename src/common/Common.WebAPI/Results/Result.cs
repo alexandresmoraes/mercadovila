@@ -40,8 +40,8 @@
       return result;
     }
 
-    public bool IsValid => !HasErrors;
-    public bool HasErrors => Errors.Count > 0;
+    public bool IsValid => !HasError;
+    public bool HasError => Errors.Count > 0;
     public IList<ErrorResult> Errors { get; private set; } = new List<ErrorResult>();
 
     public Result() { }

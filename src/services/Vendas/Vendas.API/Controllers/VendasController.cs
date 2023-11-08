@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vendas.API.Application.Commands;
+using Vendas.API.Application.Queries;
 using Vendas.API.Application.Responses;
 
 namespace Vendas.API.Controllers
@@ -15,11 +16,13 @@ namespace Vendas.API.Controllers
   {
     private readonly IMediator _mediator;
     private readonly IAuthService _authService;
+    private readonly IVendasQueries _vendasQueries;
 
-    public VendasController(IMediator mediator, IAuthService authService)
+    public VendasController(IMediator mediator, IAuthService authService, IVendasQueries vendasQueries)
     {
       _mediator = mediator;
       _authService = authService;
+      _vendasQueries = vendasQueries;
     }
 
     /// <summary>
@@ -34,6 +37,21 @@ namespace Vendas.API.Controllers
       request.UserId = _authService.GetUserId();
 
       return await _mediator.Send(request, cancellationToken);
+    }
+
+    /// <summary>
+    /// Retorna as vendas paginadas por usuário que está logado
+    /// </summary>
+    // GET api/vendas
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Venda>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<IEnumerable<Venda>>> GetVendasPorUsuarioAsync(CancellationToken cancellationToken = default)
+    {
+      var userId = _authService.GetUserId();
+
+      return Result.Ok(await _vendasQueries.GetVendasPorUsuarioAsync(userId));
     }
   }
 }
