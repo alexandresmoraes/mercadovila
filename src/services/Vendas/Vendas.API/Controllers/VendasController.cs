@@ -40,18 +40,50 @@ namespace Vendas.API.Controllers
     }
 
     /// <summary>
+    /// Retorna a venda por id
+    /// </summary>
+    // GET api/vendas/{vendaId}
+    [HttpGet("{vendaId:long}")]
+    [ProducesResponseType(typeof(VendaDetalhe), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<VendaDetalhe>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
+    {
+      var venda = await _vendasQueries.GetVendaAsync(vendaId, cancellationToken);
+
+      if (venda is null)
+        return Result.NotFound<VendaDetalhe>();
+
+      return Result.Ok(venda!);
+    }
+
+    /// <summary>
     /// Retorna as vendas paginadas por usuário que está logado
     /// </summary>
+    // GET api/vendas/vendas-por-comprador
+    [HttpGet("vendas-por-comprador")]
+    [ProducesResponseType(typeof(IEnumerable<Venda>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<IEnumerable<Venda>>> GetVendasPorUsuarioAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    {
+      var userId = _authService.GetUserId();
+
+      return Result.Ok(await _vendasQueries.GetVendasPorUsuarioAsync(vendaQuery, userId, cancellationToken));
+    }
+
+    /// <summary>
+    /// Retorna as vendas paginadas
+    /// </summary>
     // GET api/vendas
+    [Authorize("Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Venda>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<IEnumerable<Venda>>> GetVendasPorUsuarioAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<Venda>>> GetVendasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
-      var userId = _authService.GetUserId();
-
-      return Result.Ok(await _vendasQueries.GetVendasPorUsuarioAsync(userId));
+      return Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
     }
   }
 }

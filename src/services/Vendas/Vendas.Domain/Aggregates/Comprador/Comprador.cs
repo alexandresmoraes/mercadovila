@@ -7,13 +7,15 @@ namespace Vendas.Domain.Aggregates
   {
     public string UserId { get; set; } = null!;
     public string Nome { get; set; } = null!;
+    public string? FotoUrl { get; set; }
 
     public Comprador() { }
 
-    public Comprador(string userId, string nome)
+    public Comprador(string userId, string nome, string? fotoUrl)
     {
       UserId = userId;
       Nome = nome;
+      FotoUrl = fotoUrl;
     }
 
     public override string ToString()

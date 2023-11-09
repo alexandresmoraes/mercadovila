@@ -50,11 +50,12 @@ namespace Vendas.API.Application.Commands
       var comprador = await _compradorRepository.GetAsync(userId);
       if (comprador is null)
       {
-        comprador = new Comprador(userId, request.CompradorNome);
+        comprador = new Comprador(userId, request.CompradorNome, request.CompradorFotoUrl);
       }
       else
       {
         comprador.Nome = request.CompradorNome;
+        comprador.FotoUrl = request.CompradorFotoUrl;
       }
 
       var venda = new Venda(

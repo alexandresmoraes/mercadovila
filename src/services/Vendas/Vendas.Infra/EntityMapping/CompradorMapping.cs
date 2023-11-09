@@ -28,6 +28,10 @@ namespace Vendas.Infra.EntityMapping
         .IsRequired()
         .HasMaxLength(256);
 
+      b.Property(c => c.FotoUrl)
+        .HasColumnName("foto_url")
+        .HasMaxLength(256);
+
       b.Ignore(_ => _.DomainEvents);
     }
   }

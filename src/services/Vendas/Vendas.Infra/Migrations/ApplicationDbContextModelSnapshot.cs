@@ -31,6 +31,11 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("FotoUrl")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("foto_url");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)

@@ -10,5 +10,6 @@ namespace Vendas.API.Application.Commands
     [JsonIgnore]
     public string? UserId { get; set; }
     public string CompradorNome { get; set; } = null!;
+    public string? CompradorFotoUrl { get; set; }
   }
 }

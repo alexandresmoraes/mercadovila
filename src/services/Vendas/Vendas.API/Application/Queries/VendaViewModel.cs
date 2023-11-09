@@ -4,23 +4,43 @@ namespace Vendas.API.Application.Queries
 {
   public record VendaItem
   {
-    public string ProdutoId { get; private set; } = null!;
-    public string Nome { get; private set; } = null!;
-    public string ImageUrl { get; private set; } = null!;
-    public decimal Preco { get; private set; }
-    public int Quantidade { get; private set; }
-    public string UnidadeMedida { get; private set; } = null!;
+    public string ProdutoId { get; init; } = null!;
+    public string Nome { get; init; } = null!;
+    public string ImageUrl { get; init; } = null!;
+    public decimal Preco { get; init; }
+    public int Quantidade { get; init; }
+    public string UnidadeMedida { get; init; } = null!;
   }
 
   public record Venda
   {
-    public EnumVendaStatus Status { get; private set; }
-    public DateTime DataHora { get; private set; }
-    public decimal Total { get; private set; }
+    public long Id { get; init; }
+    public EnumVendaStatus Status { get; init; }
+    public DateTime DataHora { get; init; }
+    public decimal Total { get; init; }
+    public string CompradorNome { get; init; } = null!;
+    public string? CompradorFotoUrl { get; set; }
+
+    public List<VendaItem> Itens = new List<VendaItem>();
+  }
+
+  public record VendaItemDetalhe
+  {
+    public string ProdutoId { get; init; } = null!;
+    public string Nome { get; init; } = null!;
+    public string ImageUrl { get; init; } = null!;
+    public decimal Preco { get; init; }
+    public int Quantidade { get; init; }
+    public string UnidadeMedida { get; init; } = null!;
   }
 
   public record VendaDetalhe
   {
+    public long Id { get; init; }
+    public EnumVendaStatus Status { get; init; }
+    public DateTime DataHora { get; init; }
+    public decimal Total { get; init; }
 
+    public List<VendaItemDetalhe> Itens = new List<VendaItemDetalhe>();
   }
 }

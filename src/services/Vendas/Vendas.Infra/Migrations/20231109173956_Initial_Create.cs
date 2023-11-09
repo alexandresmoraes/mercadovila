@@ -17,7 +17,8 @@ namespace Vendas.Infra.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
-                    nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    foto_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {

@@ -8,8 +8,10 @@ using Common.WebAPI.PostgreSql;
 using GrpcVendas;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Data;
 using System.Data.Common;
 using System.Reflection;
+using Vendas.API.Application.Queries;
 using Vendas.API.Config;
 using Vendas.Infra.Data;
 
@@ -34,7 +36,8 @@ builder.Services.AddGrpcClient<Carrinho.CarrinhoClient>((services, options) =>
   options.Address = new Uri(grpcUrl);
 }).AddInterceptor<GrpcExceptionInterceptor>();
 
-
+builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Database.GetDbConnection());
+builder.Services.AddScoped<IVendasQueries, VendasQueries>();
 
 
 

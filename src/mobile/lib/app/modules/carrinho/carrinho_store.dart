@@ -95,7 +95,11 @@ abstract class CarrinhoStoreBase with Store {
 
       var vendasRepository = Modular.get<VendasRepository>();
       var compradorNome = Modular.get<AccountStore>().account!.nome;
-      var result = await vendasRepository.createVenda(VendaModel(compradorNome: compradorNome));
+      var compradorFotoUrl = Modular.get<AccountStore>().account!.fotoUrl;
+      var result = await vendasRepository.createVenda(VendaModel(
+        compradorNome: compradorNome,
+        compradorFotoUrl: compradorFotoUrl,
+      ));
 
       await result.fold((resultFail) {
         var message = resultFail.getErrorNotProperty();
