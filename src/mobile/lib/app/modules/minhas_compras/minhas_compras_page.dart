@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
-import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_vendas_repository.dart';
