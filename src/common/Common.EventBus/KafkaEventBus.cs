@@ -154,7 +154,7 @@ namespace Common.EventBus
         foreach (var subscription in subscriptions)
         {
           var handler = scope.ServiceProvider.GetService(subscription.HandlerType);
-          if (handler == null) continue;
+          if (handler is null) continue;
           var eventType = _subsManager.GetEventTypeByName(eventName)!;
           var integrationEvent = JsonSerializer.Deserialize(message, eventType);
           var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);

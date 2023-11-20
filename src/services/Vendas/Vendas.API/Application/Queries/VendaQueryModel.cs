@@ -6,7 +6,7 @@
 
     public int limit { get; init; }
 
-    public DateTime? dataInicio { get; init; }
+    public DateTime? dataInicial { get; init; }
 
     public DateTime? dataFinal { get; init; }
   }

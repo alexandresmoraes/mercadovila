@@ -44,15 +44,15 @@ namespace Vendas.API.Controllers
     /// </summary>
     // GET api/vendas/{vendaId}
     [HttpGet("{vendaId:long}")]
-    [ProducesResponseType(typeof(VendaDetalhe), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(VendaDetalheDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<VendaDetalhe>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
+    public async Task<Result<VendaDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
     {
       var venda = await _vendasQueries.GetVendaAsync(vendaId, cancellationToken);
 
       if (venda is null)
-        return Result.NotFound<VendaDetalhe>();
+        return Result.NotFound<VendaDetalheDto>();
 
       return Result.Ok(venda!);
     }
@@ -62,10 +62,10 @@ namespace Vendas.API.Controllers
     /// </summary>
     // GET api/vendas/vendas-por-comprador
     [HttpGet("vendas-por-comprador")]
-    [ProducesResponseType(typeof(IEnumerable<Venda>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResult<VendaDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<IEnumerable<Venda>>> GetVendasPorUsuarioAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    public async Task<Result<PagedResult<VendaDto>>> GetVendasPorUsuarioAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
       var userId = _authService.GetUserId();
 
@@ -78,10 +78,10 @@ namespace Vendas.API.Controllers
     // GET api/vendas
     [Authorize("Admin")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Venda>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResult<VendaDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<IEnumerable<Venda>>> GetVendasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    public async Task<Result<PagedResult<VendaDto>>> GetVendasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
       return Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
     }

@@ -26,7 +26,7 @@ namespace Vendas.API.Services
 
     private static CarrinhoUsuarioResponseDto? MapToCarrinhoDto(CarrinhoResponse response)
     {
-      if (response == null)
+      if (response is null)
       {
         return null;
       }

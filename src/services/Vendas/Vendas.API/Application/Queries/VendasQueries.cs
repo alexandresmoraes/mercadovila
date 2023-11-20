@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Common.WebAPI.Results;
+using Dapper;
 using System.Data;
 using Vendas.Domain.Aggregates;
 
@@ -13,7 +14,7 @@ namespace Vendas.API.Application.Queries
       _dbConnection = dbConnection;
     }
 
-    public async Task<VendaDetalhe?> GetVendaAsync(long vendaId, CancellationToken cancellationToken = default)
+    public async Task<VendaDetalheDto?> GetVendaAsync(long vendaId, CancellationToken cancellationToken = default)
     {
       var result = await _dbConnection.QueryAsync<dynamic>(
           @"
@@ -40,9 +41,9 @@ namespace Vendas.API.Application.Queries
       return MapVendaDetalhe(result);
     }
 
-    public async Task<IEnumerable<Venda>> GetVendasAsync(VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<VendaDto>> GetVendasAsync(VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
-      var vendasDictionary = new Dictionary<long, Venda>();
+      var vendasDictionary = new Dictionary<long, VendaDto>();
 
       var sql = @"
             SELECT
@@ -57,37 +58,46 @@ namespace Vendas.API.Application.Queries
 	            vi.quantidade AS itemquantidade,
 	            vi.unidade_medida AS itemunidademedida,
 	            c.nome AS compradornome,
-	            c.foto_url AS compradorfotourl
+	            c.foto_url AS compradorfotourl,
+              count(*) over() AS count
             FROM vendas v
             LEFT JOIN compradores c ON c.id = v.comprador_id
             LEFT JOIN venda_itens vi ON v.id = vi.venda_id            
       ";
 
-      if (vendaQuery.dataInicio.HasValue && vendaQuery.dataFinal.HasValue)
+      if (vendaQuery.dataInicial.HasValue && vendaQuery.dataFinal.HasValue)
       {
-        sql += " WHERE v.datahora BETWEEN @datainicio AND @datafinal";
+        sql += " WHERE v.datahora BETWEEN @dataInicial AND @datafinal";
       }
-      else if (vendaQuery.dataInicio.HasValue)
+      else if (vendaQuery.dataInicial.HasValue)
       {
-        sql += " WHERE v.datahora > @datainicio";
+        sql += " WHERE v.datahora > @dataInicial";
       }
       else if (vendaQuery.dataFinal.HasValue)
       {
         sql += " WHERE v.datahora < @datafinal";
       }
 
+      var start = (vendaQuery.page - 1) * vendaQuery.limit;
+      sql += @" 
+                ORDER BY v.datahora DESC 
+                LIMIT @limit OFFSET @offset;
+      ";
+
       var result = await _dbConnection.QueryAsync<dynamic>(sql, new
       {
-        datainicio = vendaQuery.dataInicio,
-        datafinal = vendaQuery.dataFinal
+        dataInicial = vendaQuery.dataInicial,
+        datafinal = vendaQuery.dataFinal,
+        limit = vendaQuery.limit,
+        offset = start
       });
 
       foreach (var row in result)
       {
         var vendaId = row.id;
-        if (!vendasDictionary.TryGetValue(vendaId, out Venda venda))
+        if (!vendasDictionary.TryGetValue(vendaId, out VendaDto venda))
         {
-          venda = new Venda
+          venda = new VendaDto
           {
             Id = vendaId,
             Status = (EnumVendaStatus)row.status,
@@ -99,7 +109,7 @@ namespace Vendas.API.Application.Queries
           vendasDictionary.Add(vendaId, venda);
         }
 
-        var vendaItem = new VendaItem
+        var vendaItem = new VendaItemto
         {
           ProdutoId = row.itemprodutoid,
           Nome = row.itemnome,
@@ -111,12 +121,14 @@ namespace Vendas.API.Application.Queries
         venda.Itens.Add(vendaItem);
       }
 
-      return vendasDictionary.Values.ToList();
+      long total = result.FirstOrDefault()?.count ?? 0;
+
+      return new PagedResult<VendaDto>(start, vendaQuery.limit, total, vendasDictionary.Values.ToList());
     }
 
-    public async Task<IEnumerable<Venda>> GetVendasPorUsuarioAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<VendaDto>> GetVendasPorUsuarioAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
     {
-      var vendasDictionary = new Dictionary<long, Venda>();
+      var vendasDictionary = new Dictionary<long, VendaDto>();
 
       var sql = @"
             SELECT
@@ -131,40 +143,48 @@ namespace Vendas.API.Application.Queries
 	            vi.quantidade AS itemquantidade,
 	            vi.unidade_medida AS itemunidademedida,
 	            c.nome AS compradornome,
-	            c.foto_url AS compradorfotourl
+	            c.foto_url AS compradorfotourl,
+              count(*) over() AS count
             FROM vendas v
             LEFT JOIN compradores c ON c.id = v.comprador_id
             LEFT JOIN venda_itens vi ON v.id = vi.venda_id   
             WHERE c.user_id=@userid
       ";
 
-
-      if (vendaQuery.dataInicio.HasValue && vendaQuery.dataFinal.HasValue)
+      if (vendaQuery.dataInicial.HasValue && vendaQuery.dataFinal.HasValue)
       {
-        sql += " AND (v.datahora BETWEEN @datainicio AND @datafinal)";
+        sql += " AND (v.datahora BETWEEN @dataInicial AND @datafinal)";
       }
-      else if (vendaQuery.dataInicio.HasValue)
+      else if (vendaQuery.dataInicial.HasValue)
       {
-        sql += " AND v.datahora > @datainicio";
+        sql += " AND v.datahora > @dataInicial";
       }
       else if (vendaQuery.dataFinal.HasValue)
       {
         sql += " AND v.datahora < @datafinal";
       }
 
+      var start = (vendaQuery.page - 1) * vendaQuery.limit;
+      sql += @" 
+                ORDER BY v.datahora DESC 
+                LIMIT @limit OFFSET @offset;
+      ";
+
       var result = await _dbConnection.QueryAsync<dynamic>(sql, new
       {
         userid = userId,
-        datainicio = vendaQuery.dataInicio,
-        datafinal = vendaQuery.dataFinal
+        dataInicial = vendaQuery.dataInicial,
+        datafinal = vendaQuery.dataFinal,
+        vendaQuery.limit,
+        offset = start
       });
 
       foreach (var row in result)
       {
         var vendaId = row.id;
-        if (!vendasDictionary.TryGetValue(vendaId, out Venda venda))
+        if (!vendasDictionary.TryGetValue(vendaId, out VendaDto venda))
         {
-          venda = new Venda
+          venda = new VendaDto
           {
             Id = vendaId,
             Status = (EnumVendaStatus)row.status,
@@ -176,7 +196,7 @@ namespace Vendas.API.Application.Queries
           vendasDictionary.Add(vendaId, venda);
         }
 
-        var vendaItem = new VendaItem
+        var vendaItem = new VendaItemto
         {
           ProdutoId = row.itemprodutoid,
           Nome = row.itemnome,
@@ -188,12 +208,14 @@ namespace Vendas.API.Application.Queries
         venda.Itens.Add(vendaItem);
       }
 
-      return vendasDictionary.Values.ToList();
+      long total = result.FirstOrDefault()?.count ?? 0;
+
+      return new PagedResult<VendaDto>(start, vendaQuery.limit, total, vendasDictionary.Values.ToList());
     }
 
-    private VendaDetalhe MapVendaDetalhe(dynamic result)
+    private VendaDetalheDto MapVendaDetalhe(dynamic result)
     {
-      var venda = new VendaDetalhe
+      var venda = new VendaDetalheDto
       {
         Id = result[0].id,
         Status = (EnumVendaStatus)result[0].status,
@@ -203,7 +225,7 @@ namespace Vendas.API.Application.Queries
 
       foreach (dynamic item in result)
       {
-        var vendaItem = new VendaItemDetalhe
+        var vendaItem = new VendaItemDetalheDto
         {
           ProdutoId = item.itemprodutoid,
           Nome = item.itemnome,

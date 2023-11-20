@@ -47,6 +47,7 @@ public class CarrinhoService : Carrinho.CarrinhoBase
       Id = item.ProdutoId,
       Nome = item.Nome,
       Descricao = item.Descricao,
+      ImageUrl = item.ImageUrl,
       Preco = decimal.ToDouble(item.Preco),
       Quantidade = item.Quantidade,
       UnidadeMedida = item.UnidadeMedida,

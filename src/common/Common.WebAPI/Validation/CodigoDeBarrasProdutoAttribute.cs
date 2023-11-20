@@ -8,7 +8,7 @@ namespace Common.WebAPI.Validation
   {
     public override bool IsValid(object? value)
     {
-      if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
+      if (value is null || string.IsNullOrWhiteSpace(value.ToString()))
       {
         return true;
       }

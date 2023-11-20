@@ -73,7 +73,7 @@ namespace Common.EventBus.Integrations.IntegrationLog
 
     public Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction)
     {
-      if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+      if (transaction is null) throw new ArgumentNullException(nameof(transaction));
 
       var eventLogEntry = new IntegrationEventLog(@event, transaction.TransactionId.ToString());
 

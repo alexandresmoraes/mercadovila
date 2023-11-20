@@ -6,7 +6,7 @@ namespace Common.WebAPI.Auth
   {
     public static string? GetUserId(this ClaimsPrincipal principal)
     {
-      if (principal == null)
+      if (principal is null)
       {
         throw new ArgumentException(nameof(principal));
       }
@@ -17,7 +17,7 @@ namespace Common.WebAPI.Auth
 
     public static string? GetUserEmail(this ClaimsPrincipal principal)
     {
-      if (principal == null)
+      if (principal is null)
       {
         throw new ArgumentException(nameof(principal));
       }

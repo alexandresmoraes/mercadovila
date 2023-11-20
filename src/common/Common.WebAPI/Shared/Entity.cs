@@ -45,7 +45,7 @@ namespace Common.WebAPI.Shared
 
     public override bool Equals(object? obj)
     {
-      if (obj == null || obj is not Entity)
+      if (obj is null || obj is not Entity)
         return false;
 
       if (ReferenceEquals(this, obj))

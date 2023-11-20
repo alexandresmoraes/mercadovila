@@ -2,7 +2,7 @@
 
 namespace Vendas.API.Application.Queries
 {
-  public record VendaItem
+  public record VendaItemto
   {
     public string ProdutoId { get; init; } = null!;
     public string Nome { get; init; } = null!;
@@ -12,7 +12,7 @@ namespace Vendas.API.Application.Queries
     public string UnidadeMedida { get; init; } = null!;
   }
 
-  public record Venda
+  public record VendaDto
   {
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
@@ -21,10 +21,10 @@ namespace Vendas.API.Application.Queries
     public string CompradorNome { get; init; } = null!;
     public string? CompradorFotoUrl { get; set; }
 
-    public List<VendaItem> Itens = new List<VendaItem>();
+    public List<VendaItemto> Itens { get; init; } = new List<VendaItemto>();
   }
 
-  public record VendaItemDetalhe
+  public record VendaItemDetalheDto
   {
     public string ProdutoId { get; init; } = null!;
     public string Nome { get; init; } = null!;
@@ -34,13 +34,13 @@ namespace Vendas.API.Application.Queries
     public string UnidadeMedida { get; init; } = null!;
   }
 
-  public record VendaDetalhe
+  public record VendaDetalheDto
   {
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
     public DateTime DataHora { get; init; }
     public decimal Total { get; init; }
 
-    public List<VendaItemDetalhe> Itens = new List<VendaItemDetalhe>();
+    public List<VendaItemDetalheDto> Itens { get; init; } = new List<VendaItemDetalheDto>();
   }
 }
