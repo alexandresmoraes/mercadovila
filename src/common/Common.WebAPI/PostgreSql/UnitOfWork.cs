@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.WebAPI.Shared;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Common.WebAPI.PostgreSql
@@ -33,12 +34,21 @@ namespace Common.WebAPI.PostgreSql
       }
     }
 
-    public bool IsActive { get => _isActive; }
+    public bool HasActiveTransaction { get => _isActive; }
 
     public void Dispose()
     {
       _transaction?.Dispose();
       _context?.Dispose();
+    }
+
+    public TTransaction GetTransaction<TTransaction>() => (TTransaction)_context.Database.CurrentTransaction!;
+
+    public IEnumerable<Entity> GetEntitiesPersistenceContext()
+    {
+      return _context.ChangeTracker
+        .Entries<Entity>()
+        .Select(_ => _.Entity);
     }
   }
 }

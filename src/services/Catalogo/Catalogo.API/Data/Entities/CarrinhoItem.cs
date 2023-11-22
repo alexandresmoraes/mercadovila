@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json;
 
 namespace Catalogo.API.Data.Entities
 {
@@ -12,5 +13,10 @@ namespace Catalogo.API.Data.Entities
     public string ProdutoId { get; set; } = null!;
 
     public int Quantidade { get; set; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

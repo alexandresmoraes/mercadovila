@@ -154,7 +154,7 @@ namespace Common.WebAPI.Auth
 
     private string? GetUserId(ClaimsIdentity principal)
     {
-      if (principal == null)
+      if (principal is null)
       {
         throw new ArgumentException(nameof(principal));
       }

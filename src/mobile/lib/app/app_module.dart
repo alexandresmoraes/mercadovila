@@ -28,6 +28,7 @@ import 'package:vilasesmo/app/utils/repositories/carrinho_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
 
@@ -43,7 +44,7 @@ class AppModule extends Module {
     Bind.factory((i) => HomePageController()),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.0.100:8081',
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
         connectTimeout: kReleaseMode ? 20000 : 0,
         receiveTimeout: kReleaseMode ? 20000 : 0,
         sendTimeout: kReleaseMode ? 20000 : 0,
@@ -55,6 +56,7 @@ class AppModule extends Module {
     BindInject((i) => CatalogoRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => FavoritosRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => CarrinhoRepository(), isSingleton: true, isLazy: true),
+    BindInject((i) => VendasRepository(), isSingleton: true, isLazy: true),
     //TODO: remover itens
     Bind.factory((i) => ProdutosEditController()),
     BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
@@ -8,11 +9,22 @@ namespace Common.WebAPI.Logs
   {
     public static ILoggingBuilder AddSerilog(this ILoggingBuilder logging, IConfiguration configuration)
     {
-      logging.AddSerilog(new LoggerConfiguration()
+      Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(configuration)
-        .CreateLogger());
+        .CreateLogger();
 
       return logging;
+    }
+
+    public static IServiceCollection AddSerilog(this IServiceCollection services)
+    {
+      services.AddLogging(loggingBuilder =>
+      {
+        loggingBuilder.ClearProviders();
+        loggingBuilder.AddSerilog();
+      });
+
+      return services;
     }
   }
 }

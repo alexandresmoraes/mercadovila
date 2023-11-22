@@ -19,7 +19,7 @@ namespace Catalogo.API.Models
     [Required(ErrorMessage = "Unidade de medida do produto está vazio.")]
     public string? UnidadeMedida { get; set; }
 
-    [Required(ErrorMessage = "Iamgem do produto está vazio.")]
+    [Required(ErrorMessage = "Imagem do produto está vazio.")]
     public string? ImageUrl { get; set; }
 
     [Required(ErrorMessage = "Código de barras do produto está vazio.")]

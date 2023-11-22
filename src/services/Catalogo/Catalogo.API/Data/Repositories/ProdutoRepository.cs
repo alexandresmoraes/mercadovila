@@ -13,7 +13,7 @@ namespace Catalogo.API.Data.Repositories
 {
   public class ProdutoRepository : MongoService<Produto>, IProdutoRepository
   {
-    private FavoritoItemRepository _favoriteItemRepository;
+    private readonly FavoritoItemRepository _favoriteItemRepository;
 
     public ProdutoRepository(IMongoClient mongoClient, IOptions<MongoDbSettings> opt, FavoritoItemRepository favoriteItemRepository)
      : base(mongoClient, opt, "produtos")
@@ -411,6 +411,18 @@ namespace Catalogo.API.Data.Repositories
       return new PagedResult<CatalogoDto>(start, query.limit, count, catalogo);
     }
 
+    public async Task UpdateReservarEstoque(Dictionary<string, int> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
 
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
+        var update = Builders<Produto>.Update.Inc(p => p.Estoque, -produto.Value);
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
   }
 }

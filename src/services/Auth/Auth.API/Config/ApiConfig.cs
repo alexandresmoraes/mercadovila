@@ -35,7 +35,7 @@ namespace Auth.API.Config
         options.SuppressModelStateInvalidFilter = true;
       });
       services.AddDbContext<ApplicationDbContext>();
-      services.AddScoped<DbContext, ApplicationDbContext>();
+      services.AddScoped<DbContext>(_ => _.GetRequiredService<ApplicationDbContext>());
       services.AddUnitOfWorkPostgres();
       services.AddUtils();
 

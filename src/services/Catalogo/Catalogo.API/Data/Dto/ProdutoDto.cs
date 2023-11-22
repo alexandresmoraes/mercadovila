@@ -1,4 +1,6 @@
-﻿namespace Catalogo.API.Data.Dto
+﻿using System.Text.Json;
+
+namespace Catalogo.API.Data.Dto
 {
   public record ProdutoDto
   {
@@ -13,5 +15,10 @@
     public double Rating { get; set; }
     public int RatingCount { get; set; }
     public bool IsAtivo { get; set; }
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

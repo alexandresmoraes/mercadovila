@@ -1,4 +1,6 @@
-﻿namespace Catalogo.API.Data.Dto
+﻿using System.Text.Json;
+
+namespace Catalogo.API.Data.Dto
 {
   public record NotificacaoDto
   {
@@ -11,5 +13,10 @@
     public string? ImageUrl { get; set; }
 
     public DateTime DataCriacao { get; set; } = DateTime.Now;
+
+    public override string ToString()
+    {
+      return JsonSerializer.Serialize(this);
+    }
   }
 }

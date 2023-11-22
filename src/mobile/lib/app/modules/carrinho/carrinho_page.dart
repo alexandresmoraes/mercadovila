@@ -108,8 +108,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   if (_currentIndex == 0) {
                     Modular.to.pop();
                   } else {
-                    _pageController!.animateToPage(_currentIndex - 1,
-                        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     if (_currentIndex == 0) {
                       step1Done = false;
                     } else if (_currentIndex == 1) {
@@ -166,9 +165,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(
-                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
-                                              width: 1.5),
+                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -199,12 +196,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color:
-                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i
-                                                  ? const Color(0xFF4A4352)
-                                                  : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -225,11 +219,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border: Border.all(
-                                              color: _currentIndex >= i
-                                                  ? const Color(0xFF4A4352)
-                                                  : const Color(0xFFBcc8d2),
-                                              width: 1.5),
+                                          border:
+                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -262,8 +253,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!
-                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -301,14 +291,13 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (carrinhoStore.isLoading) return;
 
                           if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1,
-                                duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                           } else if (_currentIndex == 1) {
-                            //
+                            await carrinhoStore.criarVenda();
                           }
                         },
                         child: Text(
@@ -401,8 +390,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         isDestructiveAction: true,
                                         onPressed: () async {
                                           Modular.to.pop();
-                                          await Modular.get<CarrinhoStore>()
-                                              .removerCarrinhoItem(item.produtoId, item.quantidade);
+                                          await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
                                         },
                                         child: const Text(
                                           'Remover',
@@ -589,9 +577,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             "Selecione a opção de pagamento",
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Modular.get<ThemeStore>().isDarkModeEnable
-                                    ? Theme.of(context).primaryColorLight
-                                    : Theme.of(context).primaryColor,
+                                color:
+                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           )),
                     )

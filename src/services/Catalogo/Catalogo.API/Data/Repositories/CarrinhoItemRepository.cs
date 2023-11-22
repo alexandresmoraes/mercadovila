@@ -157,5 +157,12 @@ namespace Catalogo.API.Data.Repositories
 
       await Collection.UpdateOneAsync(filter, update);
     }
+
+    public async Task RemoverCarrinhoPorUsuarioAsync(string userId)
+    {
+      var filter = Builders<CarrinhoItem>.Filter.Eq(x => x.UserId, userId);
+
+      await Collection.DeleteManyAsync(filter);
+    }
   }
 }
