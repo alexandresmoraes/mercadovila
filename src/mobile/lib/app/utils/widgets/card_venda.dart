@@ -8,6 +8,7 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/venda_status.dart';
 
 class CardVenda extends StatefulWidget {
   final VendaDto item;
@@ -27,8 +28,8 @@ class CardVendaState extends State<CardVenda> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Modular.to.pushNamed('/vendas/venda-detalhes');
+      onTap: () async {
+        await Modular.to.pushNamed('/vendas/details/${widget.item.id.toString()}');
       },
       child: Column(
         children: [
@@ -50,30 +51,9 @@ class CardVendaState extends State<CardVenda> {
                   ),
                 ),
                 const Expanded(child: SizedBox()),
-                Icon(
-                  widget.item.status == EnumVendaStatus.cancelada.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
-                  size: 20,
-                  color: widget.item.status == EnumVendaStatus.cancelada.index
-                      ? Colors.red
-                      : widget.item.status == EnumVendaStatus.pago.index
-                          ? Colors.greenAccent
-                          : widget.item.status == EnumVendaStatus.pendentePagamento.index
-                              ? Colors.blue
-                              : Theme.of(context).primaryColorLight,
+                VendasStatus(
+                  status: widget.item.status,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    widget.item.status == EnumVendaStatus.cancelada.index
-                        ? "Cancelada"
-                        : widget.item.status == EnumVendaStatus.pago.index
-                            ? "Pago"
-                            : widget.item.status == EnumVendaStatus.pendentePagamento.index
-                                ? "Pendente de pagamento"
-                                : "",
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
-                )
               ],
             ),
           ),

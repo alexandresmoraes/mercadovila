@@ -48,11 +48,14 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<VendaDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
-    {
+    {      
       var venda = await _vendasQueries.GetVendaAsync(vendaId, cancellationToken);
 
       if (venda is null)
         return Result.NotFound<VendaDetalheDto>();
+
+      if (!_authService.GetUserId().Equals(venda.CompradorUserId) && !User.IsInRole("admin"))
+        return Result.Forbidden<VendaDetalheDto>();
 
       return Result.Ok(venda!);
     }

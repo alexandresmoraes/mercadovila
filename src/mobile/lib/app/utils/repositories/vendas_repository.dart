@@ -53,4 +53,11 @@ class VendasRepository implements IVendasRepository {
 
     return PagedResult.fromJson(response.data);
   }
+
+  @override
+  Future<VendaDetalheDto> getVenda(int id) async {
+    var response = await dio.get('/api/vendas/$id');
+
+    return VendaDetalheDto.fromJson(response.data);
+  }
 }

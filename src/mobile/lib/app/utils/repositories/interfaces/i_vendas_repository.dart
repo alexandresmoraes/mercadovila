@@ -9,4 +9,5 @@ abstract class IVendasRepository implements Disposable {
   Future<Either<ResultFailModel, VendaResponseModel>> createVenda(VendaModel vendaModel);
   Future<PagedResult<VendaDto>> getVendas(int page, DateTime? dataInicial, DateTime? dataFinal);
   Future<PagedResult<VendaDto>> getVendasPorUsuario(int page, DateTime? dataInicial, DateTime? dataFinal);
+  Future<VendaDetalheDto> getVenda(int id);
 }

@@ -57,3 +57,54 @@ class VendaItemDto {
     unidadeMedida = json['unidadeMedida'];
   }
 }
+
+class VendaDetalheDto {
+  VendaDetalheDto({
+    required this.id,
+    required this.status,
+    required this.dataHora,
+    required this.total,
+    required this.compradorUserId,
+  });
+  late final int id;
+  late final int status;
+  late final DateTime dataHora;
+  late final double total;
+  late final String compradorUserId;
+  late final List<VendaDetalheItemDto> itens;
+
+  VendaDetalheDto.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    status = json['status'];
+    dataHora = DateTime.parse(json['dataHora'] as String);
+    total = json['total'];
+    compradorUserId = json['compradorUserId'];
+    itens = List<VendaDetalheItemDto>.from(json["itens"].map((x) => VendaDetalheItemDto.fromJson(x)));
+  }
+}
+
+class VendaDetalheItemDto {
+  VendaDetalheItemDto({
+    required this.produtoId,
+    required this.nome,
+    required this.imageUrl,
+    required this.preco,
+    required this.quantidade,
+    required this.unidadeMedida,
+  });
+  late final String produtoId;
+  late final String nome;
+  late final String imageUrl;
+  late final double preco;
+  late final num quantidade;
+  late final String unidadeMedida;
+
+  VendaDetalheItemDto.fromJson(Map<String, dynamic> json) {
+    produtoId = json['produtoId'];
+    nome = json['nome'];
+    imageUrl = json['imageUrl'];
+    preco = json['preco'];
+    quantidade = json['quantidade'];
+    unidadeMedida = json['unidadeMedida'];
+  }
+}

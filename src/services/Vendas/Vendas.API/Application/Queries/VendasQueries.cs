@@ -28,9 +28,11 @@ namespace Vendas.API.Application.Queries
 	            vi.image_url AS itemimageurl,
 	            vi.preco AS itempreco,
 	            vi.quantidade AS itemquantidade,
-	            vi.unidade_medida AS itemunidademedida
+	            vi.unidade_medida AS itemunidademedida,
+              c.user_id AS compradoruserid
             FROM vendas v
-            LEFT JOIN venda_itens vi ON v.id = vi.venda_id
+            LEFT JOIN compradores c ON c.id = v.comprador_id
+            LEFT JOIN venda_itens vi ON v.id = vi.venda_id            
             WHERE v.id=@id
           ", new { id = vendaId }
       );
@@ -221,6 +223,7 @@ namespace Vendas.API.Application.Queries
         Status = (EnumVendaStatus)result[0].status,
         DataHora = result[0].datahora,
         Total = result[0].total,
+        CompradorUserId = result[0].compradoruserid,
       };
 
       foreach (dynamic item in result)
@@ -232,7 +235,7 @@ namespace Vendas.API.Application.Queries
           ImageUrl = item.itemimageurl,
           Preco = item.itempreco,
           Quantidade = item.itemquantidade,
-          UnidadeMedida = item.itemunidade,
+          UnidadeMedida = item.itemunidademedida,
         };
 
         venda.Itens.Add(vendaItem);

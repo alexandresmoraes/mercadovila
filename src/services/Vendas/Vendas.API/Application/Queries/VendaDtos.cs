@@ -40,6 +40,7 @@ namespace Vendas.API.Application.Queries
     public EnumVendaStatus Status { get; init; }
     public DateTime DataHora { get; init; }
     public decimal Total { get; init; }
+    public string CompradorUserId { get; init; } = null!;
 
     public List<VendaItemDetalheDto> Itens { get; init; } = new List<VendaItemDetalheDto>();
   }
