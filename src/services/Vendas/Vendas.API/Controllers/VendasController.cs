@@ -63,16 +63,16 @@ namespace Vendas.API.Controllers
     /// <summary>
     /// Retorna as vendas paginadas por usuário que está logado
     /// </summary>
-    // GET api/vendas/vendas-por-comprador
-    [HttpGet("vendas-por-comprador")]
+    // GET api/vendas/minhas-compras
+    [HttpGet("minhas-compras")]
     [ProducesResponseType(typeof(PagedResult<VendaDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PagedResult<VendaDto>>> GetVendasPorUsuarioAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    public async Task<Result<PagedResult<VendaDto>>> GetMinhasComprasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
       var userId = _authService.GetUserId();
 
-      return Result.Ok(await _vendasQueries.GetVendasPorUsuarioAsync(vendaQuery, userId, cancellationToken));
+      return Result.Ok(await _vendasQueries.GetMinhasComprasAsync(vendaQuery, userId, cancellationToken));
     }
 
     /// <summary>
