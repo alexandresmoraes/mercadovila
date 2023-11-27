@@ -87,6 +87,7 @@ class VendaDetalheItemDto {
   VendaDetalheItemDto({
     required this.produtoId,
     required this.nome,
+    required this.descricao,
     required this.imageUrl,
     required this.preco,
     required this.quantidade,
@@ -94,6 +95,7 @@ class VendaDetalheItemDto {
   });
   late final String produtoId;
   late final String nome;
+  late final String descricao;
   late final String imageUrl;
   late final double preco;
   late final num quantidade;
@@ -102,6 +104,7 @@ class VendaDetalheItemDto {
   VendaDetalheItemDto.fromJson(Map<String, dynamic> json) {
     produtoId = json['produtoId'];
     nome = json['nome'];
+    descricao = json['descricao'];
     imageUrl = json['imageUrl'];
     preco = json['preco'];
     quantidade = json['quantidade'];

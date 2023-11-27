@@ -28,6 +28,7 @@ namespace Vendas.API.Application.Queries
   {
     public string ProdutoId { get; init; } = null!;
     public string Nome { get; init; } = null!;
+    public string Descricao { get; set; } = null!;
     public string ImageUrl { get; init; } = null!;
     public decimal Preco { get; init; }
     public int Quantidade { get; init; }

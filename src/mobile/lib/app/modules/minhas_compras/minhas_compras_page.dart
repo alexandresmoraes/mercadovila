@@ -23,10 +23,10 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
   late DateTime semanaDataFinal;
 
   MinhasComprasPageState() : super() {
-    hojeDataInicial = DateTime(hoje.year, hoje.month, hoje.day);
-    hojeDataFinal = DateTime(hoje.year, hoje.month, hoje.day, 23, 59, 59, 999, 999);
-    semanaDataInicial = hoje.subtract(Duration(days: hoje.weekday - 1));
-    semanaDataFinal = semanaDataInicial.add(const Duration(days: 6));
+    hojeDataInicial = DateTime(hoje.year, hoje.month, hoje.day).toUtc();
+    hojeDataFinal = DateTime(hoje.year, hoje.month, hoje.day, 23, 59, 59, 999, 999).toUtc();
+    semanaDataInicial = hoje.subtract(Duration(days: hoje.weekday - 1)).toUtc();
+    semanaDataFinal = semanaDataInicial.add(const Duration(days: 6)).toUtc();
   }
 
   PagingController<int, VendaDto> pagingVendasHojeController = PagingController(firstPageKey: 1);
@@ -67,23 +67,32 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
                         Radius.circular(10.0),
                       ),
                     ),
-                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                    backgroundColor:
+                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                     bottom: TabBar(
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(
                           width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColor
+                              : const Color(0xFFEF5656),
                         ),
                         insets: const EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                       indicatorWeight: 4,
                       unselectedLabelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w400),
                       labelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+                          fontSize: 13,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold),
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
+                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Theme.of(context).primaryColor
+                          : const Color(0xFFEF5656),
                       tabs: const [
                         Tab(
                             child: Text(

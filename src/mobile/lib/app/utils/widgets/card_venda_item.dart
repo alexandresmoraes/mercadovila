@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/rating_produto.dart';
 
 class CardVendaItem extends StatelessWidget {
   final VendaDetalheItemDto item;
@@ -21,8 +22,8 @@ class CardVendaItem extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: () {
-          //
+        onTap: () async {
+          await Modular.to.pushNamed('/produtos/details/${item.produtoId}');
         },
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
@@ -53,7 +54,7 @@ class CardVendaItem extends StatelessWidget {
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                       ),
                       Text(
-                        item.produtoId,
+                        item.descricao,
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -63,83 +64,26 @@ class CardVendaItem extends StatelessWidget {
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                           children: [
                             TextSpan(
-                              text: item.preco.toString(),
+                              text: "${item.preco * item.quantidade}",
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                             ),
                           ],
                         ),
                       ),
                       Text(
-                        '${item.quantidade} / ${item.unidadeMedida}',
+                        '${item.quantidade} x ${item.preco} ${item.unidadeMedida}',
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).iconTheme.color,
-                            ),
-                          ],
+                      const Padding(
+                        padding: EdgeInsets.only(top: 4.0),
+                        child: RatingProduto(
+                          rating: 4.5,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  //_productList[1].discount != null
-                  true
-                      ? Container(
-                          height: 20,
-                          width: 60,
-                          decoration: const BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            "off",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).primaryTextTheme.bodySmall,
-                          ),
-                        )
-                      : const SizedBox(
-                          height: 20,
-                          width: 60,
-                        ),
-                ],
               ),
             ),
             Positioned(

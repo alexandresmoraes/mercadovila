@@ -240,19 +240,17 @@ abstract class AccountEditControllerBase with Store {
 
       if (!isNullorEmpty(fotoPath)) {
         var globalAccount = Modular.get<AccountStore>();
-        if (globalAccount.account!.isAdmin) {
-          var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
-          await result.fold((fail) {
-            if (fail.statusCode == 413) {
-              GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
-              isSaving = false;
-            }
-          }, (response) async {
-            fotoUrl = response.filename;
+        var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
+        await result.fold((fail) {
+          if (fail.statusCode == 413) {
+            GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+            isSaving = false;
+          }
+        }, (response) async {
+          fotoUrl = response.filename;
 
-            await saveAccount();
-          });
-        }
+          await saveAccount();
+        });
       } else {
         await saveAccount();
       }

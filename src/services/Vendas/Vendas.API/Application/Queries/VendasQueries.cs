@@ -25,6 +25,7 @@ namespace Vendas.API.Application.Queries
 	            v.total AS total,
 	            vi.produto_id AS itemprodutoid,
 	            vi.nome AS itemnome, 
+              vi.descricao AS itemdescricao,
 	            vi.image_url AS itemimageurl,
 	            vi.preco AS itempreco,
 	            vi.quantidade AS itemquantidade,
@@ -232,6 +233,7 @@ namespace Vendas.API.Application.Queries
         {
           ProdutoId = item.itemprodutoid,
           Nome = item.itemnome,
+          Descricao = item.itemdescricao,
           ImageUrl = item.itemimageurl,
           Preco = item.itempreco,
           Quantidade = item.itemquantidade,

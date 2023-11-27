@@ -49,7 +49,9 @@ class ErrorInterceptor extends InterceptorsWrapper {
         errorDescription = 'Tempo limite de conexão esgotado';
         break;
       case DioErrorType.response:
-        if (dioError.response!.statusCode != 400 && dioError.response!.statusCode != 413) {
+        if (dioError.response!.statusCode == 403) {
+          errorDescription = 'Sem permissão';
+        } else if (dioError.response!.statusCode != 400 && dioError.response!.statusCode != 413) {
           errorDescription = 'Problemas com a conexão';
         }
         break;
