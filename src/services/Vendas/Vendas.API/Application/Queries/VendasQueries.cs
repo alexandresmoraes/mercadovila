@@ -129,7 +129,7 @@ namespace Vendas.API.Application.Queries
       return new PagedResult<VendaDto>(start, vendaQuery.limit, total, vendasDictionary.Values.ToList());
     }
 
-    public async Task<PagedResult<VendaDto>> GetVendasPorUsuarioAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<VendaDto>> GetMinhasComprasAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
     {
       var vendasDictionary = new Dictionary<long, VendaDto>();
 

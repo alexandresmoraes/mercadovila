@@ -71,8 +71,7 @@ class AccountPageState extends State<AccountPage> {
                               backgroundImage: AssetImage('assets/person.png'),
                             ),
                           ),
-                          imageUrl:
-                              '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${accountStore.account!.fotoUrl}',
+                          imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${accountStore.account!.fotoUrl}',
                           imageBuilder: (context, imageProvider) {
                             return CircleAvatar(
                               radius: 60,
@@ -320,8 +319,7 @@ class AccountPageState extends State<AccountPage> {
                 const Divider(),
                 SwitchListTile(
                   value: Modular.get<ThemeStore>().isDarkModeEnable,
-                  onChanged: (val) =>
-                      Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
+                  onChanged: (val) => Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   secondary: !Modular.get<ThemeStore>().isDarkModeEnable
@@ -365,7 +363,7 @@ class AccountPageState extends State<AccountPage> {
                       context: context,
                       builder: (BuildContext context) => CupertinoAlertDialog(
                         title: const Text('Atenção!'),
-                        content: const Text('Deseja sair?'),
+                        content: const Text('Tem certeza de que deseja sair?'),
                         actions: <CupertinoDialogAction>[
                           CupertinoDialogAction(
                             isDefaultAction: true,

@@ -67,32 +67,23 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
                         Radius.circular(10.0),
                       ),
                     ),
-                    backgroundColor:
-                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                     bottom: TabBar(
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(
                           width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? Theme.of(context).primaryColor
-                              : const Color(0xFFEF5656),
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                         ),
                         insets: const EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                       indicatorWeight: 4,
                       unselectedLabelStyle: TextStyle(
-                          fontSize: 13,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w400),
+                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
                       labelStyle: TextStyle(
-                          fontSize: 13,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
-                          ? Theme.of(context).primaryColor
-                          : const Color(0xFFEF5656),
+                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                       tabs: const [
                         Tab(
                             child: Text(
@@ -135,7 +126,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, hojeDataInicial, hojeDataFinal);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, hojeDataInicial, hojeDataFinal);
         },
         emptyBuilder: (_) {
           return Center(
@@ -167,7 +158,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, semanaDataInicial, semanaDataFinal);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, semanaDataInicial, semanaDataFinal);
         },
         emptyBuilder: (_) {
           return Center(
@@ -199,7 +190,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, null, null);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, null, null);
         },
         emptyBuilder: (_) {
           return Center(
