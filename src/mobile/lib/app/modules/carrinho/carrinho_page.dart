@@ -584,8 +584,16 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     )
                   : const SizedBox.shrink();
             }),
+            ListTile(
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              contentPadding: const EdgeInsets.all(0),
+              title: Text(
+                "Detalhes",
+                style: Theme.of(context).primaryTextTheme.headlineSmall,
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(bottom: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -601,20 +609,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ],
               ),
             ),
-            ListTile(
-              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-              contentPadding: const EdgeInsets.all(0),
-              title: Text(
-                "Detalhes",
-                style: Theme.of(context).primaryTextTheme.headlineSmall,
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Total",
+                  "Sub-Total",
                   style: Theme.of(context).primaryTextTheme.labelSmall,
                 ),
                 Observer(builder: (_) {
