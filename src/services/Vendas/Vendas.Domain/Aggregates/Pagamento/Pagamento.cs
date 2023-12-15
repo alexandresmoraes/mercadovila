@@ -1,7 +1,7 @@
 ﻿using Common.WebAPI.Shared;
 using System.Text.Json;
 
-namespace Vendas.Domain.Aggregates.Pagamento
+namespace Vendas.Domain.Aggregates
 {
   public class Pagamento : Entity, IAggregateRoot
   {
@@ -16,13 +16,13 @@ namespace Vendas.Domain.Aggregates.Pagamento
 
     public Pagamento() { }
 
-    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumTipoPagamento tipo, decimal valor)
+    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumTipoPagamento tipo)
     {
       Comprador = comprador;
       _vendas = vendas.ToList();
       Tipo = tipo;
-      Valor = valor;
-      DataHora = DateTime.Now;
+      Valor = vendas.Sum(_ => _.Total);
+      DataHora = DateTime.UtcNow;
     }
 
     public override string ToString()

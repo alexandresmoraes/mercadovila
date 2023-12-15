@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vendas.Domain.Aggregates.Pagamento;
+using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {

@@ -1,19 +1,16 @@
-﻿using Common.WebAPI.PostgreSql;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Aggregates;
 using Vendas.Infra.Data;
 
 namespace Vendas.Infra.Repositories
 {
-  public class VendaRepository : IVendaRepository
+  public class VendasRepository : IVendasRepository
   {
     private readonly ApplicationDbContext _context;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public VendaRepository(ApplicationDbContext context, IUnitOfWork unitOfWork)
+    public VendasRepository(ApplicationDbContext context)
     {
       _context = context;
-      _unitOfWork = unitOfWork;
     }
 
     public async Task AddAsync(Venda venda)
@@ -27,6 +24,6 @@ namespace Vendas.Infra.Repositories
       var venda = await _context.Vendas.FirstOrDefaultAsync(_ => _.Id == id);
 
       return venda;
-    }
+    }   
   }
 }

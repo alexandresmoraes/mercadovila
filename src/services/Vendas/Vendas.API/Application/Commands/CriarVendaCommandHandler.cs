@@ -12,13 +12,13 @@ namespace Vendas.API.Application.Commands
   public class CriarVendaCommandHandler
     : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
   {
-    private readonly ICompradorRepository _compradorRepository;
-    private readonly IVendaRepository _vendaRepository;
+    private readonly ICompradoresRepository _compradorRepository;
+    private readonly IVendasRepository _vendaRepository;
     private readonly IAuthService _authService;
     private readonly Carrinho.CarrinhoClient _carrinhoClient;
     private readonly IIntegrationEventService _integrationEventService;
 
-    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
+    public CriarVendaCommandHandler(ICompradoresRepository compradorRepository, IVendasRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;

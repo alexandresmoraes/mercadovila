@@ -1,6 +1,6 @@
 ﻿namespace Vendas.Domain.Aggregates
 {
-  public interface ICompradorRepository
+  public interface ICompradoresRepository
   {
     Task AddAsync(Comprador comprador);
     Task<Comprador?> GetAsync(string userId);

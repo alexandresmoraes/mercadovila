@@ -4,11 +4,11 @@ using Vendas.Infra.Data;
 
 namespace Vendas.Infra.Repositories
 {
-  public class CompradorRepository : ICompradorRepository
+  public class CompradoresRepository : ICompradoresRepository
   {
     private readonly ApplicationDbContext _context;
 
-    public CompradorRepository(ApplicationDbContext context)
+    public CompradoresRepository(ApplicationDbContext context)
     {
       _context = context;
     }

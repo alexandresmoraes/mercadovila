@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Vendas.Domain.Aggregates;
-using Vendas.Domain.Aggregates.Pagamento;
 using Vendas.Infra.EntityMapping;
 
 namespace Vendas.Infra.Data
