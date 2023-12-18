@@ -48,6 +48,9 @@ builder.Services.AddScoped<IPagamentosQueries, PagamentoQueries>();
 
 
 
+
+
+
 builder.Services.AddDbContext<IntegrationEventContext>(options =>
 {
   options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),

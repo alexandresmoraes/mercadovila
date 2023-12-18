@@ -63,7 +63,8 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             radius: 60,
                             backgroundColor: Colors.white,
                             child: Observer(builder: (_) {
-                              if (_controller.isSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
+                              if (_controller.isSelected &&
+                                  !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                 return CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
                                     color: Theme.of(context).primaryColorLight,
@@ -219,7 +220,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       ListTile(
@@ -279,7 +280,80 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                     ],
                   ),
                 );
-              })
+              }),
+              Observer(builder: (_) {
+                if (!_controller.isSelected) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text(
+                      //   "Tipo de pagamento",
+                      //   style: Theme.of(context).primaryTextTheme.displayMedium,
+                      // ),
+                      TypeAheadField<String>(
+                        emptyBuilder: (context) => const SizedBox.shrink(),
+                        suggestionsCallback: (search) {
+                          return _controller.enumTipoPagamento.keys
+                              .where((key) =>
+                                  _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
+                              .map((key) => _controller.enumTipoPagamento[key]!)
+                              .toList();
+                        },
+                        builder: (context, controller, focusNode) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  controller: controller,
+                                  focusNode: focusNode,
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                        ? Theme.of(context).inputDecorationTheme.fillColor
+                                        : Theme.of(context).scaffoldBackgroundColor,
+                                    hintText: 'Tipo de pagamento',
+                                    contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        itemBuilder: (context, data) {
+                          return ListTile(
+                            tileColor: Theme.of(context).cardTheme.color,
+                            visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                            contentPadding: const EdgeInsets.all(0),
+                            minLeadingWidth: 0,
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                data,
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                            ),
+                          );
+                        },
+                        onSelected: (data) async {
+                          //
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
           bottomNavigationBar: Observer(

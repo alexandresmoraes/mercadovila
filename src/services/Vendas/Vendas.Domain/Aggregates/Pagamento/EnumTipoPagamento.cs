@@ -2,7 +2,7 @@
 {
   public enum EnumTipoPagamento
   {
-    DescontoSalario,
+    DescontoEmFolha,
     Dinheiro
   }
 }

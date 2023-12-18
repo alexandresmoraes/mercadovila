@@ -8,23 +8,23 @@ part of 'pagamentos_pagar_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$PagamentosPagarController on _PagamentosPagarControllerBase, Store {
+mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
   Computed<bool>? _$isValidComputed;
 
   @override
   bool get isValid => (_$isValidComputed ??= Computed<bool>(() => super.isValid,
-          name: '_PagamentosPagarControllerBase.isValid'))
+          name: 'PagamentosPagarControllerBase.isValid'))
       .value;
   Computed<bool>? _$isSelectedComputed;
 
   @override
   bool get isSelected =>
       (_$isSelectedComputed ??= Computed<bool>(() => super.isSelected,
-              name: '_PagamentosPagarControllerBase.isSelected'))
+              name: 'PagamentosPagarControllerBase.isSelected'))
           .value;
 
   late final _$pagamentoDetalheDtoAtom = Atom(
-      name: '_PagamentosPagarControllerBase.pagamentoDetalheDto',
+      name: 'PagamentosPagarControllerBase.pagamentoDetalheDto',
       context: context);
 
   @override
@@ -41,25 +41,24 @@ mixin _$PagamentosPagarController on _PagamentosPagarControllerBase, Store {
   }
 
   late final _$loadAsyncAction =
-      AsyncAction('_PagamentosPagarControllerBase.load', context: context);
+      AsyncAction('PagamentosPagarControllerBase.load', context: context);
 
   @override
   Future<void> load(String userId) {
     return _$loadAsyncAction.run(() => super.load(userId));
   }
 
-  late final _$_PagamentosPagarControllerBaseActionController =
-      ActionController(
-          name: '_PagamentosPagarControllerBase', context: context);
+  late final _$PagamentosPagarControllerBaseActionController =
+      ActionController(name: 'PagamentosPagarControllerBase', context: context);
 
   @override
   void clear() {
-    final _$actionInfo = _$_PagamentosPagarControllerBaseActionController
-        .startAction(name: '_PagamentosPagarControllerBase.clear');
+    final _$actionInfo = _$PagamentosPagarControllerBaseActionController
+        .startAction(name: 'PagamentosPagarControllerBase.clear');
     try {
       return super.clear();
     } finally {
-      _$_PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
+      _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 

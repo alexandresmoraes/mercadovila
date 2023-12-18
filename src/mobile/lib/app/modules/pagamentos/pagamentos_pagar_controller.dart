@@ -6,10 +6,15 @@ import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_reposit
 
 part 'pagamentos_pagar_controller.g.dart';
 
-class PagamentosPagarController = _PagamentosPagarControllerBase with _$PagamentosPagarController;
+class PagamentosPagarController = PagamentosPagarControllerBase with _$PagamentosPagarController;
 
-abstract class _PagamentosPagarControllerBase with Store {
+abstract class PagamentosPagarControllerBase with Store {
   TextEditingController usuarioEditingController = TextEditingController();
+
+  Map<int, String> enumTipoPagamento = {
+    0: 'Desconto em folha',
+    1: 'Dinheiro',
+  };
 
   @observable
   PagamentoDetalheDto? pagamentoDetalheDto;
