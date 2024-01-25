@@ -9,19 +9,43 @@ part of 'pagamentos_pagar_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
+  Computed<bool>? _$isTipoPagamentoSelectedComputed;
+
+  @override
+  bool get isTipoPagamentoSelected => (_$isTipoPagamentoSelectedComputed ??=
+          Computed<bool>(() => super.isTipoPagamentoSelected,
+              name: 'PagamentosPagarControllerBase.isTipoPagamentoSelected'))
+      .value;
   Computed<bool>? _$isValidComputed;
 
   @override
   bool get isValid => (_$isValidComputed ??= Computed<bool>(() => super.isValid,
           name: 'PagamentosPagarControllerBase.isValid'))
       .value;
-  Computed<bool>? _$isSelectedComputed;
+  Computed<bool>? _$isPagamentoDetalheSelectedComputed;
 
   @override
-  bool get isSelected =>
-      (_$isSelectedComputed ??= Computed<bool>(() => super.isSelected,
-              name: 'PagamentosPagarControllerBase.isSelected'))
+  bool get isPagamentoDetalheSelected =>
+      (_$isPagamentoDetalheSelectedComputed ??= Computed<bool>(
+              () => super.isPagamentoDetalheSelected,
+              name: 'PagamentosPagarControllerBase.isPagamentoDetalheSelected'))
           .value;
+
+  late final _$tipoPagamentoAtom = Atom(
+      name: 'PagamentosPagarControllerBase.tipoPagamento', context: context);
+
+  @override
+  int? get tipoPagamento {
+    _$tipoPagamentoAtom.reportRead();
+    return super.tipoPagamento;
+  }
+
+  @override
+  set tipoPagamento(int? value) {
+    _$tipoPagamentoAtom.reportWrite(value, super.tipoPagamento, () {
+      super.tipoPagamento = value;
+    });
+  }
 
   late final _$pagamentoDetalheDtoAtom = Atom(
       name: 'PagamentosPagarControllerBase.pagamentoDetalheDto',
@@ -44,19 +68,42 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
       AsyncAction('PagamentosPagarControllerBase.load', context: context);
 
   @override
-  Future<void> load(String userId) {
-    return _$loadAsyncAction.run(() => super.load(userId));
+  Future<void> load(String userId, String username) {
+    return _$loadAsyncAction.run(() => super.load(userId, username));
   }
 
   late final _$PagamentosPagarControllerBaseActionController =
       ActionController(name: 'PagamentosPagarControllerBase', context: context);
 
   @override
-  void clear() {
+  void setTipoPagamento(int tipoPagamento) {
     final _$actionInfo = _$PagamentosPagarControllerBaseActionController
-        .startAction(name: 'PagamentosPagarControllerBase.clear');
+        .startAction(name: 'PagamentosPagarControllerBase.setTipoPagamento');
     try {
-      return super.clear();
+      return super.setTipoPagamento(tipoPagamento);
+    } finally {
+      _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearTipoPagamento() {
+    final _$actionInfo = _$PagamentosPagarControllerBaseActionController
+        .startAction(name: 'PagamentosPagarControllerBase.clearTipoPagamento');
+    try {
+      return super.clearTipoPagamento();
+    } finally {
+      _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearPagamentoDetalhe() {
+    final _$actionInfo =
+        _$PagamentosPagarControllerBaseActionController.startAction(
+            name: 'PagamentosPagarControllerBase.clearPagamentoDetalhe');
+    try {
+      return super.clearPagamentoDetalhe();
     } finally {
       _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -65,9 +112,11 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
   @override
   String toString() {
     return '''
+tipoPagamento: ${tipoPagamento},
 pagamentoDetalheDto: ${pagamentoDetalheDto},
+isTipoPagamentoSelected: ${isTipoPagamentoSelected},
 isValid: ${isValid},
-isSelected: ${isSelected}
+isPagamentoDetalheSelected: ${isPagamentoDetalheSelected}
     ''';
   }
 }

@@ -262,7 +262,7 @@ abstract class AccountEditControllerBase with Store {
   void apiErrors(ResultFailModel resultFail) {
     if (resultFail.statusCode == 400) {
       _nomeApiError = resultFail.getErrorByProperty('Nome');
-      _usernameApiError = resultFail.getErrorByProperty('Username');
+      _usernameApiError = resultFail.getErrorByProperty('UserName');
       _emailApiError = resultFail.getErrorByProperty('Email');
       _telefoneApiError = resultFail.getErrorByProperty('Telefone');
       _passwordApiError = resultFail.getErrorByProperty('Password');

@@ -1,6 +1,5 @@
 ﻿using Common.WebAPI.Results;
 using MediatR;
-using Org.BouncyCastle.Bcpg;
 using Vendas.API.Application.Responses;
 using Vendas.Domain.Aggregates;
 
@@ -22,7 +21,7 @@ namespace Vendas.API.Application.Commands
 
     public async Task<Result<RealizarPagamentoCommandResponse>> Handle(RealizarPagamentoCommand request, CancellationToken cancellationToken)
     {
-      cancellationToken.ThrowIfCancellationRequested();      
+      cancellationToken.ThrowIfCancellationRequested();
 
       var comprador = await _compradoresRepository.GetAsync(request.UserId);
       if (comprador is null)

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -63,8 +62,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             radius: 60,
                             backgroundColor: Colors.white,
                             child: Observer(builder: (_) {
-                              if (_controller.isSelected &&
-                                  !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
+                              if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                 return CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
                                     color: Theme.of(context).primaryColorLight,
@@ -96,7 +94,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                       ),
                     ),
                     Observer(builder: (_) {
-                      if (!_controller.isSelected) {
+                      if (!_controller.isPagamentoDetalheSelected) {
                         return const SizedBox.shrink();
                       }
 
@@ -117,7 +115,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                   controller: _controller.usuarioEditingController,
                   emptyBuilder: (context) => const SizedBox.shrink(),
                   suggestionsCallback: (search) async {
-                    if (isNullorEmpty(search) || _controller.isSelected) {
+                    if (isNullorEmpty(search) || _controller.isPagamentoDetalheSelected) {
                       return Future.value(const Iterable<AccountDto>.empty().toList());
                     }
                     var pagedResult = await Modular.get<IAccountRepository>().getAccounts(1, search);
@@ -130,7 +128,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              enabled: !_controller.isSelected,
+                              enabled: !_controller.isPagamentoDetalheSelected,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                               controller: controller,
                               focusNode: focusNode,
@@ -146,14 +144,11 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                               ),
                             ),
                           ),
-                          _controller.isSelected
+                          _controller.isPagamentoDetalheSelected
                               ? IconButton(
                                   icon: const Icon(MdiIcons.closeOctagon),
                                   onPressed: () {
-                                    if (kDebugMode) {
-                                      print('passou aqui');
-                                    }
-                                    _controller.clear();
+                                    _controller.clearPagamentoDetalhe();
                                   },
                                 )
                               : const SizedBox.shrink()
@@ -209,13 +204,12 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                     );
                   },
                   onSelected: (data) async {
-                    await _controller.load(data.id);
-                    _controller.usuarioEditingController.text = data.username;
+                    await _controller.load(data.id, data.username);
                   },
                 ),
               ),
               Observer(builder: (_) {
-                if (!_controller.isSelected) {
+                if (!_controller.isPagamentoDetalheSelected) {
                   return const SizedBox.shrink();
                 }
 
@@ -282,9 +276,10 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                 );
               }),
               Observer(builder: (_) {
-                if (!_controller.isSelected) {
+                if (!_controller.isPagamentoDetalheSelected) {
                   return const SizedBox.shrink();
                 }
+
                 return Padding(
                   padding: const EdgeInsets.only(
                     top: 16,
@@ -296,40 +291,50 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(
-                      //   "Tipo de pagamento",
-                      //   style: Theme.of(context).primaryTextTheme.displayMedium,
-                      // ),
-                      TypeAheadField<String>(
+                      TypeAheadField<int>(
+                        controller: _controller.tipoPagamentoController,
                         emptyBuilder: (context) => const SizedBox.shrink(),
                         suggestionsCallback: (search) {
+                          if (_controller.isTipoPagamentoSelected) {
+                            return Future.value(const Iterable<int>.empty().toList());
+                          }
+
                           return _controller.enumTipoPagamento.keys
-                              .where((key) =>
-                                  _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
-                              .map((key) => _controller.enumTipoPagamento[key]!)
+                              .where((key) => _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
                               .toList();
                         },
                         builder: (context, controller, focusNode) {
-                          return Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  controller: controller,
-                                  focusNode: focusNode,
-                                  autofocus: true,
-                                  decoration: InputDecoration(
-                                    border: const OutlineInputBorder(),
-                                    fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                        ? Theme.of(context).inputDecorationTheme.fillColor
-                                        : Theme.of(context).scaffoldBackgroundColor,
-                                    hintText: 'Tipo de pagamento',
-                                    contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                          return Observer(builder: (_) {
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    enabled: !_controller.isTipoPagamentoSelected,
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    autofocus: true,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                          ? Theme.of(context).inputDecorationTheme.fillColor
+                                          : Theme.of(context).scaffoldBackgroundColor,
+                                      hintText: 'Tipo de pagamento',
+                                      contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
+                                _controller.isTipoPagamentoSelected
+                                    ? IconButton(
+                                        icon: const Icon(MdiIcons.closeOctagon),
+                                        onPressed: () {
+                                          _controller.clearTipoPagamento();
+                                        },
+                                      )
+                                    : const SizedBox.shrink()
+                              ],
+                            );
+                          });
                         },
                         itemBuilder: (context, data) {
                           return ListTile(
@@ -340,14 +345,14 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             title: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                data,
+                                _controller.enumTipoPagamento[data]!,
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                               ),
                             ),
                           );
                         },
-                        onSelected: (data) async {
-                          //
+                        onSelected: (data) {
+                          _controller.setTipoPagamento(data);
                         },
                       ),
                     ],

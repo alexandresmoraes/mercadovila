@@ -10,6 +10,7 @@ class PagamentosPagarController = PagamentosPagarControllerBase with _$Pagamento
 
 abstract class PagamentosPagarControllerBase with Store {
   TextEditingController usuarioEditingController = TextEditingController();
+  TextEditingController tipoPagamentoController = TextEditingController();
 
   Map<int, String> enumTipoPagamento = {
     0: 'Desconto em folha',
@@ -17,26 +18,48 @@ abstract class PagamentosPagarControllerBase with Store {
   };
 
   @observable
-  PagamentoDetalheDto? pagamentoDetalheDto;
+  int? tipoPagamento;
 
   @action
-  Future<void> load(String userId) async {
-    pagamentoDetalheDto = await Modular.get<IPagamentosRepository>().getPagamentoDetalhePorUsuario(userId);
+  void setTipoPagamento(int tipoPagamentoId) {
+    tipoPagamento = tipoPagamentoId;
+    tipoPagamentoController.text = enumTipoPagamento[tipoPagamento]!;
   }
 
   @action
-  void clear() {
+  void clearTipoPagamento() {
+    tipoPagamentoController.text = "";
+    tipoPagamento = null;
+  }
+
+  @computed
+  bool get isTipoPagamentoSelected {
+    return tipoPagamento != null;
+  }
+
+  @observable
+  PagamentoDetalheDto? pagamentoDetalheDto;
+
+  @action
+  Future<void> load(String userId, String username) async {
+    pagamentoDetalheDto = await Modular.get<IPagamentosRepository>().getPagamentoDetalhePorUsuario(userId);
+    usuarioEditingController.text = username;
+  }
+
+  @action
+  void clearPagamentoDetalhe() {
     pagamentoDetalheDto = null;
     usuarioEditingController.text = "";
+    clearTipoPagamento();
   }
 
   @computed
   bool get isValid {
-    return isSelected && pagamentoDetalheDto!.total > 0;
+    return isPagamentoDetalheSelected && isTipoPagamentoSelected && pagamentoDetalheDto!.total > 0;
   }
 
   @computed
-  bool get isSelected {
+  bool get isPagamentoDetalheSelected {
     return pagamentoDetalheDto != null;
   }
 }
