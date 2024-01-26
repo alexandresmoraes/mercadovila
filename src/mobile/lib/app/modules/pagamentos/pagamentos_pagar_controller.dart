@@ -62,4 +62,18 @@ abstract class PagamentosPagarControllerBase with Store {
   bool get isPagamentoDetalheSelected {
     return pagamentoDetalheDto != null;
   }
+
+  @observable
+  bool isLoadingRealizarPagamento = false;
+
+  @action
+  Future<void> realizarPagamento() async {
+    try {
+      isLoadingRealizarPagamento = true;
+
+      await Future.delayed(const Duration(seconds: 2));
+    } finally {
+      isLoadingRealizarPagamento = false;
+    }
+  }
 }

@@ -64,6 +64,24 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
     });
   }
 
+  late final _$isLoadingRealizarPagamentoAtom = Atom(
+      name: 'PagamentosPagarControllerBase.isLoadingRealizarPagamento',
+      context: context);
+
+  @override
+  bool get isLoadingRealizarPagamento {
+    _$isLoadingRealizarPagamentoAtom.reportRead();
+    return super.isLoadingRealizarPagamento;
+  }
+
+  @override
+  set isLoadingRealizarPagamento(bool value) {
+    _$isLoadingRealizarPagamentoAtom
+        .reportWrite(value, super.isLoadingRealizarPagamento, () {
+      super.isLoadingRealizarPagamento = value;
+    });
+  }
+
   late final _$loadAsyncAction =
       AsyncAction('PagamentosPagarControllerBase.load', context: context);
 
@@ -72,15 +90,24 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
     return _$loadAsyncAction.run(() => super.load(userId, username));
   }
 
+  late final _$realizarPagamentoAsyncAction = AsyncAction(
+      'PagamentosPagarControllerBase.realizarPagamento',
+      context: context);
+
+  @override
+  Future<void> realizarPagamento() {
+    return _$realizarPagamentoAsyncAction.run(() => super.realizarPagamento());
+  }
+
   late final _$PagamentosPagarControllerBaseActionController =
       ActionController(name: 'PagamentosPagarControllerBase', context: context);
 
   @override
-  void setTipoPagamento(int tipoPagamento) {
+  void setTipoPagamento(int tipoPagamentoId) {
     final _$actionInfo = _$PagamentosPagarControllerBaseActionController
         .startAction(name: 'PagamentosPagarControllerBase.setTipoPagamento');
     try {
-      return super.setTipoPagamento(tipoPagamento);
+      return super.setTipoPagamento(tipoPagamentoId);
     } finally {
       _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -114,6 +141,7 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
     return '''
 tipoPagamento: ${tipoPagamento},
 pagamentoDetalheDto: ${pagamentoDetalheDto},
+isLoadingRealizarPagamento: ${isLoadingRealizarPagamento},
 isTipoPagamentoSelected: ${isTipoPagamentoSelected},
 isValid: ${isValid},
 isPagamentoDetalheSelected: ${isPagamentoDetalheSelected}

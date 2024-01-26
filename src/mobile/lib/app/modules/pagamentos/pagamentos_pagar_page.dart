@@ -327,9 +327,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                                 _controller.isTipoPagamentoSelected
                                     ? IconButton(
                                         icon: const Icon(MdiIcons.closeOctagon),
-                                        onPressed: () {
-                                          _controller.clearTipoPagamento();
-                                        },
+                                        onPressed: _controller.clearTipoPagamento,
                                       )
                                     : const SizedBox.shrink()
                               ],
@@ -394,9 +392,9 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                           child: Observer(builder: (_) {
                             return TextButton(
                               onPressed: () async {
-                                //
+                                await _controller.realizarPagamento();
                               },
-                              child: false
+                              child: _controller.isLoadingRealizarPagamento
                                   ? const CircularProgress(
                                       width: 21,
                                       height: 21,
