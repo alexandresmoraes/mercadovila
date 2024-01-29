@@ -55,8 +55,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final controller = Modular.get<HomePageController>();
-
   final CarouselController _carouselController = CarouselController();
+  final PagamentosStore pagamentosStore = Modular.get<PagamentosStore>();
 
   final List<String> _imagesList = ['assets/homescreen_banner.png', 'assets/Banner0.png', 'assets/Banner1.png'];
 
@@ -78,6 +78,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
+    Modular.get<PagamentosStore>().load();
+
     super.initState();
   }
 
@@ -110,7 +112,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -123,17 +128,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           : Image.asset('assets/notificationIcon_black.png'),
                     ),
                     Observer(builder: (_) {
-                      var store = Modular.get<PagamentosStore>();
-
-                      var pagamentoDetalheDtoIsNull = store.pagamentoDetalheDto == null;
+                      var pagamentoDetalheDtoIsNull = pagamentosStore.pagamentoDetalheDto == null;
 
                       if (pagamentoDetalheDtoIsNull) {
-                        store.load();
                         return const SizedBox.shrink();
                       }
 
                       return Container(
-                        decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                         margin: const EdgeInsets.only(right: 10),
                         padding: const EdgeInsets.only(left: 5, right: 5),
                         width: 84,
@@ -145,15 +148,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               color: Colors.white,
                               size: 20,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 5,
-                              ),
-                              child: Text(
-                                ' ${store.pagamentoDetalheDto!.total}',
-                                style: Theme.of(context).primaryTextTheme.bodySmall,
-                              ),
-                            ),
+                            pagamentosStore.isLoading
+                                ? const Expanded(
+                                    child: CircularProgress(
+                                      color: Colors.white,
+                                      width: 15,
+                                      height: 15,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      ' ${pagamentosStore.pagamentoDetalheDto!.total}',
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ),
                           ],
                         ),
                       );
@@ -418,7 +428,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',

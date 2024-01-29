@@ -11,8 +11,17 @@ abstract class PagamentosStoreBase with Store {
   @observable
   PagamentoDetalheDto? pagamentoDetalheDto;
 
+  @observable
+  bool isLoading = false;
+
   @action
   Future<void> load() async {
-    pagamentoDetalheDto = await Modular.get<IPagamentosRepository>().getPagamentoDetalheMe();
+    try {
+      isLoading = true;
+
+      pagamentoDetalheDto = await Modular.get<IPagamentosRepository>().getPagamentoDetalheMe();
+    } finally {
+      isLoading = false;
+    }
   }
 }

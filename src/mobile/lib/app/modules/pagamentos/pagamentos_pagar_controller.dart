@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utils/dto/pagamentos/pagamento_detalhe_dto.dart';
+import 'package:vilasesmo/app/utils/models/pagamento/realizar_pagamento_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 part 'pagamentos_pagar_controller.g.dart';
 
@@ -54,8 +56,13 @@ abstract class PagamentosPagarControllerBase with Store {
   }
 
   @computed
+  bool get isValidPagamento {
+    return pagamentoDetalheDto!.total > 0;
+  }
+
+  @computed
   bool get isValid {
-    return isPagamentoDetalheSelected && isTipoPagamentoSelected && pagamentoDetalheDto!.total > 0;
+    return isPagamentoDetalheSelected && isTipoPagamentoSelected && isValidPagamento;
   }
 
   @computed
@@ -71,7 +78,25 @@ abstract class PagamentosPagarControllerBase with Store {
     try {
       isLoadingRealizarPagamento = true;
 
-      await Future.delayed(const Duration(seconds: 2));
+      var pagamentoRepository = Modular.get<IPagamentosRepository>();
+
+      var result = await pagamentoRepository.realizarPagamento(
+        RealizarPagamentoModel(
+          userId: pagamentoDetalheDto!.compradorUserId,
+          tipoPagamento: tipoPagamento!,
+          vendasId: pagamentoDetalheDto!.vendas.map((e) => e.vendaId).toList(),
+        ),
+      );
+
+      await result.fold((fail) {
+        if (fail.statusCode == 400) {
+          var message = fail.getErrorNotProperty();
+          if (message.isNotEmpty) GlobalSnackbar.error(message);
+        }
+      }, (response) async {
+        GlobalSnackbar.success('Pagamento realizado com sucesso!');
+        Modular.to.pop(true);
+      });
     } finally {
       isLoadingRealizarPagamento = false;
     }

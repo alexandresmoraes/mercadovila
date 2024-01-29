@@ -34,10 +34,11 @@ class PagamentosRepository implements IPagamentosRepository {
   }
 
   @override
-  Future<Either<ResultFailModel, ProdutoResponseModel>> realizarPagamento(RealizarPagamentoModel pagamentoModel) async {
+  Future<Either<ResultFailModel, RealizarPagamentoResponseModel>> realizarPagamento(
+      RealizarPagamentoModel pagamentoModel) async {
     try {
       var response = await dio.post('/api/pagamentos', data: pagamentoModel.toJson());
-      var result = ProdutoResponseModel.fromJson(response.data);
+      var result = RealizarPagamentoResponseModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));

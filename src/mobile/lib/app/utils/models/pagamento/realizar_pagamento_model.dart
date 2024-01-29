@@ -1,12 +1,12 @@
 class RealizarPagamentoModel {
   late String userId;
   late num tipoPagamento;
-  late List<int> vendasId;
+  late List<num> vendasId;
 
   RealizarPagamentoModel({
     required this.userId,
     required this.tipoPagamento,
-    this.vendasId = const [],
+    required this.vendasId,
   });
 
   Map<String, dynamic> toJson() {
@@ -15,5 +15,14 @@ class RealizarPagamentoModel {
     data['tipoPagamento'] = tipoPagamento;
     data['vendasId'] = vendasId;
     return data;
+  }
+}
+
+class RealizarPagamentoResponseModel {
+  RealizarPagamentoResponseModel({required this.id});
+  late final num id;
+
+  RealizarPagamentoResponseModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
   }
 }

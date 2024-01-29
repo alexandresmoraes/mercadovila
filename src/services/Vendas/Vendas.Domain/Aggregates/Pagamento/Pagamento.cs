@@ -25,6 +25,14 @@ namespace Vendas.Domain.Aggregates
       DataHora = DateTime.UtcNow;
     }
 
+    public void RealizarPagamento()
+    {
+      foreach (var venda in _vendas)
+      {
+        venda.Pagar();
+      }
+    }
+
     public override string ToString()
     {
       return JsonSerializer.Serialize(this);

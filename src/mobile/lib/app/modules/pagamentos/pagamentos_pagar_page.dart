@@ -62,7 +62,8 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             radius: 60,
                             backgroundColor: Colors.white,
                             child: Observer(builder: (_) {
-                              if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
+                              if (_controller.isPagamentoDetalheSelected &&
+                                  !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                 return CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
                                     color: Theme.of(context).primaryColorLight,
@@ -300,11 +301,16 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                           }
 
                           return _controller.enumTipoPagamento.keys
-                              .where((key) => _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
+                              .where((key) =>
+                                  _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
                               .toList();
                         },
                         builder: (context, controller, focusNode) {
                           return Observer(builder: (_) {
+                            if (!_controller.isValidPagamento) {
+                              return const SizedBox.shrink();
+                            }
+
                             return Row(
                               children: [
                                 Expanded(

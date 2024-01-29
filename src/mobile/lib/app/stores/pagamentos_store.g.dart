@@ -25,6 +25,22 @@ mixin _$PagamentosStore on PagamentosStoreBase, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: 'PagamentosStoreBase.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$loadAsyncAction =
       AsyncAction('PagamentosStoreBase.load', context: context);
 
@@ -36,7 +52,8 @@ mixin _$PagamentosStore on PagamentosStoreBase, Store {
   @override
   String toString() {
     return '''
-pagamentoDetalheDto: ${pagamentoDetalheDto}
+pagamentoDetalheDto: ${pagamentoDetalheDto},
+isLoading: ${isLoading}
     ''';
   }
 }

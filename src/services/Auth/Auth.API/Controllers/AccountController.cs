@@ -97,12 +97,12 @@ namespace Auth.API.Controllers
       var user = await _userManager.FindByNameAsync(newAccountModel.Username);
 
       if (user is not null)
-        return Result.Fail<NewAccountResponseModel>(null, nameof(ApplicationUser.UserName), "Usuário já existente.");
+        return Result.Fail<NewAccountResponseModel>(nameof(ApplicationUser.UserName), "Usuário já existente.");
 
       user = await _userManager.FindByEmailAsync(newAccountModel.Email);
 
       if (user is not null)
-        return Result.Fail<NewAccountResponseModel>(null, nameof(ApplicationUser.Email), "Email já existente.");
+        return Result.Fail<NewAccountResponseModel>(nameof(ApplicationUser.Email), "Email já existente.");
 
       user = new ApplicationUser
       {
@@ -110,9 +110,9 @@ namespace Auth.API.Controllers
         UserName = newAccountModel.Username,
         Email = newAccountModel.Email,
         PhoneNumber = newAccountModel.Telefone,
-        EmailConfirmed = true,
         IsAtivo = newAccountModel.IsAtivo,
-        FotoUrl = newAccountModel.FotoUrl
+        FotoUrl = newAccountModel.FotoUrl,
+        EmailConfirmed = true,
       };
 
       var result = await _userManager.CreateAsync(user, newAccountModel.Password);

@@ -16,6 +16,13 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
           Computed<bool>(() => super.isTipoPagamentoSelected,
               name: 'PagamentosPagarControllerBase.isTipoPagamentoSelected'))
       .value;
+  Computed<bool>? _$isValidPagamentoComputed;
+
+  @override
+  bool get isValidPagamento => (_$isValidPagamentoComputed ??= Computed<bool>(
+          () => super.isValidPagamento,
+          name: 'PagamentosPagarControllerBase.isValidPagamento'))
+      .value;
   Computed<bool>? _$isValidComputed;
 
   @override
@@ -143,6 +150,7 @@ tipoPagamento: ${tipoPagamento},
 pagamentoDetalheDto: ${pagamentoDetalheDto},
 isLoadingRealizarPagamento: ${isLoadingRealizarPagamento},
 isTipoPagamentoSelected: ${isTipoPagamentoSelected},
+isValidPagamento: ${isValidPagamento},
 isValid: ${isValid},
 isPagamentoDetalheSelected: ${isPagamentoDetalheSelected}
     ''';
