@@ -233,7 +233,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "R\$ 15,98",
+                        "R\$ ${item.pagamentoValor}",
                         style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
                       ),
                     ],
