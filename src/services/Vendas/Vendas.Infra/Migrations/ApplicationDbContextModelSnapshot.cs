@@ -31,6 +31,12 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("email");
+
                     b.Property<string>("FotoUrl")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
@@ -57,7 +63,7 @@ namespace Vendas.Infra.Migrations
                     b.ToTable("compradores", (string)null);
                 });
 
-            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento.Pagamento", b =>
+            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,6 +75,10 @@ namespace Vendas.Infra.Migrations
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("datahora");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<int>("Tipo")
                         .HasColumnType("integer")
@@ -178,7 +188,7 @@ namespace Vendas.Infra.Migrations
                     b.ToTable("venda_itens", (string)null);
                 });
 
-            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento.Pagamento", b =>
+            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento", b =>
                 {
                     b.HasOne("Vendas.Domain.Aggregates.Comprador", "Comprador")
                         .WithMany()
@@ -197,7 +207,7 @@ namespace Vendas.Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vendas.Domain.Aggregates.Pagamento.Pagamento", null)
+                    b.HasOne("Vendas.Domain.Aggregates.Pagamento", null)
                         .WithMany("Vendas")
                         .HasForeignKey("pagamento_id")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -216,7 +226,7 @@ namespace Vendas.Infra.Migrations
                     b.Navigation("Venda");
                 });
 
-            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento.Pagamento", b =>
+            modelBuilder.Entity("Vendas.Domain.Aggregates.Pagamento", b =>
                 {
                     b.Navigation("Vendas");
                 });

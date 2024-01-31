@@ -1,4 +1,5 @@
 ﻿
+using Common.WebAPI.Results;
 using Dapper;
 using System.Data;
 using Vendas.Domain.Aggregates;
@@ -14,7 +15,7 @@ namespace Vendas.API.Application.Queries
       _dbConnection = dbConnection;
     }
 
-    public async Task<PagamentoDetalheDto> GetPagamentoDetalheDto(string userId, CancellationToken cancellationToken = default)
+    public async Task<PagamentoDetalheDto> GetPagamentoDetalhe(string userId, CancellationToken cancellationToken = default)
     {
       var result = await _dbConnection.QueryAsync<dynamic>(
           @"
@@ -62,6 +63,58 @@ namespace Vendas.API.Application.Queries
       }
 
       return MapPagamentoDetalhe(result);
+    }
+
+    public async Task<PagedResult<PagamentosDto>> GetPagamentos(PagamentosQuery query, CancellationToken cancellationToken = default)
+    {
+      var pagamentos = new List<PagamentosDto>();
+
+      var sql = @"
+                  SELECT
+	                  p.id AS id,
+                    p.tipo AS tipo,
+	                  p.status AS status,
+	                  p.datahora AS datahora,
+	                  p.valor AS valor,	
+                    c.user_id AS compradoruserid,
+                    c.nome AS compradornome,
+	                  c.foto_url AS compradorfotourl,
+                    count(*) over() AS count
+                  FROM pagamentos p
+                  LEFT JOIN compradores c ON c.id = p.comprador_id";
+
+      var offset = (query.page - 1) * query.limit;
+
+      if (!string.IsNullOrWhiteSpace(query.username))
+      {
+        sql += " WHERE c.nome ilike @username ";
+      }
+
+      sql += " LIMIT @limit OFFSET @offset ";
+
+      var result = await _dbConnection.QueryAsync<dynamic>(sql, new
+      {
+        username = $"%{query.username}%",
+        query.limit,
+        offset,
+      });
+
+      foreach (var row in result)
+      {
+        pagamentos.Add(new PagamentosDto
+        {
+          PagamentoId = row.id,
+          PagamentoTipo = (EnumTipoPagamento)row.tipo,
+          PagamentoStatus = (EnumStatusPagamento)row.status,
+          CompradorNome = row.compradornome,
+          CompradorUserId = row.compradoruserid,
+          PagamentoValor = row.valor,
+        });
+      }
+
+      long total = result.FirstOrDefault()?.count ?? 0;
+
+      return new PagedResult<PagamentosDto>(offset, query.limit, total, pagamentos);
     }
 
     private PagamentoDetalheDto MapPagamentoDetalhe(dynamic result)

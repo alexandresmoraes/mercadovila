@@ -5,14 +5,15 @@ namespace Vendas.Domain.Aggregates
 {
   public class Pagamento : Entity, IAggregateRoot
   {
-    public Comprador Comprador { get; set; } = null!;
+    public Comprador Comprador { get; private set; } = null!;
 
     private readonly List<Venda> _vendas = new();
     public IReadOnlyCollection<Venda> Vendas => _vendas;
 
-    public EnumTipoPagamento Tipo { get; set; }
-    public decimal Valor { get; set; }
-    public DateTime DataHora { get; set; }
+    public EnumTipoPagamento Tipo { get; private set; }
+    public EnumStatusPagamento Status { get; private set; }
+    public decimal Valor { get; private set; }
+    public DateTime DataHora { get; private set; }
 
     public Pagamento() { }
 
@@ -23,14 +24,21 @@ namespace Vendas.Domain.Aggregates
       Tipo = tipo;
       Valor = vendas.Sum(_ => _.Total);
       DataHora = DateTime.UtcNow;
+      Status = EnumStatusPagamento.Ativo;
+
+      _vendas.ForEach(venda => venda.RealizarPagamento());
     }
 
-    public void RealizarPagamento()
+    public void Cancelar()
     {
+      Status = EnumStatusPagamento.Cancelado;
+
       foreach (var venda in _vendas)
       {
-        venda.Pagar();
+        venda.CancelarPagamento();
       }
+
+      _vendas.Clear();
     }
 
     public override string ToString()

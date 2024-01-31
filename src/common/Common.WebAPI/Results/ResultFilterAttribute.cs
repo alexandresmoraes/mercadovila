@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Common.WebAPI.Results
@@ -36,10 +35,9 @@ namespace Common.WebAPI.Results
         if (objectResult.Value is Result result && result.GetType().IsGenericType && result.IsValid && result is IResultCreated)
         {
           var data = result.GetType().GetProperty(nameof(Result<object>.Data))?.GetValue(result, null);
-          context.Result = new ObjectResult(data)
-          {
-            StatusCode = StatusCodes.Status201Created
-          };
+          var location = (result as IResultCreated)?.Location;
+
+          context.Result = new CreatedResult(location!, data);
         }
       }
 

@@ -5,8 +5,8 @@
     public static Result<TDataResponse> Ok<TDataResponse>(TDataResponse data) =>
       new Result<TDataResponse>(data);
 
-    public static Result<TDataResponse> Created<TDataResponse>(TDataResponse data) =>
-      new ResultCreated<TDataResponse>(data);
+    public static Result<TDataResponse> Created<TDataResponse>(string location, TDataResponse data) =>
+      new ResultCreated<TDataResponse>(location, data);
 
     public static Result<TDataResponse> Fail<TDataResponse>(string message) =>
       new Result<TDataResponse>(message);

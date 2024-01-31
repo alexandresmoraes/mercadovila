@@ -50,11 +50,12 @@ namespace Vendas.API.Application.Commands
       var comprador = await _compradorRepository.GetAsync(userId);
       if (comprador is null)
       {
-        comprador = new Comprador(userId, request.CompradorNome, request.CompradorFotoUrl);
+        comprador = new Comprador(userId, request.CompradorNome, _authService.GetUserEmail(), request.CompradorFotoUrl);
       }
       else
       {
         comprador.Nome = request.CompradorNome;
+        comprador.Email = _authService.GetUserEmail();
         comprador.FotoUrl = request.CompradorFotoUrl;
       }
 
@@ -76,7 +77,7 @@ namespace Vendas.API.Application.Commands
       var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
-      return Result.Ok(new CriarVendaCommandResponse
+      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse
       {
         Id = venda.Id,
       });

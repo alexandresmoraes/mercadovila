@@ -36,7 +36,7 @@ namespace Vendas.API.Controllers
     {
       var userId = _authService.GetUserId();
 
-      return Result.Ok(await _pagamentosQueries.GetPagamentoDetalheDto(userId, cancellationToken));
+      return Result.Ok(await _pagamentosQueries.GetPagamentoDetalhe(userId, cancellationToken));
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagamentoDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] string userId, CancellationToken cancellationToken = default)
-      => Result.Ok(await _pagamentosQueries.GetPagamentoDetalheDto(userId, cancellationToken));
+      => Result.Ok(await _pagamentosQueries.GetPagamentoDetalhe(userId, cancellationToken));
 
     /// <summary>
     /// Realiza um pagamento para um usuário/comprador
@@ -61,5 +61,28 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<RealizarPagamentoCommandResponse>> PostAsync([FromBody] RealizarPagamentoCommand request, CancellationToken cancellationToken = default)
       => await _mediator.Send(request, cancellationToken);
+
+    /// <summary>
+    /// Retorna todos os pagamentos
+    /// </summary>
+    // GET api/pagamentos
+    [HttpGet]
+    [Authorize("Admin")]
+    [ProducesResponseType(typeof(PagamentosDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<PagedResult<PagamentosDto>>> GetPagamentos([FromQuery] PagamentosQuery query, CancellationToken cancellationToken = default)
+      => Result.Ok(await _pagamentosQueries.GetPagamentos(query, cancellationToken));
+
+    /// <summary>
+    /// Realiza o cancelamento de um pagamento
+    /// </summary>
+    // PUT api/pagamentos/cancelar/{pagamentoId}
+    [HttpPut("cancelar/{pagamentoId:long}")]
+    [Authorize("Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result> CancelarAsync([FromRoute] long pagamentoId, CancellationToken cancellationToken = default)
+      => await _mediator.Send(new CancelarPagamentoCommand(pagamentoId), cancellationToken);
   }
 }

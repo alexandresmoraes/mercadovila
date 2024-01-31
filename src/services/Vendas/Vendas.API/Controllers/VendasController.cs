@@ -30,7 +30,7 @@ namespace Vendas.API.Controllers
     /// </summary>
     // POST api/vendas
     [HttpPost]
-    [ProducesResponseType(typeof(CriarVendaCommandResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CriarVendaCommandResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<CriarVendaCommandResponse>> PostAsync([FromBody] CriarVendaCommand request, CancellationToken cancellationToken = default)
     {
@@ -48,7 +48,7 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<VendaDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
-    {      
+    {
       var venda = await _vendasQueries.GetVendaAsync(vendaId, cancellationToken);
 
       if (venda is null)
@@ -85,8 +85,17 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<VendaDto>>> GetVendasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
-    {
-      return Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
-    }
+      => Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
+
+    /// <summary>
+    /// Realiza o cancelamento de uma venda
+    /// </summary>
+    // PUT api/vendas/cancelar/{vendaId}
+    [HttpPut("cancelar/{vendaId:long}")]
+    [Authorize("Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result> CancelarAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
+      => await _mediator.Send(new CancelarVendaCommand(vendaId), cancellationToken);
   }
 }

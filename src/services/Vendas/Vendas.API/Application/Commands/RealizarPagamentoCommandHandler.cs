@@ -46,11 +46,9 @@ namespace Vendas.API.Application.Commands
 
       var pagamento = new Pagamento(comprador, vendas, request.TipoPagamento);
 
-      pagamento.RealizarPagamento();
-
       await _pagamentosRepository.AddAsync(pagamento);
 
-      return Result.Ok(new RealizarPagamentoCommandResponse
+      return Result.Created($"api/pagamentos/{pagamento.Id}", new RealizarPagamentoCommandResponse
       {
         Id = pagamento.Id
       });

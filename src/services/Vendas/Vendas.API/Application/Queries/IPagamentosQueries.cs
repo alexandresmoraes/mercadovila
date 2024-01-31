@@ -1,7 +1,10 @@
-﻿namespace Vendas.API.Application.Queries
+﻿using Common.WebAPI.Results;
+
+namespace Vendas.API.Application.Queries
 {
   public interface IPagamentosQueries
   {
-    Task<PagamentoDetalheDto> GetPagamentoDetalheDto(string userId, CancellationToken cancellationToken = default);
+    Task<PagamentoDetalheDto> GetPagamentoDetalhe(string userId, CancellationToken cancellationToken = default);
+    Task<PagedResult<PagamentosDto>> GetPagamentos(PagamentosQuery query, CancellationToken cancellationToken = default);
   }
 }

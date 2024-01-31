@@ -124,7 +124,7 @@ namespace Auth.API.Controllers
           await _userManager.AddToRoleAsync(user, "admin");
         }
 
-        return Result.Created(new NewAccountResponseModel(user.Id));
+        return Result.Created($"api/account/{user.Id}", new NewAccountResponseModel(user.Id));
       }
 
       return Result.Fail<NewAccountResponseModel>(result.Errors.Select(e => new ErrorResult(e.Description)).ToArray());
