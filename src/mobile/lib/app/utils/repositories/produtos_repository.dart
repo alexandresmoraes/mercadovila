@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
@@ -84,5 +85,15 @@ class ProdutosRepository implements IProdutosRepository {
     var response = await dio.get('/api/produtos/detail/$id');
 
     return ProdutoDetailDto.fromJson(response.data);
+  }
+
+  @override
+  Future<PagedResult<ListaComprasDto>> getListaCompra(int page) async {
+    var response = await dio.get('/api/produtos/lista-compra', queryParameters: {
+      "page": page.toString(),
+      "limit": 10,
+    });
+
+    return PagedResult.fromJson(response.data);
   }
 }

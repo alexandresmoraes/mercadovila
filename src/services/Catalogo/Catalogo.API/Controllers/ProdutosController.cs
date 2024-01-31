@@ -226,5 +226,17 @@ namespace Catalogo.API.Controllers
 
       return NotFound();
     }
+
+    /// <summary>
+    /// Retorna lista de compras, sugestões baseadas no estoque alvo
+    /// </summary>
+    // GET api/produtos/lista-compra
+    [HttpGet("lista-compra")]
+    [ProducesResponseType(typeof(PagedResult<ListaCompraDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<PagedResult<ListaCompraDto>>> GetListaComprasAsync([FromQuery] ListaCompraQuery query)
+      => Result.Ok(await _produtoRepository.GetListaCompraAsync(query));
   }
 }
