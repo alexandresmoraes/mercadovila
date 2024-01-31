@@ -24,6 +24,8 @@ namespace Vendas.API.Application.Queries
   {
     public string CompradorUserId { get; init; } = null!;
     public string CompradorNome { get; init; } = null!;
+    public string? CompradorFotoUrl { get; init; }
+    public string CompradorEmail { get; init; } = null!;
     public long PagamentoId { get; init; }
     public EnumTipoPagamento PagamentoTipo { get; init; }
     public EnumStatusPagamento PagamentoStatus { get; init; }

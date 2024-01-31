@@ -79,6 +79,7 @@ namespace Vendas.API.Application.Queries
                     c.user_id AS compradoruserid,
                     c.nome AS compradornome,
 	                  c.foto_url AS compradorfotourl,
+                    c.email AS compradoremail,
                     count(*) over() AS count
                   FROM pagamentos p
                   LEFT JOIN compradores c ON c.id = p.comprador_id";
@@ -107,7 +108,9 @@ namespace Vendas.API.Application.Queries
           PagamentoTipo = (EnumTipoPagamento)row.tipo,
           PagamentoStatus = (EnumStatusPagamento)row.status,
           CompradorNome = row.compradornome,
+          CompradorFotoUrl = row.compradorfotourl,
           CompradorUserId = row.compradoruserid,
+          CompradorEmail = row.compradoremail,
           PagamentoValor = row.valor,
         });
       }
