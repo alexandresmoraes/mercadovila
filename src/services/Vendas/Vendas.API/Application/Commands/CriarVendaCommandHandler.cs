@@ -12,13 +12,13 @@ namespace Vendas.API.Application.Commands
   public class CriarVendaCommandHandler
     : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
   {
-    private readonly ICompradorRepository _compradorRepository;
-    private readonly IVendaRepository _vendaRepository;
+    private readonly ICompradoresRepository _compradorRepository;
+    private readonly IVendasRepository _vendaRepository;
     private readonly IAuthService _authService;
     private readonly Carrinho.CarrinhoClient _carrinhoClient;
     private readonly IIntegrationEventService _integrationEventService;
 
-    public CriarVendaCommandHandler(ICompradorRepository compradorRepository, IVendaRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
+    public CriarVendaCommandHandler(ICompradoresRepository compradorRepository, IVendasRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;
@@ -50,11 +50,12 @@ namespace Vendas.API.Application.Commands
       var comprador = await _compradorRepository.GetAsync(userId);
       if (comprador is null)
       {
-        comprador = new Comprador(userId, request.CompradorNome, request.CompradorFotoUrl);
+        comprador = new Comprador(userId, request.CompradorNome, _authService.GetUserEmail(), request.CompradorFotoUrl);
       }
       else
       {
         comprador.Nome = request.CompradorNome;
+        comprador.Email = _authService.GetUserEmail();
         comprador.FotoUrl = request.CompradorFotoUrl;
       }
 
@@ -76,7 +77,7 @@ namespace Vendas.API.Application.Commands
       var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
-      return Result.Ok(new CriarVendaCommandResponse
+      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse
       {
         Id = venda.Id,
       });

@@ -23,10 +23,10 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
   late DateTime semanaDataFinal;
 
   MinhasComprasPageState() : super() {
-    hojeDataInicial = DateTime(hoje.year, hoje.month, hoje.day);
-    hojeDataFinal = DateTime(hoje.year, hoje.month, hoje.day, 23, 59, 59, 999, 999);
-    semanaDataInicial = hoje.subtract(Duration(days: hoje.weekday - 1));
-    semanaDataFinal = semanaDataInicial.add(const Duration(days: 6));
+    hojeDataInicial = DateTime(hoje.year, hoje.month, hoje.day).toUtc();
+    hojeDataFinal = DateTime(hoje.year, hoje.month, hoje.day, 23, 59, 59, 999, 999).toUtc();
+    semanaDataInicial = hoje.subtract(Duration(days: hoje.weekday - 1)).toUtc();
+    semanaDataFinal = semanaDataInicial.add(const Duration(days: 6)).toUtc();
   }
 
   PagingController<int, VendaDto> pagingVendasHojeController = PagingController(firstPageKey: 1);
@@ -126,7 +126,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, hojeDataInicial, hojeDataFinal);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, hojeDataInicial, hojeDataFinal);
         },
         emptyBuilder: (_) {
           return Center(
@@ -158,7 +158,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, semanaDataInicial, semanaDataFinal);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, semanaDataInicial, semanaDataFinal);
         },
         emptyBuilder: (_) {
           return Center(
@@ -190,7 +190,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
         request: (page) async {
-          return await Modular.get<IVendasRepository>().getVendasPorUsuario(page, null, null);
+          return await Modular.get<IVendasRepository>().getMinhasCompras(page, null, null);
         },
         emptyBuilder: (_) {
           return Center(

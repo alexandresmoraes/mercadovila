@@ -38,6 +38,10 @@ builder.Services.AddGrpcClient<Carrinho.CarrinhoClient>((services, options) =>
 
 builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Database.GetDbConnection());
 builder.Services.AddScoped<IVendasQueries, VendasQueries>();
+builder.Services.AddScoped<IPagamentosQueries, PagamentoQueries>();
+
+
+
 
 
 

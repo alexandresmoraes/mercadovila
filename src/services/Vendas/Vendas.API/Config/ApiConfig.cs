@@ -44,8 +44,9 @@ namespace Vendas.API.Config
 
       services.AddAuthServices();
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-      services.AddScoped<ICompradorRepository, CompradorRepository>();
-      services.AddScoped<IVendaRepository, VendaRepository>();
+      services.AddScoped<ICompradoresRepository, CompradoresRepository>();
+      services.AddScoped<IVendasRepository, VendasRepository>();
+      services.AddScoped<IPagamentosRepository, PagamentosRepository>();
 
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));

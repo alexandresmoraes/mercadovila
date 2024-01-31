@@ -43,8 +43,8 @@ class VendasRepository implements IVendasRepository {
   }
 
   @override
-  Future<PagedResult<VendaDto>> getVendasPorUsuario(int page, DateTime? dataInicial, DateTime? dataFinal) async {
-    var response = await dio.get('/api/vendas/vendas-por-comprador', queryParameters: {
+  Future<PagedResult<VendaDto>> getMinhasCompras(int page, DateTime? dataInicial, DateTime? dataFinal) async {
+    var response = await dio.get('/api/vendas/minhas-compras', queryParameters: {
       "page": page,
       "limit": 10,
       "dataInicial": dataInicial,
@@ -52,5 +52,12 @@ class VendasRepository implements IVendasRepository {
     });
 
     return PagedResult.fromJson(response.data);
+  }
+
+  @override
+  Future<VendaDetalheDto> getVenda(int id) async {
+    var response = await dio.get('/api/vendas/$id');
+
+    return VendaDetalheDto.fromJson(response.data);
   }
 }

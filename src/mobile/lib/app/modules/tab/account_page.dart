@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
@@ -69,8 +71,7 @@ class AccountPageState extends State<AccountPage> {
                               backgroundImage: AssetImage('assets/person.png'),
                             ),
                           ),
-                          imageUrl:
-                              '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${accountStore.account!.fotoUrl}',
+                          imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${accountStore.account!.fotoUrl}',
                           imageBuilder: (context, imageProvider) {
                             return CircleAvatar(
                               radius: 60,
@@ -318,8 +319,7 @@ class AccountPageState extends State<AccountPage> {
                 const Divider(),
                 SwitchListTile(
                   value: Modular.get<ThemeStore>().isDarkModeEnable,
-                  onChanged: (val) =>
-                      Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
+                  onChanged: (val) => Modular.get<ThemeStore>().setDarkMode(!Modular.get<ThemeStore>().isDarkModeEnable),
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   secondary: !Modular.get<ThemeStore>().isDarkModeEnable
@@ -359,7 +359,35 @@ class AccountPageState extends State<AccountPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    Modular.to.pushNamed('/login/');
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoAlertDialog(
+                        title: const Text('Atenção!'),
+                        content: const Text('Tem certeza de que deseja sair?'),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Modular.to.pop();
+                            },
+                            child: const Text(
+                              'Não',
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: () async {
+                              Modular.to.pop();
+                              Modular.get<IAuthService>().logout();
+                            },
+                            child: const Text('Sim'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),

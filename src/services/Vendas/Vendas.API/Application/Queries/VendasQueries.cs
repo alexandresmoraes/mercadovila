@@ -25,12 +25,15 @@ namespace Vendas.API.Application.Queries
 	            v.total AS total,
 	            vi.produto_id AS itemprodutoid,
 	            vi.nome AS itemnome, 
+              vi.descricao AS itemdescricao,
 	            vi.image_url AS itemimageurl,
 	            vi.preco AS itempreco,
 	            vi.quantidade AS itemquantidade,
-	            vi.unidade_medida AS itemunidademedida
+	            vi.unidade_medida AS itemunidademedida,
+              c.user_id AS compradoruserid
             FROM vendas v
-            LEFT JOIN venda_itens vi ON v.id = vi.venda_id
+            LEFT JOIN compradores c ON c.id = v.comprador_id
+            LEFT JOIN venda_itens vi ON v.id = vi.venda_id            
             WHERE v.id=@id
           ", new { id = vendaId }
       );
@@ -126,7 +129,7 @@ namespace Vendas.API.Application.Queries
       return new PagedResult<VendaDto>(start, vendaQuery.limit, total, vendasDictionary.Values.ToList());
     }
 
-    public async Task<PagedResult<VendaDto>> GetVendasPorUsuarioAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<VendaDto>> GetMinhasComprasAsync(VendaQuery vendaQuery, string userId, CancellationToken cancellationToken = default)
     {
       var vendasDictionary = new Dictionary<long, VendaDto>();
 
@@ -221,6 +224,7 @@ namespace Vendas.API.Application.Queries
         Status = (EnumVendaStatus)result[0].status,
         DataHora = result[0].datahora,
         Total = result[0].total,
+        CompradorUserId = result[0].compradoruserid,
       };
 
       foreach (dynamic item in result)
@@ -229,10 +233,11 @@ namespace Vendas.API.Application.Queries
         {
           ProdutoId = item.itemprodutoid,
           Nome = item.itemnome,
+          Descricao = item.itemdescricao,
           ImageUrl = item.itemimageurl,
           Preco = item.itempreco,
           Quantidade = item.itemquantidade,
-          UnidadeMedida = item.itemunidade,
+          UnidadeMedida = item.itemunidademedida,
         };
 
         venda.Itens.Add(vendaItem);

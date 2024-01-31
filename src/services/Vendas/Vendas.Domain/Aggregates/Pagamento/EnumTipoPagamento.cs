@@ -1,8 +1,8 @@
-﻿namespace Vendas.Domain.Aggregates.Pagamento
+﻿namespace Vendas.Domain.Aggregates
 {
   public enum EnumTipoPagamento
   {
-    DescontoSalario,
+    DescontoEmFolha,
     Dinheiro
   }
 }

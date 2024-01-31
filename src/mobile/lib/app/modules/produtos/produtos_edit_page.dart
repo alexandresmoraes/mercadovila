@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,9 +80,8 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(isNullorEmpty(widget.id) ? "Criando produto" : "Editando produto"),
@@ -151,8 +149,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    imageUrl:
-                                        '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
+                                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
                                     imageBuilder: (context, imageProvider) {
                                       return Container(
                                         decoration: BoxDecoration(
@@ -228,9 +225,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                           },
                           child: Observer(builder: (_) {
                             return Text(
-                              isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
-                                  ? 'Escolher imagem'
-                                  : 'Trocar imagem',
+                              isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath) ? 'Escolher imagem' : 'Trocar imagem',
                               style: Theme.of(context).primaryTextTheme.displayLarge,
                             );
                           }),
@@ -372,9 +367,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       MdiIcons.barcode,
-                                      color: !Modular.get<ThemeStore>().isDarkModeEnable
-                                          ? const Color(0xFF373C58)
-                                          : const Color(0xFFF2F5F8),
+                                      color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                                     ),
                                     onPressed: () async {
                                       var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');

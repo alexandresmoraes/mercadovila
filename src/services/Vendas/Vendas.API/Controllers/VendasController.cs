@@ -30,7 +30,7 @@ namespace Vendas.API.Controllers
     /// </summary>
     // POST api/vendas
     [HttpPost]
-    [ProducesResponseType(typeof(CriarVendaCommandResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CriarVendaCommandResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<CriarVendaCommandResponse>> PostAsync([FromBody] CriarVendaCommand request, CancellationToken cancellationToken = default)
     {
@@ -54,22 +54,25 @@ namespace Vendas.API.Controllers
       if (venda is null)
         return Result.NotFound<VendaDetalheDto>();
 
+      if (!_authService.GetUserId().Equals(venda.CompradorUserId) && !User.IsInRole("admin"))
+        return Result.Forbidden<VendaDetalheDto>();
+
       return Result.Ok(venda!);
     }
 
     /// <summary>
     /// Retorna as vendas paginadas por usuário que está logado
     /// </summary>
-    // GET api/vendas/vendas-por-comprador
-    [HttpGet("vendas-por-comprador")]
+    // GET api/vendas/minhas-compras
+    [HttpGet("minhas-compras")]
     [ProducesResponseType(typeof(PagedResult<VendaDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<PagedResult<VendaDto>>> GetVendasPorUsuarioAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
+    public async Task<Result<PagedResult<VendaDto>>> GetMinhasComprasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
     {
       var userId = _authService.GetUserId();
 
-      return Result.Ok(await _vendasQueries.GetVendasPorUsuarioAsync(vendaQuery, userId, cancellationToken));
+      return Result.Ok(await _vendasQueries.GetMinhasComprasAsync(vendaQuery, userId, cancellationToken));
     }
 
     /// <summary>
@@ -82,8 +85,17 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<VendaDto>>> GetVendasAsync([FromQuery] VendaQuery vendaQuery, CancellationToken cancellationToken = default)
-    {
-      return Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
-    }
+      => Result.Ok(await _vendasQueries.GetVendasAsync(vendaQuery, cancellationToken));
+
+    /// <summary>
+    /// Realiza o cancelamento de uma venda
+    /// </summary>
+    // PUT api/vendas/cancelar/{vendaId}
+    [HttpPut("cancelar/{vendaId:long}")]
+    [Authorize("Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result> CancelarAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
+      => await _mediator.Send(new CancelarVendaCommand(vendaId), cancellationToken);
   }
 }

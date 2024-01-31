@@ -1,8 +1,8 @@
 ﻿namespace Vendas.Domain.Aggregates
 {
-  public interface IVendaRepository
+  public interface IVendasRepository
   {
     Task AddAsync(Venda venda);
-    Task<Venda?> GetAsync(long id);
+    Task<Venda?> GetAsync(long id);    
   }
 }

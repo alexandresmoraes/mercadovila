@@ -14,9 +14,15 @@ namespace Vendas.API.Application.Queries
 
   public record VendaDto
   {
+    private DateTime _dataHora;
+
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora { get; init; }
+    public DateTime DataHora
+    {
+      get => DateTime.SpecifyKind(_dataHora, DateTimeKind.Utc);
+      init => _dataHora = value;
+    }
     public decimal Total { get; init; }
     public string CompradorNome { get; init; } = null!;
     public string? CompradorFotoUrl { get; set; }
@@ -28,6 +34,7 @@ namespace Vendas.API.Application.Queries
   {
     public string ProdutoId { get; init; } = null!;
     public string Nome { get; init; } = null!;
+    public string Descricao { get; set; } = null!;
     public string ImageUrl { get; init; } = null!;
     public decimal Preco { get; init; }
     public int Quantidade { get; init; }
@@ -36,10 +43,17 @@ namespace Vendas.API.Application.Queries
 
   public record VendaDetalheDto
   {
+    private DateTime _dataHora;
+
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora { get; init; }
+    public DateTime DataHora
+    {
+      get => DateTime.SpecifyKind(_dataHora, DateTimeKind.Utc);
+      init => _dataHora = value;
+    }
     public decimal Total { get; init; }
+    public string CompradorUserId { get; init; } = null!;
 
     public List<VendaItemDetalheDto> Itens { get; init; } = new List<VendaItemDetalheDto>();
   }

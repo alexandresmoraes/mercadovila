@@ -8,12 +8,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/tab/home_page_controller.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
+import 'package:vilasesmo/app/stores/pagamentos_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
-
 import 'package:vilasesmo/app/utils/widgets/card_produto_color.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
@@ -44,12 +44,20 @@ class Product {
   });
 }
 
-class HomePage extends StatelessWidget {
-  final controller = Modular.get<HomePageController>();
+class HomePage extends StatefulWidget {
   final String title;
-  HomePage({Key? key, this.title = 'Home'}) : super(key: key);
 
+  const HomePage({Key? key, this.title = 'Home'}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  final controller = Modular.get<HomePageController>();
   final CarouselController _carouselController = CarouselController();
+  final PagamentosStore pagamentosStore = Modular.get<PagamentosStore>();
+
   final List<String> _imagesList = ['assets/homescreen_banner.png', 'assets/Banner0.png', 'assets/Banner1.png'];
 
   List<Widget> _items() {
@@ -66,6 +74,13 @@ class HomePage extends StatelessWidget {
       ));
     }
     return list;
+  }
+
+  @override
+  void initState() {
+    Modular.get<PagamentosStore>().load();
+
+    super.initState();
   }
 
   @override
@@ -97,7 +112,10 @@ class HomePage extends StatelessWidget {
                       ),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -109,31 +127,47 @@ class HomePage extends StatelessWidget {
                           ? Image.asset('assets/notificationIcon_white.png')
                           : Image.asset('assets/notificationIcon_black.png'),
                     ),
-                    Container(
-                      decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      width: 84,
-                      height: 30,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            MdiIcons.currencyBrl,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 5,
+                    Observer(builder: (_) {
+                      var pagamentoDetalheDtoIsNull = pagamentosStore.pagamentoDetalheDto == null;
+
+                      if (pagamentoDetalheDtoIsNull) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                        margin: const EdgeInsets.only(right: 10),
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        width: 84,
+                        height: 30,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              MdiIcons.currencyBrl,
+                              color: Colors.white,
+                              size: 20,
                             ),
-                            child: Text(
-                              ' 15,59',
-                              style: Theme.of(context).primaryTextTheme.bodySmall,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                            pagamentosStore.isLoading
+                                ? const Expanded(
+                                    child: CircularProgress(
+                                      color: Colors.white,
+                                      width: 15,
+                                      height: 15,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      ' ${pagamentosStore.pagamentoDetalheDto!.total}',
+                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -394,7 +428,9 @@ class HomePage extends StatelessWidget {
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         '${item.preco}',

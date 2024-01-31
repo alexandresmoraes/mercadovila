@@ -5,14 +5,17 @@
     public static Result<TDataResponse> Ok<TDataResponse>(TDataResponse data) =>
       new Result<TDataResponse>(data);
 
-    public static Result<TDataResponse> Created<TDataResponse>(TDataResponse data) =>
-      new ResultCreated<TDataResponse>(data);
+    public static Result<TDataResponse> Created<TDataResponse>(string location, TDataResponse data) =>
+      new ResultCreated<TDataResponse>(location, data);
 
     public static Result<TDataResponse> Fail<TDataResponse>(string message) =>
       new Result<TDataResponse>(message);
 
-    public static Result<TDataResponse> Fail<TDataResponse>(string code, string message) =>
-      new Result<TDataResponse>(code, message);
+    public static Result<TDataResponse> Fail<TDataResponse>(string property, string message) =>
+      new Result<TDataResponse>(property, message);
+
+    public static Result<TDataResponse> Fail<TDataResponse>(string? code, string? property, string message) =>
+      new Result<TDataResponse>(code, property, message);
 
     public static Result NotFound() => new ResultNotFound();
     public static Result<TDataResponse> NotFound<TDataResponse>() => new ResultNotFound<TDataResponse>();
@@ -25,7 +28,8 @@
 
     public static Result Fail(string message) => new Result(message);
 
-    public static Result Fail(string code, string message) => new Result(code, message);
+    public static Result Fail(string? code, string? property, string message) => new Result(code, property, message);
+
     public static Result Fail(IList<ErrorResult> errors) => new Result(errors);
 
     public static Result Ok() => new ResultNoContent();
@@ -58,7 +62,10 @@
     public Result(string message) : this(new ErrorResult(null, null, message))
     { }
 
-    public Result(string code, string message) : this(new ErrorResult(code, null, message))
+    public Result(string property, string message) : this(new ErrorResult(property, null, message))
+    { }
+
+    public Result(string? code, string? property, string message) : this(new ErrorResult(code, property, message))
     { }
 
     public Result AddError(ErrorResult error)
@@ -73,7 +80,7 @@
     public Result AddError(string code, string message) =>
       AddError(new ErrorResult(code, null, message));
 
-    public Result AddError(string code, string property, string message) =>
+    public Result AddError(string? code, string? property, string message) =>
       AddError(new ErrorResult(code, property, message));
   }
 
@@ -83,7 +90,8 @@
 
     public Result() : base() { }
     public Result(string message) : base(message) { }
-    public Result(string code, string message) : base(code, message) { }
+    public Result(string property, string message) : base(property, message) { }
+    public Result(string? code, string? property, string message) : base(code, property, message) { }
 
     public Result(TDataResponse data) : base()
       => Data = data;

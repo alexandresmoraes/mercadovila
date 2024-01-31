@@ -13,6 +13,7 @@ import 'package:vilasesmo/app/modules/search/search_module.dart';
 import 'package:vilasesmo/app/modules/tab/home_page_controller.dart';
 import 'package:vilasesmo/app/modules/tab/tab_module.dart';
 import 'package:vilasesmo/app/modules/vendas/vendas_module.dart';
+import 'package:vilasesmo/app/stores/pagamentos_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/modules/account/account_module.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
@@ -27,6 +28,7 @@ import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/carrinho_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
@@ -39,6 +41,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind.lazySingleton((i) => SearchFilterStore()),
+    Bind.lazySingleton((i) => PagamentosStore()),
     Bind.factory((i) => CardCountProdutoController()),
     Bind.factory((i) => FavoritoController()),
     Bind.factory((i) => HomePageController()),
@@ -57,6 +60,7 @@ class AppModule extends Module {
     BindInject((i) => FavoritosRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => CarrinhoRepository(), isSingleton: true, isLazy: true),
     BindInject((i) => VendasRepository(), isSingleton: true, isLazy: true),
+    BindInject((i) => PagamentosRepository(), isSingleton: true, isLazy: true),
     //TODO: remover itens
     Bind.factory((i) => ProdutosEditController()),
     BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),

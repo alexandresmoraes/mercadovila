@@ -57,7 +57,6 @@ namespace Common.WebAPI.Shared.Pipeline
             transactionId = transaction.TransactionId;
           }
 
-          // TODO
           await _integrationEventService.PublishEventsThroughEventBusAsync(transactionId);
         });
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vendas.Domain.Aggregates.Pagamento;
+using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
@@ -20,7 +20,7 @@ namespace Vendas.Infra.EntityMapping
         .HasForeignKey("comprador_id")
         .IsRequired();
 
-      b.HasMany(v => v.Vendas)
+      b.HasMany(_ => _.Vendas)
         .WithOne()
         .HasForeignKey("pagamento_id")
         .OnDelete(DeleteBehavior.Cascade);
@@ -29,8 +29,15 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("tipo")
         .IsRequired()
         .HasConversion(
-          v => (int)v,
-          v => (EnumTipoPagamento)v);
+          p => (int)p,
+          p => (EnumTipoPagamento)p);
+
+      b.Property(_ => _.Status)
+        .HasColumnName("status")
+        .IsRequired()
+        .HasConversion(
+          p => (int)p,
+          p => (EnumStatusPagamento)p);
 
       b.Property(_ => _.DataHora)
         .HasColumnName("datahora")

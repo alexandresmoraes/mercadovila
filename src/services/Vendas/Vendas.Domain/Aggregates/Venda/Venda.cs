@@ -23,6 +23,16 @@ namespace Vendas.Domain.Aggregates
       DataHora = DateTime.UtcNow;
     }
 
+    public void RealizarPagamento()
+    {
+      Status = EnumVendaStatus.Pago;
+    }
+
+    public void CancelarPagamento()
+    {
+      Status = EnumVendaStatus.PendentePagamento;
+    }
+
     public override string ToString()
     {
       return JsonSerializer.Serialize(this);

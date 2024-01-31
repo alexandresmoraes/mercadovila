@@ -7,14 +7,16 @@ namespace Vendas.Domain.Aggregates
   {
     public string UserId { get; set; } = null!;
     public string Nome { get; set; } = null!;
+    public string Email { get; set; } = null!;
     public string? FotoUrl { get; set; }
 
     public Comprador() { }
 
-    public Comprador(string userId, string nome, string? fotoUrl)
+    public Comprador(string userId, string nome, string email, string? fotoUrl)
     {
       UserId = userId;
       Nome = nome;
+      Email = email;
       FotoUrl = fotoUrl;
     }
 
