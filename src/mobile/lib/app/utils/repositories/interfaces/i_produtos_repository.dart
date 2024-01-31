@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
@@ -14,4 +15,5 @@ abstract class IProdutosRepository implements Disposable {
   Future<PagedResult<ProdutoDto>> getProdutos(int page, String? nome);
   Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageProdutos(String filepath);
   Future<ProdutoDetailDto> getProdutoDetail(String id);
+  Future<PagedResult<ListaComprasDto>> getListaCompra(int page);
 }

@@ -424,5 +424,38 @@ namespace Catalogo.API.Data.Repositories
 
       _ = await Collection.BulkWriteAsync(loteUpdate);
     }
+
+    public async Task<PagedResult<ListaCompraDto>> GetListaCompraAsync(ListaCompraQuery query)
+    {
+      var filtro = Builders<Produto>.Filter.Where(_ => _.IsAtivo);
+      filtro &= Builders<Produto>.Filter.Where(_ => _.Estoque < _.EstoqueAlvo);
+
+      var start = (query.page - 1) * query.limit;
+
+      var projections = Builders<Produto>.Projection
+        .Expression(p => new ListaCompraDto
+        {
+          Id = p.Id,
+          Nome = p.Nome,
+          Descricao = p.Descricao,
+          ImageUrl = p.ImageUrl,
+          UnidadeMedida = p.UnidadeMedida,
+          EstoqueAlvo = p.EstoqueAlvo,
+          Estoque = p.Estoque,
+          Rating = p.Rating,
+          RatingCount = p.RatingCount
+        });
+
+      var produtos = await Collection.Find(filtro)
+        .SortByDescending(p => p.Nome)
+        .Skip((query.page - 1) * query.limit)
+        .Limit(query.limit)
+        .Project(projections)
+        .ToListAsync();
+
+      var count = await Collection.CountDocumentsAsync(filtro);
+
+      return new PagedResult<ListaCompraDto>(start, query.limit, count, produtos);
+    }
   }
 }
