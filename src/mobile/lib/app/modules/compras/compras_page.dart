@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/tab/home_page.dart';
-import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 
 class ComprasPage extends StatefulWidget {
@@ -11,6 +9,44 @@ class ComprasPage extends StatefulWidget {
   const ComprasPage({Key? key, this.title = 'Compras'}) : super(key: key);
   @override
   ComprasPageState createState() => ComprasPageState();
+}
+
+class Order {
+  String? orderId;
+
+  String? name;
+  String? orderStatus;
+
+  String? datetime;
+  String? orderOption;
+  String? amount;
+  bool isProductsVisible = false;
+  Order({this.amount, this.name, this.datetime, this.orderId, this.orderOption, this.orderStatus});
+}
+
+class Product {
+  String? name;
+  int? qty;
+  bool? isFavourite = false;
+  String? rating;
+  String? amount;
+  String? unitName;
+  String? ratingCount;
+  String? description;
+  String? discount;
+  String? imagePath;
+  Product({
+    this.amount,
+    this.description,
+    this.discount,
+    this.isFavourite,
+    this.name,
+    this.qty,
+    this.rating,
+    this.ratingCount,
+    this.unitName,
+    this.imagePath,
+  });
 }
 
 class ComprasPageState extends State<ComprasPage> {
@@ -180,6 +216,16 @@ class ComprasPageState extends State<ComprasPage> {
             ),
             centerTitle: true,
             title: const Text("Compras"),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  //TODO
+                  var refresh = await Modular.to.pushNamed<bool>('/compras/carrinho');
+                  // if (refresh ?? false) pagingController.refresh();
+                },
+                icon: const Icon(MdiIcons.plus),
+              ),
+            ],
           ),
           body: Column(
             children: [
@@ -193,32 +239,23 @@ class ComprasPageState extends State<ComprasPage> {
                         Radius.circular(10.0),
                       ),
                     ),
-                    backgroundColor:
-                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                     bottom: TabBar(
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(
                           width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? Theme.of(context).primaryColor
-                              : const Color(0xFFEF5656),
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                         ),
                         insets: const EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                       indicatorWeight: 4,
                       unselectedLabelStyle: TextStyle(
-                          fontSize: 13,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w400),
+                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
                       labelStyle: TextStyle(
-                          fontSize: 13,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
-                          ? Theme.of(context).primaryColor
-                          : const Color(0xFFEF5656),
+                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                       tabs: const [
                         Tab(
                             child: Text(
@@ -301,8 +338,7 @@ class ComprasPageState extends State<ComprasPage> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(
-                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     '${_allItemsList[i].amount}',
@@ -373,9 +409,7 @@ class ComprasPageState extends State<ComprasPage> {
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
-                            color: Modular.get<ThemeStore>().isDarkModeEnable
-                                ? const Color(0xFF373C58)
-                                : const Color(0xFFF2F5F8),
+                            color: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                           child: Text(
@@ -385,9 +419,7 @@ class ComprasPageState extends State<ComprasPage> {
                         ),
                         const Expanded(child: SizedBox()),
                         Icon(
-                          _orderListScreen[index].orderStatus == 'Cancelled'
-                              ? MdiIcons.closeOctagon
-                              : MdiIcons.checkDecagram,
+                          _orderListScreen[index].orderStatus == 'Cancelled' ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                           size: 20,
                           color: _orderListScreen[index].orderStatus == 'Cancelled'
                               ? Colors.red

@@ -6,16 +6,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
-  const CarrinhoPage({Key? key, this.title = 'Carrinho'}) : super(key: key);
+  const CarrinhoPage({Key? key, this.title = 'Itens de compra'}) : super(key: key);
   @override
   CarrinhoPageState createState() => CarrinhoPageState();
 }
@@ -23,15 +19,13 @@ class CarrinhoPage extends StatefulWidget {
 class CarrinhoPageState extends State<CarrinhoPage> {
   final carrinhoStore = Modular.get<CarrinhoStore>();
 
-  GlobalKey<ScaffoldState>? _scaffoldKey;
+  List<String> orderProcess = ['Carrinho', 'Pagamento'];
 
   int _currentIndex = 0;
   PageController? _pageController;
   ScrollController? _scrollController;
   bool step1Done = false;
   bool step2Done = false;
-
-  CarrinhoPageState() : super();
 
   @override
   void dispose() {
@@ -49,8 +43,6 @@ class CarrinhoPageState extends State<CarrinhoPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> orderProcess = ['Carrinho', 'Pagamento'];
-
     return WillPopScope(
       onWillPop: () async {
         Modular.to.pop();
@@ -58,12 +50,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
       },
       child: SafeArea(
         child: Scaffold(
-          key: _scaffoldKey,
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              orderProcess[_currentIndex],
-            ),
+            title: Text(widget.title),
             leading: IconButton(
               onPressed: () {
                 if (_currentIndex == 0) {
@@ -81,7 +70,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               },
               icon: const Icon(MdiIcons.arrowLeft),
             ),
-            automaticallyImplyLeading: _currentIndex == 0 ? true : false,
+            automaticallyImplyLeading: _currentIndex == 0,
           ),
           body: Column(
             children: [
@@ -266,8 +255,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           carrinhoStore.isLoading
                               ? 'Aguarde..'
                               : _currentIndex == 0
-                                  ? 'Ir para o pagamento'
-                                  : 'Pagar',
+                                  ? 'Ir para o detalhes'
+                                  : 'Comprar',
                         ),
                       ),
                     ),
@@ -281,238 +270,142 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     );
   }
 
-  bool isLoaded = false;
-
-  void checkIndisponiveis() {
-    for (var item in carrinhoStore.carrinhoDto!.itens) {
-      if (item.quantidade > item.estoque || !item.isDisponivel()) {
-        GlobalSnackbar.error('Identifique os itens indisponíveis');
-        break;
-      }
-    }
-  }
-
-  Future<CarrinhoDto> load() async {
-    if (isLoaded) {
-      checkIndisponiveis();
-      return carrinhoStore.carrinhoDto!;
-    }
-
-    await carrinhoStore.load();
-    checkIndisponiveis();
-    isLoaded = true;
-    return carrinhoStore.carrinhoDto!;
-  }
-
   Widget _cart() {
-    return FutureTriple(
-      future: load(),
-      data: (_, snapshot) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Observer(builder: (_) {
-                  if (carrinhoStore.carrinhoItens.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/empty_cart.png',
-                            width: 300,
-                            height: 300,
-                          ),
-                        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Observer(builder: (_) {
+              if (carrinhoStore.carrinhoItens.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/empty_cart.png',
+                        width: 300,
+                        height: 300,
                       ),
-                    );
-                  }
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: carrinhoStore.carrinhoItens.length,
-                    itemBuilder: (_, index) {
-                      final item = carrinhoStore.carrinhoItens[index];
+                    ],
+                  ),
+                );
+              }
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: carrinhoStore.carrinhoItens.length,
+                itemBuilder: (_, index) {
+                  final item = carrinhoStore.carrinhoItens[index];
 
-                      return Slidable(
-                        endActionPane: ActionPane(
-                          extentRatio: 0.15,
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (_) {
-                                showCupertinoModalPopup<void>(
-                                  context: context,
-                                  builder: (BuildContext context) => CupertinoActionSheet(
-                                    title: const Icon(Icons.question_answer),
-                                    actions: <Widget>[
-                                      CupertinoActionSheetAction(
-                                        isDestructiveAction: true,
-                                        onPressed: () async {
-                                          Modular.to.pop();
-                                          await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
-                                        },
-                                        child: const Text(
-                                          'Remover',
-                                        ),
-                                      ),
-                                      CupertinoActionSheetAction(
-                                        isDefaultAction: true,
-                                        onPressed: () {
-                                          Modular.to.pop();
-                                        },
-                                        child: const Text(
-                                          'Cancelar',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      extentRatio: 0.15,
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (_) {
+                            showCupertinoModalPopup<void>(
+                              context: context,
+                              builder: (BuildContext context) => CupertinoActionSheet(
+                                title: const Icon(Icons.question_answer),
+                                actions: <Widget>[
+                                  CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () async {
+                                      Modular.to.pop();
+                                      await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
+                                    },
+                                    child: const Text(
+                                      'Remover',
+                                    ),
                                   ),
-                                );
-                              },
-                              backgroundColor: Colors.transparent,
-                              foregroundColor: Colors.red,
-                              icon: MdiIcons.trashCanOutline,
-                            ),
-                          ],
+                                  CupertinoActionSheetAction(
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      Modular.to.pop();
+                                    },
+                                    child: const Text(
+                                      'Cancelar',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: Colors.red,
+                          icon: MdiIcons.trashCanOutline,
                         ),
-                        child: CardProdutoCarrinho(item),
-                      );
-                    },
+                      ],
+                    ),
+                    child: CardProdutoCarrinho(item),
+                  );
+                },
+              );
+            }),
+            ListTile(
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              contentPadding: const EdgeInsets.all(0),
+              title: Text(
+                "Preço",
+                style: Theme.of(context).primaryTextTheme.headlineSmall,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Subtotal",
+                  style: Theme.of(context).primaryTextTheme.labelSmall,
+                ),
+                Observer(builder: (_) {
+                  return Text(
+                    "R\$ ${carrinhoStore.carrinhoDto!.total}",
+                    style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
-                ListTile(
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.all(0),
-                  title: Text(
-                    "Preço",
-                    style: Theme.of(context).primaryTextTheme.headlineSmall,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Subtotal",
-                      style: Theme.of(context).primaryTextTheme.labelSmall,
-                    ),
-                    Observer(builder: (_) {
-                      return Text(
-                        "R\$ ${carrinhoStore.carrinhoDto!.total}",
-                        style: Theme.of(context).primaryTextTheme.labelSmall,
-                      );
-                    }),
-                  ],
-                ),
-                const Divider(),
-                ListTile(
-                  minVerticalPadding: 0,
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  minLeadingWidth: 30,
-                  contentPadding: const EdgeInsets.all(0),
-                  leading: Text(
-                    "Total",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  trailing: Observer(builder: (_) {
-                    return Text(
-                      "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
-                    );
-                  }),
-                ),
-                Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Container(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'assets/checkout_cart_dark.png',
-                            ),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'assets/checkout_cart_light.png',
-                            ),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      )
               ],
             ),
-          ),
-        );
-      },
-      error: RefreshWidget(
-        onTap: () => setState(() {}),
+            const Divider(),
+            ListTile(
+              minVerticalPadding: 0,
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              minLeadingWidth: 30,
+              contentPadding: const EdgeInsets.all(0),
+              leading: Text(
+                "Total",
+                style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+              ),
+              trailing: Observer(builder: (_) {
+                return Text(
+                  "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
+                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                );
+              }),
+            ),
+          ],
+        ),
       ),
-      loading: const CircularProgress(),
     );
   }
 
   Widget _payment() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(
+          right: 8,
+          left: 8,
+          top: 20,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 7,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Opções de pagamento',
-                  style: Theme.of(context).primaryTextTheme.headlineSmall,
-                ),
-              ),
-            ),
-            Observer(builder: (_) {
-              return InkWell(
-                onTap: () {
-                  carrinhoStore.setSelectOpcaoPagamento(true);
-                },
-                child: ListTile(
-                  leading: Radio(
-                    value: true,
-                    groupValue: carrinhoStore.selectOpcaoPagamento,
-                    onChanged: (value) {
-                      carrinhoStore.setSelectOpcaoPagamento(value!);
-                    },
-                  ),
-                  title: Text(
-                    "Desconto em folha",
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                  ),
-                  subtitle: Text(
-                    "Autorizar o desconto em folha no próximo mês útil",
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
-                  trailing: Image.asset(
-                    'assets/dinheiro.png',
-                    scale: 1.5,
-                  ),
-                ),
-              );
-            }),
             Observer(builder: (_) {
               return !carrinhoStore.selectOpcaoPagamento
                   ? Container(
@@ -536,7 +429,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           height: 50,
                           alignment: Alignment.center,
                           child: Text(
-                            "Selecione a opção de pagamento",
+                            "Detalhes",
                             style: TextStyle(
                                 fontSize: 14,
                                 color:
@@ -546,16 +439,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     )
                   : const SizedBox.shrink();
             }),
-            ListTile(
-              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-              contentPadding: const EdgeInsets.all(0),
-              title: Text(
-                "Detalhes",
-                style: Theme.of(context).primaryTextTheme.headlineSmall,
-              ),
-            ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
+              padding: const EdgeInsets.only(bottom: 10.0, top: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
