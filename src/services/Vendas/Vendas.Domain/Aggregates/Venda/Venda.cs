@@ -1,5 +1,6 @@
 ﻿using Common.WebAPI.Shared;
 using System.Text.Json;
+using Vendas.Domain.Events;
 
 namespace Vendas.Domain.Aggregates
 {
@@ -21,6 +22,13 @@ namespace Vendas.Domain.Aggregates
       Status = EnumVendaStatus.PendentePagamento;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
       DataHora = DateTime.UtcNow;
+    }
+
+    public void Cancelar()
+    {
+      Status = EnumVendaStatus.Cancelada;
+
+      AddDomainEvent(new VendaCanceladaEvent(this));
     }
 
     public void RealizarPagamento()

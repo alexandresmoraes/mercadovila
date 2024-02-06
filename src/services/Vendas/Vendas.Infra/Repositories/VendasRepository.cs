@@ -19,11 +19,28 @@ namespace Vendas.Infra.Repositories
       await _context.SaveChangesAsync();
     }
 
-    public async Task<Venda?> GetAsync(long id)
+    public async Task<Venda?> GetAsync(long vendaId)
     {
-      var venda = await _context.Vendas.FirstOrDefaultAsync(_ => _.Id == id);
+      var venda = await _context
+        .Vendas
+        .Include(v => v.Comprador)
+        .FirstOrDefaultAsync(v => v.Id == vendaId);
+
+      if (venda is null)
+      {
+        venda = _context.Vendas
+          .Local
+          .FirstOrDefault(p => p.Id == vendaId);
+      }
+
+      if (venda is not null)
+      {
+        await _context.Entry(venda)
+            .Collection(i => i.VendaItens).LoadAsync();
+      }
+
 
       return venda;
-    }   
+    }
   }
 }

@@ -147,14 +147,13 @@ namespace Catalogo.API.Controllers
     {
       var produto = await _produtoRepository.GetAsync(id);
 
-      if (produto is null)
-        return Result.NotFound();
+      if (produto is null) return Result.NotFound();
 
       var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
-      if (isExistPorNome) return Result.Fail("Produto já existente com o mesmo nome.");
+      if (isExistPorNome) return Result.Fail(nameof(Produto.Nome), "Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
-      if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
+      if (isExistPorCodigoBarras) return Result.Fail(nameof(Produto.CodigoBarras), "Produto já existente com o mesmo código de barras.");
 
       produto.Nome = produtoModel.Nome!;
       produto.Descricao = produtoModel.Descricao!;

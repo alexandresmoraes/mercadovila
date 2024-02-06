@@ -23,7 +23,7 @@ namespace Vendas.Infra.EntityMapping
       b.HasMany(_ => _.Vendas)
         .WithOne()
         .HasForeignKey("pagamento_id")
-        .OnDelete(DeleteBehavior.Cascade);
+        .OnDelete(DeleteBehavior.SetNull);
 
       b.Property(_ => _.Tipo)
         .HasColumnName("tipo")

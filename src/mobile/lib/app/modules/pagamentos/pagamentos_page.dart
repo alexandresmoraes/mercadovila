@@ -178,7 +178,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Inativo",
+                          item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Cancelado",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                       )

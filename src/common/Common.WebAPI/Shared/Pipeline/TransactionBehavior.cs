@@ -65,7 +65,6 @@ namespace Common.WebAPI.Shared.Pipeline
       catch (Exception ex)
       {
         _logger.LogError(ex, "Error Handling transaction for {CommandName} ({@Command})", typeName, request);
-
         throw;
       }
     }
