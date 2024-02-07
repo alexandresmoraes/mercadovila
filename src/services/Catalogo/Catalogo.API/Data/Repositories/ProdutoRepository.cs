@@ -411,7 +411,7 @@ namespace Catalogo.API.Data.Repositories
       return new PagedResult<CatalogoDto>(start, query.limit, count, catalogo);
     }
 
-    public async Task UpdateReservarEstoque(Dictionary<string, int> produtos)
+    public async Task SaidaEstoqueAsync(Dictionary<string, int> produtos)
     {
       var loteUpdate = new List<WriteModel<Produto>>();
 
@@ -419,6 +419,20 @@ namespace Catalogo.API.Data.Repositories
       {
         var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
         var update = Builders<Produto>.Update.Inc(p => p.Estoque, -produto.Value);
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
+
+    public async Task EntradaEstoqueAsync(Dictionary<string, int> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
+        var update = Builders<Produto>.Update.Inc(p => p.Estoque, +produto.Value);
         loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
       }
 
