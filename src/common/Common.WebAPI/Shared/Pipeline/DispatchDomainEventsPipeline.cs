@@ -26,100 +26,112 @@ namespace Common.WebAPI.Shared.Pipeline
     {
       cancellationToken.ThrowIfCancellationRequested();
 
-      if (typeof(TResponse) == typeof(ResultNotifications))
+      //if (typeof(TResponse) == typeof(ResultNotifications))
+      //{
+      //  var response = await next();
+
+      //  var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+
+      //  foreach (var entity in entities)
+      //  {
+      //    _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+
+      //    if (entity.HasDomainEvents)
+      //    {
+      //      var domainEvents = entity.DomainEvents!.ToList();
+
+      //      entity.ClearDomainEvents();
+
+      //      foreach (var domainEvent in domainEvents)
+      //      {
+      //        if (_notificationsContext.HasErrors)
+      //          return (TResponse)(object)_notificationsContext.Notifications;
+
+      //        _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
+
+      //        await _mediator.Publish(domainEvent);
+      //      }
+      //    }
+      //  }
+
+      //  return response;
+      //}
+      //else if (typeof(TResponse) == typeof(Result))
+      //{
+      //  var response = await next();
+
+      //  var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+
+      //  var responseResult = (Result)(object)response!;
+
+      //  foreach (var entity in entities)
+      //  {
+      //    _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+
+      //    if (entity.HasDomainEvents)
+      //    {
+      //      var domainEvents = entity.DomainEvents!.ToList();
+
+      //      entity.ClearDomainEvents();
+
+      //      foreach (var domainEvent in domainEvents)
+      //      {
+      //        if (!responseResult.IsValid)
+      //          return response;
+
+      //        _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
+
+      //        await _mediator.Publish(domainEvent);
+      //      }
+      //    }
+      //  }
+
+      //  return response;
+      //}
+
+      if ((typeof(TResponse) != typeof(ResultNotifications))
+        && (typeof(TResponse) != typeof(Result)))
       {
-        var response = await next();
+        return await next();
+      }
 
-        var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+      var response = await next();
 
-        foreach (var entity in entities)
+      var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
+
+      foreach (var entity in entities)
+      {
+        _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+
+        if (entity.HasDomainEvents)
         {
-          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
+          var domainEvents = entity.DomainEvents!.ToList();
 
-          if (entity.HasDomainEvents)
+          entity.ClearDomainEvents();
+
+          foreach (var domainEvent in domainEvents)
           {
-            var domainEvents = entity.DomainEvents!.ToList();
-
-            entity.ClearDomainEvents();
-
-            foreach (var domainEvent in domainEvents)
+            if (typeof(TResponse) == typeof(ResultNotifications))
             {
               if (_notificationsContext.HasErrors)
                 return (TResponse)(object)_notificationsContext.Notifications;
-
-              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
-
-              await _mediator.Publish(domainEvent);
             }
-          }
-        }
-
-        return response;
-      }
-      else if (typeof(TResponse) == typeof(ResultNotifications))
-      {
-        var response = await next();
-
-        var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
-
-        foreach (var entity in entities)
-        {
-          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
-
-          if (entity.HasDomainEvents)
-          {
-            var domainEvents = entity.DomainEvents!.ToList();
-
-            entity.ClearDomainEvents();
-
-            foreach (var domainEvent in domainEvents)
+            else if (typeof(TResponse) == typeof(Result))
             {
-              if (_notificationsContext.HasErrors)
-                return (TResponse)(object)_notificationsContext.Notifications;
+              var result = (Result)(object)response!;
 
-              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
-
-              await _mediator.Publish(domainEvent);
-            }
-          }
-        }
-
-        return response;
-      }
-      else if (typeof(TResponse) == typeof(Result))
-      {
-        var response = await next();
-
-        var entities = _unitOfWork.GetEntitiesPersistenceContext()!;
-
-        var responseResult = (Result)(object)response!;
-
-        foreach (var entity in entities)
-        {
-          _logger.LogInformation("Dispatch entity domain events {entityTypeName}", entity.GetType().Name);
-
-          if (entity.HasDomainEvents)
-          {
-            var domainEvents = entity.DomainEvents!.ToList();
-
-            entity.ClearDomainEvents();
-
-            foreach (var domainEvent in domainEvents)
-            {
-              if (!responseResult.IsValid)
+              if (!result.IsValid)
                 return response;
-
-              _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
-
-              await _mediator.Publish(domainEvent);
             }
+
+            _logger.LogInformation("Dispatch domain event {domainEvent}", domainEvent);
+
+            await _mediator.Publish(domainEvent);
           }
         }
-
-        return response;
       }
 
-      return await next();
+      return response;
     }
   }
 }

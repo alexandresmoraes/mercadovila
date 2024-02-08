@@ -35,7 +35,11 @@ namespace Common.EventBus.Integrations
 
     public IntegrationEventLog DeserializeJsonContent(Type type)
     {
-      IntegrationEvent = (JsonSerializer.Deserialize(Content, type) as IntegrationEvent)!;
+      IntegrationEvent = (JsonSerializer.Deserialize(Content, type, new JsonSerializerOptions()
+      {
+        PropertyNameCaseInsensitive = true
+      }) as IntegrationEvent)!;
+
       return this;
     }
   }

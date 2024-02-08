@@ -28,140 +28,132 @@ class CardVendaState extends State<CardVenda> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        await Modular.to.pushNamed('/vendas/details/${widget.item.id.toString()}');
-      },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    color:
-                        Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 0.0),
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10.0),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: Text(
-                    '#${widget.item.id}',
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                  ),
+                  color: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                 ),
-                const Expanded(child: SizedBox()),
-                VendasStatus(
-                  status: widget.item.status,
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Text(
+                  '#${widget.item.id}',
+                  style: Theme.of(context).primaryTextTheme.displayMedium,
                 ),
-              ],
-            ),
+              ),
+              const Expanded(child: SizedBox()),
+              VendasStatus(
+                status: widget.item.status,
+              ),
+            ],
           ),
-          ListTile(
-            visualDensity: const VisualDensity(vertical: -1, horizontal: -4),
-            contentPadding: const EdgeInsets.all(0),
-            minLeadingWidth: 0,
-            leading: isNullorEmpty(widget.item.compradorFotoUrl)
-                ? const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 24,
-                      backgroundImage: AssetImage('assets/person.png'),
-                    ),
-                  )
-                : CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => CircularProgress(
-                        color: Theme.of(context).primaryColorLight,
-                      ),
-                      errorWidget: (context, url, error) {
-                        return const CircleAvatar(
-                          radius: 21,
-                          backgroundImage: AssetImage('assets/person.png'),
-                        );
-                      },
-                      imageUrl:
-                          '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
-                      imageBuilder: (context, imageProvider) {
-                        return CircleAvatar(
-                          radius: 24,
-                          backgroundImage: imageProvider,
-                        );
-                      },
-                    ),
+        ),
+        ListTile(
+          visualDensity: const VisualDensity(vertical: -1, horizontal: -4),
+          contentPadding: const EdgeInsets.all(0),
+          minLeadingWidth: 0,
+          leading: isNullorEmpty(widget.item.compradorFotoUrl)
+              ? const CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 24,
+                    backgroundImage: AssetImage('assets/person.png'),
                   ),
-            title: Text(
-              widget.item.compradorNome,
-              style: Theme.of(context).primaryTextTheme.bodyLarge,
-            ),
-            subtitle: Text(
-              timeago.format(locale: 'pt_BR', widget.item.dataHora.toLocal()),
-              style: Theme.of(context).primaryTextTheme.displayMedium,
-            ),
-            trailing: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "R\$ ${widget.item.total}",
-                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                )
+              : CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.white,
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => CircularProgress(
+                      color: Theme.of(context).primaryColorLight,
+                    ),
+                    errorWidget: (context, url, error) {
+                      return const CircleAvatar(
+                        radius: 21,
+                        backgroundImage: AssetImage('assets/person.png'),
+                      );
+                    },
+                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
+                    imageBuilder: (context, imageProvider) {
+                      return CircleAvatar(
+                        radius: 24,
+                        backgroundImage: imageProvider,
+                      );
+                    },
+                  ),
                 ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      isProductsVisible = !isProductsVisible;
-                    });
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
-                    margin: const EdgeInsets.only(right: 10, top: 5),
-                    padding: const EdgeInsets.only(left: 5, right: 5),
-                    width: 80,
-                    height: 25,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 0,
-                          ),
-                          child: Text(
-                            'Detalhes',
-                            style: Theme.of(context).primaryTextTheme.bodySmall,
-                          ),
+          title: Text(
+            widget.item.compradorNome,
+            style: Theme.of(context).primaryTextTheme.bodyLarge,
+          ),
+          subtitle: Text(
+            timeago.format(locale: 'pt_BR', widget.item.dataHora.toLocal()),
+            style: Theme.of(context).primaryTextTheme.displayMedium,
+          ),
+          trailing: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "R\$ ${widget.item.total}",
+                style: Theme.of(context).primaryTextTheme.bodyLarge,
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isProductsVisible = !isProductsVisible;
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  margin: const EdgeInsets.only(right: 10, top: 5),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  width: 80,
+                  height: 25,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 0,
                         ),
-                      ],
-                    ),
+                        child: Text(
+                          'Detalhes',
+                          style: Theme.of(context).primaryTextTheme.bodySmall,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            height: isProductsVisible ? 180 : 0,
-            child: SingleChildScrollView(
-              child: SizedBox(
-                height: 180,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: _vendaItens(widget.item.itens),
-                ),
+        ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: isProductsVisible ? 180 : 0,
+          child: SingleChildScrollView(
+            child: SizedBox(
+              height: 180,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: _vendaItens(widget.item.itens),
               ),
             ),
           ),
-          Divider(
-            color: Modular.get<ThemeStore>().isDarkModeEnable
-                ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                : Theme.of(context).dividerTheme.color,
-          ),
-        ],
-      ),
+        ),
+        Divider(
+          color: Modular.get<ThemeStore>().isDarkModeEnable
+              ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+              : Theme.of(context).dividerTheme.color,
+        ),
+      ],
     );
   }
 
@@ -213,8 +205,7 @@ class CardVendaState extends State<CardVenda> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(
-                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     '${itens[i].preco}',

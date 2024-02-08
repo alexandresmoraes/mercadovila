@@ -60,4 +60,14 @@ class VendasRepository implements IVendasRepository {
 
     return VendaDetalheDto.fromJson(response.data);
   }
+
+  @override
+  Future<Either<ResultFailModel, void>> cancelarVenda(int vendaId) async {
+    try {
+      await dio.put('/api/vendas/cancelar/$vendaId');
+      return const Right(null);
+    } on DioError catch (err) {
+      return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+    }
+  }
 }

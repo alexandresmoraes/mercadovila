@@ -1,5 +1,4 @@
 ﻿using Common.WebAPI.Shared;
-using System.Text.Json;
 using Vendas.Domain.Events;
 
 namespace Vendas.Domain.Aggregates
@@ -43,7 +42,11 @@ namespace Vendas.Domain.Aggregates
 
     public override string ToString()
     {
-      return JsonSerializer.Serialize(this);
+      return $"Venda {Id} / " +
+        $"Comprador {Comprador?.Nome} / " +
+        $"Status {Status} / " +
+        $"DataHora {DataHora} / " +
+        $"Total {Total}";
     }
   }
 }

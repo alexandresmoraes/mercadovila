@@ -11,5 +11,10 @@ namespace Vendas.Domain.Events
     {
       Venda = venda;
     }
+
+    public override string ToString()
+    {
+      return $"Venda Cancelada / {Venda}";
+    }
   }
 }

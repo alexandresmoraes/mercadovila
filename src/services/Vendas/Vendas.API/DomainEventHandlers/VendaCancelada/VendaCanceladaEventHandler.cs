@@ -5,8 +5,7 @@ using Vendas.Domain.Events;
 
 namespace Vendas.API.DomainEventHandlers.VendaCancelada
 {
-  public class VendaCanceladaEventHandler
-    : INotificationHandler<VendaCanceladaEvent>
+  public class VendaCanceladaEventHandler : INotificationHandler<VendaCanceladaEvent>
   {
     private readonly ILogger<VendaCanceladaEvent> _logger;
     private readonly IIntegrationEventService _integrationEventService;

@@ -1,5 +1,4 @@
 ﻿using Common.WebAPI.Shared;
-using System.Text.Json;
 
 namespace Vendas.Domain.Aggregates
 {
@@ -30,7 +29,10 @@ namespace Vendas.Domain.Aggregates
 
     public override string ToString()
     {
-      return JsonSerializer.Serialize(this);
+      return $"VendaItem {Id} / " +
+        $"ProdutoId {ProdutoId} / " +
+        $"Nome {Nome} / " +
+        $"Preco {Preco}";
     }
   }
 }

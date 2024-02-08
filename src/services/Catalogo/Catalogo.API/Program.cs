@@ -23,6 +23,7 @@ builder.Services.AddSerilog();
 
 
 builder.Services.AddTransient<VendaCriadaIntegrationEventHandler>();
+builder.Services.AddTransient<VendaCanceladaIntegrationEventHandler>();
 
 builder.Services.AddSingleton<IEventBusSubscriptionsManager, EventBusSubscriptionsManager>();
 builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
@@ -72,4 +73,5 @@ void ConfigureEventBus(IApplicationBuilder app)
   var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
   eventBus.Subscribe<VendaCriadaIntegrationEvent, VendaCriadaIntegrationEventHandler>();
+  eventBus.Subscribe<VendaCanceladaIntegrationEvent, VendaCanceladaIntegrationEventHandler>();
 }

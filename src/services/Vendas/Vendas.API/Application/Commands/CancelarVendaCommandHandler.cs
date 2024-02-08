@@ -4,8 +4,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.API.Application.Commands
 {
-  public class CancelarVendaCommandHandler
-    : IRequestHandler<CancelarVendaCommand, Result>
+  public class CancelarVendaCommandHandler : IRequestHandler<CancelarVendaCommand, Result>
   {
     private readonly IVendasRepository _vendasRepository;
 
@@ -22,6 +21,9 @@ namespace Vendas.API.Application.Commands
 
       if (venda.Status == EnumVendaStatus.Pago)
         return Result.Fail($"Venda #{request.VendaId} encontra-se Pago.");
+
+      if (venda.Status == EnumVendaStatus.Cancelada)
+        return Result.Fail($"Venda #{request.VendaId} encontra-se Cancelada.");
 
       venda.Cancelar();
 

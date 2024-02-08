@@ -144,7 +144,13 @@ class VendasPageState extends State<VendasPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return CardVenda(item: item);
+          return InkWell(
+            onTap: (() async {
+              var refresh = await Modular.to.pushNamed<bool>('/vendas/details/${item.id.toString()}');
+              if (refresh ?? false) pagingVendasHojeController.refresh();
+            }),
+            child: CardVenda(item: item),
+          );
         },
       ),
     );
@@ -176,7 +182,13 @@ class VendasPageState extends State<VendasPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return CardVenda(item: item);
+          return InkWell(
+            onTap: () async {
+              var refresh = await Modular.to.pushNamed<bool>('/vendas/details/${item.id.toString()}');
+              if (refresh ?? false) pagingVendasSemanaController.refresh();
+            },
+            child: CardVenda(item: item),
+          );
         },
       ),
     );
@@ -208,7 +220,13 @@ class VendasPageState extends State<VendasPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return CardVenda(item: item);
+          return InkWell(
+            onTap: () async {
+              var refresh = await Modular.to.pushNamed<bool>('/vendas/details/${item.id.toString()}');
+              if (refresh ?? false) pagingVendasTodasController.refresh();
+            },
+            child: CardVenda(item: item),
+          );
         },
       ),
     );

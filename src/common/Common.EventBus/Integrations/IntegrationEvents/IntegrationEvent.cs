@@ -11,10 +11,11 @@ namespace Common.EventBus.Integrations.IntegrationEvents
     }
 
     [JsonConstructor]
-    public IntegrationEvent(string id, DateTime createDate)
+    public IntegrationEvent(string id, DateTime creationDate, string? key)
     {
       Id = id;
-      CreationDate = createDate;
+      CreationDate = creationDate;
+      Key = key;
     }
 
     [JsonInclude]

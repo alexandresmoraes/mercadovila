@@ -1,6 +1,7 @@
 ﻿using Common.EventBus;
 using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
+using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Results;
 using Common.WebAPI.Shared.Pipeline;
@@ -44,6 +45,9 @@ namespace Vendas.API.Config
 
       services.AddAuthServices();
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+      services.AddScoped<INotificationsContext, NotificationsContext>();
+
       services.AddScoped<ICompradoresRepository, CompradoresRepository>();
       services.AddScoped<IVendasRepository, VendasRepository>();
       services.AddScoped<IPagamentosRepository, PagamentosRepository>();
@@ -51,6 +55,7 @@ namespace Vendas.API.Config
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DispatchDomainEventsPipeline<,>));
 
       services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
 
