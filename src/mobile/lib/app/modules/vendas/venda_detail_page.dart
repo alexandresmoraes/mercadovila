@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -102,7 +103,9 @@ class VendaDetailPageState extends State<VendaDetailPage> {
           },
         ),
         bottomNavigationBar: Observer(builder: (_) {
-          return isAdmin && _controller.vendaDetailDto != null && _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
+          return isAdmin &&
+                  _controller.vendaDetailDto != null &&
+                  _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -123,7 +126,36 @@ class VendaDetailPageState extends State<VendaDetailPage> {
                         child: Observer(builder: (_) {
                           return TextButton(
                             onPressed: () async {
-                              await _controller.cancelar();
+                              showCupertinoModalPopup<void>(
+                                context: context,
+                                builder: (BuildContext context) => CupertinoActionSheet(
+                                  title: const Icon(Icons.question_answer),
+                                  actions: <Widget>[
+                                    CupertinoActionSheetAction(
+                                      isDestructiveAction: true,
+                                      onPressed: () async {
+                                        await _controller.cancelar();
+                                        Modular.to.pop(true);
+                                      },
+                                      child: const Text(
+                                        'Sim',
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Modular.to.pop();
+                                      },
+                                      child: const Text(
+                                        'Não',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
                             child: !_controller.isLoadingCancelar
                                 ? const Text(
