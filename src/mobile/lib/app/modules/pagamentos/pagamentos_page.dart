@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -138,10 +140,30 @@ class PagamentosPageState extends State<PagamentosPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return InkWell(
-            onTap: () async {
-              // TODO
-            },
+          return Slidable(
+            enabled: item.pagamentoStatus != EnumStatusPagamento.cancelado.index,
+            key: Key(item.pagamentoId.toString()),
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              dismissible: DismissiblePane(
+                closeOnCancel: true,
+                confirmDismiss: () {
+                  return cancelar(item.pagamentoId.toString());
+                },
+                onDismissed: () {},
+              ),
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.red,
+                  label: 'Cancelar?',
+                  icon: MdiIcons.closeOctagon,
+                  onPressed: (_) {
+                    cancelar(item.pagamentoId.toString());
+                  },
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -247,6 +269,40 @@ class PagamentosPageState extends State<PagamentosPage> {
         },
       ),
     );
+  }
+
+  Future<bool> cancelar(String pagamentoId) async {
+    return await showCupertinoModalPopup<bool>(
+          context: context,
+          builder: (BuildContext context) => CupertinoActionSheet(
+            title: const Icon(Icons.question_answer),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () async {
+                  Modular.to.pop(true);
+                  pagingController.refresh();
+                },
+                child: const Text(
+                  'Sim',
+                ),
+              ),
+              CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Modular.to.pop(false);
+                },
+                child: const Text(
+                  'Não',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override

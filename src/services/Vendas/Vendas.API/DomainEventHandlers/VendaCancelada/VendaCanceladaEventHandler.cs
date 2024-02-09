@@ -18,7 +18,7 @@ namespace Vendas.API.DomainEventHandlers.VendaCancelada
 
     public async Task Handle(VendaCanceladaEvent vendaCanceladaEvent, CancellationToken cancellationToken)
     {
-      _logger.LogTrace("Venda com Id: {VendaId} foi cancelada.", vendaCanceladaEvent.Venda.Id);
+      _logger.LogTrace("Event Handler: Venda com Id: {VendaId} foi cancelada.", vendaCanceladaEvent.Venda.Id);
 
       var vendaItens = vendaCanceladaEvent.Venda.VendaItens
         .Select(_ => new VendaCanceladaItemIntegrationEvent(
