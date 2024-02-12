@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -5,9 +7,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
+import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
+import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
+import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
@@ -17,7 +21,7 @@ class CarrinhoPage extends StatefulWidget {
 }
 
 class CarrinhoPageState extends State<CarrinhoPage> {
-  final carrinhoStore = Modular.get<CarrinhoStore>();
+  final carrinhoComprasStore = Modular.get<CarrinhoComprasStore>();
 
   List<String> orderProcess = ['Carrinho', 'Pagamento'];
 
@@ -39,6 +43,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     _scrollController = ScrollController(initialScrollOffset: _currentIndex.toDouble());
     _pageController = PageController(initialPage: _currentIndex);
     _pageController!.addListener(() {});
+
+    carrinhoComprasStore.load();
   }
 
   @override
@@ -58,7 +64,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 if (_currentIndex == 0) {
                   Modular.to.pop();
                 } else {
-                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  _pageController!.animateToPage(_currentIndex - 1,
+                      duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   if (_currentIndex == 0) {
                     step1Done = false;
                   } else if (_currentIndex == 1) {
@@ -116,7 +123,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -147,9 +156,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -170,8 +182,11 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -204,7 +219,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!
+                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -224,7 +240,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: carrinhoStore.isLoading
+                        gradient: carrinhoComprasStore.isLoading
                             ? LinearGradient(
                                 stops: const [0, .90],
                                 begin: Alignment.centerLeft,
@@ -243,16 +259,17 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                       width: MediaQuery.of(context).size.width,
                       child: TextButton(
                         onPressed: () async {
-                          if (carrinhoStore.isLoading) return;
+                          if (carrinhoComprasStore.isLoading) return;
 
                           if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                            _pageController!.animateToPage(_currentIndex + 1,
+                                duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                           } else if (_currentIndex == 1) {
-                            await carrinhoStore.criarVenda();
+                            //
                           }
                         },
                         child: Text(
-                          carrinhoStore.isLoading
+                          carrinhoComprasStore.isLoading
                               ? 'Aguarde..'
                               : _currentIndex == 0
                                   ? 'Ir para o detalhes'
@@ -277,7 +294,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
         child: Column(
           children: [
             Observer(builder: (_) {
-              if (carrinhoStore.carrinhoItens.isEmpty) {
+              if (carrinhoComprasStore.carrinhoComprasItens.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -295,9 +312,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: carrinhoStore.carrinhoItens.length,
+                itemCount: carrinhoComprasStore.carrinhoComprasItens.length,
                 itemBuilder: (_, index) {
-                  final item = carrinhoStore.carrinhoItens[index];
+                  final item = carrinhoComprasStore.carrinhoComprasItens[index];
 
                   return Slidable(
                     endActionPane: ActionPane(
@@ -315,7 +332,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
+                                      await Modular.get<CarrinhoStore>()
+                                          .removerCarrinhoItem(item.produtoId, item.quantidade);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -343,7 +361,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                         ),
                       ],
                     ),
-                    child: CardProdutoCarrinho(item),
+                    child: _cardProdutoCarrinho(item),
                   );
                 },
               );
@@ -366,7 +384,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto!.total}",
+                    "R\$ ${carrinhoComprasStore.carrinhoComprasDto!.total}",
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -384,7 +402,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               ),
               trailing: Observer(builder: (_) {
                 return Text(
-                  "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
+                  "R\$ ${carrinhoComprasStore.carrinhoComprasDto!.subtotal}",
                   style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                 );
               }),
@@ -407,37 +425,36 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Observer(builder: (_) {
-              return !carrinhoStore.selectOpcaoPagamento
-                  ? Container(
-                      padding: const EdgeInsets.all(2),
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Detalhes",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color:
-                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    )
-                  : const SizedBox.shrink();
+              return Container(
+                padding: const EdgeInsets.all(2),
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Detalhes",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold),
+                    )),
+              );
             }),
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0, top: 30),
@@ -466,7 +483,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.total}",
+                    "R\$ ${carrinhoComprasStore.carrinhoComprasDto?.total}",
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -485,7 +502,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               trailing: Observer(
                 builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.subtotal}",
+                    "R\$ ${carrinhoComprasStore.carrinhoComprasDto?.subtotal}",
                     style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                   );
                 },
@@ -493,6 +510,255 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _cardProdutoCarrinho(CarrinhoComprasItemDto item) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          SizedBox(
+            height: 200, // TODO
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardTheme.color,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, left: 120),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.nome,
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                    Text(
+                      item.descricao,
+                      style: Theme.of(context).primaryTextTheme.displayMedium,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    RichText(
+                        text:
+                            TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                      TextSpan(
+                        text: '${item.preco}',
+                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                      ),
+                      TextSpan(
+                        text: ' / ${item.unidadeMedida}',
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      )
+                    ])),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Preço pago",
+                                      style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    ),
+                                    Container(
+                                      decoration:
+                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      margin: const EdgeInsets.only(top: 5, bottom: 15),
+                                      padding: const EdgeInsets.only(),
+                                      child: Observer(builder: (_) {
+                                        return TextFormField(
+                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                          autocorrect: true,
+                                          initialValue: '5,50',
+                                          onChanged: (text) {},
+                                          decoration: InputDecoration(
+                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                                ? Theme.of(context).inputDecorationTheme.fillColor
+                                                : Theme.of(context).scaffoldBackgroundColor,
+                                            hintText: 'Coca-cola',
+                                            // errorText: _controller.getNomeError,
+                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Preço sugerido",
+                                      style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    ),
+                                    Container(
+                                      decoration:
+                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      margin: const EdgeInsets.only(top: 5, bottom: 15),
+                                      padding: const EdgeInsets.only(),
+                                      child: Observer(builder: (_) {
+                                        return TextFormField(
+                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                          autocorrect: true,
+                                          initialValue: '5,50',
+                                          onChanged: (text) {},
+                                          decoration: InputDecoration(
+                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                                ? Theme.of(context).inputDecorationTheme.fillColor
+                                                : Theme.of(context).scaffoldBackgroundColor,
+                                            hintText: 'Coca-cola',
+                                            // errorText: _controller.getNomeError,
+                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          true ? Icons.check_box : Icons.check_box_outline_blank,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Usar preço médio sugerido.',
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  height: 20,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: !item.isDisponivel() ? Colors.redAccent : Colors.green,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        item.getDisponiveis(),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).primaryTextTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                // TODO Observer(builder: (_) {
+                //   return IconButton(
+                //     onPressed: () async {
+                //       var favoritoRepository = Modular.get<IFavoritosRepository>();
+                //       try {
+                //         if (favoritoController.isFavorito) {
+                //           favoritoController.isFavorito = !favoritoController.isFavorito;
+                //           await favoritoRepository.removerFavorito(item.produtoId);
+                //         } else {
+                //           favoritoController.isFavorito = !favoritoController.isFavorito;
+                //           await favoritoRepository.adicionarFavorito(item.produtoId);
+                //         }
+                //       } catch (e) {
+                //         favoritoController.isFavorito = !favoritoController.isFavorito;
+                //       }
+                //     },
+                //     icon: favoritoController.isFavorito
+                //         ? Image.asset('assets/fav_red.png')
+                //         : Image.asset('assets/fav_grey.png'),
+                //   );
+                // })
+              ],
+            ),
+          ),
+          Observer(builder: (_) {
+            return CardCountProduto(
+              produtoId: item.produtoId,
+              estoqueDisponivel: item.estoque,
+              isAtivo: item.isAtivo,
+            );
+          }),
+          Positioned(
+            left: 0,
+            top: -20,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => const SizedBox(
+                width: 120,
+                height: 100,
+                child: CircularProgress(),
+              ),
+              errorWidget: (context, url, error) => const SizedBox(
+                width: 120,
+                height: 100,
+                child: CircleAvatar(
+                  radius: 50,
+                  child: Icon(
+                    MdiIcons.cameraOff,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${item.imageUrl}',
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                    ),
+                  ),
+                  height: 100,
+                  width: 120,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
