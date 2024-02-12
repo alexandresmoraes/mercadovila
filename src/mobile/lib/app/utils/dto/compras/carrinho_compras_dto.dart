@@ -30,6 +30,7 @@ class CarrinhoComprasItemDto {
     required this.isAtivo,
     required this.isFavorito,
     required this.quantidade,
+    required this.isPrecoMedioSugerido,
   });
   late final String produtoId;
   late final String nome;
@@ -43,6 +44,7 @@ class CarrinhoComprasItemDto {
   late final bool isAtivo;
   late final bool isFavorito;
   late final int quantidade;
+  late final bool isPrecoMedioSugerido;
 
   CarrinhoComprasItemDto.fromJson(Map<String, dynamic> json) {
     produtoId = json['produtoId'];
@@ -57,6 +59,7 @@ class CarrinhoComprasItemDto {
     isAtivo = json['isAtivo'];
     isFavorito = json['isFavorito'];
     quantidade = json['quantidade'];
+    isPrecoMedioSugerido = json['isPrecoMedioSugerido'];
   }
 
   bool isDisponivel() => isAtivo && estoque > 0;

@@ -25,6 +25,7 @@ abstract class CarrinhoComprasStoreBase with Store {
         isAtivo: true,
         isFavorito: true,
         quantidade: 5,
+        isPrecoMedioSugerido: true,
       )
     ],
     subtotal: 0,
