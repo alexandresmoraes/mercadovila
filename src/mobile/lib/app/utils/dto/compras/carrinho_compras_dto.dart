@@ -28,7 +28,6 @@ class CarrinhoComprasItemDto {
     required this.rating,
     required this.ratingCount,
     required this.isAtivo,
-    required this.isFavorito,
     required this.quantidade,
     required this.isPrecoMedioSugerido,
   });

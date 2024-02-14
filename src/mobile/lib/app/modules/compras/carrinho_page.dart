@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,10 +7,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
@@ -78,6 +74,14 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               icon: const Icon(MdiIcons.arrowLeft),
             ),
             automaticallyImplyLeading: _currentIndex == 0,
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  adicionarItemModalShow();
+                },
+                icon: const Icon(MdiIcons.plus),
+              ),
+            ],
           ),
           body: Column(
             children: [
@@ -498,6 +502,71 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void adicionarItemModalShow() {
+    WoltModalSheet.show<void>(
+      // pageIndexNotifier: pageIndexNotifier,
+      context: context,
+      pageListBuilder: (modalSheetContext) {
+        final textTheme = Theme.of(context).textTheme;
+        return [
+          WoltModalSheetPage(
+            hasSabGradient: false,
+            stickyActionBar: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(modalSheetContext).pop(),
+                    child: const SizedBox(
+                      height: 56,
+                      width: double.infinity,
+                      child: Center(child: Text('Cancel')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            topBarTitle: Text('Pagination', style: textTheme.titleSmall),
+            isTopBarLayerAlwaysVisible: true,
+            trailingNavBarWidget: IconButton(
+              padding: const EdgeInsets.all(16),
+              icon: const Icon(Icons.close),
+              onPressed: () => Modular.to.pop(),
+            ),
+            child: const Padding(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  300,
+                ),
+                child: Text(
+                  '''
+Pagination involves a sequence of screens the user navigates sequentially. We chose a lateral motion for these transitions. When proceeding forward, the next screen emerges from the right; moving backward, the screen reverts to its original position. We felt that sliding the next screen entirely from the right could be overly distracting. As a result, we decided to move and fade in the next page using 30% of the modal side.
+''',
+                )),
+          ),
+        ];
+      },
+      modalTypeBuilder: (context) {
+        final size = MediaQuery.of(context).size.width;
+        if (size < 768) {
+          return WoltModalType.bottomSheet;
+        } else {
+          return WoltModalType.dialog;
+        }
+      },
+      onModalDismissedWithBarrierTap: () {
+        debugPrint('Closed modal sheet with barrier tap');
+        Modular.to.pop();
+      },
+      maxDialogWidth: 560,
+      minDialogWidth: 400,
+      minPageHeight: 0.0,
+      maxPageHeight: 0.9,
     );
   }
 }

@@ -5,10 +5,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CardProdutoCarrinhoComprasCount extends StatelessWidget {
   final int quantidade;
+  final VoidCallback? onAdicionar;
+  final VoidCallback? onRemover;
 
   const CardProdutoCarrinhoComprasCount({
     Key? key,
     required this.quantidade,
+    required this.onAdicionar,
+    required this.onRemover,
   }) : super(key: key);
 
   @override
@@ -31,9 +35,7 @@ class CardProdutoCarrinhoComprasCount extends StatelessWidget {
           child: IconButton(
             padding: const EdgeInsets.all(0),
             visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-            onPressed: () async {
-              //TODO
-            },
+            onPressed: onAdicionar,
             icon: Icon(
               Icons.add,
               color: Theme.of(context).primaryColorLight,
@@ -83,7 +85,7 @@ class CardProdutoCarrinhoComprasCount extends StatelessWidget {
                           isDestructiveAction: true,
                           onPressed: () async {
                             Modular.to.pop();
-                            // TODO
+                            onRemover!();
                           },
                           child: const Text(
                             'Remover',
@@ -112,17 +114,12 @@ class CardProdutoCarrinhoComprasCount extends StatelessWidget {
                 )),
             Text(
               "$quantidade",
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .bodyLarge!
-                  .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
             ),
             IconButton(
               padding: const EdgeInsets.all(0),
               visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-              onPressed: () async {
-                // TODO
-              },
+              onPressed: onAdicionar,
               icon: Icon(
                 FontAwesomeIcons.plus,
                 size: 11,

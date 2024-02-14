@@ -6,7 +6,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
@@ -65,8 +64,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                       overflow: TextOverflow.ellipsis,
                     ),
                     RichText(
-                        text:
-                            TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                        text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
                       TextSpan(
                         text: '${widget.item.preco}',
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -93,26 +91,23 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       style: Theme.of(context).primaryTextTheme.displayMedium,
                                     ),
                                     Container(
-                                      decoration:
-                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
-                                      child: Observer(builder: (_) {
-                                        return TextFormField(
-                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                          autocorrect: true,
-                                          initialValue: '5,50',
-                                          onChanged: (text) {},
-                                          decoration: InputDecoration(
-                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                                : Theme.of(context).scaffoldBackgroundColor,
-                                            hintText: 'Coca-cola',
-                                            // errorText: _controller.getNomeError,
-                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                          ),
-                                        );
-                                      }),
+                                      child: TextFormField(
+                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                        autocorrect: true,
+                                        initialValue: '5,50',
+                                        onChanged: (text) {},
+                                        decoration: InputDecoration(
+                                          fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                              ? Theme.of(context).inputDecorationTheme.fillColor
+                                              : Theme.of(context).scaffoldBackgroundColor,
+                                          hintText: 'Preço pago',
+                                          // errorText: _controller.getNomeError,
+                                          contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                        ),
+                                      ),
                                     ),
                                   ]),
                             ),
@@ -130,26 +125,23 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       style: Theme.of(context).primaryTextTheme.displayMedium,
                                     ),
                                     Container(
-                                      decoration:
-                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
-                                      child: Observer(builder: (_) {
-                                        return TextFormField(
-                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                          autocorrect: true,
-                                          initialValue: '5,50',
-                                          onChanged: (text) {},
-                                          decoration: InputDecoration(
-                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                                ? Theme.of(context).inputDecorationTheme.fillColor
-                                                : Theme.of(context).scaffoldBackgroundColor,
-                                            hintText: 'Coca-cola',
-                                            // errorText: _controller.getNomeError,
-                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                                          ),
-                                        );
-                                      }),
+                                      child: TextFormField(
+                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                        autocorrect: true,
+                                        initialValue: '5,50',
+                                        onChanged: (text) {},
+                                        decoration: InputDecoration(
+                                          fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                              ? Theme.of(context).inputDecorationTheme.fillColor
+                                              : Theme.of(context).scaffoldBackgroundColor,
+                                          hintText: 'Preço sugerido',
+                                          // errorText: _controller.getNomeError,
+                                          contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                        ),
+                                      ),
                                     ),
                                   ]),
                             ),
@@ -216,11 +208,11 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
               ],
             ),
           ),
-          Observer(builder: (_) {
-            return CardProdutoCarrinhoComprasCount(
-              quantidade: 2,
-            );
-          }),
+          CardProdutoCarrinhoComprasCount(
+            quantidade: 2,
+            onAdicionar: () {},
+            onRemover: () {},
+          ),
           Positioned(
             left: 0,
             top: -20,

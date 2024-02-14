@@ -18,12 +18,11 @@ abstract class CarrinhoComprasStoreBase with Store {
         descricao: "descricao",
         imageUrl: "imageUrl",
         preco: 5.40,
-        unidadeMedida: "um",
+        unidadeMedida: "un",
         estoque: 7,
         rating: 5,
         ratingCount: 150,
         isAtivo: true,
-        isFavorito: true,
         quantidade: 5,
         isPrecoMedioSugerido: true,
       )

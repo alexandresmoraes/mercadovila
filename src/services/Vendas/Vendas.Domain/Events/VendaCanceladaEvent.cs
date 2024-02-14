@@ -5,7 +5,7 @@ namespace Vendas.Domain.Events
 {
   public record VendaCanceladaEvent : INotification
   {
-    public Venda Venda { get; private set; }
+    public Venda Venda { get; private init; }
 
     public VendaCanceladaEvent(Venda venda)
     {
