@@ -30,7 +30,7 @@ abstract class CardCountProdutoControllerBase with Store {
           GlobalSnackbar.error('Sem estoque');
         } else {
           quantidade++;
-          await Modular.get<CarrinhoStore>().adicionarCarrinhoItem(produtoId!, 1);
+          await carrinhoStore.adicionarCarrinhoItem(produtoId!, 1);
         }
       } catch (e) {
         quantidade--;
@@ -48,10 +48,10 @@ abstract class CardCountProdutoControllerBase with Store {
       try {
         if (itensFaltando > 0) {
           quantidade -= itensFaltando;
-          await Modular.get<CarrinhoStore>().removerCarrinhoItem(produtoId!, itensFaltando);
+          await carrinhoStore.removerCarrinhoItem(produtoId!, itensFaltando);
         } else {
           quantidade--;
-          await Modular.get<CarrinhoStore>().removerCarrinhoItem(produtoId!, 1);
+          await carrinhoStore.removerCarrinhoItem(produtoId!, 1);
         }
       } catch (e) {
         if (itensFaltando > 0) {

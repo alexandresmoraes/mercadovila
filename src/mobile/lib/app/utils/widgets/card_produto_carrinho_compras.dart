@@ -7,6 +7,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
+import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoCarrinhoCompras extends StatefulWidget {
@@ -64,7 +65,8 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                       overflow: TextOverflow.ellipsis,
                     ),
                     RichText(
-                        text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                        text:
+                            TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
                       TextSpan(
                         text: '${widget.item.preco}',
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
@@ -91,7 +93,8 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       style: Theme.of(context).primaryTextTheme.displayMedium,
                                     ),
                                     Container(
-                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      decoration:
+                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
                                       child: Observer(builder: (_) {
@@ -127,7 +130,8 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       style: Theme.of(context).primaryTextTheme.displayMedium,
                                     ),
                                     Container(
-                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                      decoration:
+                                          const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
                                       child: Observer(builder: (_) {
@@ -213,10 +217,8 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
             ),
           ),
           Observer(builder: (_) {
-            return CardCountProduto(
-              produtoId: widget.item.produtoId,
-              estoqueDisponivel: widget.item.estoque,
-              isAtivo: widget.item.isAtivo,
+            return CardProdutoCarrinhoComprasCount(
+              quantidade: 2,
             );
           }),
           Positioned(
