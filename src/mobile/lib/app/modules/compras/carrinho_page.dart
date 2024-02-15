@@ -12,7 +12,7 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
-  const CarrinhoPage({Key? key, this.title = 'Itens de compra'}) : super(key: key);
+  const CarrinhoPage({Key? key, this.title = 'Compra'}) : super(key: key);
   @override
   CarrinhoPageState createState() => CarrinhoPageState();
 }
@@ -61,7 +61,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 if (_currentIndex == 0) {
                   Modular.to.pop();
                 } else {
-                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  _pageController!.animateToPage(_currentIndex - 1,
+                      duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   if (_currentIndex == 0) {
                     step1Done = false;
                   } else if (_currentIndex == 1) {
@@ -127,7 +128,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -158,9 +161,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -181,8 +187,11 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -215,7 +224,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!
+                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -257,7 +267,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           if (carrinhoComprasStore.isLoading) return;
 
                           if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                            _pageController!.animateToPage(_currentIndex + 1,
+                                duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                           } else if (_currentIndex == 1) {
                             //
                           }
@@ -266,7 +277,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           carrinhoComprasStore.isLoading
                               ? 'Aguarde..'
                               : _currentIndex == 0
-                                  ? 'Ir para o detalhes'
+                                  ? 'Ir para detalhes'
                                   : 'Comprar',
                         ),
                       ),
@@ -326,7 +337,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
+                                      await Modular.get<CarrinhoStore>()
+                                          .removerCarrinhoItem(item.produtoId, item.quantidade);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -442,7 +454,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                       "Detalhes",
                       style: TextStyle(
                           fontSize: 14,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     )),
               );
@@ -510,26 +524,38 @@ class CarrinhoPageState extends State<CarrinhoPage> {
       // pageIndexNotifier: pageIndexNotifier,
       context: context,
       pageListBuilder: (modalSheetContext) {
-        final textTheme = Theme.of(context).textTheme;
+        final textTheme = Theme.of(context).primaryTextTheme;
         return [
           WoltModalSheetPage(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             hasSabGradient: false,
-            stickyActionBar: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(modalSheetContext).pop(),
-                    child: const SizedBox(
-                      height: 56,
-                      width: double.infinity,
-                      child: Center(child: Text('Cancel')),
-                    ),
-                  ),
-                ],
+            stickyActionBar: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                gradient: LinearGradient(
+                  stops: const [0, .90],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                ),
+              ),
+              margin: const EdgeInsets.all(8.0),
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: TextButton(
+                onPressed: () async {
+                  // TODO
+                  Modular.to.pop();
+                },
+                child: const Text(
+                  'Adicionar',
+                ),
               ),
             ),
-            topBarTitle: Text('Pagination', style: textTheme.titleSmall),
+            topBarTitle: Text(
+              'Adicionar item',
+              style: textTheme.titleLarge,
+            ),
             isTopBarLayerAlwaysVisible: true,
             trailingNavBarWidget: IconButton(
               padding: const EdgeInsets.all(16),
