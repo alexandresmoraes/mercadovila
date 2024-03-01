@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
@@ -97,14 +97,13 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       child: TextFormField(
                                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                                         autocorrect: true,
-                                        initialValue: '5,50',
+                                        initialValue: "${widget.item.preco}",
                                         onChanged: (text) {},
                                         decoration: InputDecoration(
                                           fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                               ? Theme.of(context).inputDecorationTheme.fillColor
                                               : Theme.of(context).scaffoldBackgroundColor,
                                           hintText: 'Preço pago',
-                                          // errorText: _controller.getNomeError,
                                           contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                         ),
                                       ),
@@ -129,16 +128,23 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
                                       child: TextFormField(
+                                        keyboardType: TextInputType.number,
                                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                                         autocorrect: true,
-                                        initialValue: '5,50',
-                                        onChanged: (text) {},
+                                        initialValue: "${widget.item.preco}",
+                                        onChanged: (text) {
+                                          try {
+                                            widget.item.preco = double.parse(text);
+                                            print(widget.item.preco);
+                                          } catch (e) {
+                                            print('A string não é um número válido. $text');
+                                          }
+                                        },
                                         decoration: InputDecoration(
                                           fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                               ? Theme.of(context).inputDecorationTheme.fillColor
                                               : Theme.of(context).scaffoldBackgroundColor,
                                           hintText: 'Preço sugerido',
-                                          // errorText: _controller.getNomeError,
                                           contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                         ),
                                       ),
@@ -209,9 +215,15 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
             ),
           ),
           CardProdutoCarrinhoComprasCount(
-            quantidade: 2,
-            onAdicionar: () {},
-            onRemover: () {},
+            quantidade: widget.item.quantidade,
+            onAdicionar: () {
+              Modular.get<CarrinhoComprasStore>().addCarrinhoComprasItemExistente(widget.item.produtoId);
+              setState(() {});
+            },
+            onRemover: () {
+              Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(widget.item.produtoId);
+              setState(() {});
+            },
           ),
           Positioned(
             left: 0,

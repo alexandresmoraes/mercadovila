@@ -24,6 +24,7 @@ class CarrinhoComprasItemDto {
     required this.imageUrl,
     required this.preco,
     required this.unidadeMedida,
+    required this.codigoBarras,
     required this.estoque,
     required this.rating,
     required this.ratingCount,
@@ -37,13 +38,13 @@ class CarrinhoComprasItemDto {
   late final String imageUrl;
   late final double preco;
   late final String unidadeMedida;
+  late final String codigoBarras;
   late final int estoque;
   late final int rating;
   late final int ratingCount;
   late final bool isAtivo;
-  late final bool isFavorito;
-  late final int quantidade;
-  late final bool isPrecoMedioSugerido;
+  late int quantidade;
+  late bool isPrecoMedioSugerido;
 
   CarrinhoComprasItemDto.fromJson(Map<String, dynamic> json) {
     produtoId = json['produtoId'];
@@ -52,11 +53,11 @@ class CarrinhoComprasItemDto {
     imageUrl = json['imageUrl'];
     preco = json['preco'];
     unidadeMedida = json['unidadeMedida'];
+    codigoBarras = json['codigoBarras'];
     estoque = json['estoque'];
     rating = json['rating'];
     ratingCount = json['ratingCount'];
     isAtivo = json['isAtivo'];
-    isFavorito = json['isFavorito'];
     quantidade = json['quantidade'];
     isPrecoMedioSugerido = json['isPrecoMedioSugerido'];
   }

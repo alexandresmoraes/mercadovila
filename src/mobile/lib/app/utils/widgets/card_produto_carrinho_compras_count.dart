@@ -76,36 +76,40 @@ class CardProdutoCarrinhoComprasCount extends StatelessWidget {
                 padding: const EdgeInsets.all(0),
                 visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
                 onPressed: () async {
-                  showCupertinoModalPopup<void>(
-                    context: context,
-                    builder: (BuildContext context) => CupertinoActionSheet(
-                      title: const Icon(Icons.question_answer),
-                      actions: <Widget>[
-                        CupertinoActionSheetAction(
-                          isDestructiveAction: true,
-                          onPressed: () async {
-                            Modular.to.pop();
-                            onRemover!();
-                          },
-                          child: const Text(
-                            'Remover',
-                          ),
-                        ),
-                        CupertinoActionSheetAction(
-                          isDefaultAction: true,
-                          onPressed: () {
-                            Modular.to.pop();
-                          },
-                          child: const Text(
-                            'Cancelar',
-                            style: TextStyle(
-                              color: Colors.blue,
+                  if (quantidade > 1) {
+                    onRemover!();
+                  } else {
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoActionSheet(
+                        title: const Icon(Icons.question_answer),
+                        actions: <Widget>[
+                          CupertinoActionSheetAction(
+                            isDestructiveAction: true,
+                            onPressed: () async {
+                              Modular.to.pop();
+                              onRemover!();
+                            },
+                            child: const Text(
+                              'Remover',
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
+                          CupertinoActionSheetAction(
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Modular.to.pop();
+                            },
+                            child: const Text(
+                              'Cancelar',
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
                 icon: Icon(
                   FontAwesomeIcons.minus,

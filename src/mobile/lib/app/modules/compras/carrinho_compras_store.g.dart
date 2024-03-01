@@ -9,6 +9,27 @@ part of 'carrinho_compras_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
+  Computed<bool>? _$isSelectedItemComputed;
+
+  @override
+  bool get isSelectedItem =>
+      (_$isSelectedItemComputed ??= Computed<bool>(() => super.isSelectedItem,
+              name: 'CarrinhoComprasStoreBase.isSelectedItem'))
+          .value;
+  Computed<num>? _$subtotalComputed;
+
+  @override
+  num get subtotal =>
+      (_$subtotalComputed ??= Computed<num>(() => super.subtotal,
+              name: 'CarrinhoComprasStoreBase.subtotal'))
+          .value;
+  Computed<num>? _$totalComputed;
+
+  @override
+  num get total => (_$totalComputed ??= Computed<num>(() => super.total,
+          name: 'CarrinhoComprasStoreBase.total'))
+      .value;
+
   late final _$carrinhoComprasItensAtom = Atom(
       name: 'CarrinhoComprasStoreBase.carrinhoComprasItens', context: context);
 
@@ -26,19 +47,19 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
     });
   }
 
-  late final _$carrinhoComprasDtoAtom = Atom(
-      name: 'CarrinhoComprasStoreBase.carrinhoComprasDto', context: context);
+  late final _$selectedItemAtom =
+      Atom(name: 'CarrinhoComprasStoreBase.selectedItem', context: context);
 
   @override
-  CarrinhoComprasDto? get carrinhoComprasDto {
-    _$carrinhoComprasDtoAtom.reportRead();
-    return super.carrinhoComprasDto;
+  ProdutoDto? get selectedItem {
+    _$selectedItemAtom.reportRead();
+    return super.selectedItem;
   }
 
   @override
-  set carrinhoComprasDto(CarrinhoComprasDto? value) {
-    _$carrinhoComprasDtoAtom.reportWrite(value, super.carrinhoComprasDto, () {
-      super.carrinhoComprasDto = value;
+  set selectedItem(ProdutoDto? value) {
+    _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
+      super.selectedItem = value;
     });
   }
 
@@ -58,20 +79,73 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
     });
   }
 
-  late final _$loadAsyncAction =
-      AsyncAction('CarrinhoComprasStoreBase.load', context: context);
+  late final _$CarrinhoComprasStoreBaseActionController =
+      ActionController(name: 'CarrinhoComprasStoreBase', context: context);
 
   @override
-  Future<CarrinhoComprasDto> load() {
-    return _$loadAsyncAction.run(() => super.load());
+  void clearSelectedItem() {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.clearSelectedItem');
+    try {
+      return super.clearSelectedItem();
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectItem(ProdutoDto item) {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.setSelectItem');
+    try {
+      return super.setSelectItem(item);
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addCarrinhoComprasItem() {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.addCarrinhoComprasItem');
+    try {
+      return super.addCarrinhoComprasItem();
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool addCarrinhoComprasItemExistente(String produtoId) {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.addCarrinhoComprasItemExistente');
+    try {
+      return super.addCarrinhoComprasItemExistente(produtoId);
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool removerCarrinhoComprasItem(String produtoId) {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.removerCarrinhoComprasItem');
+    try {
+      return super.removerCarrinhoComprasItem(produtoId);
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
   String toString() {
     return '''
 carrinhoComprasItens: ${carrinhoComprasItens},
-carrinhoComprasDto: ${carrinhoComprasDto},
-isLoading: ${isLoading}
+selectedItem: ${selectedItem},
+isLoading: ${isLoading},
+isSelectedItem: ${isSelectedItem},
+subtotal: ${subtotal},
+total: ${total}
     ''';
   }
 }
