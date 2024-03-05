@@ -4,7 +4,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
-  class PagamentoMapping : IEntityTypeConfiguration<Pagamento>
+  sealed class PagamentoMapping : IEntityTypeConfiguration<Pagamento>
   {
     public void Configure(EntityTypeBuilder<Pagamento> b)
     {

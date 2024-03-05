@@ -1,25 +1,65 @@
+using Common.EventBus.Integrations;
+using Common.WebAPI.PostgreSql;
+using Compras.API.Config;
+using Compras.Infra.Data;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System.Reflection;
+
+var appName = Assembly.GetEntryAssembly()!.GetName().Name;
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddApiConfiguration(builder.Configuration);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+builder.Services.AddDbContext<IntegrationEventContext>(options =>
 {
-  app.UseSwagger();
-  app.UseSwaggerUI();
+  options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),
+    opt =>
+    {
+      opt.MigrationsAssembly(Assembly.GetAssembly(typeof(ApplicationDbContext))!.GetName().Name);
+      opt.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
+    });
+});
+
+Log.Logger = CreateSerilogLogger(builder.Configuration);
+
+try
+{
+  Log.Information("Configuring web app ({ApplicationContext})...", appName);
+  var app = builder.Build();
+
+  app.UseApiConfiguration();
+
+  Log.Information("Applying migrations ({ApplicationContext})...", appName);
+
+  app.MigrateDbContext<ApplicationDbContext>((_, __) => { })
+  .MigrateDbContext<IntegrationEventContext>((_, __) => { });
+
+  Log.Information("Starting web app ({ApplicationContext})...", appName);
+  app.Run();
+
+  return 0;
+}
+catch (Exception ex)
+{
+  Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", appName);
+  return 1;
+}
+finally
+{
+  Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+{
+  return new LoggerConfiguration()
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}

@@ -1,34 +1,18 @@
-class CarrinhoComprasDto {
-  CarrinhoComprasDto({
-    required this.itens,
-    required this.subtotal,
-    required this.total,
-  });
-
-  late final num subtotal;
-  late final num total;
-  late final List<CarrinhoComprasItemDto> itens;
-
-  CarrinhoComprasDto.fromJson(Map<String, dynamic> json) {
-    subtotal = json['subtotal'];
-    total = json['total'];
-    itens = List<CarrinhoComprasItemDto>.from(json["itens"].map((_) => CarrinhoComprasItemDto.fromJson(_)));
-  }
-}
-
 class CarrinhoComprasItemDto {
   CarrinhoComprasItemDto({
     required this.produtoId,
     required this.nome,
     required this.descricao,
     required this.imageUrl,
-    required this.preco,
     required this.unidadeMedida,
     required this.codigoBarras,
+    required this.preco,
     required this.estoque,
     required this.rating,
     required this.ratingCount,
     required this.isAtivo,
+    required this.precoPago,
+    required this.precoSugerido,
     required this.quantidade,
     required this.isPrecoMedioSugerido,
   });
@@ -36,31 +20,17 @@ class CarrinhoComprasItemDto {
   late final String nome;
   late final String descricao;
   late final String imageUrl;
-  late final double preco;
   late final String unidadeMedida;
   late final String codigoBarras;
+  late final double preco;
   late final int estoque;
   late final int rating;
   late final int ratingCount;
   late final bool isAtivo;
+  late double precoPago;
+  late double precoSugerido;
   late int quantidade;
   late bool isPrecoMedioSugerido;
-
-  CarrinhoComprasItemDto.fromJson(Map<String, dynamic> json) {
-    produtoId = json['produtoId'];
-    nome = json['nome'];
-    descricao = json['descricao'];
-    imageUrl = json['imageUrl'];
-    preco = json['preco'];
-    unidadeMedida = json['unidadeMedida'];
-    codigoBarras = json['codigoBarras'];
-    estoque = json['estoque'];
-    rating = json['rating'];
-    ratingCount = json['ratingCount'];
-    isAtivo = json['isAtivo'];
-    quantidade = json['quantidade'];
-    isPrecoMedioSugerido = json['isPrecoMedioSugerido'];
-  }
 
   bool isDisponivel() => isAtivo && estoque > 0;
 
@@ -69,4 +39,12 @@ class CarrinhoComprasItemDto {
       : estoque == 1
           ? '1 disponível'
           : '$estoque disponíveis';
+
+  double getPrecoSugerido() {
+    if (isPrecoMedioSugerido) {
+      precoSugerido = ((preco * estoque) + (precoPago * quantidade)) / (quantidade + estoque);
+    }
+
+    return precoSugerido;
+  }
 }

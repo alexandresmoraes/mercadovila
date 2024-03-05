@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class CardProdutoCarrinhoCompras extends StatefulWidget {
   final CarrinhoComprasItemDto item;
@@ -22,7 +24,16 @@ class CardProdutoCarrinhoCompras extends StatefulWidget {
 }
 
 class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> {
-  bool isPrecoMedioSugerido = false;
+  TextEditingController precoPagoController = TextEditingController();
+  TextEditingController precoSugeridoController = TextEditingController();
+  CarrinhoComprasStore carrinhoComprasStore = Modular.get<CarrinhoComprasStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    precoPagoController = TextEditingController(text: '${widget.item.precoPago}');
+    precoSugeridoController = TextEditingController(text: '${widget.item.getPrecoSugerido()}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,17 +105,34 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
-                                      child: TextFormField(
-                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                        autocorrect: true,
-                                        initialValue: "${widget.item.preco}",
-                                        onChanged: (text) {},
-                                        decoration: InputDecoration(
-                                          fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                              ? Theme.of(context).inputDecorationTheme.fillColor
-                                              : Theme.of(context).scaffoldBackgroundColor,
-                                          hintText: 'Preço pago',
-                                          contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                      child: Focus(
+                                        onFocusChange: (hasFocus) {
+                                          if (!hasFocus) {
+                                            double? doubleValue = double.tryParse(precoPagoController.text);
+                                            if (doubleValue != null) {
+                                              if (kDebugMode) print(doubleValue);
+                                              widget.item.precoPago = doubleValue;
+                                              precoPagoController.text = '${widget.item.precoPago}';
+                                              precoSugeridoController.text = '${widget.item.getPrecoSugerido()}';
+                                              carrinhoComprasStore.update();
+                                            } else {
+                                              if (kDebugMode) print('A string não é um número válido. $precoPagoController.text');
+                                              precoPagoController.text = '${widget.item.precoPago}';
+                                              GlobalSnackbar.error('${precoPagoController.text} não é um número válido.');
+                                            }
+                                          }
+                                        },
+                                        child: TextFormField(
+                                          controller: precoPagoController,
+                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                          autocorrect: true,
+                                          decoration: InputDecoration(
+                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                                ? Theme.of(context).inputDecorationTheme.fillColor
+                                                : Theme.of(context).scaffoldBackgroundColor,
+                                            hintText: 'Preço pago',
+                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -127,25 +155,34 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                                       margin: const EdgeInsets.only(top: 5, bottom: 15),
                                       padding: const EdgeInsets.only(),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                        autocorrect: true,
-                                        initialValue: "${widget.item.preco}",
-                                        onChanged: (text) {
-                                          try {
-                                            widget.item.preco = double.parse(text);
-                                            print(widget.item.preco);
-                                          } catch (e) {
-                                            print('A string não é um número válido. $text');
+                                      child: Focus(
+                                        onFocusChange: (hasFocus) {
+                                          if (!hasFocus) {
+                                            double? doubleValue = double.tryParse(precoSugeridoController.text);
+                                            if (doubleValue != null) {
+                                              if (kDebugMode) print(doubleValue);
+                                              widget.item.precoSugerido = doubleValue;
+                                              precoSugeridoController.text = '${widget.item.precoSugerido}';
+                                            } else {
+                                              if (kDebugMode) print('A string não é um número válido. $precoSugeridoController.text');
+                                              precoSugeridoController.text = '${widget.item.precoSugerido}';
+                                              GlobalSnackbar.error('${precoSugeridoController.text} não é um número válido.');
+                                            }
                                           }
                                         },
-                                        decoration: InputDecoration(
-                                          fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                              ? Theme.of(context).inputDecorationTheme.fillColor
-                                              : Theme.of(context).scaffoldBackgroundColor,
-                                          hintText: 'Preço sugerido',
-                                          contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                        child: TextFormField(
+                                          controller: precoSugeridoController,
+                                          keyboardType: TextInputType.number,
+                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                          autocorrect: true,
+                                          enabled: !widget.item.isPrecoMedioSugerido,
+                                          decoration: InputDecoration(
+                                            fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                                ? Theme.of(context).inputDecorationTheme.fillColor
+                                                : Theme.of(context).scaffoldBackgroundColor,
+                                            hintText: 'Preço sugerido',
+                                            contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -157,13 +194,15 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                     ),
                     InkWell(
                       onTap: () {
-                        isPrecoMedioSugerido = !isPrecoMedioSugerido;
+                        widget.item.isPrecoMedioSugerido = !widget.item.isPrecoMedioSugerido;
+                        precoSugeridoController.text = '${widget.item.getPrecoSugerido()}';
+                        carrinhoComprasStore.update();
                         setState(() {});
                       },
                       child: Row(
                         children: [
                           Icon(
-                            isPrecoMedioSugerido ? Icons.check_box : Icons.check_box_outline_blank,
+                            widget.item.isPrecoMedioSugerido ? Icons.check_box : Icons.check_box_outline_blank,
                             color: Colors.white,
                           ),
                           Padding(
@@ -217,11 +256,13 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
           CardProdutoCarrinhoComprasCount(
             quantidade: widget.item.quantidade,
             onAdicionar: () {
-              Modular.get<CarrinhoComprasStore>().addCarrinhoComprasItemExistente(widget.item.produtoId);
+              carrinhoComprasStore.addCarrinhoComprasItemExistente(widget.item.produtoId);
+              carrinhoComprasStore.update();
               setState(() {});
             },
             onRemover: () {
               Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(widget.item.produtoId);
+              carrinhoComprasStore.update();
               setState(() {});
             },
           ),

@@ -41,10 +41,5 @@ namespace Vendas.Infra.Repositories
 
       return pagamento;
     }
-
-    public void Update(Pagamento pagamento)
-    {
-      _context.Entry(pagamento).State = EntityState.Modified;
-    }
   }
 }

@@ -23,6 +23,7 @@ abstract class CarrinhoComprasStoreBase with Store {
   void clearSelectedItem() {
     selectedItem = null;
     produtoItemController.text = "";
+    update();
   }
 
   @action
@@ -39,12 +40,14 @@ abstract class CarrinhoComprasStoreBase with Store {
         descricao: selectedItem!.descricao,
         imageUrl: selectedItem!.imageUrl,
         preco: selectedItem!.preco,
+        precoPago: selectedItem!.preco,
         unidadeMedida: selectedItem!.unidadeMedida,
         codigoBarras: selectedItem!.codigoBarras,
         estoque: selectedItem!.estoque,
         rating: selectedItem!.ratingCount,
         ratingCount: selectedItem!.ratingCount,
         isAtivo: selectedItem!.isAtivo,
+        precoSugerido: selectedItem!.preco,
         quantidade: 1,
         isPrecoMedioSugerido: true,
       ));
@@ -88,15 +91,21 @@ abstract class CarrinhoComprasStoreBase with Store {
     return false;
   }
 
+  @action
+  void update() {
+    subTotal = carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+    total = carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+  }
+
   @observable
   bool isLoading = false;
 
   @computed
   bool get isValidCarrinhoCompras => carrinhoComprasItens.isNotEmpty;
 
-  @computed
-  num get subtotal => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.preco * item.quantidade));
+  @observable
+  num subTotal = 0;
 
-  @computed
-  num get total => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + item.preco);
+  @observable
+  num total = 0;
 }

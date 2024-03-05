@@ -16,18 +16,12 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
       (_$isSelectedItemComputed ??= Computed<bool>(() => super.isSelectedItem,
               name: 'CarrinhoComprasStoreBase.isSelectedItem'))
           .value;
-  Computed<num>? _$subtotalComputed;
+  Computed<bool>? _$isValidCarrinhoComprasComputed;
 
   @override
-  num get subtotal =>
-      (_$subtotalComputed ??= Computed<num>(() => super.subtotal,
-              name: 'CarrinhoComprasStoreBase.subtotal'))
-          .value;
-  Computed<num>? _$totalComputed;
-
-  @override
-  num get total => (_$totalComputed ??= Computed<num>(() => super.total,
-          name: 'CarrinhoComprasStoreBase.total'))
+  bool get isValidCarrinhoCompras => (_$isValidCarrinhoComprasComputed ??=
+          Computed<bool>(() => super.isValidCarrinhoCompras,
+              name: 'CarrinhoComprasStoreBase.isValidCarrinhoCompras'))
       .value;
 
   late final _$carrinhoComprasItensAtom = Atom(
@@ -76,6 +70,38 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
   set isLoading(bool value) {
     _$isLoadingAtom.reportWrite(value, super.isLoading, () {
       super.isLoading = value;
+    });
+  }
+
+  late final _$subTotalAtom =
+      Atom(name: 'CarrinhoComprasStoreBase.subTotal', context: context);
+
+  @override
+  num get subTotal {
+    _$subTotalAtom.reportRead();
+    return super.subTotal;
+  }
+
+  @override
+  set subTotal(num value) {
+    _$subTotalAtom.reportWrite(value, super.subTotal, () {
+      super.subTotal = value;
+    });
+  }
+
+  late final _$totalAtom =
+      Atom(name: 'CarrinhoComprasStoreBase.total', context: context);
+
+  @override
+  num get total {
+    _$totalAtom.reportRead();
+    return super.total;
+  }
+
+  @override
+  set total(num value) {
+    _$totalAtom.reportWrite(value, super.total, () {
+      super.total = value;
     });
   }
 
@@ -138,14 +164,26 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
   }
 
   @override
+  void update() {
+    final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
+        name: 'CarrinhoComprasStoreBase.update');
+    try {
+      return super.update();
+    } finally {
+      _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 carrinhoComprasItens: ${carrinhoComprasItens},
 selectedItem: ${selectedItem},
 isLoading: ${isLoading},
+subTotal: ${subTotal},
+total: ${total},
 isSelectedItem: ${isSelectedItem},
-subtotal: ${subtotal},
-total: ${total}
+isValidCarrinhoCompras: ${isValidCarrinhoCompras}
     ''';
   }
 }

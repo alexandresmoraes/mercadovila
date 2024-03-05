@@ -19,4 +19,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Compras.Domain\Compras.Domain.csproj" />
+    <ProjectReference Include="..\Compras.Infra\Compras.Infra.csproj" />
+  </ItemGroup>
+
 </Project>

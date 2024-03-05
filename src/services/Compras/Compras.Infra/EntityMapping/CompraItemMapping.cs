@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Compras.Domain.Aggregates;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vendas.Domain.Aggregates;
 
-namespace Vendas.Infra.EntityMapping
+namespace Compras.Infra.EntityMapping
 {
-  sealed class VendaItemMapping : IEntityTypeConfiguration<VendaItem>
+  sealed class CompraItemMapping : IEntityTypeConfiguration<CompraItem>
   {
-    public void Configure(EntityTypeBuilder<VendaItem> b)
+    public void Configure(EntityTypeBuilder<CompraItem> b)
     {
-      b.ToTable("venda_itens");
+      b.ToTable("compra_itens");
 
       b.HasKey(c => c.Id);
       b.Property(e => e.Id)
@@ -44,8 +44,8 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("unidade_medida")
         .IsRequired();
 
-      b.Property(_ => _.VendaId)
-        .HasColumnName("venda_id");
+      b.Property(_ => _.CompraId)
+        .HasColumnName("compra_id");
 
       b.Ignore(_ => _.DomainEvents);
     }

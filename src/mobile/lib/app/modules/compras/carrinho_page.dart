@@ -403,7 +403,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               ),
               trailing: Observer(builder: (_) {
                 return Text(
-                  "R\$ ${carrinhoComprasStore.subtotal}",
+                  "R\$ ${carrinhoComprasStore.subTotal}",
                   style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                 );
               }),
@@ -501,7 +501,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               trailing: Observer(
                 builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoComprasStore.subtotal}",
+                    "R\$ ${carrinhoComprasStore.total}",
                     style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                   );
                 },

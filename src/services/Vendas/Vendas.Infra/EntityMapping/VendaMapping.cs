@@ -4,7 +4,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
-  class VendaMapping : IEntityTypeConfiguration<Venda>
+  sealed class VendaMapping : IEntityTypeConfiguration<Venda>
   {
     public void Configure(EntityTypeBuilder<Venda> b)
     {
