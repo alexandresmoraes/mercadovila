@@ -1,7 +1,6 @@
 ﻿using Common.EventBus;
 using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
-using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
 using Common.WebAPI.Results;
 using Common.WebAPI.Shared.Pipeline;
@@ -46,8 +45,6 @@ namespace Vendas.API.Config
       services.AddAuthServices();
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-      services.AddScoped<INotificationsContext, NotificationsContext>();
-
       services.AddScoped<ICompradoresRepository, CompradoresRepository>();
       services.AddScoped<IVendasRepository, VendasRepository>();
       services.AddScoped<IPagamentosRepository, PagamentosRepository>();
@@ -71,7 +68,6 @@ namespace Vendas.API.Config
 
     public static IApplicationBuilder UseApiConfiguration(this WebApplication app)
     {
-      app.RunMigrations<ApplicationDbContext>();
       app.MapHealthChecks();
 
       if (app.Environment.IsDevelopment())

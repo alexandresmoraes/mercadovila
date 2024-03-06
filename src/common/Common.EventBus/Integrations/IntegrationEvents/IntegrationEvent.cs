@@ -7,11 +7,11 @@ namespace Common.EventBus.Integrations.IntegrationEvents
     public IntegrationEvent()
     {
       Id = Guid.NewGuid().ToString();
-      CreationDate = DateTime.UtcNow;
+      CreationDate = DateTimeOffset.UtcNow;
     }
 
     [JsonConstructor]
-    public IntegrationEvent(string id, DateTime creationDate, string? key)
+    public IntegrationEvent(string id, DateTimeOffset creationDate, string? key)
     {
       Id = id;
       CreationDate = creationDate;
@@ -22,7 +22,7 @@ namespace Common.EventBus.Integrations.IntegrationEvents
     public string Id { get; private init; }
 
     [JsonInclude]
-    public DateTime CreationDate { get; private init; }
+    public DateTimeOffset CreationDate { get; private init; }
 
     [JsonInclude]
     public string? Key { get; private init; }

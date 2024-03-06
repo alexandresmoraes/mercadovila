@@ -28,6 +28,16 @@ namespace Compras.Infra.EntityMapping
         .HasForeignKey(_ => _.CompraId)
         .OnDelete(DeleteBehavior.Cascade);
 
+      b.Property(c => c.UserId)
+        .HasColumnName("user_id")
+        .HasMaxLength(36)
+        .IsRequired();
+
+      b.Property(c => c.UserEmail)
+        .HasColumnName("user_email")
+        .HasMaxLength(128)
+        .IsRequired();
+
       b.Ignore(_ => _.DomainEvents);
     }
   }

@@ -77,10 +77,7 @@ namespace Vendas.API.Application.Commands
       var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
-      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse
-      {
-        Id = venda.Id,
-      });
+      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse(venda.Id));
     }
   }
 }

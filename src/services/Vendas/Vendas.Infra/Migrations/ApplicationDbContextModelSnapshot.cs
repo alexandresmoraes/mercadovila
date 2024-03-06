@@ -72,8 +72,8 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DataHora")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
 
                     b.Property<int>("Status")
@@ -107,8 +107,8 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DataHora")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
 
                     b.Property<int>("Status")
@@ -210,7 +210,7 @@ namespace Vendas.Infra.Migrations
                     b.HasOne("Vendas.Domain.Aggregates.Pagamento", null)
                         .WithMany("Vendas")
                         .HasForeignKey("pagamento_id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Comprador");
                 });

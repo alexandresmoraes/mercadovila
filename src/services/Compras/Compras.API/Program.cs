@@ -8,7 +8,7 @@ using System.Reflection;
 
 var appName = Assembly.GetEntryAssembly()!.GetName().Name;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 

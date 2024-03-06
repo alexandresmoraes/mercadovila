@@ -32,8 +32,16 @@ namespace Compras.Infra.EntityMapping
         .HasColumnName("descricao")
         .IsRequired();
 
-      b.Property(_ => _.Preco)
-        .HasColumnName("preco")
+      b.Property(_ => _.PrecoPago)
+        .HasColumnName("preco_pago")
+        .IsRequired();
+
+      b.Property(_ => _.PrecoSugerido)
+        .HasColumnName("preco_sugerido")
+        .IsRequired();
+
+      b.Property(_ => _.IsPrecoMedioSugerido)
+        .HasColumnName("preco_medio_sugerido")
         .IsRequired();
 
       b.Property(_ => _.Quantidade)

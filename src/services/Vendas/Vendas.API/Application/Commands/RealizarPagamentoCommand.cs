@@ -7,8 +7,8 @@ namespace Vendas.API.Application.Commands
 {
   public record RealizarPagamentoCommand : IRequest<Result<RealizarPagamentoCommandResponse>>
   {
-    public string UserId { get; set; } = null!;
-    public EnumTipoPagamento TipoPagamento { get; set; }
-    public IEnumerable<long> VendasId { get; set; } = Enumerable.Empty<long>();
+    public string UserId { get; init; } = null!;
+    public EnumTipoPagamento TipoPagamento { get; init; }
+    public IEnumerable<long> VendasId { get; init; } = Enumerable.Empty<long>();
   }
 }

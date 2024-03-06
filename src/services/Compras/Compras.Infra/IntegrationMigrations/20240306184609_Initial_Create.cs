@@ -17,7 +17,7 @@ namespace Compras.Infra.IntegrationMigrations
                     event_type_name = table.Column<string>(type: "text", nullable: false),
                     state = table.Column<int>(type: "integer", nullable: false),
                     times_sent = table.Column<int>(type: "integer", nullable: false),
-                    creation_time = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    creation_time = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
                     transaction_id = table.Column<string>(type: "text", nullable: false)
                 },

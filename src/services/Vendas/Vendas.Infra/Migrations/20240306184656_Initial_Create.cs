@@ -36,7 +36,7 @@ namespace Vendas.Infra.Migrations
                     tipo = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
-                    datahora = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace Vendas.Infra.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     comprador_id = table.Column<long>(type: "bigint", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
-                    datahora = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     total = table.Column<decimal>(type: "numeric", nullable: false),
                     pagamento_id = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -75,7 +75,7 @@ namespace Vendas.Infra.Migrations
                         column: x => x.pagamento_id,
                         principalTable: "pagamentos",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

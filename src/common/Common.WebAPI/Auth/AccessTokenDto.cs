@@ -6,7 +6,7 @@
     public int ExpiresIn { get; private set; }
     public string TokenType { get; private set; }
     public string RefreshToken { get; private set; }
-    public long IssuedUtc { get; private set; } = DateTimeOffset.Now.ToUnixTimeSeconds();
+    public long IssuedUtc { get; private set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
     public AccessTokenDto(string accessToken, int expiresIn, string tokenType, string refreshToken)
     {

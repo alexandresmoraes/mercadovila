@@ -9,7 +9,7 @@ namespace Vendas.Domain.Aggregates
     public IReadOnlyCollection<VendaItem> VendaItens => _vendaItens;
     public Comprador Comprador { get; private set; } = null!;
     public EnumVendaStatus Status { get; private set; }
-    public DateTime DataHora { get; private set; }
+    public DateTimeOffset DataHora { get; private set; }
     public decimal Total { get; private set; }
 
     public Venda() { }
@@ -20,7 +20,7 @@ namespace Vendas.Domain.Aggregates
       _vendaItens = vendaItens.ToList();
       Status = EnumVendaStatus.PendentePagamento;
       Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
-      DataHora = DateTime.UtcNow;
+      DataHora = DateTimeOffset.UtcNow;
     }
 
     public void Cancelar()

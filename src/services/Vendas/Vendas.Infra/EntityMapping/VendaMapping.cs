@@ -22,8 +22,8 @@ namespace Vendas.Infra.EntityMapping
 
       b.Property(_ => _.Status)
         .HasColumnName("status")
-       .IsRequired()
-       .HasConversion(
+        .IsRequired()
+        .HasConversion(
            v => (int)v,
            v => (EnumVendaStatus)v);
 

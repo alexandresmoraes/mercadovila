@@ -16,7 +16,7 @@ namespace Common.EventBus.Integrations.IntegrationEvents
     }
 
     [JsonConstructor]
-    public VendaCanceladaIntegrationEvent(long vendaId, string userId, List<VendaCanceladaItemIntegrationEvent> vendaItens, string id, DateTime creationDate, string? key)
+    public VendaCanceladaIntegrationEvent(long vendaId, string userId, List<VendaCanceladaItemIntegrationEvent> vendaItens, string id, DateTimeOffset creationDate, string? key)
       : base(id, creationDate, key)
     {
       VendaId = vendaId;

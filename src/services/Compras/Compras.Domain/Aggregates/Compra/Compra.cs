@@ -7,16 +7,20 @@ namespace Compras.Domain.Aggregates
   {
     private readonly List<CompraItem> _compraItens = new List<CompraItem>();
     public IReadOnlyCollection<CompraItem> CompraItens => _compraItens;
-    public DateTime DataHora { get; private set; }
+    public DateTimeOffset DataHora { get; private set; }
     public decimal Total { get; private set; }
+    public string UserId { get; private set; } = null!;
+    public string UserEmail { get; private set; } = null!;
 
     public Compra() { }
 
-    public Compra(IEnumerable<CompraItem> vendaItens)
+    public Compra(IEnumerable<CompraItem> vendaItens, string userId, string userEmail)
     {
       _compraItens = vendaItens.ToList();
-      Total = vendaItens.Sum(_ => _.Preco * _.Quantidade);
-      DataHora = DateTime.UtcNow;
+      Total = vendaItens.Sum(_ => _.PrecoPago * _.Quantidade);
+      DataHora = DateTimeOffset.UtcNow;
+      UserId = userId;
+      UserEmail = userEmail;
 
       AddDomainEvent(new CompraCriadaEvent(this));
     }
@@ -25,7 +29,8 @@ namespace Compras.Domain.Aggregates
     {
       return $"Compra {Id} / " +
         $"DataHora {DataHora} / " +
-        $"Total {Total}";
+        $"Total {Total} " +
+        $"UserEmail {UserEmail}";
     }
   }
 }

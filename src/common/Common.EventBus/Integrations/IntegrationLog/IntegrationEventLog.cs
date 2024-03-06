@@ -29,7 +29,7 @@ namespace Common.EventBus.Integrations
     public IntegrationEvent IntegrationEvent { get; private set; } = null!;
     public EnumEventState State { get; set; }
     public int TimesSent { get; set; }
-    public DateTime CreationTime { get; private set; }
+    public DateTimeOffset CreationTime { get; private set; }
     public string Content { get; private set; } = null!;
     public string TransactionId { get; private set; } = null!;
 

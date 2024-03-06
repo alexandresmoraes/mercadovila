@@ -12,7 +12,7 @@ namespace Vendas.Domain.Aggregates
     public EnumTipoPagamento Tipo { get; private set; }
     public EnumStatusPagamento Status { get; private set; }
     public decimal Valor { get; private set; }
-    public DateTime DataHora { get; private set; }
+    public DateTimeOffset DataHora { get; private set; }
 
     public Pagamento() { }
 
@@ -22,7 +22,7 @@ namespace Vendas.Domain.Aggregates
       _vendas = vendas.ToList();
       Tipo = tipo;
       Valor = vendas.Sum(_ => _.Total);
-      DataHora = DateTime.UtcNow;
+      DataHora = DateTimeOffset.UtcNow;
       Status = EnumStatusPagamento.Ativo;
 
       _vendas.ForEach(venda => venda.RealizarPagamento());
