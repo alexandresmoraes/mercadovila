@@ -27,6 +27,7 @@ import 'package:vilasesmo/app/utils/http/dio_api.dart';
 import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/carrinho_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/compras_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
@@ -37,14 +38,6 @@ import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => CarrinhoStore()),
-    Bind.lazySingleton((i) => ThemeStore()),
-    Bind.lazySingleton((i) => AccountStore()),
-    Bind.lazySingleton((i) => SearchFilterStore()),
-    Bind.lazySingleton((i) => PagamentosStore()),
-    Bind.factory((i) => CardCountProdutoController()),
-    Bind.factory((i) => FavoritoController()),
-    Bind.factory((i) => HomePageController()),
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
@@ -53,17 +46,27 @@ class AppModule extends Module {
         sendTimeout: kReleaseMode ? 20000 : 0,
       ),
     ),
-    BindInject((i) => DioApi(i.get<BaseOptions>()), isSingleton: true, isLazy: true),
-    BindInject((i) => AuthService(), isSingleton: true, isLazy: true),
-    BindInject((i) => AccountRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => CatalogoRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => FavoritosRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => CarrinhoRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => VendasRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => PagamentosRepository(), isSingleton: true, isLazy: true),
+    Bind.lazySingleton((i) => CarrinhoStore()),
+    Bind.lazySingleton((i) => ThemeStore()),
+    Bind.lazySingleton((i) => AccountStore()),
+    Bind.lazySingleton((i) => SearchFilterStore()),
+    Bind.lazySingleton((i) => PagamentosStore()),
+    BindInject((i) => DioApi(i.get<BaseOptions>())),
+    Bind.factory((i) => CardCountProdutoController()),
+    Bind.factory((i) => FavoritoController()),
+    Bind.factory((i) => HomePageController()),
+    BindInject((i) => AuthService()),
+    BindInject((i) => AccountRepository()),
+    BindInject((i) => CatalogoRepository()),
+    BindInject((i) => FavoritosRepository()),
+    BindInject((i) => CarrinhoRepository()),
+    BindInject((i) => VendasRepository()),
+    BindInject((i) => ComprasRepository()),
+    BindInject((i) => PagamentosRepository()),
+
     //TODO: remover itens
     Bind.factory((i) => ProdutosEditController()),
-    BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),
+    BindInject((i) => ProdutosRepository()),
   ];
 
   @override

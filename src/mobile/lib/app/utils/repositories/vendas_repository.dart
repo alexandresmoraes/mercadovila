@@ -20,7 +20,7 @@ class VendasRepository implements IVendasRepository {
   void dispose() {}
 
   @override
-  Future<Either<ResultFailModel, VendaResponseModel>> createVenda(VendaModel vendaModel) async {
+  Future<Either<ResultFailModel, VendaResponseModel>> criarVenda(VendaModel vendaModel) async {
     try {
       var response = await dio.post('/api/vendas', data: vendaModel.toJson());
       var result = VendaResponseModel.fromJson(response.data);

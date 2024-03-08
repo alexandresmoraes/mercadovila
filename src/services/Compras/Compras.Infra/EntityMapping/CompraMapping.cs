@@ -38,6 +38,10 @@ namespace Compras.Infra.EntityMapping
         .HasMaxLength(128)
         .IsRequired();
 
+      b.Property(c => c.UserFotoUrl)
+        .HasColumnName("user_foto_url")
+        .HasMaxLength(128);
+
       b.Ignore(_ => _.DomainEvents);
     }
   }

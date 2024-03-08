@@ -4,6 +4,7 @@ using Common.EventBus.Integrations;
 using Common.EventBus.Integrations.IntegrationLog;
 using Common.Grpc;
 using Common.WebAPI.Logs;
+using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
 using GrpcVendas;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,6 @@ using Vendas.API.Config;
 using Vendas.Infra.Data;
 
 var appName = Assembly.GetEntryAssembly()!.GetName().Name;
-
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,12 +39,7 @@ builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Data
 builder.Services.AddScoped<IVendasQueries, VendasQueries>();
 builder.Services.AddScoped<IPagamentosQueries, PagamentoQueries>();
 
-
-
-
-
-
-
+builder.Services.AddScoped<INotificationsContext, NotificationsContext>();
 
 
 

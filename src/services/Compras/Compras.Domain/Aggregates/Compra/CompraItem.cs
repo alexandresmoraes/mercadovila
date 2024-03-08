@@ -19,7 +19,7 @@ namespace Compras.Domain.Aggregates
 
     public CompraItem() { }
 
-    public CompraItem(string produtoId, string nome, string imageUrl, string descricao, int estoqueAtual, decimal precoPago, decimal precoSugerido, bool isPrecoMedioSugerido, int quantidade, string unidadeMedida, long compraId, Compra compra)
+    public CompraItem(string produtoId, string nome, string imageUrl, string descricao, int estoqueAtual, decimal precoPago, decimal precoSugerido, bool isPrecoMedioSugerido, int quantidade, string unidadeMedida)
     {
       ProdutoId = produtoId;
       Nome = nome;
@@ -31,8 +31,6 @@ namespace Compras.Domain.Aggregates
       IsPrecoMedioSugerido = isPrecoMedioSugerido;
       Quantidade = quantidade;
       UnidadeMedida = unidadeMedida;
-      CompraId = compraId;
-      Compra = compra;
     }
 
     public override string ToString()

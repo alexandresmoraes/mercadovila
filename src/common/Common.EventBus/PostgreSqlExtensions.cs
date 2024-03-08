@@ -11,8 +11,6 @@ namespace Common.EventBus
     {
       options.UseNpgsql(configuration.GetConnectionString("Default"), b => b.MigrationsAssembly(appName));
 
-      AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
       return options;
     }
   }

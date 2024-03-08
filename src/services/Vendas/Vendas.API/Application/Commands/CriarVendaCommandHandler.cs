@@ -9,8 +9,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.API.Application.Commands
 {
-  public class CriarVendaCommandHandler
-    : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
+  public class CriarVendaCommandHandler : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
   {
     private readonly ICompradoresRepository _compradorRepository;
     private readonly IVendasRepository _vendaRepository;

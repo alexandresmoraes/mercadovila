@@ -26,7 +26,7 @@ namespace Compras.Infra.IntegrationMigrations
                 {
                     b.Property<string>("EventId")
                         .HasColumnType("text")
-                        .HasColumnName("entity_id");
+                        .HasColumnName("event_id");
 
                     b.Property<string>("Content")
                         .IsRequired()

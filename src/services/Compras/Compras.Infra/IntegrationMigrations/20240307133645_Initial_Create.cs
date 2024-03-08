@@ -13,7 +13,7 @@ namespace Compras.Infra.IntegrationMigrations
                 name: "integration_event",
                 columns: table => new
                 {
-                    entity_id = table.Column<string>(type: "text", nullable: false),
+                    event_id = table.Column<string>(type: "text", nullable: false),
                     event_type_name = table.Column<string>(type: "text", nullable: false),
                     state = table.Column<int>(type: "integer", nullable: false),
                     times_sent = table.Column<int>(type: "integer", nullable: false),
@@ -23,7 +23,7 @@ namespace Compras.Infra.IntegrationMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_integration_event", x => x.entity_id);
+                    table.PrimaryKey("PK_integration_event", x => x.event_id);
                 });
         }
 

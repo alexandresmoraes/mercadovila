@@ -1,14 +1,15 @@
 using Common.EventBus.Integrations;
+using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
+using Compras.API.Application.Queries;
 using Compras.API.Config;
 using Compras.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Data;
 using System.Reflection;
 
 var appName = Assembly.GetEntryAssembly()!.GetName().Name;
-
-//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApiConfiguration(builder.Configuration);
+
+builder.Services.AddAuthConfig(builder.Configuration);
+
+builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Database.GetDbConnection());
+builder.Services.AddScoped<IComprasQueries, ComprasQueries>();
+
+builder.Services.AddScoped<INotificationsContext, NotificationsContext>();
 
 builder.Services.AddDbContext<IntegrationEventContext>(options =>
 {

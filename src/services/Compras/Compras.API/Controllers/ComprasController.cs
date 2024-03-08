@@ -1,5 +1,4 @@
-﻿using Common.WebAPI.Auth;
-using Common.WebAPI.Results;
+﻿using Common.WebAPI.Results;
 using Compras.API.Application.Commands;
 using Compras.API.Application.Queries;
 using Compras.API.Application.Responses;
@@ -15,13 +14,11 @@ namespace Compras.API.Controllers
   public class ComprasController : ControllerBase
   {
     private readonly IMediator _mediator;
-    private readonly IAuthService _authService;
     private readonly IComprasQueries _comprasQueries;
 
-    public ComprasController(IMediator mediator, IAuthService authService, IComprasQueries comprasQueries)
+    public ComprasController(IMediator mediator, IComprasQueries comprasQueries)
     {
       _mediator = mediator;
-      _authService = authService;
       _comprasQueries = comprasQueries;
     }
 
@@ -34,11 +31,24 @@ namespace Compras.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<CriarCompraCommandResponse>> PostAsync([FromBody] CriarCompraCommand request, CancellationToken cancellationToken = default)
-    {
-      request.UserId = _authService.GetUserId();
-      request.UserEmail = _authService.GetUserEmail();
+      => await _mediator.Send(request, cancellationToken);
 
-      return await _mediator.Send(request, cancellationToken);
+    /// <summary>
+    /// Retorna a compra por id
+    /// </summary>
+    // GET api/compras/{compraId}
+    [HttpGet("{compraId:long}")]
+    [ProducesResponseType(typeof(CompraDetalheDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<CompraDetalheDto>> GetVendaAsync([FromRoute] long compraId, CancellationToken cancellationToken = default)
+    {
+      var compra = await _comprasQueries.GetCompraAsync(compraId, cancellationToken);
+
+      if (compra is null)
+        return Result.NotFound<CompraDetalheDto>();
+
+      return Result.Ok(compra!);
     }
 
     /// <summary>

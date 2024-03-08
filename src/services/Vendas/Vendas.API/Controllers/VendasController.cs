@@ -47,7 +47,7 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(typeof(VendaDetalheDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<VendaDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
+    public async Task<Result<VendaDetalheDto>> GetVendaAsync([FromRoute] long vendaId, CancellationToken cancellationToken = default)
     {
       var venda = await _vendasQueries.GetVendaAsync(vendaId, cancellationToken);
 

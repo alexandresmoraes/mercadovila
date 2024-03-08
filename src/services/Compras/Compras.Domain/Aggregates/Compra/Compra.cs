@@ -11,16 +11,18 @@ namespace Compras.Domain.Aggregates
     public decimal Total { get; private set; }
     public string UserId { get; private set; } = null!;
     public string UserEmail { get; private set; } = null!;
+    public string? UserFotoUrl { get; private set; }
 
     public Compra() { }
 
-    public Compra(IEnumerable<CompraItem> vendaItens, string userId, string userEmail)
+    public Compra(IEnumerable<CompraItem> compraItens, string userId, string userEmail, string? userFotoUrl)
     {
-      _compraItens = vendaItens.ToList();
-      Total = vendaItens.Sum(_ => _.PrecoPago * _.Quantidade);
+      _compraItens = compraItens.ToList();
+      Total = compraItens.Sum(_ => _.PrecoPago * _.Quantidade);
       DataHora = DateTimeOffset.UtcNow;
       UserId = userId;
       UserEmail = userEmail;
+      UserFotoUrl = userFotoUrl;
 
       AddDomainEvent(new CompraCriadaEvent(this));
     }

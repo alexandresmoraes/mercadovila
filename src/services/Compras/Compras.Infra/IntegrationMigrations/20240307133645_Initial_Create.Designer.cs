@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Vendas.Infra.IntegrationMigrations
+namespace Compras.Infra.IntegrationMigrations
 {
     [DbContext(typeof(IntegrationEventContext))]
-    [Migration("20240306184645_Initial_Create")]
+    [Migration("20240307133645_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,7 @@ namespace Vendas.Infra.IntegrationMigrations
                 {
                     b.Property<string>("EventId")
                         .HasColumnType("text")
-                        .HasColumnName("entity_id");
+                        .HasColumnName("event_id");
 
                     b.Property<string>("Content")
                         .IsRequired()

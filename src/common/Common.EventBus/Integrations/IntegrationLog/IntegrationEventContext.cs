@@ -21,7 +21,7 @@ namespace Common.EventBus.Integrations
       b.HasKey(e => e.EventId);
 
       b.Property(e => e.EventId)
-        .HasColumnName("entity_id")
+        .HasColumnName("event_id")
         .IsRequired();
 
       b.Property(e => e.Content)

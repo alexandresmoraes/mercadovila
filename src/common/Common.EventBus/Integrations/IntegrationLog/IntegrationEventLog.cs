@@ -27,11 +27,19 @@ namespace Common.EventBus.Integrations
     public string? EventTypeShortName => EventTypeName.Split('.')?.Last();
     [NotMapped]
     public IntegrationEvent IntegrationEvent { get; private set; } = null!;
-    public EnumEventState State { get; set; }
-    public int TimesSent { get; set; }
+    public EnumEventState State { get; private set; }
+    public int TimesSent { get; private set; }
     public DateTimeOffset CreationTime { get; private set; }
     public string Content { get; private set; } = null!;
     public string TransactionId { get; private set; } = null!;
+
+    public void UpdateStatus(EnumEventState status)
+    {
+      State = status;
+
+      if (status == EnumEventState.InProgress)
+        TimesSent++;
+    }
 
     public IntegrationEventLog DeserializeJsonContent(Type type)
     {
