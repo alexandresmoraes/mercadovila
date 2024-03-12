@@ -24,19 +24,17 @@ namespace Vendas.Infra.Repositories
       var venda = await _context
         .Vendas
         .Include(v => v.Comprador)
-        .FirstOrDefaultAsync(v => v.Id == vendaId);
-
-      if (venda is null)
-      {
-        venda = _context.Vendas
+        .FirstOrDefaultAsync(v => v.Id == vendaId)
+      ?? _context.Vendas
           .Local
           .FirstOrDefault(p => p.Id == vendaId);
-      }
 
       if (venda is not null)
       {
-        await _context.Entry(venda)
-            .Collection(i => i.VendaItens).LoadAsync();
+        await _context
+          .Entry(venda)
+          .Collection(i => i.VendaItens)
+          .LoadAsync();
       }
 
 

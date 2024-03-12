@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
@@ -236,6 +236,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               if (!carrinhoComprasStore.isValidCarrinhoCompras) {
                 return const SizedBox.shrink();
               }
+
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -267,7 +268,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           if (_currentIndex == 0) {
                             _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                           } else if (_currentIndex == 1) {
-                            //
+                            await carrinhoComprasStore.criarCompra();
                           }
                         },
                         child: Text(
@@ -334,7 +335,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
+                                      Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(item.produtoId, true);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -380,12 +381,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Subtotal",
+                  "Sub-Total",
                   style: Theme.of(context).primaryTextTheme.labelSmall,
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoComprasStore.total}",
+                    UtilBrasilFields.obterReal(carrinhoComprasStore.subTotal),
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -403,7 +404,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               ),
               trailing: Observer(builder: (_) {
                 return Text(
-                  "R\$ ${carrinhoComprasStore.subTotal}",
+                  UtilBrasilFields.obterReal(carrinhoComprasStore.subTotal),
                   style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                 );
               }),
@@ -466,7 +467,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                   Text(
-                    "26/03/2021 12:40 PM",
+                    '${UtilData.obterDataDDMMAAAA(DateTime.now())} ${UtilData.obterHoraHHMM(DateTime.now())}',
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                 ],
@@ -482,7 +483,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoComprasStore.total}",
+                    UtilBrasilFields.obterReal(carrinhoComprasStore.subTotal),
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -501,7 +502,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               trailing: Observer(
                 builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoComprasStore.total}",
+                    UtilBrasilFields.obterReal(carrinhoComprasStore.total),
                     style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                   );
                 },

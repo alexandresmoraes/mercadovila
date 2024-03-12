@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Compras.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240307174200_Initial_Create")]
+    [Migration("20240312200319_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,22 +41,34 @@ namespace Compras.Infra.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("total");
 
-                    b.Property<string>("UserEmail")
+                    b.Property<string>("UsuarioEmail")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
-                        .HasColumnName("user_email");
+                        .HasColumnName("usuario_email");
 
-                    b.Property<string>("UserFotoUrl")
+                    b.Property<string>("UsuarioFotoUrl")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
-                        .HasColumnName("user_foto_url");
+                        .HasColumnName("usuario_foto_url");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("usuario_id");
+
+                    b.Property<string>("UsuarioNome")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("usuario_nome");
+
+                    b.Property<string>("UsuarioUsername")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("usuario_username");
 
                     b.HasKey("Id");
 

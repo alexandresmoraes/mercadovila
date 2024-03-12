@@ -9,20 +9,24 @@ namespace Compras.Domain.Aggregates
     public IReadOnlyCollection<CompraItem> CompraItens => _compraItens;
     public DateTimeOffset DataHora { get; private set; }
     public decimal Total { get; private set; }
-    public string UserId { get; private set; } = null!;
-    public string UserEmail { get; private set; } = null!;
-    public string? UserFotoUrl { get; private set; }
+    public string UsuarioId { get; private set; } = null!;
+    public string UsuarioNome { get; private set; } = null!;
+    public string UsuarioUsername { get; private set; } = null!;
+    public string UsuarioEmail { get; private set; } = null!;
+    public string? UsuarioFotoUrl { get; private set; }
 
     public Compra() { }
 
-    public Compra(IEnumerable<CompraItem> compraItens, string userId, string userEmail, string? userFotoUrl)
+    public Compra(List<CompraItem> compraItens, string usuarioId, string usuarioNome, string usuarioUsername, string usuarioEmail, string? usuarioFotoUrl)
     {
-      _compraItens = compraItens.ToList();
+      _compraItens = compraItens;
       Total = compraItens.Sum(_ => _.PrecoPago * _.Quantidade);
       DataHora = DateTimeOffset.UtcNow;
-      UserId = userId;
-      UserEmail = userEmail;
-      UserFotoUrl = userFotoUrl;
+      UsuarioId = usuarioId;
+      UsuarioNome = usuarioNome;
+      UsuarioUsername = usuarioUsername;
+      UsuarioEmail = usuarioEmail;
+      UsuarioFotoUrl = usuarioFotoUrl;
 
       AddDomainEvent(new CompraCriadaEvent(this));
     }
@@ -32,7 +36,8 @@ namespace Compras.Domain.Aggregates
       return $"Compra {Id} / " +
         $"DataHora {DataHora} / " +
         $"Total {Total} " +
-        $"UserEmail {UserEmail}";
+        $"Usuario {UsuarioNome} / " +
+        $"UsuarioEmail {UsuarioEmail}";
     }
   }
 }

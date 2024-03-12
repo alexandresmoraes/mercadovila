@@ -14,17 +14,25 @@ namespace Compras.API.Application.Commands
     private readonly IComprasRepository _comprasRepository;
     private readonly IIntegrationEventService _integrationEventService;
 
-
+    public CriarCompraCommandHandler(IAuthService authService, IComprasRepository comprasRepository, IIntegrationEventService integrationEventService)
+    {
+      _authService = authService;
+      _comprasRepository = comprasRepository;
+      _integrationEventService = integrationEventService;
+    }
 
     public async Task<Result<CriarCompraCommandResponse>> Handle(CriarCompraCommand request, CancellationToken cancellationToken)
     {
-      var userId = _authService.GetUserId();
-      var userEmail = _authService.GetUserEmail();
+      var usuarioId = _authService.GetUserId();
+      var usuarioUsername = _authService.GetUserName();
+      var usuarioEmail = _authService.GetUserEmail();
 
       var compra = new Compra(
-        userId: userId,
-        userEmail: userEmail,
-        userFotoUrl: request.UserFotoUrl,
+        usuarioId: usuarioId,
+        usuarioUsername: usuarioUsername,
+        usuarioEmail: usuarioEmail,
+        usuarioNome: request.UsuarioNome,
+        usuarioFotoUrl: request.UsuarioFotoUrl,
         compraItens: request.CompraItens.Select(item => new CompraItem(
           item.ProdutoId,
           item.Nome,
@@ -36,12 +44,12 @@ namespace Compras.API.Application.Commands
           item.IsPrecoMedioSugerido,
           item.Quantidade,
           item.UnidadeMedida
-        ))
+        )).ToList()
       );
 
       await _comprasRepository.AddAsync(compra);
 
-      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
+      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(usuarioId);
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
       return Result.Created($"api/compras/{compra.Id}", new CriarCompraCommandResponse(compra.Id));

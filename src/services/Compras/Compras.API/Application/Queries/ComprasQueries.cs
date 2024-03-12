@@ -21,9 +21,10 @@ namespace Compras.API.Application.Queries
              c.id AS id,   
              c.datahora AS datahora,
              c.total AS total,
-             c.user_id AS userid,
-             c.user_email AS useremail,
-             c.user_foto_url AS userfotourl,
+             c.usuario_id AS usuarioid,
+             c.usuario_nome AS usuarionome,
+             c.usuario_email AS usuarioemail,
+             c.usuario_foto_url AS usuariofotourl,
              ci.produto_id AS itemprodutoid,
              ci.nome AS itemnome,	 
              ci.image_url AS itemimageurl,
@@ -55,17 +56,15 @@ namespace Compras.API.Application.Queries
              c.id AS id,   
              c.datahora AS datahora,
              c.total AS total,
-             c.user_id AS userid,
-             c.user_email AS useremail,
-             c.user_foto_url AS userfotourl,
+             c.usuario_id AS usuarioid,
+             c.usuario_nome AS usuarionome,
+             c.usuario_email AS usuarioemail,
+             c.usuario_foto_url AS usuariofotourl,
              ci.produto_id AS itemprodutoid,
              ci.nome AS itemnome,	 
-             ci.image_url AS itemimageurl,
              ci.descricao AS itemdescricao,
-             ci.estoque_atual AS itemestoqueatual,
-             ci.preco_pago AS itemprecopago,
-             ci.preco_sugerido AS itemprecosugerido,
-             ci.preco_medio_sugerido AS itemprecomediosugerido,
+             ci.image_url AS itemimageurl,
+             ci.preco_pago AS itemprecopago,             
              ci.quantidade AS itemquantidade,
              ci.unidade_medida AS itemunidademedida,   
              count(*) over() AS count
@@ -110,9 +109,10 @@ namespace Compras.API.Application.Queries
             Id = compraId,
             DataHora = row.datahora,
             Total = row.total,
-            UserId = row.userid,
-            UserEmail = row.useremail,
-            UserFotoUrl = row.userfotourl
+            UsuarioId = row.usuarioid,
+            UsuarioNome = row.usuarionome,
+            UsuarioEmail = row.usuarioemail,
+            UsuarioFotoUrl = row.usuariofotourl
           };
           comprasDictionary.Add(compraId, venda);
         }
@@ -121,6 +121,7 @@ namespace Compras.API.Application.Queries
         {
           ProdutoId = row.itemprodutoid,
           Nome = row.itemnome,
+          Descricao = row.itemdescricao,
           ImageUrl = row.itemimageurl,
           PrecoPago = row.itemprecopago,
           Quantidade = row.itemquantidade,
@@ -141,9 +142,10 @@ namespace Compras.API.Application.Queries
         Id = result[0].id,
         DataHora = result[0].datahora,
         Total = result[0].total,
-        UserId = result[0].userid,
-        UserEmail = result[0].useremail,
-        UserFotoUrl = result[0].userfotourl
+        UsuarioId = result[0].usuarioid,
+        UsuarioNome = result[0].usuarionome,
+        UsuarioEmail = result[0].usuarioemail,
+        UsuarioFotoUrl = result[0].usuariofotourl
       };
 
       foreach (dynamic item in result)

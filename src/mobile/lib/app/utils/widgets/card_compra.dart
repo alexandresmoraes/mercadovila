@@ -6,25 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
+import 'package:vilasesmo/app/utils/dto/compras/compra_dto.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/venda_status.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CardVenda extends StatefulWidget {
-  final VendaDto item;
+class CardCompra extends StatefulWidget {
+  final CompraDto item;
 
-  const CardVenda({
+  const CardCompra({
     super.key,
     required this.item,
   });
 
   @override
-  CardVendaState createState() => CardVendaState();
+  CardCompraState createState() => CardCompraState();
 }
 
-class CardVendaState extends State<CardVenda> {
+class CardCompraState extends State<CardCompra> {
   bool isProductsVisible = false;
 
   @override
@@ -49,9 +48,6 @@ class CardVendaState extends State<CardVenda> {
                 ),
               ),
               const Expanded(child: SizedBox()),
-              VendasStatus(
-                status: widget.item.status,
-              ),
             ],
           ),
         ),
@@ -59,7 +55,7 @@ class CardVendaState extends State<CardVenda> {
           visualDensity: const VisualDensity(vertical: -1, horizontal: -4),
           contentPadding: const EdgeInsets.all(0),
           minLeadingWidth: 0,
-          leading: isNullorEmpty(widget.item.compradorFotoUrl)
+          leading: isNullorEmpty(widget.item.usuarioFotoUrl)
               ? const CircleAvatar(
                   radius: 35,
                   backgroundColor: Colors.white,
@@ -81,7 +77,7 @@ class CardVendaState extends State<CardVenda> {
                         backgroundImage: AssetImage('assets/person.png'),
                       );
                     },
-                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
+                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.usuarioFotoUrl!}',
                     imageBuilder: (context, imageProvider) {
                       return CircleAvatar(
                         radius: 24,
@@ -91,7 +87,7 @@ class CardVendaState extends State<CardVenda> {
                   ),
                 ),
           title: Text(
-            widget.item.compradorNome,
+            widget.item.usuarioNome,
             style: Theme.of(context).primaryTextTheme.bodyLarge,
           ),
           subtitle: Text(
@@ -138,13 +134,13 @@ class CardVendaState extends State<CardVenda> {
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: isProductsVisible ? 180 : 0,
+          height: isProductsVisible ? 200 : 0,
           child: SingleChildScrollView(
             child: SizedBox(
-              height: 180,
+              height: 200,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: _vendaItens(widget.item.itens),
+                children: _compraItens(widget.item.itens),
               ),
             ),
           ),
@@ -158,19 +154,19 @@ class CardVendaState extends State<CardVenda> {
     );
   }
 
-  List<Widget> _vendaItens(List<VendaItemDto> itens) {
+  List<Widget> _compraItens(List<CompraItemDto> itens) {
     List<Widget> widgetList = [];
     try {
       for (int i = 0; i < itens.length; i++) {
         widgetList.add(
           Container(
-            height: 172,
+            height: 200,
             margin: const EdgeInsets.only(top: 40, left: 10),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 SizedBox(
-                  height: 172,
+                  height: 200,
                   width: 145,
                   child: Container(
                     decoration: BoxDecoration(
@@ -190,7 +186,7 @@ class CardVendaState extends State<CardVenda> {
                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                           ),
                           Text(
-                            '${itens[i].quantidade} ${itens[i].unidadeMedida}',
+                            itens[i].descricao,
                             style: Theme.of(context).primaryTextTheme.displayMedium,
                           ),
                           Row(
@@ -209,9 +205,21 @@ class CardVendaState extends State<CardVenda> {
                                     style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
-                                    UtilBrasilFields.obterReal(itens[i].preco, moeda: false),
+                                    UtilBrasilFields.obterReal(itens[i].precoPago, moeda: false),
                                     style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  )
+                                  ),
+                                  Text(
+                                    ' x ',
+                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                  ),
+                                  Text(
+                                    '${itens[i].quantidade}',
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    itens[i].unidadeMedida,
+                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                  ),
                                 ],
                               ),
                             ],
@@ -271,7 +279,7 @@ class CardVendaState extends State<CardVenda> {
     } catch (e) {
       widgetList.add(const SizedBox());
       if (kDebugMode) {
-        print("Exception - _vendaItens(): $e");
+        print("Exception - compras_page.dart - _allItemsWidgetList():$e");
       }
       return widgetList;
     }

@@ -18,9 +18,11 @@ namespace Compras.Infra.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     total = table.Column<decimal>(type: "numeric", nullable: false),
-                    user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
-                    user_email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    user_foto_url = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
+                    usuario_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    usuario_nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    usuario_username = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    usuario_email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    usuario_foto_url = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {

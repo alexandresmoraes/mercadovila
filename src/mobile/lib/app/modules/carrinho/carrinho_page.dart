@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -378,12 +379,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Subtotal",
+                      "Sub-Total",
                       style: Theme.of(context).primaryTextTheme.labelSmall,
                     ),
                     Observer(builder: (_) {
                       return Text(
-                        "R\$ ${carrinhoStore.carrinhoDto!.total}",
+                        UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto!.total.toDouble()),
                         style: Theme.of(context).primaryTextTheme.labelSmall,
                       );
                     }),
@@ -401,7 +402,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Observer(builder: (_) {
                     return Text(
-                      "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
+                      UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto!.subtotal.toDouble()),
                       style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                     );
                   }),
@@ -545,7 +546,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                   Text(
-                    "26/03/2021 12:40 PM",
+                    '${UtilData.obterDataDDMMAAAA(DateTime.now())} ${UtilData.obterHoraHHMM(DateTime.now())}',
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                 ],
@@ -561,7 +562,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.total}",
+                    UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto?.total.toDouble() ?? 0),
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -580,7 +581,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               trailing: Observer(
                 builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.subtotal}",
+                    UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto?.subtotal.toDouble() ?? 0),
                     style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                   );
                 },

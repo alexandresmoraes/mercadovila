@@ -16,7 +16,7 @@ namespace Catalogo.API.Controllers
   /// Criar e editar produtos para gerar o catalogo
   /// </summary>
   [Route("api/produtos")]
-  [Authorize("Admin")]
+  [Authorize]
   [ApiController]
   public class ProdutosController : ControllerBase
   {
@@ -45,6 +45,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos/{id}
     [HttpGet("{id}")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -73,6 +74,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos
     [HttpGet]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(PagedResult<ProdutoDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -105,6 +107,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // POST api/produtos    
     [HttpPost]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ProdutoResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -139,6 +142,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // PUT api/produtos/{id}    
     [HttpPut("{id}")]
+    [Authorize("Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -174,6 +178,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // POST api/produtos/image
     [HttpPost("image")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ImageUploadModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -231,6 +236,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos/lista-compra
     [HttpGet("lista-compra")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(PagedResult<ListaCompraDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

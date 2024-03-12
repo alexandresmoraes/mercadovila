@@ -4,8 +4,8 @@ class CompraItemModel {
   String imageUrl;
   String descricao;
   int estoqueAtual;
-  int precoPago;
-  int precoSugerido;
+  double precoPago;
+  double precoSugerido;
   bool isPrecoMedioSugerido;
   int quantidade;
   String unidadeMedida;
@@ -40,17 +40,20 @@ class CompraItemModel {
 }
 
 class CompraModel {
-  String? userFotoUrl;
+  String usuarioNome;
+  String? usuarioFotoUrl;
   List<CompraItemModel> compraItens;
 
   CompraModel({
-    this.userFotoUrl,
+    required this.usuarioNome,
+    this.usuarioFotoUrl,
     required this.compraItens,
   });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['userFotoUrl'] = userFotoUrl;
+    data['usuarioNome'] = usuarioNome;
+    data['usuarioFotoUrl'] = usuarioFotoUrl;
     data['compraItens'] = compraItens.map((v) => v.toJson()).toList();
     return data;
   }

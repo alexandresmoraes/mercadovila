@@ -6,13 +6,15 @@ namespace Compras.API.Application.Commands
 {
   public record CriarCompraCommand : IRequest<Result<CriarCompraCommandResponse>>
   {
-    public string? UserFotoUrl { get; private init; }
+    public string UsuarioNome { get; private init; }
+    public string? UsuarioFotoUrl { get; private init; }
 
     public IEnumerable<CriarComparItemCommand> CompraItens { get; private init; }
 
-    public CriarCompraCommand(string? userFotoUrl, IEnumerable<CriarComparItemCommand> compraItens)
+    public CriarCompraCommand(string usuarioNome, string? usuarioFotoUrl, IEnumerable<CriarComparItemCommand> compraItens)
     {
-      UserFotoUrl = userFotoUrl;
+      UsuarioNome = usuarioNome;
+      UsuarioFotoUrl = usuarioFotoUrl;
       CompraItens = compraItens;
     }
   }

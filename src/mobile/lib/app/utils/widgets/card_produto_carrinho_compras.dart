@@ -1,7 +1,8 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
@@ -9,7 +10,6 @@ import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class CardProdutoCarrinhoCompras extends StatefulWidget {
   final CarrinhoComprasItemDto item;
@@ -31,8 +31,8 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
   @override
   void initState() {
     super.initState();
-    precoPagoController = TextEditingController(text: '${widget.item.precoPago}');
-    precoSugeridoController = TextEditingController(text: '${widget.item.getPrecoSugerido()}');
+    precoPagoController = TextEditingController(text: UtilBrasilFields.obterReal(widget.item.precoPago));
+    precoSugeridoController = TextEditingController(text: UtilBrasilFields.obterReal(widget.item.getPrecoSugerido()));
   }
 
   @override
@@ -77,7 +77,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                     RichText(
                         text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
                       TextSpan(
-                        text: '${widget.item.preco}',
+                        text: UtilBrasilFields.obterReal(widget.item.preco, moeda: false),
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                       ),
                       TextSpan(
@@ -108,21 +108,18 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       child: Focus(
                                         onFocusChange: (hasFocus) {
                                           if (!hasFocus) {
-                                            double? doubleValue = double.tryParse(precoPagoController.text);
-                                            if (doubleValue != null) {
-                                              if (kDebugMode) print(doubleValue);
-                                              widget.item.precoPago = doubleValue;
-                                              precoPagoController.text = '${widget.item.precoPago}';
-                                              precoSugeridoController.text = '${widget.item.getPrecoSugerido()}';
-                                              carrinhoComprasStore.update();
-                                            } else {
-                                              if (kDebugMode) print('A string não é um número válido. $precoPagoController.text');
-                                              precoPagoController.text = '${widget.item.precoPago}';
-                                              GlobalSnackbar.error('${precoPagoController.text} não é um número válido.');
-                                            }
+                                            debugPrint(precoPagoController.text);
+                                            widget.item.precoPago = UtilBrasilFields.converterMoedaParaDouble(precoPagoController.text);
+                                            precoPagoController.text = UtilBrasilFields.obterReal(widget.item.precoPago);
+                                            precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+                                            carrinhoComprasStore.update();
                                           }
                                         },
                                         child: TextFormField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                            CentavosInputFormatter(moeda: true),
+                                          ],
                                           controller: precoPagoController,
                                           style: Theme.of(context).primaryTextTheme.bodyLarge,
                                           autocorrect: true,
@@ -158,16 +155,10 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       child: Focus(
                                         onFocusChange: (hasFocus) {
                                           if (!hasFocus) {
-                                            double? doubleValue = double.tryParse(precoSugeridoController.text);
-                                            if (doubleValue != null) {
-                                              if (kDebugMode) print(doubleValue);
-                                              widget.item.precoSugerido = doubleValue;
-                                              precoSugeridoController.text = '${widget.item.precoSugerido}';
-                                            } else {
-                                              if (kDebugMode) print('A string não é um número válido. $precoSugeridoController.text');
-                                              precoSugeridoController.text = '${widget.item.precoSugerido}';
-                                              GlobalSnackbar.error('${precoSugeridoController.text} não é um número válido.');
-                                            }
+                                            debugPrint(precoSugeridoController.text);
+                                            widget.item.precoSugerido = UtilBrasilFields.converterMoedaParaDouble(precoSugeridoController.text);
+                                            precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+                                            carrinhoComprasStore.update();
                                           }
                                         },
                                         child: TextFormField(
@@ -195,7 +186,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                     InkWell(
                       onTap: () {
                         widget.item.isPrecoMedioSugerido = !widget.item.isPrecoMedioSugerido;
-                        precoSugeridoController.text = '${widget.item.getPrecoSugerido()}';
+                        precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
                         carrinhoComprasStore.update();
                         setState(() {});
                       },
@@ -257,12 +248,10 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
             quantidade: widget.item.quantidade,
             onAdicionar: () {
               carrinhoComprasStore.addCarrinhoComprasItemExistente(widget.item.produtoId);
-              carrinhoComprasStore.update();
               setState(() {});
             },
             onRemover: () {
-              Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(widget.item.produtoId);
-              carrinhoComprasStore.update();
+              Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(widget.item.produtoId, false);
               setState(() {});
             },
           ),

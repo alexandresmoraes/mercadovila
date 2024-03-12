@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -304,9 +306,13 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             padding: const EdgeInsets.only(),
                             child: Observer(builder: (_) {
                               return TextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  CentavosInputFormatter(moeda: true),
+                                ],
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                initialValue: _controller.preco,
-                                onChanged: _controller.setPreco,
+                                initialValue: UtilBrasilFields.obterReal(_controller.preco ?? 0),
+                                onChanged: (value) => _controller.setPreco(UtilBrasilFields.converterMoedaParaDouble(value)),
                                 decoration: InputDecoration(
                                   fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                       ? Theme.of(context).inputDecorationTheme.fillColor

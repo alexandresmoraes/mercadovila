@@ -14,7 +14,7 @@ namespace Catalogo.API.Data.Entities
 
     public string? ImageUrl { get; set; }
 
-    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset DataCriacao { get; set; } = DateTimeOffset.UtcNow;
 
     public override string ToString()
     {

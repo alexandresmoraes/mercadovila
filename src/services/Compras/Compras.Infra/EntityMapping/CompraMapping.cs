@@ -28,18 +28,28 @@ namespace Compras.Infra.EntityMapping
         .HasForeignKey(_ => _.CompraId)
         .OnDelete(DeleteBehavior.Cascade);
 
-      b.Property(c => c.UserId)
-        .HasColumnName("user_id")
+      b.Property(c => c.UsuarioId)
+        .HasColumnName("usuario_id")
         .HasMaxLength(36)
         .IsRequired();
 
-      b.Property(c => c.UserEmail)
-        .HasColumnName("user_email")
+      b.Property(c => c.UsuarioUsername)
+        .HasColumnName("usuario_username")
         .HasMaxLength(128)
         .IsRequired();
 
-      b.Property(c => c.UserFotoUrl)
-        .HasColumnName("user_foto_url")
+      b.Property(c => c.UsuarioNome)
+       .HasColumnName("usuario_nome")
+       .HasMaxLength(256)
+       .IsRequired();
+
+      b.Property(c => c.UsuarioEmail)
+        .HasColumnName("usuario_email")
+        .HasMaxLength(128)
+        .IsRequired();
+
+      b.Property(c => c.UsuarioFotoUrl)
+        .HasColumnName("usuario_foto_url")
         .HasMaxLength(128);
 
       b.Ignore(_ => _.DomainEvents);

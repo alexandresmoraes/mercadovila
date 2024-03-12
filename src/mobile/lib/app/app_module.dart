@@ -1,5 +1,6 @@
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
 import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
@@ -38,6 +39,7 @@ import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
+    Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
@@ -47,26 +49,26 @@ class AppModule extends Module {
       ),
     ),
     Bind.lazySingleton((i) => CarrinhoStore()),
+    Bind.lazySingleton((i) => CarrinhoComprasStore()),
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind.lazySingleton((i) => SearchFilterStore()),
     Bind.lazySingleton((i) => PagamentosStore()),
-    BindInject((i) => DioApi(i.get<BaseOptions>())),
     Bind.factory((i) => CardCountProdutoController()),
     Bind.factory((i) => FavoritoController()),
     Bind.factory((i) => HomePageController()),
-    BindInject((i) => AuthService()),
-    BindInject((i) => AccountRepository()),
-    BindInject((i) => CatalogoRepository()),
-    BindInject((i) => FavoritosRepository()),
-    BindInject((i) => CarrinhoRepository()),
-    BindInject((i) => VendasRepository()),
-    BindInject((i) => ComprasRepository()),
-    BindInject((i) => PagamentosRepository()),
+    Bind.lazySingleton((i) => AuthService()),
+    Bind.lazySingleton((i) => AccountRepository()),
+    Bind.lazySingleton((i) => CatalogoRepository()),
+    Bind.lazySingleton((i) => FavoritosRepository()),
+    Bind.lazySingleton((i) => CarrinhoRepository()),
+    Bind.lazySingleton((i) => VendasRepository()),
+    Bind.lazySingleton((i) => ComprasRepository()),
+    Bind.lazySingleton((i) => PagamentosRepository()),
 
     //TODO: remover itens
     Bind.factory((i) => ProdutosEditController()),
-    BindInject((i) => ProdutosRepository()),
+    Bind.lazySingleton((i) => ProdutosRepository()),
   ];
 
   @override

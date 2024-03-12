@@ -77,13 +77,13 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
       Atom(name: 'CarrinhoComprasStoreBase.subTotal', context: context);
 
   @override
-  num get subTotal {
+  double get subTotal {
     _$subTotalAtom.reportRead();
     return super.subTotal;
   }
 
   @override
-  set subTotal(num value) {
+  set subTotal(double value) {
     _$subTotalAtom.reportWrite(value, super.subTotal, () {
       super.subTotal = value;
     });
@@ -93,13 +93,13 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
       Atom(name: 'CarrinhoComprasStoreBase.total', context: context);
 
   @override
-  num get total {
+  double get total {
     _$totalAtom.reportRead();
     return super.total;
   }
 
   @override
-  set total(num value) {
+  set total(double value) {
     _$totalAtom.reportWrite(value, super.total, () {
       super.total = value;
     });
@@ -153,11 +153,11 @@ mixin _$CarrinhoComprasStore on CarrinhoComprasStoreBase, Store {
   }
 
   @override
-  bool removerCarrinhoComprasItem(String produtoId) {
+  bool removerCarrinhoComprasItem(String produtoId, bool removeAll) {
     final _$actionInfo = _$CarrinhoComprasStoreBaseActionController.startAction(
         name: 'CarrinhoComprasStoreBase.removerCarrinhoComprasItem');
     try {
-      return super.removerCarrinhoComprasItem(produtoId);
+      return super.removerCarrinhoComprasItem(produtoId, removeAll);
     } finally {
       _$CarrinhoComprasStoreBaseActionController.endAction(_$actionInfo);
     }

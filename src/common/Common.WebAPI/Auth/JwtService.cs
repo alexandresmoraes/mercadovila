@@ -35,8 +35,9 @@ namespace Common.WebAPI.Auth
 
       var identityClaims = new ClaimsIdentity();
 
-      identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user!.Id.ToString()!));
-      identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Email, user.Email!));
+      identityClaims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user!.Id.ToString()!));
+      identityClaims.AddClaim(new Claim(ClaimTypes.Email, user.Email!));
+      identityClaims.AddClaim(new Claim(ClaimTypes.Name, user.UserName!));
       identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
       identityClaims.AddClaim(new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 
@@ -146,6 +147,7 @@ namespace Common.WebAPI.Auth
     private void RemoveRefreshToken(ICollection<Claim> claims)
     {
       var refreshToken = claims.FirstOrDefault(f => f.Type == LAST_REFRESH_TOKEN);
+
       if (refreshToken is not null)
         claims.Remove(refreshToken);
     }
@@ -159,9 +161,8 @@ namespace Common.WebAPI.Auth
         throw new ArgumentException(nameof(principal));
       }
 
-      var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub);
-      if (claim is null)
-        claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+      var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub)
+        ?? principal.FindFirst(ClaimTypes.NameIdentifier);
 
       return claim?.Value;
     }

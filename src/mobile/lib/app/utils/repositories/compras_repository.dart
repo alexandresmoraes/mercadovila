@@ -22,7 +22,7 @@ class ComprasRepository implements IComprasRepository {
   @override
   Future<Either<ResultFailModel, CompraResponseModel>> criarCompra(CompraModel compraModel) async {
     try {
-      var response = await dio.post('/api/vendas', data: compraModel.toJson());
+      var response = await dio.post('/api/compras', data: compraModel.toJson());
       var result = CompraResponseModel.fromJson(response.data);
       return Right(result);
     } on DioError catch (err) {
@@ -32,14 +32,14 @@ class ComprasRepository implements IComprasRepository {
 
   @override
   Future<CompraDetalheDto> getCompra(int id) async {
-    var response = await dio.get('/api/vendas/$id');
+    var response = await dio.get('/api/compras/$id');
 
     return CompraDetalheDto.fromJson(response.data);
   }
 
   @override
   Future<PagedResult<CompraDto>> getCompras(int page, DateTime? dataInicial, DateTime? dataFinal) async {
-    var response = await dio.get('/api/vendas', queryParameters: {
+    var response = await dio.get('/api/compras', queryParameters: {
       "page": page,
       "limit": 10,
       "dataInicial": dataInicial,
