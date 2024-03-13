@@ -17,6 +17,8 @@ namespace Catalogo.API.Data.Repositories
     Task<ProdutoDetailDto?> GetProdutoDetailAsync(string userId, string produtoId);
     Task SaidaEstoqueAsync(Dictionary<string, int> produtos);
     Task EntradaEstoqueAsync(Dictionary<string, int> produtos);
+    Task EntradaEstoqueAndUpdatePrecoAsync(List<(string, int, bool, decimal?)> produtos);
+    Task AtualizarQuantidadeVendidaDataUltimaVenda(Dictionary<string, int> produtos);
 
     Task<PagedResult<CatalogoDto>> GetProdutosNovosAsync(CatalogoQuery query);
     Task<PagedResult<CatalogoDto>> GetProdutosMaisVendidosAsync(CatalogoQuery query);

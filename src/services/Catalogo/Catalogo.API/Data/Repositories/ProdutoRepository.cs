@@ -440,6 +440,40 @@ namespace Catalogo.API.Data.Repositories
       _ = await Collection.BulkWriteAsync(loteUpdate);
     }
 
+    public async Task EntradaEstoqueAndUpdatePrecoAsync(List<(string, int, bool, decimal?)> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Item1);
+
+        decimal novoPreco = produto.Item4 ?? 0;
+
+        if (produto.Item3)
+        {
+          var produtoAtual = Collection.Find(filter).FirstOrDefault();
+          var estoqueAtual = produtoAtual.Estoque;
+          var precoAtual = produtoAtual.Preco;
+          var precoPago = produto.Item4 ?? 0;
+
+          novoPreco = estoqueAtual == 0
+            ? precoPago
+            : (precoAtual + precoPago) / 2;
+        }
+
+        novoPreco = Math.Round(novoPreco, 2, MidpointRounding.AwayFromZero);
+
+        var update = Builders<Produto>.Update.Combine(
+            Builders<Produto>.Update.Inc(p => p.Estoque, +produto.Item2),
+            Builders<Produto>.Update.Set(p => p.Preco, novoPreco));
+
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
+
     public async Task<PagedResult<ListaCompraDto>> GetListaCompraAsync(ListaCompraQuery query)
     {
       var filtro = Builders<Produto>.Filter.Where(_ => _.IsAtivo);
@@ -471,6 +505,23 @@ namespace Catalogo.API.Data.Repositories
       var count = await Collection.CountDocumentsAsync(filtro);
 
       return new PagedResult<ListaCompraDto>(start, query.limit, count, produtos);
+    }
+
+    public async Task AtualizarQuantidadeVendidaDataUltimaVenda(Dictionary<string, int> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
+        var update = Builders<Produto>.Update.Combine(
+          Builders<Produto>.Update.Inc(p => p.QuantidadeVendida, +produto.Value),
+          Builders<Produto>.Update.Set(p => p.DataUltimaVenda, DateTimeOffset.UtcNow));
+
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
     }
   }
 }

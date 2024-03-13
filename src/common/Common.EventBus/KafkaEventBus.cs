@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Wrap;
+using System.Collections.Concurrent;
 using System.Text.Json;
 
 namespace Common.EventBus
@@ -18,8 +19,9 @@ namespace Common.EventBus
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly AsyncPolicyWrap _policyWrap;
     private readonly IProducer<string, string> _producer;
-    private readonly IConsumer<string, string> _consumer;
     private readonly int _retryCount;
+    private readonly ConsumerConfig _consumerConfig;
+    private readonly ConcurrentDictionary<string, IConsumer<string, string>> _consumers = new ConcurrentDictionary<string, IConsumer<string, string>>();
 
     public KafkaEventBus(
       ILogger<KafkaEventBus> logger,
@@ -46,17 +48,17 @@ namespace Common.EventBus
 
       var producerConfig = new ProducerConfig
       {
-        BootstrapServers = eventBusSettings.BootstrapServer
+        BootstrapServers = _eventBusSettings.BootstrapServer
       };
       _producer = new ProducerBuilder<string, string>(producerConfig).Build();
 
-      var consumerConfig = new ConsumerConfig
+      _consumerConfig = new ConsumerConfig
       {
-        BootstrapServers = eventBusSettings.BootstrapServer,
-        GroupId = eventBusSettings.Group,
-        AutoOffsetReset = AutoOffsetReset.Earliest
+        BootstrapServers = _eventBusSettings.BootstrapServer,
+        GroupId = _eventBusSettings.Group,
+        AutoOffsetReset = AutoOffsetReset.Earliest,
+        EnableAutoCommit = false,
       };
-      _consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
     }
 
     public async Task PublishAsync(IntegrationEvent @event)
@@ -77,7 +79,7 @@ namespace Common.EventBus
       {
         _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
 
-        await _producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
+        await _producer.ProduceAsync(eventName, new Message<string, string>
         {
           Key = @event.Key ?? Guid.NewGuid().ToString(),
           Value = message
@@ -110,17 +112,19 @@ namespace Common.EventBus
 
     private void StartBasicConsume(string eventName)
     {
-      _logger.LogTrace("Starting Kafka basic consume");
+      _logger.LogTrace("Starting Kafka basic consume {EventName}", eventName);
 
       Task.Run(async () =>
       {
-        _consumer.Subscribe(_eventBusSettings.Topic);
+        var consumer = GetConsumer(eventName);
+
+        consumer.Subscribe(eventName);
 
         while (true)
         {
           try
           {
-            var result = _consumer.Consume();
+            var result = consumer.Consume();
 
             if (result is not null)
             {
@@ -132,6 +136,8 @@ namespace Common.EventBus
               await _policyWrap.ExecuteAsync(async () =>
               {
                 await ProcessEvent(eventName, result.Message.Value);
+
+                consumer.Commit(result);
               });
             }
           }
@@ -172,8 +178,11 @@ namespace Common.EventBus
     public void Dispose()
     {
       _producer?.Dispose();
-      _consumer?.Dispose();
+      _consumers.Values.ToList().ForEach(_ => _?.Dispose());
     }
+
+    private IConsumer<string, string> GetConsumer(string eventName)
+      => _consumers.GetOrAdd(eventName, _ => new ConsumerBuilder<string, string>(_consumerConfig).Build());
 
     private void OnBreak(Exception exception, TimeSpan timespan)
     {

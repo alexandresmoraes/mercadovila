@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
@@ -402,7 +403,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                         style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
-                                        '${item.preco}',
+                                        UtilBrasilFields.obterReal(item.preco, moeda: false),
                                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                                       )
                                     ],
@@ -581,7 +582,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                             style: Theme.of(context).primaryTextTheme.displayMedium,
                                           ),
                                           Text(
-                                            '${item.preco} ',
+                                            UtilBrasilFields.obterReal(item.preco, moeda: false),
                                             style: Theme.of(context).primaryTextTheme.headlineSmall,
                                           ),
                                         ],

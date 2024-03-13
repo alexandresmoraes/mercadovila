@@ -65,7 +65,7 @@ class CardVendaItem extends StatelessWidget {
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                           children: [
                             TextSpan(
-                              text: UtilBrasilFields.obterReal(item.preco * item.quantidade, moeda: false),
+                              text: UtilBrasilFields.obterReal(item.preco * item.quantidade.toDouble(), moeda: false),
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                             ),
                           ],

@@ -49,8 +49,16 @@ namespace Compras.API.Application.Commands
 
       await _comprasRepository.AddAsync(compra);
 
-      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(usuarioId);
-      await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
+      var compraItens = compra.CompraItens.Select(item => new CompraCriadaItemIntegrationEvent(
+        produtoId: item.ProdutoId,
+        quantidade: item.Quantidade,
+        precoPago: item.PrecoPago,
+        precoSugerido: item.IsPrecoMedioSugerido ? null : item.PrecoSugerido,
+        isPrecoSugerido: item.IsPrecoMedioSugerido
+      )).ToList();
+      var compraCriadaIntegrationEvent = new CompraCriadaIntegrationEvent(compra.Id, usuarioId, compraItens);
+
+      await _integrationEventService.AddAndSaveEventAsync(compraCriadaIntegrationEvent);
 
       return Result.Created($"api/compras/{compra.Id}", new CriarCompraCommandResponse(compra.Id));
     }

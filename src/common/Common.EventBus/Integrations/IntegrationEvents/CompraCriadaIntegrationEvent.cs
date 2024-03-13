@@ -6,16 +6,17 @@ namespace Common.EventBus.Integrations.IntegrationEvents
   {
     public long CompraId { get; private init; }
     public string UserId { get; private init; } = null!;
-    public List<VendaCanceladaItemIntegrationEvent> CompraItens { get; private init; }
+    public List<CompraCriadaItemIntegrationEvent> CompraItens { get; private init; }
 
-    public CompraCriadaIntegrationEvent(long compraId, string userId, List<VendaCanceladaItemIntegrationEvent> compraItens)
+    public CompraCriadaIntegrationEvent(long compraId, string userId, List<CompraCriadaItemIntegrationEvent> compraItens)
     {
       CompraId = compraId;
       UserId = userId;
       CompraItens = compraItens;
     }
+
     [JsonConstructor]
-    public CompraCriadaIntegrationEvent(long compraId, string userId, List<VendaCanceladaItemIntegrationEvent> compraItens, string id, DateTimeOffset creationDate, string? key)
+    public CompraCriadaIntegrationEvent(long compraId, string userId, List<CompraCriadaItemIntegrationEvent> compraItens, string id, DateTimeOffset creationDate, string? key)
       : base(id, creationDate, key)
     {
       CompraId = compraId;

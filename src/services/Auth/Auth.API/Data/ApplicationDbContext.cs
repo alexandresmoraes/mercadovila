@@ -27,18 +27,24 @@ namespace Auth.API.Data
       modelBuilder.Entity<ApplicationUser>(b =>
       {
         b.HasKey(e => e.Id);
-        b.Property(e => e.Id).HasMaxLength(36).ValueGeneratedOnAdd();
-        b.Property(e => e.Nome).HasMaxLength(256);
-        b.Property(e => e.UserName).HasMaxLength(128);
-        b.Property(e => e.NormalizedUserName).HasMaxLength(128);
-        b.Property(e => e.Email).HasMaxLength(128);
-        b.Property(e => e.NormalizedEmail).HasMaxLength(128);
-        b.Property(e => e.PasswordHash).HasMaxLength(256);
-        b.Property(e => e.SecurityStamp).HasMaxLength(36);
-        b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
-        b.Property(e => e.PhoneNumber).HasMaxLength(17);
-        b.Property(e => e.FotoUrl).HasMaxLength(128);
-        b.Property(e => e.IsAtivo);
+        b.Property(e => e.Id).HasColumnName("id").HasMaxLength(36).ValueGeneratedOnAdd();
+        b.Property(e => e.Nome).HasColumnName("nome").HasMaxLength(256);
+        b.Property(e => e.UserName).HasColumnName("username").HasMaxLength(128);
+        b.Property(e => e.NormalizedUserName).HasColumnName("normalized_username").HasMaxLength(128);
+        b.Property(e => e.Email).HasColumnName("email").HasMaxLength(128);
+        b.Property(e => e.NormalizedEmail).HasColumnName("normalized_email").HasMaxLength(128);
+        b.Property(e => e.EmailConfirmed).HasColumnName("email_confirmed");
+        b.Property(e => e.PasswordHash).HasColumnName("password_hash").HasMaxLength(256);
+        b.Property(e => e.SecurityStamp).HasColumnName("security_stamp").HasMaxLength(36);
+        b.Property(e => e.ConcurrencyStamp).HasColumnName("concurrency_stamp").HasMaxLength(36);
+        b.Property(e => e.PhoneNumber).HasColumnName("phone_number").HasMaxLength(17);
+        b.Property(e => e.PhoneNumberConfirmed).HasColumnName("phone_number_confirmed");
+        b.Property(e => e.TwoFactorEnabled).HasColumnName("two_factor_enabled");
+        b.Property(e => e.LockoutEnd).HasColumnName("lockout_end");
+        b.Property(e => e.LockoutEnabled).HasColumnName("lockout_end_enabled");
+        b.Property(e => e.FotoUrl).HasColumnName("foto_url").HasMaxLength(128);
+        b.Property(e => e.IsAtivo).HasColumnName("isativo");
+        b.Property(e => e.AccessFailedCount).HasColumnName("access_failed_count");
 
         b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("users_username_index").IsUnique();
         b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("users_email_index").IsUnique();
@@ -54,10 +60,10 @@ namespace Auth.API.Data
       modelBuilder.Entity<IdentityRole>(b =>
       {
         b.HasKey(e => e.Id);
-        b.Property(e => e.Id).HasMaxLength(36);
-        b.Property(e => e.Name).HasMaxLength(128);
-        b.Property(e => e.NormalizedName).HasMaxLength(128);
-        b.Property(e => e.ConcurrencyStamp).HasMaxLength(36);
+        b.Property(e => e.Id).HasColumnName("id").HasMaxLength(36);
+        b.Property(e => e.Name).HasColumnName("name").HasMaxLength(128);
+        b.Property(e => e.NormalizedName).HasColumnName("normalized_name").HasMaxLength(128);
+        b.Property(e => e.ConcurrencyStamp).HasColumnName("concurrency_stamp").HasMaxLength(36);
 
         b.HasIndex(r => r.NormalizedName).HasDatabaseName("roles_rolename_index").IsUnique();
 
@@ -69,28 +75,28 @@ namespace Auth.API.Data
 
       modelBuilder.Entity<IdentityUserRole<string>>(b =>
       {
-        b.Property(e => e.UserId).HasMaxLength(36);
-        b.Property(e => e.RoleId).HasMaxLength(36);
+        b.Property(e => e.UserId).HasColumnName("user_id").HasMaxLength(36);
+        b.Property(e => e.RoleId).HasColumnName("role_id").HasMaxLength(36);
 
         b.ToTable("user_roles");
       });
 
       modelBuilder.Entity<IdentityUserClaim<string>>(b =>
       {
-        b.Property(e => e.Id).HasMaxLength(36);
-        b.Property(e => e.UserId).HasMaxLength(36);
-        b.Property(e => e.ClaimType).HasMaxLength(128);
-        b.Property(e => e.ClaimValue).HasMaxLength(128);
+        b.Property(e => e.Id).HasColumnName("id").HasMaxLength(36);
+        b.Property(e => e.UserId).HasColumnName("user_id").HasMaxLength(36);
+        b.Property(e => e.ClaimType).HasColumnName("claim_type").HasMaxLength(128);
+        b.Property(e => e.ClaimValue).HasColumnName("claim_value").HasMaxLength(128);
 
         b.ToTable("user_claims");
       });
 
       modelBuilder.Entity<IdentityUserLogin<string>>(b =>
       {
-        b.Property(e => e.LoginProvider).HasMaxLength(128);
-        b.Property(e => e.ProviderKey).HasMaxLength(128);
-        b.Property(e => e.ProviderDisplayName).HasMaxLength(128);
-        b.Property(e => e.UserId).HasMaxLength(36);
+        b.Property(e => e.LoginProvider).HasColumnName("login_provider").HasMaxLength(128);
+        b.Property(e => e.ProviderKey).HasColumnName("provider_key").HasMaxLength(128);
+        b.Property(e => e.ProviderDisplayName).HasColumnName("provider_display_name").HasMaxLength(128);
+        b.Property(e => e.UserId).HasColumnName("user_id").HasMaxLength(36);
 
         b.ToTable("user_logins");
       });
@@ -98,20 +104,20 @@ namespace Auth.API.Data
       modelBuilder.Entity<IdentityRoleClaim<string>>(b =>
       {
         b.HasKey(e => e.Id);
-        b.Property(e => e.Id).HasMaxLength(36);
-        b.Property(e => e.RoleId).HasMaxLength(36);
-        b.Property(e => e.ClaimType).HasMaxLength(128);
-        b.Property(e => e.ClaimValue).HasMaxLength(128);
+        b.Property(e => e.Id).HasColumnName("id").HasMaxLength(36);
+        b.Property(e => e.RoleId).HasColumnName("role_id").HasMaxLength(36);
+        b.Property(e => e.ClaimType).HasColumnName("claim_type").HasMaxLength(128);
+        b.Property(e => e.ClaimValue).HasColumnName("claim_value").HasMaxLength(128);
 
         b.ToTable("role_claims");
       });
 
       modelBuilder.Entity<IdentityUserToken<string>>(b =>
       {
-        b.Property(e => e.UserId).HasMaxLength(36);
-        b.Property(e => e.LoginProvider).HasMaxLength(128);
-        b.Property(e => e.Name).HasMaxLength(36);
-        b.Property(e => e.Value).HasMaxLength(256);
+        b.Property(e => e.UserId).HasColumnName("user_id").HasMaxLength(36);
+        b.Property(e => e.LoginProvider).HasColumnName("login_provider").HasMaxLength(128);
+        b.Property(e => e.Name).HasColumnName("name").HasMaxLength(36);
+        b.Property(e => e.Value).HasColumnName("value").HasMaxLength(256);
 
         b.ToTable("user_tokens");
       });
@@ -128,7 +134,7 @@ namespace Auth.API.Data
         Email = "admin@admin.com",
         NormalizedUserName = "ADMIN",
         NormalizedEmail = "ADMIN@ADMIN.COM",
-        PhoneNumber = "+55 46 99909-7070",
+        PhoneNumber = "(46) 99999-7070",
         IsAtivo = true
       };
       var hasher = new PasswordHasher<ApplicationUser>();

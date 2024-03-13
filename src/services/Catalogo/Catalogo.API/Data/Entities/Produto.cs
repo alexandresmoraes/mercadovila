@@ -28,11 +28,11 @@ namespace Catalogo.API.Data.Entities
 
     public int RatingCount { get; set; }
 
-    public DateTime? DataUltimaVenda { get; set; }
+    public DateTimeOffset? DataUltimaVenda { get; set; }
 
     public int QuantidadeVendida { get; set; }
 
-    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset DataCriacao { get; set; } = DateTimeOffset.UtcNow;
 
     public bool IsAtivo { get; set; }
 

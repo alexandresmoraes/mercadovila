@@ -16,7 +16,7 @@ namespace Vendas.API.Application.Queries
   {
     public long VendaId { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora { get; init; }
+    public DateTimeOffset DataHora { get; init; }
     public decimal Total { get; init; }
   }
 

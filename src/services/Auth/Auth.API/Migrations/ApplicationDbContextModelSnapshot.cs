@@ -27,70 +27,88 @@ namespace Auth.API.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("id");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("access_failed_count");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Email")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("email_confirmed");
 
                     b.Property<string>("FotoUrl")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("foto_url");
 
                     b.Property<bool>("IsAtivo")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("isativo");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("lockout_end_enabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lockout_end");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("nome");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("normalized_email");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("normalized_username");
 
                     b.Property<string>("PasswordHash")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("password_hash");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(17)
-                        .HasColumnType("character varying(17)");
+                        .HasColumnType("character varying(17)")
+                        .HasColumnName("phone_number");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("phone_number_confirmed");
 
                     b.Property<string>("SecurityStamp")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("security_stamp");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("username");
 
                     b.HasKey("Id");
 
@@ -107,9 +125,9 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0f76aa88-6a46-41cd-805d-a6d87b19f481",
+                            Id = "35eb87de-4d35-42fe-a49f-8a7f74d4780a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f86cac4-31cd-40b5-9293-06e692b98b87",
+                            ConcurrencyStamp = "d72fdba6-8477-4518-b055-a773395ac72a",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             IsAtivo = true,
@@ -117,10 +135,10 @@ namespace Auth.API.Migrations
                             Nome = "Admin",
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAELtBWZNYmte5aZr1b5/Kf9kT9klwBG8pZ5Rc7xrIkvg/2MjqVTrfcnXjwNDnDdAmAg==",
-                            PhoneNumber = "+55 46 99909-7070",
+                            PasswordHash = "AQAAAAEAACcQAAAAEProPkJ2108Ak0rOaiHniImwXthJJblcv9IGp5s1t5xGgJQw240vzDHKJ/ndcxjCvg==",
+                            PhoneNumber = "(46) 99999-7070",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bc26d054-8803-465b-9d66-c46b42fa1589",
+                            SecurityStamp = "d99e5200-7c69-456b-8dde-a8c8c18d2ced",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -130,20 +148,24 @@ namespace Auth.API.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("normalized_name");
 
                     b.HasKey("Id");
 
@@ -156,8 +178,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "31ab46df-f95e-471e-9e65-e9b21b296f42",
-                            ConcurrencyStamp = "ce1e5d27-0f6d-404b-993c-571e261899b4",
+                            Id = "15ee84e8-c577-4889-9725-e14fb8ceebad",
+                            ConcurrencyStamp = "70d87a9e-23a3-43b3-b4dc-571dc705af32",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -168,22 +190,26 @@ namespace Auth.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("claim_value");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("role_id");
 
                     b.HasKey("Id");
 
@@ -197,22 +223,26 @@ namespace Auth.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("claim_value");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
@@ -225,20 +255,24 @@ namespace Auth.API.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("login_provider");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("provider_key");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("provider_display_name");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -251,11 +285,13 @@ namespace Auth.API.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("RoleId")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -266,8 +302,8 @@ namespace Auth.API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "0f76aa88-6a46-41cd-805d-a6d87b19f481",
-                            RoleId = "31ab46df-f95e-471e-9e65-e9b21b296f42"
+                            UserId = "35eb87de-4d35-42fe-a49f-8a7f74d4780a",
+                            RoleId = "15ee84e8-c577-4889-9725-e14fb8ceebad"
                         });
                 });
 
@@ -275,19 +311,23 @@ namespace Auth.API.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("login_provider");
 
                     b.Property<string>("Name")
                         .HasMaxLength(36)
-                        .HasColumnType("character varying(36)");
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("name");
 
                     b.Property<string>("Value")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

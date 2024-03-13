@@ -162,6 +162,10 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                           }
                                         },
                                         child: TextFormField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                            CentavosInputFormatter(moeda: true),
+                                          ],
                                           controller: precoSugeridoController,
                                           keyboardType: TextInputType.number,
                                           style: Theme.of(context).primaryTextTheme.bodyLarge,

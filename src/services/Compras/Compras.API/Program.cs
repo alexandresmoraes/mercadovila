@@ -2,6 +2,7 @@ using Common.EventBus;
 using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations;
 using Common.EventBus.Integrations.IntegrationLog;
+using Common.WebAPI.Logs;
 using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
 using Compras.API.Application.Queries;
@@ -26,6 +27,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApiConfiguration(builder.Configuration);
 
 builder.Services.AddAuthConfig(builder.Configuration);
+
+builder.Logging.AddSerilog(builder.Configuration);
+builder.Services.AddSerilog();
 
 builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Database.GetDbConnection());
 builder.Services.AddScoped<IComprasQueries, ComprasQueries>();

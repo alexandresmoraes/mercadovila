@@ -209,7 +209,7 @@ class CardVendaState extends State<CardVenda> {
                                     style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
-                                    UtilBrasilFields.obterReal(itens[i].preco, moeda: false),
+                                    UtilBrasilFields.obterReal(itens[i].preco.toDouble(), moeda: false),
                                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                                   )
                                 ],

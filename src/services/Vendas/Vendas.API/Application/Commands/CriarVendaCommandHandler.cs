@@ -73,7 +73,7 @@ namespace Vendas.API.Application.Commands
 
       await _vendaRepository.AddAsync(venda);
 
-      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
+      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId, venda.VendaItens.ToDictionary(_ => _.ProdutoId, _ => _.Quantidade));
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
       return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse(venda.Id));
