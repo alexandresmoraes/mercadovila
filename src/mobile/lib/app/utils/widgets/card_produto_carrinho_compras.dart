@@ -120,6 +120,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                             FilteringTextInputFormatter.digitsOnly,
                                             CentavosInputFormatter(moeda: true),
                                           ],
+                                          keyboardType: TextInputType.number,
                                           controller: precoPagoController,
                                           style: Theme.of(context).primaryTextTheme.bodyLarge,
                                           autocorrect: true,

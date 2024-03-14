@@ -107,9 +107,9 @@ abstract class CarrinhoStoreBase with Store {
         if (message.isNotEmpty) GlobalSnackbar.error(message);
       }, (response) async {
         GlobalSnackbar.success("Compra efetuada com sucesso.");
+        Modular.to.pop();
         await load();
         await Modular.get<PagamentosStore>().load();
-        Modular.to.pop();
         setSelectOpcaoPagamento(false);
       });
     } finally {

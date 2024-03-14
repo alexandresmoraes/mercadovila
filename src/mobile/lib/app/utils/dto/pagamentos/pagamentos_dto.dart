@@ -35,7 +35,7 @@ class PagamentosDto {
     compradorFotoUrl = json['compradorFotoUrl'];
     compradorEmail = json['compradorEmail'];
     pagamentoId = json['pagamentoId'];
-    pagamentoDataHora = json['pagamentoDataHora'];
+    pagamentoDataHora = DateTime.parse(json['pagamentoDataHora'] as String);
     pagamentoTipo = json['pagamentoTipo'];
     pagamentoStatus = json['pagamentoStatus'];
     pagamentoValor = json['pagamentoValor'];

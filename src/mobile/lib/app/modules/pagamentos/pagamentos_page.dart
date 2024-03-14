@@ -14,6 +14,7 @@ import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_reposit
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PagamentosPage extends StatefulWidget {
   final String title;
@@ -104,7 +105,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                 ),
               ),
               Expanded(
-                child: _allPagamentos(),
+                child: _todosPagamentos(),
               ),
             ],
           ),
@@ -113,7 +114,7 @@ class PagamentosPageState extends State<PagamentosPage> {
     );
   }
 
-  Widget _allPagamentos() {
+  Widget _todosPagamentos() {
     final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
@@ -190,9 +191,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                       ),
                       const Expanded(child: SizedBox()),
                       Icon(
-                        item.pagamentoStatus == EnumStatusPagamento.cancelado.index
-                            ? MdiIcons.closeOctagon
-                            : MdiIcons.checkDecagram,
+                        item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                         size: 20,
                         color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
                             ? Colors.red
@@ -236,8 +235,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                                 backgroundImage: AssetImage('assets/person.png'),
                               );
                             },
-                            imageUrl:
-                                '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
+                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
                             imageBuilder: (context, imageProvider) {
                               return CircleAvatar(
                                 radius: 21,
@@ -250,9 +248,24 @@ class PagamentosPageState extends State<PagamentosPage> {
                     item.compradorNome,
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
-                  subtitle: Text(
-                    item.compradorEmail,
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                          top: 5,
+                        ),
+                        child: Text(
+                          item.compradorEmail,
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                        ),
+                      ),
+                      Text(
+                        '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}',
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    ],
                   ),
                   trailing: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -265,9 +278,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
