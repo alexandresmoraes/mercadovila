@@ -21,10 +21,10 @@ namespace Compras.API.Application.Queries
              c.id AS id,   
              c.datahora AS datahora,
              c.total AS total,
-             c.usuario_id AS usuarioid,
-             c.usuario_nome AS usuarionome,
-             c.usuario_email AS usuarioemail,
-             c.usuario_foto_url AS usuariofotourl,
+             co.id AS usuarioid,
+             co.nome AS usuarionome,
+             co.email AS usuarioemail,
+             co.foto_url AS usuariofotourl,
              ci.produto_id AS itemprodutoid,
              ci.nome AS itemnome,	 
              ci.image_url AS itemimageurl,
@@ -35,7 +35,8 @@ namespace Compras.API.Application.Queries
              ci.preco_medio_sugerido AS itemprecomediosugerido,
              ci.quantidade AS itemquantidade,
              ci.unidade_medida AS itemunidademedida
-            FROM compras c            
+            FROM compras c    
+            LEFT JOIN compradores co ON co.id = c.comprador_id
             LEFT JOIN compra_itens ci ON c.id = ci.compra_id
             WHERE c.id=@id
           ", new { id = compraId }
@@ -56,10 +57,10 @@ namespace Compras.API.Application.Queries
              c.id AS id,   
              c.datahora AS datahora,
              c.total AS total,
-             c.usuario_id AS usuarioid,
-             c.usuario_nome AS usuarionome,
-             c.usuario_email AS usuarioemail,
-             c.usuario_foto_url AS usuariofotourl,
+             co.id AS usuarioid,
+             co.nome AS usuarionome,
+             co.email AS usuarioemail,
+             co.foto_url AS usuariofotourl,
              ci.produto_id AS itemprodutoid,
              ci.nome AS itemnome,	 
              ci.descricao AS itemdescricao,
@@ -69,6 +70,7 @@ namespace Compras.API.Application.Queries
              ci.unidade_medida AS itemunidademedida,   
              count(*) over() AS count
           FROM compras c
+          LEFT JOIN compradores co ON co.id = c.comprador_id
           LEFT JOIN compra_itens ci ON c.id = ci.compra_id  
       ";
 

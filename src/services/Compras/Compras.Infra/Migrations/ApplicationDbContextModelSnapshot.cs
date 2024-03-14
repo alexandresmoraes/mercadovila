@@ -55,7 +55,7 @@ namespace Compras.Infra.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -78,7 +78,7 @@ namespace Compras.Infra.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
-                        .HasColumnName("usuario_username");
+                        .HasColumnName("username");
 
                     b.HasKey("UserId");
 

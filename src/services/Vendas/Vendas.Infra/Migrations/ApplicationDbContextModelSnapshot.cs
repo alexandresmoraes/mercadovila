@@ -27,7 +27,7 @@ namespace Vendas.Infra.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("id");
 
                     b.Property<string>("Email")
                         .IsRequired()

@@ -14,7 +14,7 @@ namespace Vendas.Infra.EntityMapping
 
       b.Property(p => p.UserId)
         .HasMaxLength(36)
-        .HasColumnName("user_id")
+        .HasColumnName("id")
         .IsRequired();
 
       b.Property(c => c.Nome)

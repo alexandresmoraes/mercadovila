@@ -14,7 +14,7 @@ namespace Compras.Infra.EntityMapping
 
       b.Property(c => c.UserId)
         .HasMaxLength(36)
-        .HasColumnName("user_id")
+        .HasColumnName("id")
         .IsRequired();
 
       b.Property(c => c.Nome)
@@ -23,7 +23,7 @@ namespace Compras.Infra.EntityMapping
         .HasMaxLength(256);
 
       b.Property(c => c.Username)
-        .HasColumnName("usuario_username")
+        .HasColumnName("username")
         .HasMaxLength(128)
         .IsRequired();
 

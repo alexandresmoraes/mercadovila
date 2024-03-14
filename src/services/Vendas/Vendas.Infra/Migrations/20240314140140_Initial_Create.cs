@@ -14,14 +14,14 @@ namespace Vendas.Infra.Migrations
                 name: "compradores",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     foto_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_compradores", x => x.user_id);
+                    table.PrimaryKey("PK_compradores", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,7 +43,7 @@ namespace Vendas.Infra.Migrations
                         name: "FK_pagamentos_compradores_comprador_id",
                         column: x => x.comprador_id,
                         principalTable: "compradores",
-                        principalColumn: "user_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -66,7 +66,7 @@ namespace Vendas.Infra.Migrations
                         name: "FK_vendas_compradores_comprador_id",
                         column: x => x.comprador_id,
                         principalTable: "compradores",
-                        principalColumn: "user_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vendas_pagamentos_pagamento_id",

@@ -1,5 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
@@ -175,23 +176,35 @@ class LoginPageState extends State<LoginPage> {
                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
                       padding: const EdgeInsets.only(),
                       margin: const EdgeInsets.only(top: 20),
-                      child: TextFormField(
-                        controller: passwordController,
-                        focusNode: passwordFocusNode,
-                        textInputAction: TextInputAction.done,
-                        maxLength: 10,
-                        onChanged: _controller.setPassword,
-                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                        decoration: InputDecoration(
-                          hintText: 'Senha',
-                          prefixIcon: Icon(
-                            Icons.password,
-                            color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                      child: Observer(builder: (_) {
+                        return TextFormField(
+                          controller: passwordController,
+                          focusNode: passwordFocusNode,
+                          obscureText: !_controller.isPasswordVisible,
+                          textInputAction: TextInputAction.done,
+                          maxLength: 10,
+                          onChanged: _controller.setPassword,
+                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          decoration: InputDecoration(
+                            hintText: 'Senha',
+                            prefixIcon: Icon(
+                              Icons.password,
+                              color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                            ),
+                            counterText: '',
+                            contentPadding: const EdgeInsets.only(top: 10),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _controller.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                _controller.isPasswordVisible = !_controller.isPasswordVisible;
+                              },
+                            ),
                           ),
-                          counterText: '',
-                          contentPadding: const EdgeInsets.only(top: 10),
-                        ),
-                      ),
+                        );
+                      }),
                     ),
                     Container(
                       decoration: BoxDecoration(

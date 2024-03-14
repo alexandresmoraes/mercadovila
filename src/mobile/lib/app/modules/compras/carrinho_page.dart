@@ -825,7 +825,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                               style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             trailing: Text(
-                              "R\$ ${carrinhoComprasStore.selectedItem!.preco}",
+                              UtilBrasilFields.obterReal(carrinhoComprasStore.selectedItem!.preco),
                               style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/notificacoes/notificacao_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
@@ -32,13 +33,15 @@ class NotificacoesPageState extends State<NotificacoesPage> {
           centerTitle: true,
           title: const Text("Notificações"),
           actions: [
-            IconButton(
-              onPressed: () async {
-                var refresh = await Modular.to.pushNamed<bool>('/notificacoes/new');
-                if (refresh ?? false) pagingController.refresh();
-              },
-              icon: const Icon(MdiIcons.plus),
-            ),
+            Modular.get<AccountStore>().account!.isAdmin
+                ? IconButton(
+                    onPressed: () async {
+                      var refresh = await Modular.to.pushNamed<bool>('/notificacoes/new');
+                      if (refresh ?? false) pagingController.refresh();
+                    },
+                    icon: const Icon(MdiIcons.plus),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
         body: _allNotificacoes(),

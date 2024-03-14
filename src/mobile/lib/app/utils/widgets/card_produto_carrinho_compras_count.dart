@@ -50,7 +50,7 @@ class CardProdutoCarrinhoComprasCount extends StatelessWidget {
       right: 0,
       child: Container(
         height: 28,
-        width: 80,
+        width: 87,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             stops: const [0, .90],

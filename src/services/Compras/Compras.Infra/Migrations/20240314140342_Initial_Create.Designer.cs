@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Compras.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240314134900_Initial_Create")]
+    [Migration("20240314140342_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace Compras.Infra.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -80,7 +80,7 @@ namespace Compras.Infra.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
-                        .HasColumnName("usuario_username");
+                        .HasColumnName("username");
 
                     b.HasKey("UserId");
 

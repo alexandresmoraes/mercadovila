@@ -88,7 +88,7 @@ class CardProdutoColor extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "R\$",
+                                    "R\$ ",
                                     style: Theme.of(context).primaryTextTheme.titleSmall,
                                   ),
                                   Text(

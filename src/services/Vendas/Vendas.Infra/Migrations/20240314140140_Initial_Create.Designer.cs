@@ -12,7 +12,7 @@ using Vendas.Infra.Data;
 namespace Vendas.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240314130132_Initial_Create")]
+    [Migration("20240314140140_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ namespace Vendas.Infra.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("id");
 
                     b.Property<string>("Email")
                         .IsRequired()

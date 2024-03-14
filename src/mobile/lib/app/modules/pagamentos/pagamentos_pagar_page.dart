@@ -36,335 +36,338 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
             centerTitle: true,
             title: const Text('Pagamento'),
           ),
-          body: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                color: Colors.transparent,
-                alignment: Alignment.topCenter,
-                child: Stack(
-                  clipBehavior: Clip.none,
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 200,
+                  color: Colors.transparent,
                   alignment: Alignment.topCenter,
-                  children: [
-                    Container(
-                      height: 200,
-                      alignment: Alignment.topCenter,
-                      child: Container(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
                         height: 200,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/profile_edit.png'),
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/profile_edit.png'),
+                            ),
+                          ),
+                          alignment: Alignment.topCenter,
+                          child: Center(
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.white,
+                              child: Observer(builder: (_) {
+                                if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
+                                  return CachedNetworkImage(
+                                    placeholder: (context, url) => CircularProgress(
+                                      color: Theme.of(context).primaryColorLight,
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    errorWidget: (context, url, error) => const CircleAvatar(
+                                      radius: 100,
+                                      backgroundImage: AssetImage('assets/person.png'),
+                                    ),
+                                    imageUrl:
+                                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.pagamentoDetalheDto!.compradorFotoUrl}',
+                                    imageBuilder: (context, imageProvider) {
+                                      return CircleAvatar(
+                                        radius: 100,
+                                        backgroundImage: imageProvider,
+                                      );
+                                    },
+                                  );
+                                }
+
+                                return const CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: AssetImage('assets/person.png'),
+                                );
+                              }),
+                            ),
                           ),
                         ),
-                        alignment: Alignment.topCenter,
-                        child: Center(
-                          child: CircleAvatar(
-                            radius: 60,
-                            backgroundColor: Colors.white,
-                            child: Observer(builder: (_) {
-                              if (_controller.isPagamentoDetalheSelected &&
-                                  !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
-                                return CachedNetworkImage(
+                      ),
+                      Observer(builder: (_) {
+                        if (!_controller.isPagamentoDetalheSelected) {
+                          return const SizedBox.shrink();
+                        }
+
+                        return Positioned(
+                          bottom: 15,
+                          child: Text(
+                            _controller.pagamentoDetalheDto!.compradorNome ?? "",
+                            style: Theme.of(context).primaryTextTheme.displayLarge,
+                          ),
+                        );
+                      })
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: TypeAheadField<AccountDto>(
+                    controller: _controller.usuarioEditingController,
+                    emptyBuilder: (context) => const SizedBox.shrink(),
+                    suggestionsCallback: (search) async {
+                      if (isNullorEmpty(search) || _controller.isPagamentoDetalheSelected) {
+                        return Future.value(const Iterable<AccountDto>.empty().toList());
+                      }
+                      var pagedResult = await Modular.get<IAccountRepository>().getAccounts(1, search);
+                      var listAccount = pagedResult.data.map((e) => AccountDto.fromJson(e)).toList();
+                      return Future.value(listAccount);
+                    },
+                    builder: (context, controller, focusNode) {
+                      return Observer(builder: (_) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                enabled: !_controller.isPagamentoDetalheSelected,
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                controller: controller,
+                                focusNode: focusNode,
+                                autofocus: true,
+                                decoration: InputDecoration(
+                                  prefixText: '@',
+                                  border: const OutlineInputBorder(),
+                                  fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                      ? Theme.of(context).inputDecorationTheme.fillColor
+                                      : Theme.of(context).scaffoldBackgroundColor,
+                                  hintText: 'Usuário',
+                                  contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                ),
+                              ),
+                            ),
+                            _controller.isPagamentoDetalheSelected
+                                ? IconButton(
+                                    icon: const Icon(MdiIcons.closeOctagon),
+                                    onPressed: () {
+                                      _controller.clearPagamentoDetalhe();
+                                    },
+                                  )
+                                : const SizedBox.shrink()
+                          ],
+                        );
+                      });
+                    },
+                    itemBuilder: (context, data) {
+                      return ListTile(
+                        tileColor: Theme.of(context).cardTheme.color,
+                        visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                        contentPadding: const EdgeInsets.all(0),
+                        minLeadingWidth: 0,
+                        leading: isNullorEmpty(data.fotoUrl)
+                            ? const CircleAvatar(
+                                radius: 35,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: 21,
+                                  backgroundImage: AssetImage('assets/person.png'),
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 35,
+                                backgroundColor: Colors.white,
+                                child: CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
-                                    color: Theme.of(context).primaryColorLight,
-                                    width: 100,
-                                    height: 100,
+                                    color: Theme.of(context).primaryColor,
                                   ),
-                                  errorWidget: (context, url, error) => const CircleAvatar(
-                                    radius: 100,
-                                    backgroundImage: AssetImage('assets/person.png'),
-                                  ),
-                                  imageUrl:
-                                      '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.pagamentoDetalheDto!.compradorFotoUrl}',
+                                  errorWidget: (context, url, error) {
+                                    return const CircleAvatar(
+                                      radius: 21,
+                                      backgroundImage: AssetImage('assets/person.png'),
+                                    );
+                                  },
+                                  imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${data.fotoUrl!}',
                                   imageBuilder: (context, imageProvider) {
                                     return CircleAvatar(
-                                      radius: 100,
+                                      radius: 21,
                                       backgroundImage: imageProvider,
                                     );
                                   },
-                                );
-                              }
-
-                              return const CircleAvatar(
-                                radius: 100,
-                                backgroundImage: AssetImage('assets/person.png'),
-                              );
-                            }),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Observer(builder: (_) {
-                      if (!_controller.isPagamentoDetalheSelected) {
-                        return const SizedBox.shrink();
-                      }
-
-                      return Positioned(
-                        bottom: 15,
-                        child: Text(
-                          _controller.pagamentoDetalheDto!.compradorNome ?? "",
-                          style: Theme.of(context).primaryTextTheme.displayLarge,
-                        ),
-                      );
-                    })
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: TypeAheadField<AccountDto>(
-                  controller: _controller.usuarioEditingController,
-                  emptyBuilder: (context) => const SizedBox.shrink(),
-                  suggestionsCallback: (search) async {
-                    if (isNullorEmpty(search) || _controller.isPagamentoDetalheSelected) {
-                      return Future.value(const Iterable<AccountDto>.empty().toList());
-                    }
-                    var pagedResult = await Modular.get<IAccountRepository>().getAccounts(1, search);
-                    var listAccount = pagedResult.data.map((e) => AccountDto.fromJson(e)).toList();
-                    return Future.value(listAccount);
-                  },
-                  builder: (context, controller, focusNode) {
-                    return Observer(builder: (_) {
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              enabled: !_controller.isPagamentoDetalheSelected,
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              controller: controller,
-                              focusNode: focusNode,
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                prefixText: '@',
-                                border: const OutlineInputBorder(),
-                                fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                    ? Theme.of(context).inputDecorationTheme.fillColor
-                                    : Theme.of(context).scaffoldBackgroundColor,
-                                hintText: 'Usuário',
-                                contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                              ),
-                            ),
-                          ),
-                          _controller.isPagamentoDetalheSelected
-                              ? IconButton(
-                                  icon: const Icon(MdiIcons.closeOctagon),
-                                  onPressed: () {
-                                    _controller.clearPagamentoDetalhe();
-                                  },
-                                )
-                              : const SizedBox.shrink()
-                        ],
-                      );
-                    });
-                  },
-                  itemBuilder: (context, data) {
-                    return ListTile(
-                      tileColor: Theme.of(context).cardTheme.color,
-                      visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
-                      contentPadding: const EdgeInsets.all(0),
-                      minLeadingWidth: 0,
-                      leading: isNullorEmpty(data.fotoUrl)
-                          ? const CircleAvatar(
-                              radius: 35,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 21,
-                                backgroundImage: AssetImage('assets/person.png'),
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 35,
-                              backgroundColor: Colors.white,
-                              child: CachedNetworkImage(
-                                placeholder: (context, url) => CircularProgress(
-                                  color: Theme.of(context).primaryColor,
                                 ),
-                                errorWidget: (context, url, error) {
-                                  return const CircleAvatar(
-                                    radius: 21,
-                                    backgroundImage: AssetImage('assets/person.png'),
-                                  );
-                                },
-                                imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${data.fotoUrl!}',
-                                imageBuilder: (context, imageProvider) {
-                                  return CircleAvatar(
-                                    radius: 21,
-                                    backgroundImage: imageProvider,
-                                  );
-                                },
                               ),
-                            ),
-                      title: Text(
-                        data.username,
-                        style: Theme.of(context).primaryTextTheme.bodyLarge,
-                      ),
-                      subtitle: Text(
-                        data.email,
-                        style: Theme.of(context).primaryTextTheme.displayMedium,
-                      ),
-                    );
-                  },
-                  onSelected: (data) async {
-                    await _controller.load(data.id, data.username);
-                  },
-                ),
-              ),
-              Observer(builder: (_) {
-                if (!_controller.isPagamentoDetalheSelected) {
-                  return const SizedBox.shrink();
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                        contentPadding: const EdgeInsets.all(0),
                         title: Text(
-                          "Detalhes",
-                          style: Theme.of(context).primaryTextTheme.headlineSmall,
+                          data.username,
+                          style: Theme.of(context).primaryTextTheme.bodyLarge,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
+                        subtitle: Text(
+                          data.email,
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                        ),
+                      );
+                    },
+                    onSelected: (data) async {
+                      await _controller.load(data.id, data.username);
+                    },
+                  ),
+                ),
+                Observer(builder: (_) {
+                  if (!_controller.isPagamentoDetalheSelected) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                          contentPadding: const EdgeInsets.all(0),
+                          title: Text(
+                            "Detalhes",
+                            style: Theme.of(context).primaryTextTheme.headlineSmall,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Data e Hora",
+                                style: Theme.of(context).primaryTextTheme.labelSmall,
+                              ),
+                              Text(
+                                '${UtilData.obterDataDDMMAAAA(DateTime.now())} ${UtilData.obterHoraHHMM(DateTime.now())}',
+                                style: Theme.of(context).primaryTextTheme.labelSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Data e Hora",
+                              "Sub-Total",
                               style: Theme.of(context).primaryTextTheme.labelSmall,
                             ),
                             Text(
-                              '${UtilData.obterDataDDMMAAAA(DateTime.now())} ${UtilData.obterHoraHHMM(DateTime.now())}',
+                              UtilBrasilFields.obterReal(_controller.pagamentoDetalheDto!.total.toDouble()),
                               style: Theme.of(context).primaryTextTheme.labelSmall,
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Sub-Total",
-                            style: Theme.of(context).primaryTextTheme.labelSmall,
+                        const Divider(),
+                        ListTile(
+                          minVerticalPadding: 0,
+                          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                          minLeadingWidth: 30,
+                          contentPadding: const EdgeInsets.all(0),
+                          leading: Text(
+                            "Total",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                           ),
-                          Text(
+                          trailing: Text(
                             UtilBrasilFields.obterReal(_controller.pagamentoDetalheDto!.total.toDouble()),
-                            style: Theme.of(context).primaryTextTheme.labelSmall,
+                            style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                           ),
-                        ],
-                      ),
-                      const Divider(),
-                      ListTile(
-                        minVerticalPadding: 0,
-                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                        minLeadingWidth: 30,
-                        contentPadding: const EdgeInsets.all(0),
-                        leading: Text(
-                          "Total",
-                          style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                         ),
-                        trailing: Text(
-                          UtilBrasilFields.obterReal(_controller.pagamentoDetalheDto!.total.toDouble()),
-                          style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-              Observer(builder: (_) {
-                if (!_controller.isPagamentoDetalheSelected) {
-                  return const SizedBox.shrink();
-                }
+                      ],
+                    ),
+                  );
+                }),
+                Observer(builder: (_) {
+                  if (!_controller.isPagamentoDetalheSelected) {
+                    return const SizedBox.shrink();
+                  }
 
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TypeAheadField<int>(
-                        controller: _controller.tipoPagamentoController,
-                        emptyBuilder: (context) => const SizedBox.shrink(),
-                        suggestionsCallback: (search) {
-                          if (_controller.isTipoPagamentoSelected) {
-                            return Future.value(const Iterable<int>.empty().toList());
-                          }
-
-                          return _controller.enumTipoPagamento.keys
-                              .where((key) =>
-                                  _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
-                              .toList();
-                        },
-                        builder: (context, controller, focusNode) {
-                          return Observer(builder: (_) {
-                            if (!_controller.isValidPagamento) {
-                              return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TypeAheadField<int>(
+                          controller: _controller.tipoPagamentoController,
+                          emptyBuilder: (context) => const SizedBox.shrink(),
+                          suggestionsCallback: (search) {
+                            if (_controller.isTipoPagamentoSelected) {
+                              return Future.value(const Iterable<int>.empty().toList());
                             }
 
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    enabled: !_controller.isTipoPagamentoSelected,
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                    controller: controller,
-                                    focusNode: focusNode,
-                                    autofocus: true,
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      fillColor: Modular.get<ThemeStore>().isDarkModeEnable
-                                          ? Theme.of(context).inputDecorationTheme.fillColor
-                                          : Theme.of(context).scaffoldBackgroundColor,
-                                      hintText: 'Tipo de pagamento',
-                                      contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                            return _controller.enumTipoPagamento.keys
+                                .where((key) => _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
+                                .toList();
+                          },
+                          builder: (context, controller, focusNode) {
+                            return Observer(builder: (_) {
+                              if (!_controller.isValidPagamento) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      enabled: !_controller.isTipoPagamentoSelected,
+                                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                            ? Theme.of(context).inputDecorationTheme.fillColor
+                                            : Theme.of(context).scaffoldBackgroundColor,
+                                        hintText: 'Tipo de pagamento',
+                                        contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                      ),
                                     ),
                                   ),
+                                  _controller.isTipoPagamentoSelected
+                                      ? IconButton(
+                                          icon: const Icon(MdiIcons.closeOctagon),
+                                          onPressed: _controller.clearTipoPagamento,
+                                        )
+                                      : const SizedBox.shrink()
+                                ],
+                              );
+                            });
+                          },
+                          itemBuilder: (context, data) {
+                            return ListTile(
+                              tileColor: Theme.of(context).cardTheme.color,
+                              visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                              contentPadding: const EdgeInsets.all(0),
+                              minLeadingWidth: 0,
+                              title: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  _controller.enumTipoPagamento[data]!,
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 ),
-                                _controller.isTipoPagamentoSelected
-                                    ? IconButton(
-                                        icon: const Icon(MdiIcons.closeOctagon),
-                                        onPressed: _controller.clearTipoPagamento,
-                                      )
-                                    : const SizedBox.shrink()
-                              ],
-                            );
-                          });
-                        },
-                        itemBuilder: (context, data) {
-                          return ListTile(
-                            tileColor: Theme.of(context).cardTheme.color,
-                            visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
-                            contentPadding: const EdgeInsets.all(0),
-                            minLeadingWidth: 0,
-                            title: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                _controller.enumTipoPagamento[data]!,
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
                               ),
-                            ),
-                          );
-                        },
-                        onSelected: (data) {
-                          _controller.setTipoPagamento(data);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }),
-            ],
+                            );
+                          },
+                          onSelected: (data) {
+                            _controller.setTipoPagamento(data);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 100,
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
           bottomNavigationBar: Observer(
             builder: (_) {
