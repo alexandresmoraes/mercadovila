@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -183,13 +184,15 @@ class PagamentosPageState extends State<PagamentosPage> {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         child: Text(
-                          '#${item.pagamentoId.toString()}',
+                          '#${item.pagamentoId}',
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                       ),
                       const Expanded(child: SizedBox()),
                       Icon(
-                        item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                        item.pagamentoStatus == EnumStatusPagamento.cancelado.index
+                            ? MdiIcons.closeOctagon
+                            : MdiIcons.checkDecagram,
                         size: 20,
                         color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
                             ? Colors.red
@@ -233,7 +236,8 @@ class PagamentosPageState extends State<PagamentosPage> {
                                 backgroundImage: AssetImage('assets/person.png'),
                               );
                             },
-                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
+                            imageUrl:
+                                '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
                             imageBuilder: (context, imageProvider) {
                               return CircleAvatar(
                                 radius: 21,
@@ -254,14 +258,16 @@ class PagamentosPageState extends State<PagamentosPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "R\$ ${item.pagamentoValor}",
+                        UtilBrasilFields.obterReal(item.pagamentoValor.toDouble()),
                         style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
                       ),
                     ],
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                      : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),

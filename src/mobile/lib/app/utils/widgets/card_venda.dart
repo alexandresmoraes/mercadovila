@@ -81,7 +81,8 @@ class CardVendaState extends State<CardVenda> {
                         backgroundImage: AssetImage('assets/person.png'),
                       );
                     },
-                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
+                    imageUrl:
+                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
                     imageBuilder: (context, imageProvider) {
                       return CircleAvatar(
                         radius: 24,
@@ -102,7 +103,7 @@ class CardVendaState extends State<CardVenda> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "R\$ ${widget.item.total}",
+                UtilBrasilFields.obterReal(widget.item.total.toDouble()),
                 style: Theme.of(context).primaryTextTheme.bodyLarge,
               ),
               InkWell(
@@ -112,7 +113,8 @@ class CardVendaState extends State<CardVenda> {
                   });
                 },
                 child: Container(
-                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  decoration:
+                      const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                   margin: const EdgeInsets.only(right: 10, top: 5),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   width: 80,
@@ -206,7 +208,8 @@ class CardVendaState extends State<CardVenda> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     UtilBrasilFields.obterReal(itens[i].preco.toDouble(), moeda: false),

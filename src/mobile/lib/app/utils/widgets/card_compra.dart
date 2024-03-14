@@ -98,7 +98,7 @@ class CardCompraState extends State<CardCompra> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "R\$ ${widget.item.total}",
+                UtilBrasilFields.obterReal(widget.item.total.toDouble()),
                 style: Theme.of(context).primaryTextTheme.bodyLarge,
               ),
               InkWell(
@@ -108,7 +108,8 @@ class CardCompraState extends State<CardCompra> {
                   });
                 },
                 child: Container(
-                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  decoration:
+                      const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                   margin: const EdgeInsets.only(right: 10, top: 5),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   width: 80,
@@ -202,7 +203,8 @@ class CardCompraState extends State<CardCompra> {
                                   ),
                                   Text(
                                     'R\$ ',
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     UtilBrasilFields.obterReal(itens[i].precoPago, moeda: false),
@@ -210,7 +212,8 @@ class CardCompraState extends State<CardCompra> {
                                   ),
                                   Text(
                                     ' x ',
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                   Text(
                                     '${itens[i].quantidade}',
@@ -218,7 +221,8 @@ class CardCompraState extends State<CardCompra> {
                                   ),
                                   Text(
                                     itens[i].unidadeMedida,
-                                    style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                    style: TextStyle(
+                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                   ),
                                 ],
                               ),

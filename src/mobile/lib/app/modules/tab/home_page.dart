@@ -88,7 +88,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -108,7 +111,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       }
 
                       return Container(
-                        decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                         margin: const EdgeInsets.only(right: 10),
                         padding: const EdgeInsets.only(left: 5, right: 5),
                         width: 84,
@@ -130,9 +134,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     ),
                                   )
                                 : Padding(
-                                    padding: const EdgeInsets.only(left: 5),
+                                    padding: const EdgeInsets.only(left: 15),
                                     child: Text(
-                                      ' ${pagamentosStore.pagamentoDetalheDto!.total}',
+                                      UtilBrasilFields.obterReal(pagamentosStore.pagamentoDetalheDto!.total.toDouble(),
+                                          moeda: false),
                                       style: Theme.of(context).primaryTextTheme.bodySmall,
                                     ),
                                   ),
@@ -400,7 +405,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         UtilBrasilFields.obterReal(item.preco, moeda: false),
