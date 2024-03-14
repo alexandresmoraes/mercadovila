@@ -6,13 +6,13 @@ namespace Common.WebAPI.Shared
   {
     public string MessageType { get; protected set; }
     public string AggregateId { get; protected set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
     protected Event(string aggregateId)
     {
       MessageType = GetType().Name;
       AggregateId = aggregateId;
-      CreatedAt = DateTime.Now;
+      CreatedAt = DateTimeOffset.UtcNow;
     }
 
     public override string ToString()

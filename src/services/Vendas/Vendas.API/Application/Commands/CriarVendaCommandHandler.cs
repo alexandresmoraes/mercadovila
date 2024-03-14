@@ -9,8 +9,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.API.Application.Commands
 {
-  public class CriarVendaCommandHandler
-    : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
+  public class CriarVendaCommandHandler : IRequestHandler<CriarVendaCommand, Result<CriarVendaCommandResponse>>
   {
     private readonly ICompradoresRepository _compradorRepository;
     private readonly IVendasRepository _vendaRepository;
@@ -74,13 +73,10 @@ namespace Vendas.API.Application.Commands
 
       await _vendaRepository.AddAsync(venda);
 
-      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId);
+      var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId, venda.VendaItens.ToDictionary(_ => _.ProdutoId, _ => _.Quantidade));
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);
 
-      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse
-      {
-        Id = venda.Id,
-      });
+      return Result.Created($"api/vendas/{venda.Id}", new CriarVendaCommandResponse(venda.Id));
     }
   }
 }

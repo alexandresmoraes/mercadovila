@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Wrap;
+using System.Collections.Concurrent;
 using System.Text.Json;
 
 namespace Common.EventBus
@@ -18,8 +19,9 @@ namespace Common.EventBus
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly AsyncPolicyWrap _policyWrap;
     private readonly IProducer<string, string> _producer;
-    private readonly IConsumer<string, string> _consumer;
     private readonly int _retryCount;
+    private readonly ConsumerConfig _consumerConfig;
+    private readonly ConcurrentDictionary<string, IConsumer<string, string>> _consumers = new ConcurrentDictionary<string, IConsumer<string, string>>();
 
     public KafkaEventBus(
       ILogger<KafkaEventBus> logger,
@@ -46,17 +48,17 @@ namespace Common.EventBus
 
       var producerConfig = new ProducerConfig
       {
-        BootstrapServers = eventBusSettings.BootstrapServer
+        BootstrapServers = _eventBusSettings.BootstrapServer
       };
       _producer = new ProducerBuilder<string, string>(producerConfig).Build();
 
-      var consumerConfig = new ConsumerConfig
+      _consumerConfig = new ConsumerConfig
       {
-        BootstrapServers = eventBusSettings.BootstrapServer,
-        GroupId = eventBusSettings.Group,
-        AutoOffsetReset = AutoOffsetReset.Earliest
+        BootstrapServers = _eventBusSettings.BootstrapServer,
+        GroupId = _eventBusSettings.Group,
+        AutoOffsetReset = AutoOffsetReset.Earliest,
+        EnableAutoCommit = false,
       };
-      _consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
     }
 
     public async Task PublishAsync(IntegrationEvent @event)
@@ -64,20 +66,20 @@ namespace Common.EventBus
       var policy = Policy.Handle<Exception>()
        .WaitAndRetryAsync(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
        {
-         _logger.LogWarning(ex, "Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", @event.Id, $"{time.TotalSeconds:n1}", ex.Message);
+         _logger.LogWarning(ex, "----- WARNING: Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", @event.Id, $"{time.TotalSeconds:n1}", ex.Message);
        });
 
       var eventName = @event.GetType().Name;
 
-      _logger.LogTrace("Creating Kafka producer to publish event: {EventId} ({EventName})", @event.Id, eventName);
+      _logger.LogTrace("----- Creating Kafka producer to publish event: {EventId} ({EventName})", @event.Id, eventName);
 
       var message = JsonSerializer.Serialize(@event, @event.GetType());
 
       await policy.ExecuteAsync(async () =>
       {
-        _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
+        _logger.LogTrace("----- Publishing event to Kafka: {EventId}", @event.Id);
 
-        await _producer.ProduceAsync(_eventBusSettings.Topic, new Message<string, string>
+        await _producer.ProduceAsync(eventName, new Message<string, string>
         {
           Key = @event.Key ?? Guid.NewGuid().ToString(),
           Value = message
@@ -94,7 +96,7 @@ namespace Common.EventBus
       _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
       _subsManager.AddSubscription<T, TH>();
-      StartBasicConsume(eventName);
+      StartConsume(eventName);
     }
 
     public void Unsubscribe<T, TH>()
@@ -108,23 +110,25 @@ namespace Common.EventBus
       _subsManager.RemoveSubscription<T, TH>();
     }
 
-    private void StartBasicConsume(string eventName)
+    private void StartConsume(string eventName)
     {
-      _logger.LogTrace("Starting Kafka basic consume");
+      _logger.LogTrace("----- Starting Kafka basic consume {EventName}", eventName);
 
       Task.Run(async () =>
       {
-        _consumer.Subscribe(_eventBusSettings.Topic);
+        var consumer = GetConsumer(eventName);
+
+        consumer.Subscribe(eventName);
 
         while (true)
         {
           try
           {
-            var result = _consumer.Consume();
+            var result = consumer.Consume();
 
             if (result is not null)
             {
-              _logger.LogInformation("Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
+              _logger.LogInformation("----- Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
                 result.Partition,
                 result.Offset,
                 result.Message.Timestamp.UtcDateTime);
@@ -132,6 +136,8 @@ namespace Common.EventBus
               await _policyWrap.ExecuteAsync(async () =>
               {
                 await ProcessEvent(eventName, result.Message.Value);
+
+                consumer.Commit(result);
               });
             }
           }
@@ -145,7 +151,7 @@ namespace Common.EventBus
 
     private async Task ProcessEvent(string eventName, string message)
     {
-      _logger.LogTrace("Processing Kafka event: {EventName}", eventName);
+      _logger.LogTrace("----- Processing Kafka event: {EventName}", eventName);
 
       if (_subsManager.HasSubscriptionsForEvent(eventName))
       {
@@ -165,29 +171,32 @@ namespace Common.EventBus
       }
       else
       {
-        _logger.LogWarning("No subscription for Kafka event: {EventName}", eventName);
+        _logger.LogWarning("----- No subscription for Kafka event: {EventName}", eventName);
       }
     }
 
     public void Dispose()
     {
       _producer?.Dispose();
-      _consumer?.Dispose();
+      _consumers.Values.ToList().ForEach(_ => _?.Dispose());
     }
+
+    private IConsumer<string, string> GetConsumer(string eventName)
+      => _consumers.GetOrAdd(eventName, _ => new ConsumerBuilder<string, string>(_consumerConfig).Build());
 
     private void OnBreak(Exception exception, TimeSpan timespan)
     {
-      _logger.LogError("Consumer Open (onBreak) - {@exception}", exception);
+      _logger.LogError("----- Consumer Open (onBreak) - {@exception}", exception);
     }
 
     private void OnReset()
     {
-      _logger.LogWarning("Closed (onReset)");
+      _logger.LogWarning("----- Closed (onReset)");
     }
 
     private void OnHalfOpen()
     {
-      _logger.LogWarning("Half Open (onHalfOpen)");
+      _logger.LogWarning("----- Half Open (onHalfOpen)");
     }
   }
 }

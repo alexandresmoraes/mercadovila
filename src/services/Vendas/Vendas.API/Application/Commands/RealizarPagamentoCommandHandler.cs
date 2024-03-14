@@ -48,10 +48,7 @@ namespace Vendas.API.Application.Commands
 
       await _pagamentosRepository.AddAsync(pagamento);
 
-      return Result.Created($"api/pagamentos/{pagamento.Id}", new RealizarPagamentoCommandResponse
-      {
-        Id = pagamento.Id
-      });
+      return Result.Created($"api/pagamentos/{pagamento.Id}", new RealizarPagamentoCommandResponse(pagamento.Id));
     }
   }
 }

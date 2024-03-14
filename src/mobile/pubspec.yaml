@@ -40,6 +40,8 @@ dependencies:
   flutter_svg: ^2.0.7
   flutter_typeahead: ^5.0.1
   window_manager: ^0.2.7
+  wolt_modal_sheet: ^0.4.1
+  brasil_fields: ^1.14.3
   
 dev_dependencies:
   flutter_test:

@@ -165,13 +165,13 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
       Atom(name: 'ProdutosEditControllerBase.preco', context: context);
 
   @override
-  String? get preco {
+  double? get preco {
     _$precoAtom.reportRead();
     return super.preco;
   }
 
   @override
-  set preco(String? value) {
+  set preco(double? value) {
     _$precoAtom.reportWrite(value, super.preco, () {
       super.preco = value;
     });
@@ -414,7 +414,7 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
   }
 
   @override
-  void setPreco(String? v) {
+  void setPreco(double? v) {
     final _$actionInfo = _$ProdutosEditControllerBaseActionController
         .startAction(name: 'ProdutosEditControllerBase.setPreco');
     try {

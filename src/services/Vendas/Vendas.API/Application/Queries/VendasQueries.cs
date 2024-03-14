@@ -30,7 +30,7 @@ namespace Vendas.API.Application.Queries
 	            vi.preco AS itempreco,
 	            vi.quantidade AS itemquantidade,
 	            vi.unidade_medida AS itemunidademedida,
-              c.user_id AS compradoruserid
+              c.id AS compradoruserid
             FROM vendas v
             LEFT JOIN compradores c ON c.id = v.comprador_id
             LEFT JOIN venda_itens vi ON v.id = vi.venda_id            
@@ -151,7 +151,7 @@ namespace Vendas.API.Application.Queries
             FROM vendas v
             LEFT JOIN compradores c ON c.id = v.comprador_id
             LEFT JOIN venda_itens vi ON v.id = vi.venda_id   
-            WHERE c.user_id=@userid
+            WHERE c.id=@userid
       ";
 
       if (vendaQuery.dataInicial.HasValue && vendaQuery.dataFinal.HasValue)

@@ -145,101 +145,111 @@ class AccountPageState extends State<AccountPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/account/accounts');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.accountBoxMultipleOutline,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Contas de usuários",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/produtos/');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.orderAlphabeticalAscending,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Produtos",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/vendas/');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.cartArrowUp,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Vendas",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/compras/');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.cartArrowDown,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Compras",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/lista-compras/');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.listBoxOutline,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Lista de compras",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/account/accounts');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.accountBoxMultipleOutline,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Contas de usuários",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/produtos/');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.orderAlphabeticalAscending,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Produtos",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/vendas/');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.cartArrowUp,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Vendas",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/compras/');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.cartArrowDown,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Compras",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/lista-compras/');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.listBoxOutline,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Lista de compras",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
                 ListTile(
                   onTap: () {
                     Modular.to.pushNamed('/minhas-compras/');
@@ -259,25 +269,27 @@ class AccountPageState extends State<AccountPage> {
                     ),
                   ),
                 ),
-                ListTile(
-                  onTap: () {
-                    Modular.to.pushNamed('/pagamentos/');
-                  },
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.walletOutline,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Pagamentos",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
+                !accountStore.account!.isAdmin
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/pagamentos/');
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: Icon(
+                          MdiIcons.walletOutline,
+                          color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                          size: 20,
+                        ),
+                        title: Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: Text(
+                            "Pagamentos",
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
                 ListTile(
                   onTap: () {
                     Modular.to.pushNamed('/favoritos/');

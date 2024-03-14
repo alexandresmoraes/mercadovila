@@ -12,7 +12,7 @@ using Vendas.Infra.Data;
 namespace Vendas.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240130180605_Initial_Create")]
+    [Migration("20240314140140_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,12 +26,10 @@ namespace Vendas.Infra.Migrations
 
             modelBuilder.Entity("Vendas.Domain.Aggregates.Comprador", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                    b.Property<string>("UserId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -50,17 +48,7 @@ namespace Vendas.Infra.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("nome");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("character varying(36)")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("comprador_userid_index");
+                    b.HasKey("UserId");
 
                     b.ToTable("compradores", (string)null);
                 });
@@ -74,8 +62,8 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DataHora")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
 
                     b.Property<int>("Status")
@@ -90,8 +78,9 @@ namespace Vendas.Infra.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("valor");
 
-                    b.Property<long>("comprador_id")
-                        .HasColumnType("bigint");
+                    b.Property<string>("comprador_id")
+                        .IsRequired()
+                        .HasColumnType("character varying(36)");
 
                     b.HasKey("Id");
 
@@ -109,8 +98,8 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DataHora")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
 
                     b.Property<int>("Status")
@@ -121,8 +110,9 @@ namespace Vendas.Infra.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("total");
 
-                    b.Property<long>("comprador_id")
-                        .HasColumnType("bigint");
+                    b.Property<string>("comprador_id")
+                        .IsRequired()
+                        .HasColumnType("character varying(36)");
 
                     b.Property<long?>("pagamento_id")
                         .HasColumnType("bigint");
@@ -212,7 +202,7 @@ namespace Vendas.Infra.Migrations
                     b.HasOne("Vendas.Domain.Aggregates.Pagamento", null)
                         .WithMany("Vendas")
                         .HasForeignKey("pagamento_id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Comprador");
                 });

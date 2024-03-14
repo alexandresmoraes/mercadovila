@@ -97,7 +97,7 @@ abstract class CarrinhoStoreBase with Store {
       var vendasRepository = Modular.get<VendasRepository>();
       var compradorNome = Modular.get<AccountStore>().account!.nome;
       var compradorFotoUrl = Modular.get<AccountStore>().account!.fotoUrl;
-      var result = await vendasRepository.createVenda(VendaModel(
+      var result = await vendasRepository.criarVenda(VendaModel(
         compradorNome: compradorNome,
         compradorFotoUrl: compradorFotoUrl,
       ));
@@ -107,9 +107,9 @@ abstract class CarrinhoStoreBase with Store {
         if (message.isNotEmpty) GlobalSnackbar.error(message);
       }, (response) async {
         GlobalSnackbar.success("Compra efetuada com sucesso.");
+        Modular.to.pop();
         await load();
         await Modular.get<PagamentosStore>().load();
-        Modular.to.pop();
         setSelectOpcaoPagamento(false);
       });
     } finally {

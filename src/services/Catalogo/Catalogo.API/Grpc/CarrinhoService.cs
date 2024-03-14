@@ -29,7 +29,7 @@ public class CarrinhoService : Carrinho.CarrinhoBase
 
     if (response.Itens.Any() && !response.Itens.Any(_ => _.DisponibilidadeEstoque == false))
     {
-      await _produtoRepository.UpdateReservarEstoque(response.Itens.ToDictionary(_ => _.Id, _ => _.Quantidade));
+      await _produtoRepository.SaidaEstoqueAsync(response.Itens.ToDictionary(_ => _.Id, _ => _.Quantidade));
     }
 
     return response;

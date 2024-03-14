@@ -14,9 +14,7 @@ namespace Vendas.Infra.Migrations
                 name: "compradores",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     foto_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
@@ -32,11 +30,11 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    comprador_id = table.Column<long>(type: "bigint", nullable: false),
+                    comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     tipo = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
-                    datahora = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,9 +53,9 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    comprador_id = table.Column<long>(type: "bigint", nullable: false),
+                    comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
-                    datahora = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     total = table.Column<decimal>(type: "numeric", nullable: false),
                     pagamento_id = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -75,7 +73,7 @@ namespace Vendas.Infra.Migrations
                         column: x => x.pagamento_id,
                         principalTable: "pagamentos",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,12 +101,6 @@ namespace Vendas.Infra.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "comprador_userid_index",
-                table: "compradores",
-                column: "user_id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_pagamentos_comprador_id",

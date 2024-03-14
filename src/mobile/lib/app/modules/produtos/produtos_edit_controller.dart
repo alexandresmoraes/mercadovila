@@ -58,17 +58,17 @@ abstract class ProdutosEditControllerBase with Store {
   }
 
   @observable
-  String? preco;
+  double? preco;
   @observable
   String? _precoApiError;
   @computed
   String? get getPrecoError => !isNullorEmpty(_precoApiError)
       ? _precoApiError
-      : isNullorEmpty(preco)
+      : isNullorEmpty(preco.toString())
           ? 'Preço do produto não pode ser vazio.'
           : null;
   @action
-  void setPreco(String? v) {
+  void setPreco(double? v) {
     preco = v;
     _precoApiError = null;
   }
@@ -174,7 +174,7 @@ abstract class ProdutosEditControllerBase with Store {
     nome = produtoModel!.nome;
     descricao = produtoModel!.descricao;
     imageUrl = produtoModel!.imageUrl;
-    preco = produtoModel!.preco == 0 ? "" : produtoModel!.preco.toString();
+    preco = produtoModel!.preco;
     unidadeMedida = produtoModel!.unidadeMedida;
     codigoBarras = produtoModel!.codigoBarras;
     estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "0" : produtoModel!.estoqueAlvo.toString();
@@ -189,7 +189,7 @@ abstract class ProdutosEditControllerBase with Store {
       nome: nome!,
       descricao: descricao!,
       imageUrl: imageUrl!,
-      preco: double.parse(preco!),
+      preco: preco!,
       unidadeMedida: unidadeMedida!,
       codigoBarras: codigoBarras!,
       estoqueAlvo: int.parse(estoqueAlvo!),

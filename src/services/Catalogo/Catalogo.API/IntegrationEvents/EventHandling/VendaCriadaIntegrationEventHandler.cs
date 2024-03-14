@@ -6,13 +6,15 @@ namespace Catalogo.API.IntegrationEvents.EventHandling
 {
   public class VendaCriadaIntegrationEventHandler : IIntegrationEventHandler<VendaCriadaIntegrationEvent>
   {
-    private readonly ICarrinhoItemRepository _carrinhoItemRepository;
     private readonly ILogger<VendaCriadaIntegrationEventHandler> _logger;
+    private readonly ICarrinhoItemRepository _carrinhoItemRepository;
+    private readonly IProdutoRepository _produtoRepository;
 
-    public VendaCriadaIntegrationEventHandler(ICarrinhoItemRepository carrinhoItemRepository, ILogger<VendaCriadaIntegrationEventHandler> logger)
+    public VendaCriadaIntegrationEventHandler(ILogger<VendaCriadaIntegrationEventHandler> logger, ICarrinhoItemRepository carrinhoItemRepository, IProdutoRepository produtoRepository)
     {
-      _carrinhoItemRepository = carrinhoItemRepository;
       _logger = logger;
+      _carrinhoItemRepository = carrinhoItemRepository;
+      _produtoRepository = produtoRepository;
     }
 
     public async Task Handle(VendaCriadaIntegrationEvent @event)
@@ -20,6 +22,7 @@ namespace Catalogo.API.IntegrationEvents.EventHandling
       _logger.LogInformation("----- Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
       await _carrinhoItemRepository.RemoverCarrinhoPorUsuarioAsync(@event.UserId);
+      await _produtoRepository.AtualizarQuantidadeVendidaDataUltimaVenda(@event.Itens);
     }
   }
 }

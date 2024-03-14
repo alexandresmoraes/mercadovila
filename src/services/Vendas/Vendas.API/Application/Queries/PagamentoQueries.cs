@@ -1,5 +1,4 @@
-﻿
-using Common.WebAPI.Results;
+﻿using Common.WebAPI.Results;
 using Dapper;
 using System.Data;
 using Vendas.Domain.Aggregates;
@@ -15,7 +14,7 @@ namespace Vendas.API.Application.Queries
       _dbConnection = dbConnection;
     }
 
-    public async Task<PagamentoDetalheDto> GetPagamentoDetalhe(string userId, CancellationToken cancellationToken = default)
+    public async Task<PagamentoDetalheDto> GetPagamentoPendentes(string userId, CancellationToken cancellationToken = default)
     {
       var result = await _dbConnection.QueryAsync<dynamic>(
           @"
@@ -24,12 +23,12 @@ namespace Vendas.API.Application.Queries
 	            v.status AS status,
 	            v.datahora AS datahora,
 	            v.total AS total,	
-              c.user_id AS compradoruserid,
+              c.id AS compradoruserid,
               c.nome AS compradornome,
 	            c.foto_url AS compradorfotourl
             FROM vendas v
             LEFT JOIN compradores c ON c.id = v.comprador_id                      
-            WHERE v.status=0 and c.user_id=@id
+            WHERE v.status=0 and c.id=@id
           ", new { id = userId }
       );
 
@@ -38,11 +37,11 @@ namespace Vendas.API.Application.Queries
         result = await _dbConnection.QueryAsync<dynamic>(
           @"
             SELECT
-                c.user_id AS compradoruserid,
+                c.id AS compradoruserid,
                 c.nome AS compradornome,
 	            c.foto_url AS compradorfotourl
             FROM compradores c
-            WHERE c.user_id=@id
+            WHERE c.id=@id
           ", new { id = userId }
         );
 
@@ -76,7 +75,7 @@ namespace Vendas.API.Application.Queries
 	                  p.status AS status,
 	                  p.datahora AS datahora,
 	                  p.valor AS valor,	
-                    c.user_id AS compradoruserid,
+                    c.id AS compradoruserid,
                     c.nome AS compradornome,
 	                  c.foto_url AS compradorfotourl,
                     c.email AS compradoremail,
@@ -91,7 +90,10 @@ namespace Vendas.API.Application.Queries
         sql += " WHERE c.nome ilike @username ";
       }
 
-      sql += " LIMIT @limit OFFSET @offset ";
+      sql += @" 
+                ORDER BY p.datahora DESC 
+                LIMIT @limit OFFSET @offset;
+      ";
 
       var result = await _dbConnection.QueryAsync<dynamic>(sql, new
       {
@@ -105,6 +107,7 @@ namespace Vendas.API.Application.Queries
         pagamentos.Add(new PagamentosDto
         {
           PagamentoId = row.id,
+          PagamentoDataHora = row.datahora,
           PagamentoTipo = (EnumTipoPagamento)row.tipo,
           PagamentoStatus = (EnumStatusPagamento)row.status,
           CompradorNome = row.compradornome,

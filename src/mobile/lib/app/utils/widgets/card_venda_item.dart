@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class CardVendaItem extends StatelessWidget {
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                           children: [
                             TextSpan(
-                              text: "${item.preco * item.quantidade}",
+                              text: UtilBrasilFields.obterReal(item.preco * item.quantidade.toDouble(), moeda: false),
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                             ),
                           ],

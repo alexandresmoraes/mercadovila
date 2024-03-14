@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -87,11 +88,11 @@ class CardProdutoColor extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "R\$",
+                                    "R\$ ",
                                     style: Theme.of(context).primaryTextTheme.titleSmall,
                                   ),
                                   Text(
-                                    '${item.preco} ',
+                                    UtilBrasilFields.obterReal(item.preco, moeda: false),
                                     style: Theme.of(context).primaryTextTheme.titleMedium,
                                   ),
                                   Text(

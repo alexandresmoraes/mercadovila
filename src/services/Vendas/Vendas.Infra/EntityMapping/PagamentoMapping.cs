@@ -4,7 +4,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
-  class PagamentoMapping : IEntityTypeConfiguration<Pagamento>
+  sealed class PagamentoMapping : IEntityTypeConfiguration<Pagamento>
   {
     public void Configure(EntityTypeBuilder<Pagamento> b)
     {
@@ -23,7 +23,7 @@ namespace Vendas.Infra.EntityMapping
       b.HasMany(_ => _.Vendas)
         .WithOne()
         .HasForeignKey("pagamento_id")
-        .OnDelete(DeleteBehavior.Cascade);
+        .OnDelete(DeleteBehavior.SetNull);
 
       b.Property(_ => _.Tipo)
         .HasColumnName("tipo")

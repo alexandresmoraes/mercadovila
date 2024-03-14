@@ -10,6 +10,7 @@ namespace Catalogo.API.Data.Dto
     public string ImageUrl { get; set; } = null!;
     public decimal Preco { get; set; }
     public string UnidadeMedida { get; set; } = null!;
+    public string CodigoBarras { get; set; } = null!;
     public int EstoqueAlvo { get; set; }
     public int Estoque { get; set; }
     public double Rating { get; set; }

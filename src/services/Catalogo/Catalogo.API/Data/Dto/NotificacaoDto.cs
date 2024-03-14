@@ -12,7 +12,7 @@ namespace Catalogo.API.Data.Dto
 
     public string? ImageUrl { get; set; }
 
-    public DateTime DataCriacao { get; set; } = DateTime.Now;
+    public DateTimeOffset DataCriacao { get; set; } = DateTimeOffset.UtcNow;
 
     public override string ToString()
     {

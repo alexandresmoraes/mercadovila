@@ -1,9 +1,11 @@
 import 'dart:async';
-
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
@@ -12,6 +14,7 @@ import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_reposit
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PagamentosPage extends StatefulWidget {
   final String title;
@@ -102,7 +105,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                 ),
               ),
               Expanded(
-                child: _allPagamentos(),
+                child: _todosPagamentos(),
               ),
             ],
           ),
@@ -111,7 +114,7 @@ class PagamentosPageState extends State<PagamentosPage> {
     );
   }
 
-  Widget _allPagamentos() {
+  Widget _todosPagamentos() {
     final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
@@ -139,10 +142,30 @@ class PagamentosPageState extends State<PagamentosPage> {
           );
         },
         itemBuilder: (context, item, index) {
-          return InkWell(
-            onTap: () async {
-              // TODO
-            },
+          return Slidable(
+            enabled: item.pagamentoStatus != EnumStatusPagamento.cancelado.index,
+            key: Key(item.pagamentoId.toString()),
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              dismissible: DismissiblePane(
+                closeOnCancel: true,
+                confirmDismiss: () {
+                  return cancelar(item.pagamentoId.toString());
+                },
+                onDismissed: () {},
+              ),
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.red,
+                  label: 'Cancelar?',
+                  icon: MdiIcons.closeOctagon,
+                  onPressed: (_) {
+                    cancelar(item.pagamentoId.toString());
+                  },
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -162,7 +185,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         child: Text(
-                          '#${item.pagamentoId.toString()}',
+                          '#${item.pagamentoId}',
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                       ),
@@ -179,7 +202,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Inativo",
+                          item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Cancelado",
                           style: Theme.of(context).primaryTextTheme.displayMedium,
                         ),
                       )
@@ -225,15 +248,30 @@ class PagamentosPageState extends State<PagamentosPage> {
                     item.compradorNome,
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
-                  subtitle: Text(
-                    item.compradorEmail,
-                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                          top: 5,
+                        ),
+                        child: Text(
+                          item.compradorEmail,
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                        ),
+                      ),
+                      Text(
+                        '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}',
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    ],
                   ),
                   trailing: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "R\$ ${item.pagamentoValor}",
+                        UtilBrasilFields.obterReal(item.pagamentoValor.toDouble()),
                         style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
                       ),
                     ],
@@ -248,6 +286,40 @@ class PagamentosPageState extends State<PagamentosPage> {
         },
       ),
     );
+  }
+
+  Future<bool> cancelar(String pagamentoId) async {
+    return await showCupertinoModalPopup<bool>(
+          context: context,
+          builder: (BuildContext context) => CupertinoActionSheet(
+            title: const Icon(Icons.question_answer),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () async {
+                  Modular.to.pop(true);
+                  pagingController.refresh();
+                },
+                child: const Text(
+                  'Sim',
+                ),
+              ),
+              CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Modular.to.pop(false);
+                },
+                child: const Text(
+                  'Não',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override

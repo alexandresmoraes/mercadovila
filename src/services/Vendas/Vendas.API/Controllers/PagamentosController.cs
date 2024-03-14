@@ -36,7 +36,7 @@ namespace Vendas.API.Controllers
     {
       var userId = _authService.GetUserId();
 
-      return Result.Ok(await _pagamentosQueries.GetPagamentoDetalhe(userId, cancellationToken));
+      return Result.Ok(await _pagamentosQueries.GetPagamentoPendentes(userId, cancellationToken));
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagamentoDetalheDto>> GetVendasPorUsuarioAsync([FromRoute] string userId, CancellationToken cancellationToken = default)
-      => Result.Ok(await _pagamentosQueries.GetPagamentoDetalhe(userId, cancellationToken));
+      => Result.Ok(await _pagamentosQueries.GetPagamentoPendentes(userId, cancellationToken));
 
     /// <summary>
     /// Realiza um pagamento para um usuário/comprador

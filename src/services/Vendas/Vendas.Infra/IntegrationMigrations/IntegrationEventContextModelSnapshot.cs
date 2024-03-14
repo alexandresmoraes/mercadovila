@@ -26,15 +26,15 @@ namespace Vendas.Infra.IntegrationMigrations
                 {
                     b.Property<string>("EventId")
                         .HasColumnType("text")
-                        .HasColumnName("entity_id");
+                        .HasColumnName("event_id");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("creation_time");
 
                     b.Property<string>("EventTypeName")

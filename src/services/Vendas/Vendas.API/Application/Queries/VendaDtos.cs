@@ -14,15 +14,9 @@ namespace Vendas.API.Application.Queries
 
   public record VendaDto
   {
-    private DateTime _dataHora;
-
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora
-    {
-      get => DateTime.SpecifyKind(_dataHora, DateTimeKind.Utc);
-      init => _dataHora = value;
-    }
+    public DateTimeOffset DataHora { get; set; }
     public decimal Total { get; init; }
     public string CompradorNome { get; init; } = null!;
     public string? CompradorFotoUrl { get; set; }
@@ -43,15 +37,9 @@ namespace Vendas.API.Application.Queries
 
   public record VendaDetalheDto
   {
-    private DateTime _dataHora;
-
     public long Id { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora
-    {
-      get => DateTime.SpecifyKind(_dataHora, DateTimeKind.Utc);
-      init => _dataHora = value;
-    }
+    public DateTimeOffset DataHora { get; set; }
     public decimal Total { get; init; }
     public string CompradorUserId { get; init; } = null!;
 

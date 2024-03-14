@@ -2,9 +2,13 @@
 {
   public record VendaCriadaIntegrationEvent : IntegrationEvent
   {
-    public string UserId { get; init; }
+    public string UserId { get; private init; }
+    public Dictionary<string, int> Itens { get; private init; }
 
-    public VendaCriadaIntegrationEvent(string userId)
-        => UserId = userId;
+    public VendaCriadaIntegrationEvent(string userId, Dictionary<string, int> itens)
+    {
+      UserId = userId;
+      Itens = itens;
+    }
   }
 }

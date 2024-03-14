@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vendas.Infra.IntegrationMigrations
 {
     [DbContext(typeof(IntegrationEventContext))]
-    [Migration("20231018185728_Initial_Create")]
+    [Migration("20240307133710_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,15 +28,15 @@ namespace Vendas.Infra.IntegrationMigrations
                 {
                     b.Property<string>("EventId")
                         .HasColumnType("text")
-                        .HasColumnName("entity_id");
+                        .HasColumnName("event_id");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("creation_time");
 
                     b.Property<string>("EventTypeName")

@@ -3,6 +3,6 @@
   public interface IVendasRepository
   {
     Task AddAsync(Venda venda);
-    Task<Venda?> GetAsync(long id);    
+    Task<Venda?> GetAsync(long vendaId);
   }
 }

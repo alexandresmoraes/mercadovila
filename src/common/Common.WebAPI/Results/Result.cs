@@ -28,6 +28,8 @@
 
     public static Result Fail(string message) => new Result(message);
 
+    public static Result Fail(string property, string message) => new Result(property, message);
+
     public static Result Fail(string? code, string? property, string message) => new Result(code, property, message);
 
     public static Result Fail(IList<ErrorResult> errors) => new Result(errors);

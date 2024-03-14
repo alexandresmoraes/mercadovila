@@ -14,7 +14,7 @@ namespace Catalogo.API.Controllers
   /// <summary>
   /// Criar, editar e listar notificacoes
   /// </summary>
-  [Route("api/notificacoes")]  
+  [Route("api/notificacoes")]
   [ApiController]
   public class NotificacoesController : ControllerBase
   {
@@ -51,7 +51,7 @@ namespace Catalogo.API.Controllers
       {
         Titulo = notificacao!.Titulo,
         Mensagem = notificacao!.Mensagem,
-        ImageUrl = notificacao.ImageUrl        
+        ImageUrl = notificacao.ImageUrl
       });
     }
 
@@ -79,12 +79,12 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<NotificacaoResponseModel>> PostAsync([FromBody] NotificacaoModel notificacaoModel)
-    {      
+    {
       var notificacao = new Notificacao
       {
         Titulo = notificacaoModel.Titulo,
         Mensagem = notificacaoModel.Mensagem,
-        ImageUrl = notificacaoModel.ImageUrl        
+        ImageUrl = notificacaoModel.ImageUrl
       };
 
       await _notificacoesRepository.CreateAsync(notificacao);
@@ -108,7 +108,7 @@ namespace Catalogo.API.Controllers
 
       if (notificacao is null)
         return Result.NotFound();
-      
+
       notificacao.Titulo = notificacaoModel.Titulo;
       notificacao.Mensagem = notificacaoModel.Mensagem;
       notificacao.ImageUrl = notificacaoModel.ImageUrl;

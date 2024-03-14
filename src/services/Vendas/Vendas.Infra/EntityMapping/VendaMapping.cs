@@ -4,7 +4,7 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
-  class VendaMapping : IEntityTypeConfiguration<Venda>
+  sealed class VendaMapping : IEntityTypeConfiguration<Venda>
   {
     public void Configure(EntityTypeBuilder<Venda> b)
     {
@@ -22,8 +22,8 @@ namespace Vendas.Infra.EntityMapping
 
       b.Property(_ => _.Status)
         .HasColumnName("status")
-       .IsRequired()
-       .HasConversion(
+        .IsRequired()
+        .HasConversion(
            v => (int)v,
            v => (EnumVendaStatus)v);
 

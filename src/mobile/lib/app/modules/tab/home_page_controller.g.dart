@@ -76,6 +76,22 @@ mixin _$HomePageController on HomePageControllerBase, Store {
     });
   }
 
+  late final _$isFavoritosEmptyAtom =
+      Atom(name: 'HomePageControllerBase.isFavoritosEmpty', context: context);
+
+  @override
+  bool get isFavoritosEmpty {
+    _$isFavoritosEmptyAtom.reportRead();
+    return super.isFavoritosEmpty;
+  }
+
+  @override
+  set isFavoritosEmpty(bool value) {
+    _$isFavoritosEmptyAtom.reportWrite(value, super.isFavoritosEmpty, () {
+      super.isFavoritosEmpty = value;
+    });
+  }
+
   late final _$currentIndexCarouselSliderAtom = Atom(
       name: 'HomePageControllerBase.currentIndexCarouselSlider',
       context: context);
@@ -101,6 +117,7 @@ isVisibleNovos: ${isVisibleNovos},
 isVisibleMaisVendidos: ${isVisibleMaisVendidos},
 isVisibleUltimosVendidos: ${isVisibleUltimosVendidos},
 isVisibleFavoritos: ${isVisibleFavoritos},
+isFavoritosEmpty: ${isFavoritosEmpty},
 currentIndexCarouselSlider: ${currentIndexCarouselSlider}
     ''';
   }

@@ -118,6 +118,7 @@ namespace Catalogo.API.Data.Repositories
           ImageUrl = p.ImageUrl,
           Preco = p.Preco,
           UnidadeMedida = p.UnidadeMedida,
+          CodigoBarras = p.CodigoBarras,
           EstoqueAlvo = p.EstoqueAlvo,
           Estoque = p.Estoque,
           Rating = p.Rating,
@@ -411,7 +412,7 @@ namespace Catalogo.API.Data.Repositories
       return new PagedResult<CatalogoDto>(start, query.limit, count, catalogo);
     }
 
-    public async Task UpdateReservarEstoque(Dictionary<string, int> produtos)
+    public async Task SaidaEstoqueAsync(Dictionary<string, int> produtos)
     {
       var loteUpdate = new List<WriteModel<Produto>>();
 
@@ -419,6 +420,54 @@ namespace Catalogo.API.Data.Repositories
       {
         var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
         var update = Builders<Produto>.Update.Inc(p => p.Estoque, -produto.Value);
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
+
+    public async Task EntradaEstoqueAsync(Dictionary<string, int> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
+        var update = Builders<Produto>.Update.Inc(p => p.Estoque, +produto.Value);
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
+
+    public async Task EntradaEstoqueAndUpdatePrecoAsync(List<(string, int, bool, decimal?)> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Item1);
+
+        decimal novoPreco = produto.Item4 ?? 0;
+
+        if (produto.Item3)
+        {
+          var produtoAtual = Collection.Find(filter).FirstOrDefault();
+          var estoqueAtual = produtoAtual.Estoque;
+          var precoAtual = produtoAtual.Preco;
+          var precoPago = produto.Item4 ?? 0;
+
+          novoPreco = estoqueAtual == 0
+            ? precoPago
+            : (precoAtual + precoPago) / 2;
+        }
+
+        novoPreco = Math.Round(novoPreco, 2, MidpointRounding.AwayFromZero);
+
+        var update = Builders<Produto>.Update.Combine(
+            Builders<Produto>.Update.Inc(p => p.Estoque, +produto.Item2),
+            Builders<Produto>.Update.Set(p => p.Preco, novoPreco));
+
         loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
       }
 
@@ -456,6 +505,23 @@ namespace Catalogo.API.Data.Repositories
       var count = await Collection.CountDocumentsAsync(filtro);
 
       return new PagedResult<ListaCompraDto>(start, query.limit, count, produtos);
+    }
+
+    public async Task AtualizarQuantidadeVendidaDataUltimaVenda(Dictionary<string, int> produtos)
+    {
+      var loteUpdate = new List<WriteModel<Produto>>();
+
+      foreach (var produto in produtos)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, produto.Key);
+        var update = Builders<Produto>.Update.Combine(
+          Builders<Produto>.Update.Inc(p => p.QuantidadeVendida, +produto.Value),
+          Builders<Produto>.Update.Set(p => p.DataUltimaVenda, DateTimeOffset.UtcNow));
+
+        loteUpdate.Add(new UpdateOneModel<Produto>(filter, update));
+      }
+
+      _ = await Collection.BulkWriteAsync(loteUpdate);
     }
   }
 }

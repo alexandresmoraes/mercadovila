@@ -4,24 +4,18 @@ using Vendas.Domain.Aggregates;
 
 namespace Vendas.Infra.EntityMapping
 {
-  class CompradorMapping : IEntityTypeConfiguration<Comprador>
+  sealed class CompradorMapping : IEntityTypeConfiguration<Comprador>
   {
     public void Configure(EntityTypeBuilder<Comprador> b)
     {
       b.ToTable("compradores");
 
-      b.HasKey(c => c.Id);
-      b.Property(e => e.Id)
-        .HasColumnName("id")
-        .ValueGeneratedOnAdd();
+      b.HasKey(_ => _.UserId);
 
       b.Property(p => p.UserId)
         .HasMaxLength(36)
-        .HasColumnName("user_id")
+        .HasColumnName("id")
         .IsRequired();
-      b.HasIndex(p => p.UserId)
-        .HasDatabaseName("comprador_userid_index")
-        .IsUnique();
 
       b.Property(c => c.Nome)
         .HasColumnName("nome")
@@ -37,6 +31,7 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("foto_url")
         .HasMaxLength(256);
 
+      b.Ignore(_ => _.Id);
       b.Ignore(_ => _.DomainEvents);
     }
   }

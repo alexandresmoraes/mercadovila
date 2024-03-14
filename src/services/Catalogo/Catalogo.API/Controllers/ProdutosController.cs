@@ -16,7 +16,7 @@ namespace Catalogo.API.Controllers
   /// Criar e editar produtos para gerar o catalogo
   /// </summary>
   [Route("api/produtos")]
-  [Authorize("Admin")]
+  [Authorize]
   [ApiController]
   public class ProdutosController : ControllerBase
   {
@@ -45,6 +45,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos/{id}
     [HttpGet("{id}")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -73,6 +74,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos
     [HttpGet]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(PagedResult<ProdutoDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -105,6 +107,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // POST api/produtos    
     [HttpPost]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ProdutoResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -139,6 +142,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // PUT api/produtos/{id}    
     [HttpPut("{id}")]
+    [Authorize("Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -147,14 +151,13 @@ namespace Catalogo.API.Controllers
     {
       var produto = await _produtoRepository.GetAsync(id);
 
-      if (produto is null)
-        return Result.NotFound();
+      if (produto is null) return Result.NotFound();
 
       var isExistPorNome = await _produtoRepository.ExisteProdutoPorNome(produtoModel.Nome!, id);
-      if (isExistPorNome) return Result.Fail("Produto já existente com o mesmo nome.");
+      if (isExistPorNome) return Result.Fail(nameof(Produto.Nome), "Produto já existente com o mesmo nome.");
 
       var isExistPorCodigoBarras = await _produtoRepository.ExisteProdutoPorCodigoBarras(produtoModel.CodigoBarras!, id);
-      if (isExistPorCodigoBarras) return Result.Fail("Produto já existente com o mesmo código de barras.");
+      if (isExistPorCodigoBarras) return Result.Fail(nameof(Produto.CodigoBarras), "Produto já existente com o mesmo código de barras.");
 
       produto.Nome = produtoModel.Nome!;
       produto.Descricao = produtoModel.Descricao!;
@@ -175,6 +178,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // POST api/produtos/image
     [HttpPost("image")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(ImageUploadModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -232,6 +236,7 @@ namespace Catalogo.API.Controllers
     /// </summary>
     // GET api/produtos/lista-compra
     [HttpGet("lista-compra")]
+    [Authorize("Admin")]
     [ProducesResponseType(typeof(PagedResult<ListaCompraDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

@@ -25,5 +25,16 @@ namespace Common.WebAPI.Auth
       var claim = principal.FindFirst(ClaimTypes.Email);
       return claim?.Value;
     }
+
+    public static string? GetUserName(this ClaimsPrincipal principal)
+    {
+      if (principal is null)
+      {
+        throw new ArgumentException(nameof(principal));
+      }
+
+      var claim = principal.FindFirst(ClaimTypes.Name);
+      return claim?.Value;
+    }
   }
 }

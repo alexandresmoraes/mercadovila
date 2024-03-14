@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -184,7 +185,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                                     style: Theme.of(context).primaryTextTheme.displayMedium,
                                     children: [
                                   TextSpan(
-                                    text: '${item.preco}',
+                                    text: UtilBrasilFields.obterReal(item.preco, moeda: false),
                                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                                   ),
                                   TextSpan(

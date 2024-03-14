@@ -44,6 +44,7 @@ namespace Vendas.API.Config
 
       services.AddAuthServices();
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
       services.AddScoped<ICompradoresRepository, CompradoresRepository>();
       services.AddScoped<IVendasRepository, VendasRepository>();
       services.AddScoped<IPagamentosRepository, PagamentosRepository>();
@@ -51,6 +52,7 @@ namespace Vendas.API.Config
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DispatchDomainEventsPipeline<,>));
 
       services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
 
@@ -66,7 +68,6 @@ namespace Vendas.API.Config
 
     public static IApplicationBuilder UseApiConfiguration(this WebApplication app)
     {
-      app.RunMigrations<ApplicationDbContext>();
       app.MapHealthChecks();
 
       if (app.Environment.IsDevelopment())

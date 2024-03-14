@@ -1,5 +1,6 @@
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
 import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
@@ -27,6 +28,7 @@ import 'package:vilasesmo/app/utils/http/dio_api.dart';
 import 'package:vilasesmo/app/utils/repositories/account_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/carrinho_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/compras_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
@@ -37,7 +39,17 @@ import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
+    Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
+    Bind(
+      (i) => BaseOptions(
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.1.110:8081',
+        connectTimeout: kReleaseMode ? 20000 : 0,
+        receiveTimeout: kReleaseMode ? 20000 : 0,
+        sendTimeout: kReleaseMode ? 20000 : 0,
+      ),
+    ),
     Bind.lazySingleton((i) => CarrinhoStore()),
+    Bind.lazySingleton((i) => CarrinhoComprasStore()),
     Bind.lazySingleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind.lazySingleton((i) => SearchFilterStore()),
@@ -45,25 +57,18 @@ class AppModule extends Module {
     Bind.factory((i) => CardCountProdutoController()),
     Bind.factory((i) => FavoritoController()),
     Bind.factory((i) => HomePageController()),
-    Bind(
-      (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://publicado' : 'http://host.docker.internal:8081',
-        connectTimeout: kReleaseMode ? 20000 : 0,
-        receiveTimeout: kReleaseMode ? 20000 : 0,
-        sendTimeout: kReleaseMode ? 20000 : 0,
-      ),
-    ),
-    BindInject((i) => DioApi(i.get<BaseOptions>()), isSingleton: true, isLazy: true),
-    BindInject((i) => AuthService(), isSingleton: true, isLazy: true),
-    BindInject((i) => AccountRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => CatalogoRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => FavoritosRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => CarrinhoRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => VendasRepository(), isSingleton: true, isLazy: true),
-    BindInject((i) => PagamentosRepository(), isSingleton: true, isLazy: true),
+    Bind.lazySingleton((i) => AuthService()),
+    Bind.lazySingleton((i) => AccountRepository()),
+    Bind.lazySingleton((i) => CatalogoRepository()),
+    Bind.lazySingleton((i) => FavoritosRepository()),
+    Bind.lazySingleton((i) => CarrinhoRepository()),
+    Bind.lazySingleton((i) => VendasRepository()),
+    Bind.lazySingleton((i) => ComprasRepository()),
+    Bind.lazySingleton((i) => PagamentosRepository()),
+
     //TODO: remover itens
     Bind.factory((i) => ProdutosEditController()),
-    BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),
+    Bind.lazySingleton((i) => ProdutosRepository()),
   ];
 
   @override

@@ -37,4 +37,7 @@ abstract class LoginControllerBase with Store {
     password = v;
     _passwordApiError = null;
   }
+
+  @observable
+  bool isPasswordVisible = false;
 }

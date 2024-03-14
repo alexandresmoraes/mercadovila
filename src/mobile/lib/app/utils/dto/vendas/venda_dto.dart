@@ -16,7 +16,7 @@ class VendaDto {
   late final int id;
   late final int status;
   late final DateTime dataHora;
-  late final double total;
+  late final num total;
   late final String compradorNome;
   late final String? compradorFotoUrl;
   late final List<VendaItemDto> itens;
@@ -44,7 +44,7 @@ class VendaItemDto {
   late final String produtoId;
   late final String nome;
   late final String imageUrl;
-  late final double preco;
+  late final num preco;
   late final num quantidade;
   late final String unidadeMedida;
 
@@ -69,7 +69,7 @@ class VendaDetalheDto {
   late final int id;
   late final int status;
   late final DateTime dataHora;
-  late final double total;
+  late final num total;
   late final String compradorUserId;
   late final List<VendaDetalheItemDto> itens;
 
@@ -97,7 +97,7 @@ class VendaDetalheItemDto {
   late final String nome;
   late final String descricao;
   late final String imageUrl;
-  late final double preco;
+  late final num preco;
   late final num quantidade;
   late final String unidadeMedida;
 

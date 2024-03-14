@@ -16,7 +16,7 @@ namespace Vendas.API.Application.Queries
   {
     public long VendaId { get; init; }
     public EnumVendaStatus Status { get; init; }
-    public DateTime DataHora { get; init; }
+    public DateTimeOffset DataHora { get; init; }
     public decimal Total { get; init; }
   }
 
@@ -27,6 +27,7 @@ namespace Vendas.API.Application.Queries
     public string? CompradorFotoUrl { get; init; }
     public string CompradorEmail { get; init; } = null!;
     public long PagamentoId { get; init; }
+    public DateTimeOffset PagamentoDataHora { get; init; }
     public EnumTipoPagamento PagamentoTipo { get; init; }
     public EnumStatusPagamento PagamentoStatus { get; init; }
     public decimal PagamentoValor { get; set; }

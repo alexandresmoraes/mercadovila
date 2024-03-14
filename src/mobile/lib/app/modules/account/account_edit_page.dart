@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -84,9 +86,8 @@ class AccountEditPageState extends State<AccountEditPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(widget.id != null ? "Editando usuário" : "Criando usuário"),
@@ -146,8 +147,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                       radius: 100,
                                       backgroundImage: AssetImage('assets/person.png'),
                                     ),
-                                    imageUrl:
-                                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
+                                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
                                     imageBuilder: (context, imageProvider) {
                                       return CircleAvatar(
                                         radius: 100,
@@ -215,9 +215,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                           },
                           child: Observer(builder: (_) {
                             return Text(
-                              isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath)
-                                  ? 'Escolher foto'
-                                  : 'Trocar foto',
+                              isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath) ? 'Escolher foto' : 'Trocar foto',
                               style: Theme.of(context).primaryTextTheme.displayLarge,
                             );
                           }),
@@ -294,6 +292,10 @@ class AccountEditPageState extends State<AccountEditPage> {
                             padding: const EdgeInsets.only(),
                             child: Observer(builder: (_) {
                               return TextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  TelefoneInputFormatter(),
+                                ],
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 initialValue: _controller.telefone,
                                 onChanged: _controller.setTelefone,
@@ -302,7 +304,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                       ? Theme.of(context).inputDecorationTheme.fillColor
                                       : Theme.of(context).scaffoldBackgroundColor,
-                                  hintText: '+55 46999057070',
+                                  hintText: '(46) 99999-7070',
                                   contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                   errorText: _controller.getTelefoneError,
                                 ),

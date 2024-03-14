@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -65,19 +66,16 @@ class CardProdutoSearch extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       RichText(
-                          text: TextSpan(
-                              text: "R\$ ",
-                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                              children: [
-                            TextSpan(
-                              text: '${item.preco}',
-                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                            ),
-                            TextSpan(
-                              text: ' / ${item.unidadeMedida}',
-                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                            )
-                          ])),
+                          text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                        TextSpan(
+                          text: UtilBrasilFields.obterReal(item.preco, moeda: false),
+                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                        ),
+                        TextSpan(
+                          text: ' / ${item.unidadeMedida}',
+                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                        )
+                      ])),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Row(
@@ -159,9 +157,7 @@ class CardProdutoSearch extends StatelessWidget {
                           favoritoController.isFavorito = !favoritoController.isFavorito;
                         }
                       },
-                      icon: favoritoController.isFavorito
-                          ? Image.asset('assets/fav_red.png')
-                          : Image.asset('assets/fav_grey.png'),
+                      icon: favoritoController.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                     );
                   })
                 ],

@@ -88,6 +88,22 @@ mixin _$LoginController on LoginControllerBase, Store {
     });
   }
 
+  late final _$isPasswordVisibleAtom =
+      Atom(name: 'LoginControllerBase.isPasswordVisible', context: context);
+
+  @override
+  bool get isPasswordVisible {
+    _$isPasswordVisibleAtom.reportRead();
+    return super.isPasswordVisible;
+  }
+
+  @override
+  set isPasswordVisible(bool value) {
+    _$isPasswordVisibleAtom.reportWrite(value, super.isPasswordVisible, () {
+      super.isPasswordVisible = value;
+    });
+  }
+
   late final _$LoginControllerBaseActionController =
       ActionController(name: 'LoginControllerBase', context: context);
 
@@ -118,6 +134,7 @@ mixin _$LoginController on LoginControllerBase, Store {
     return '''
 username: ${username},
 password: ${password},
+isPasswordVisible: ${isPasswordVisible},
 getNomeError: ${getNomeError},
 getPasswordError: ${getPasswordError}
     ''';

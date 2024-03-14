@@ -21,6 +21,7 @@ namespace Common.WebAPI.PostgreSql
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
+      await _context.SaveChangesAsync(cancellationToken);
       await _transaction!.CommitAsync(cancellationToken);
       _isActive = false;
     }

@@ -45,10 +45,8 @@ namespace Common.EventBus.Integrations.IntegrationLog
     private Task UpdateEventStatus(string eventId, EnumEventState status)
     {
       var eventLogEntry = _integrationEventContext.IntegrationEventLogs.Single(ie => ie.EventId == eventId);
-      eventLogEntry.State = status;
 
-      if (status == EnumEventState.InProgress)
-        eventLogEntry.TimesSent++;
+      eventLogEntry.UpdateStatus(status);
 
       _integrationEventContext.IntegrationEventLogs.Update(eventLogEntry);
 

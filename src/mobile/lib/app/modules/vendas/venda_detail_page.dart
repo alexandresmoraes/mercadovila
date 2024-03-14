@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/vendas/venda_detail_controller.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
+import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_venda_item.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
@@ -99,36 +102,77 @@ class VendaDetailPageState extends State<VendaDetailPage> {
             );
           },
         ),
-        bottomNavigationBar: isAdmin
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: LinearGradient(
-                          stops: const [0, .90],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+        bottomNavigationBar: Observer(builder: (_) {
+          return isAdmin &&
+                  _controller.vendaDetailDto != null &&
+                  _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          gradient: LinearGradient(
+                            stops: const [0, .90],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                          ),
                         ),
+                        margin: const EdgeInsets.all(8.0),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        child: Observer(builder: (_) {
+                          return TextButton(
+                            onPressed: () async {
+                              showCupertinoModalPopup<void>(
+                                context: context,
+                                builder: (BuildContext context) => CupertinoActionSheet(
+                                  title: const Icon(Icons.question_answer),
+                                  actions: <Widget>[
+                                    CupertinoActionSheetAction(
+                                      isDestructiveAction: true,
+                                      onPressed: () async {
+                                        await _controller.cancelar();
+                                        Modular.to.pop(true);
+                                      },
+                                      child: const Text(
+                                        'Sim',
+                                      ),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Modular.to.pop();
+                                      },
+                                      child: const Text(
+                                        'Não',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: !_controller.isLoadingCancelar
+                                ? const Text(
+                                    'Cancelar',
+                                  )
+                                : const CircularProgress(
+                                    width: 21,
+                                    height: 21,
+                                  ),
+                          );
+                        }),
                       ),
-                      margin: const EdgeInsets.all(8.0),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                          onPressed: () {
-                            //
-                          },
-                          child: const Text(
-                            'Cancelar',
-                          )),
                     ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink(),
+                  ],
+                )
+              : const SizedBox.shrink();
+        }),
       ),
     );
   }
@@ -140,7 +184,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
 
   @override
   void initState() {
-    _controller.id = int.parse(widget.id);
+    _controller.vendaId = int.parse(widget.id);
 
     super.initState();
   }

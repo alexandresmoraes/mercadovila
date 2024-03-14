@@ -5,7 +5,7 @@ namespace Vendas.API.Application.Commands
 {
   public record CancelarPagamentoCommand : IRequest<Result>
   {
-    public long PagamentoId { get; set; }
+    public long PagamentoId { get; private init; }
 
     public CancelarPagamentoCommand(long pagamentoId)
     {

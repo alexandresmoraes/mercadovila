@@ -6,6 +6,7 @@ namespace Common.WebAPI.Auth
   {
     string GetUserId();
     string GetUserEmail();
+    string GetUserName();
     bool IsAuthenticated();
   }
 
@@ -21,6 +22,8 @@ namespace Common.WebAPI.Auth
     public string GetUserEmail() => _httpContextAccessor.HttpContext?.User.GetUserEmail() ?? "";
 
     public string GetUserId() => _httpContextAccessor.HttpContext?.User.GetUserId() ?? "";
+
+    public string GetUserName() => _httpContextAccessor.HttpContext?.User.GetUserName() ?? "";
 
     public bool IsAuthenticated() => _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
   }

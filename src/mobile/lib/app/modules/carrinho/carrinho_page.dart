@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,54 +21,16 @@ class CarrinhoPage extends StatefulWidget {
   CarrinhoPageState createState() => CarrinhoPageState();
 }
 
-class Product {
-  String? name;
-  int? qty;
-  bool? isFavourite = false;
-  String? rating;
-  String? amount;
-  String? unitName;
-  String? ratingCount;
-  String? description;
-  String? discount;
-  String? imagePath;
-  Product(
-      {this.amount,
-      this.description,
-      this.discount,
-      this.isFavourite,
-      this.name,
-      this.qty,
-      this.rating,
-      this.ratingCount,
-      this.unitName,
-      this.imagePath});
-}
-
-class Address {
-  String? title;
-  String? address;
-  Address({this.title, this.address});
-}
-
 class CarrinhoPageState extends State<CarrinhoPage> {
   final carrinhoStore = Modular.get<CarrinhoStore>();
 
   GlobalKey<ScaffoldState>? _scaffoldKey;
 
-  String? selectedCouponCode;
-  int? vendorId;
-  String selectedTimeSlot = '';
-  String? barberName;
   int _currentIndex = 0;
-  int? selectedCoupon;
   PageController? _pageController;
   ScrollController? _scrollController;
-  DateTime? selectedDate;
   bool step1Done = false;
   bool step2Done = false;
-  TextEditingController textController1 = TextEditingController();
-  TextEditingController textController2 = TextEditingController();
 
   CarrinhoPageState() : super();
 
@@ -88,7 +51,6 @@ class CarrinhoPageState extends State<CarrinhoPage> {
   @override
   Widget build(BuildContext context) {
     List<String> orderProcess = ['Carrinho', 'Pagamento'];
-    List<String> orderProcessText = ['Carrinho', 'Pagamento'];
 
     return WillPopScope(
       onWillPop: () async {
@@ -101,24 +63,25 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              orderProcessText[_currentIndex],
+              orderProcess[_currentIndex],
             ),
             leading: IconButton(
-                onPressed: () {
+              onPressed: () {
+                if (_currentIndex == 0) {
+                  Modular.to.pop();
+                } else {
+                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   if (_currentIndex == 0) {
-                    Modular.to.pop();
-                  } else {
-                    _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                    if (_currentIndex == 0) {
-                      step1Done = false;
-                    } else if (_currentIndex == 1) {
-                      step2Done = false;
-                    }
-
-                    setState(() {});
+                    step1Done = false;
+                  } else if (_currentIndex == 1) {
+                    step2Done = false;
                   }
-                },
-                icon: const Icon(MdiIcons.arrowLeft)),
+
+                  setState(() {});
+                }
+              },
+              icon: const Icon(MdiIcons.arrowLeft),
+            ),
             automaticallyImplyLeading: _currentIndex == 0 ? true : false,
           ),
           body: Column(
@@ -195,25 +158,26 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     alignment: Alignment.centerLeft,
                                     children: [
                                       Container(
-                                          decoration: BoxDecoration(
+                                        decoration: BoxDecoration(
+                                          color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                          border: Border.all(
                                             color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                            border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                              width: 1.5,
-                                            ),
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ),
+                                            width: 1.5,
                                           ),
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(left: 25, right: 10),
-                                          child: Text(
-                                            orderProcess[i],
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                            ),
-                                          )),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.only(left: 25, right: 10),
+                                        child: Text(
+                                          orderProcess[i],
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
                                       Container(
                                         height: 20,
                                         width: 20,
@@ -257,8 +221,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     setState(() {});
                   },
                   children: [
-                    _cartWidget(),
-                    _payment(),
+                    _carrinho(),
+                    _pagamento(),
                   ],
                 ),
               ),
@@ -342,7 +306,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     return carrinhoStore.carrinhoDto!;
   }
 
-  Widget _cartWidget() {
+  Widget _carrinho() {
     return FutureTriple(
       future: load(),
       data: (_, snapshot) {
@@ -375,46 +339,25 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                       final item = carrinhoStore.carrinhoItens[index];
 
                       return Slidable(
+                        key: Key(item.produtoId),
                         endActionPane: ActionPane(
-                          extentRatio: 0.15,
-                          motion: const ScrollMotion(),
+                          motion: const BehindMotion(),
+                          dismissible: DismissiblePane(
+                            closeOnCancel: true,
+                            confirmDismiss: () {
+                              return remover(item.produtoId, item.quantidade);
+                            },
+                            onDismissed: () {},
+                          ),
                           children: [
                             SlidableAction(
-                              onPressed: (_) {
-                                showCupertinoModalPopup<void>(
-                                  context: context,
-                                  builder: (BuildContext context) => CupertinoActionSheet(
-                                    title: const Icon(Icons.question_answer),
-                                    actions: <Widget>[
-                                      CupertinoActionSheetAction(
-                                        isDestructiveAction: true,
-                                        onPressed: () async {
-                                          Modular.to.pop();
-                                          await Modular.get<CarrinhoStore>().removerCarrinhoItem(item.produtoId, item.quantidade);
-                                        },
-                                        child: const Text(
-                                          'Remover',
-                                        ),
-                                      ),
-                                      CupertinoActionSheetAction(
-                                        isDefaultAction: true,
-                                        onPressed: () {
-                                          Modular.to.pop();
-                                        },
-                                        child: const Text(
-                                          'Cancelar',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                              label: 'Remover?',
                               backgroundColor: Colors.transparent,
                               foregroundColor: Colors.red,
                               icon: MdiIcons.trashCanOutline,
+                              onPressed: (_) {
+                                remover(item.produtoId, item.quantidade);
+                              },
                             ),
                           ],
                         ),
@@ -436,12 +379,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Subtotal",
+                      "Sub-Total",
                       style: Theme.of(context).primaryTextTheme.labelSmall,
                     ),
                     Observer(builder: (_) {
                       return Text(
-                        "R\$ ${carrinhoStore.carrinhoDto!.total}",
+                        UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto!.total.toDouble()),
                         style: Theme.of(context).primaryTextTheme.labelSmall,
                       );
                     }),
@@ -459,7 +402,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Observer(builder: (_) {
                     return Text(
-                      "R\$ ${carrinhoStore.carrinhoDto!.subtotal}",
+                      UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto!.subtotal.toDouble()),
                       style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                     );
                   }),
@@ -503,7 +446,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
     );
   }
 
-  Widget _payment() {
+  Widget _pagamento() {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -603,7 +546,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                   Text(
-                    "26/03/2021 12:40 PM",
+                    '${UtilData.obterDataDDMMAAAA(DateTime.now())} ${UtilData.obterHoraHHMM(DateTime.now())}',
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   ),
                 ],
@@ -619,7 +562,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Observer(builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.total}",
+                    UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto?.total.toDouble() ?? 0),
                     style: Theme.of(context).primaryTextTheme.labelSmall,
                   );
                 }),
@@ -638,7 +581,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               trailing: Observer(
                 builder: (_) {
                   return Text(
-                    "R\$ ${carrinhoStore.carrinhoDto?.subtotal}",
+                    UtilBrasilFields.obterReal(carrinhoStore.carrinhoDto?.subtotal.toDouble() ?? 0),
                     style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                   );
                 },
@@ -648,5 +591,39 @@ class CarrinhoPageState extends State<CarrinhoPage> {
         ),
       ),
     );
+  }
+
+  Future<bool> remover(String produtoId, int quantidade) async {
+    return await showCupertinoModalPopup<bool>(
+          context: context,
+          builder: (BuildContext context) => CupertinoActionSheet(
+            title: const Icon(Icons.question_answer),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () async {
+                  Modular.to.pop(true);
+                  await Modular.get<CarrinhoStore>().removerCarrinhoItem(produtoId, quantidade);
+                },
+                child: const Text(
+                  'Sim',
+                ),
+              ),
+              CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Modular.to.pop(false);
+                },
+                child: const Text(
+                  'Não',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 }
