@@ -1,5 +1,4 @@
-﻿
-using Common.WebAPI.Results;
+﻿using Common.WebAPI.Results;
 using Dapper;
 using System.Data;
 using Vendas.Domain.Aggregates;
@@ -15,7 +14,7 @@ namespace Vendas.API.Application.Queries
       _dbConnection = dbConnection;
     }
 
-    public async Task<PagamentoDetalheDto> GetPagamentoDetalhe(string userId, CancellationToken cancellationToken = default)
+    public async Task<PagamentoDetalheDto> GetPagamentoPendentes(string userId, CancellationToken cancellationToken = default)
     {
       var result = await _dbConnection.QueryAsync<dynamic>(
           @"

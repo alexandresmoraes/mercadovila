@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class AccountsPage extends StatefulWidget {
@@ -32,86 +35,83 @@ class AccountsPageState extends State<AccountsPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "Contas de usuários",
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  setState(() {
-                    isSearchVisibled = !isSearchVisibled;
-                    if (!isSearchVisibled && !isNullorEmpty(usernameFilter)) {
-                      usernameFilter = "";
-                      searchController.clear();
-                      pagingController.refresh();
-                    }
-                    if (isSearchVisibled) {
-                      searchNode.requestFocus();
-                    } else {
-                      searchNode.unfocus();
-                    }
-                  });
-                },
-                icon: const Icon(MdiIcons.magnify),
-              ),
-              IconButton(
-                onPressed: () async {
-                  var refresh = await Modular.to.pushNamed<bool>('/account/new');
-                  if (refresh ?? false) pagingController.refresh();
-                },
-                icon: const Icon(MdiIcons.plus),
-              ),
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "Contas de usuários",
           ),
-          body: Column(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: isSearchVisibled ? 70 : 0,
-                child: Container(
-                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.only(),
-                  child: TextFormField(
-                    focusNode: searchNode,
-                    controller: searchController,
-                    onChanged: ((value) {
-                      if (_debounce?.isActive ?? false) _debounce!.cancel();
-                      _debounce = Timer(const Duration(milliseconds: 500), () {
-                        setState(() {
-                          usernameFilter = value;
-                          pagingController.refresh();
-                        });
+          actions: [
+            IconButton(
+              onPressed: () async {
+                setState(() {
+                  isSearchVisibled = !isSearchVisibled;
+                  if (!isSearchVisibled && !isNullorEmpty(usernameFilter)) {
+                    usernameFilter = "";
+                    searchController.clear();
+                    pagingController.refresh();
+                  }
+                  if (isSearchVisibled) {
+                    searchNode.requestFocus();
+                  } else {
+                    searchNode.unfocus();
+                  }
+                });
+              },
+              icon: const Icon(MdiIcons.magnify),
+            ),
+            IconButton(
+              onPressed: () async {
+                var refresh = await Modular.to.pushNamed<bool>('/account/new');
+                if (refresh ?? false) pagingController.refresh();
+              },
+              icon: const Icon(MdiIcons.plus),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isSearchVisibled ? 70 : 0,
+              child: Container(
+                decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(),
+                child: TextFormField(
+                  focusNode: searchNode,
+                  controller: searchController,
+                  onChanged: ((value) {
+                    if (_debounce?.isActive ?? false) _debounce!.cancel();
+                    _debounce = Timer(const Duration(milliseconds: 500), () {
+                      setState(() {
+                        usernameFilter = value;
+                        pagingController.refresh();
                       });
-                    }),
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    decoration: InputDecoration(
-                      hintText: 'Buscar por nome de usuários ou email',
-                      prefixIcon: Icon(
-                        MdiIcons.magnify,
-                        size: isSearchVisibled ? 20 : 0,
-                      ),
-                      contentPadding: const EdgeInsets.only(top: 10),
+                    });
+                  }),
+                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar por nome de usuários ou email',
+                    prefixIcon: Icon(
+                      MdiIcons.magnify,
+                      size: isSearchVisibled ? 20 : 0,
                     ),
+                    contentPadding: const EdgeInsets.only(top: 10),
                   ),
                 ),
               ),
-              Expanded(
-                child: _allUsers(),
-              ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: _todosUsuarios(),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _allUsers() {
+  Widget _todosUsuarios() {
     final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
@@ -233,17 +233,43 @@ class AccountsPageState extends State<AccountsPage> {
                   trailing: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        "R\$ 15,98",
-                        style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
+                      FutureTriple(
+                        error: const SizedBox.shrink(),
+                        loading: const SizedBox.shrink(),
+                        future: Modular.get<IPagamentosRepository>().getPagamentoDetalhePorUsuario(item.id),
+                        data: (_, snapshot) {
+                          if (snapshot.data!.total == 0) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Container(
+                            decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                            margin: const EdgeInsets.only(right: 10, top: 5),
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            width: 80,
+                            height: 25,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 0,
+                                  ),
+                                  child: Text(
+                                    UtilBrasilFields.obterReal(snapshot.data!.total.toDouble()),
+                                    style: Theme.of(context).primaryTextTheme.bodySmall,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),
