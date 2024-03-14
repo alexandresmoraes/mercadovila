@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Compras.Domain.Aggregates;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vendas.Domain.Aggregates;
 
-namespace Vendas.Infra.EntityMapping
+namespace Compras.Infra.EntityMapping
 {
   sealed class CompradorMapping : IEntityTypeConfiguration<Comprador>
   {
@@ -10,9 +10,9 @@ namespace Vendas.Infra.EntityMapping
     {
       b.ToTable("compradores");
 
-      b.HasKey(_ => _.UserId);
+      b.HasKey(c => c.UserId);
 
-      b.Property(p => p.UserId)
+      b.Property(c => c.UserId)
         .HasMaxLength(36)
         .HasColumnName("user_id")
         .IsRequired();
@@ -21,6 +21,11 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("nome")
         .IsRequired()
         .HasMaxLength(256);
+
+      b.Property(c => c.Username)
+        .HasColumnName("usuario_username")
+        .HasMaxLength(128)
+        .IsRequired();
 
       b.Property(c => c.Email)
         .HasColumnName("email")
@@ -31,8 +36,8 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("foto_url")
         .HasMaxLength(256);
 
-      b.Ignore(_ => _.Id);
-      b.Ignore(_ => _.DomainEvents);
+      b.Ignore(c => c.Id);
+      b.Ignore(c => c.DomainEvents);
     }
   }
 }

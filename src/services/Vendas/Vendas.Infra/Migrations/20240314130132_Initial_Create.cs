@@ -14,8 +14,6 @@ namespace Vendas.Infra.Migrations
                 name: "compradores",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
                     nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
@@ -23,7 +21,7 @@ namespace Vendas.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_compradores", x => x.id);
+                    table.PrimaryKey("PK_compradores", x => x.user_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,7 +30,7 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    comprador_id = table.Column<long>(type: "bigint", nullable: false),
+                    comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     tipo = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
@@ -45,7 +43,7 @@ namespace Vendas.Infra.Migrations
                         name: "FK_pagamentos_compradores_comprador_id",
                         column: x => x.comprador_id,
                         principalTable: "compradores",
-                        principalColumn: "id",
+                        principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -55,7 +53,7 @@ namespace Vendas.Infra.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    comprador_id = table.Column<long>(type: "bigint", nullable: false),
+                    comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     total = table.Column<decimal>(type: "numeric", nullable: false),
@@ -68,7 +66,7 @@ namespace Vendas.Infra.Migrations
                         name: "FK_vendas_compradores_comprador_id",
                         column: x => x.comprador_id,
                         principalTable: "compradores",
-                        principalColumn: "id",
+                        principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_vendas_pagamentos_pagamento_id",
@@ -103,12 +101,6 @@ namespace Vendas.Infra.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "comprador_userid_index",
-                table: "compradores",
-                column: "user_id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_pagamentos_comprador_id",

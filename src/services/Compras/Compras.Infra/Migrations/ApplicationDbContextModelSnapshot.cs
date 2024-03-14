@@ -39,38 +39,50 @@ namespace Compras.Infra.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("total");
 
-                    b.Property<string>("UsuarioEmail")
+                    b.Property<string>("comprador_id")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("usuario_email");
+                        .HasColumnType("character varying(36)");
 
-                    b.Property<string>("UsuarioFotoUrl")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("usuario_foto_url");
+                    b.HasKey("Id");
 
-                    b.Property<string>("UsuarioId")
-                        .IsRequired()
+                    b.HasIndex("comprador_id");
+
+                    b.ToTable("compras", (string)null);
+                });
+
+            modelBuilder.Entity("Compras.Domain.Aggregates.Comprador", b =>
+                {
+                    b.Property<string>("UserId")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
-                        .HasColumnName("usuario_id");
+                        .HasColumnName("user_id");
 
-                    b.Property<string>("UsuarioNome")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("usuario_nome");
+                        .HasColumnName("email");
 
-                    b.Property<string>("UsuarioUsername")
+                    b.Property<string>("FotoUrl")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("foto_url");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("nome");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("usuario_username");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
-                    b.ToTable("compras", (string)null);
+                    b.ToTable("compradores", (string)null);
                 });
 
             modelBuilder.Entity("Compras.Domain.Aggregates.CompraItem", b =>
@@ -137,6 +149,17 @@ namespace Compras.Infra.Migrations
                     b.HasIndex("CompraId");
 
                     b.ToTable("compra_itens", (string)null);
+                });
+
+            modelBuilder.Entity("Compras.Domain.Aggregates.Compra", b =>
+                {
+                    b.HasOne("Compras.Domain.Aggregates.Comprador", "Comprador")
+                        .WithMany()
+                        .HasForeignKey("comprador_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comprador");
                 });
 
             modelBuilder.Entity("Compras.Domain.Aggregates.CompraItem", b =>

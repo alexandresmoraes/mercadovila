@@ -12,12 +12,14 @@ namespace Compras.API.Application.Commands
   {
     private readonly IAuthService _authService;
     private readonly IComprasRepository _comprasRepository;
+    private readonly ICompradoresRepository _compradoresRepository;
     private readonly IIntegrationEventService _integrationEventService;
 
-    public CriarCompraCommandHandler(IAuthService authService, IComprasRepository comprasRepository, IIntegrationEventService integrationEventService)
+    public CriarCompraCommandHandler(IAuthService authService, IComprasRepository comprasRepository, ICompradoresRepository compradoresRepository, IIntegrationEventService integrationEventService)
     {
       _authService = authService;
       _comprasRepository = comprasRepository;
+      _compradoresRepository = compradoresRepository;
       _integrationEventService = integrationEventService;
     }
 
@@ -27,12 +29,21 @@ namespace Compras.API.Application.Commands
       var usuarioUsername = _authService.GetUserName();
       var usuarioEmail = _authService.GetUserEmail();
 
+      var comprador = await _compradoresRepository.GetAsync(usuarioId);
+      if (comprador is null)
+      {
+        comprador = new Comprador(usuarioId, request.UsuarioNome, usuarioUsername, _authService.GetUserEmail(), request.UsuarioFotoUrl);
+      }
+      else
+      {
+        comprador.Nome = request.UsuarioNome;
+        comprador.Email = usuarioEmail;
+        comprador.Username = usuarioUsername;
+        comprador.FotoUrl = request.UsuarioFotoUrl;
+      }
+
       var compra = new Compra(
-        usuarioId: usuarioId,
-        usuarioUsername: usuarioUsername,
-        usuarioEmail: usuarioEmail,
-        usuarioNome: request.UsuarioNome,
-        usuarioFotoUrl: request.UsuarioFotoUrl,
+        comprador: comprador,
         compraItens: request.CompraItens.Select(item => new CompraItem(
           item.ProdutoId,
           item.Nome,

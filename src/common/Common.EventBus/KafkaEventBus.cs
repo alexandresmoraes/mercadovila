@@ -66,18 +66,18 @@ namespace Common.EventBus
       var policy = Policy.Handle<Exception>()
        .WaitAndRetryAsync(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
        {
-         _logger.LogWarning(ex, "Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", @event.Id, $"{time.TotalSeconds:n1}", ex.Message);
+         _logger.LogWarning(ex, "----- WARNING: Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", @event.Id, $"{time.TotalSeconds:n1}", ex.Message);
        });
 
       var eventName = @event.GetType().Name;
 
-      _logger.LogTrace("Creating Kafka producer to publish event: {EventId} ({EventName})", @event.Id, eventName);
+      _logger.LogTrace("----- Creating Kafka producer to publish event: {EventId} ({EventName})", @event.Id, eventName);
 
       var message = JsonSerializer.Serialize(@event, @event.GetType());
 
       await policy.ExecuteAsync(async () =>
       {
-        _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
+        _logger.LogTrace("----- Publishing event to Kafka: {EventId}", @event.Id);
 
         await _producer.ProduceAsync(eventName, new Message<string, string>
         {
@@ -96,7 +96,7 @@ namespace Common.EventBus
       _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
       _subsManager.AddSubscription<T, TH>();
-      StartBasicConsume(eventName);
+      StartConsume(eventName);
     }
 
     public void Unsubscribe<T, TH>()
@@ -110,9 +110,9 @@ namespace Common.EventBus
       _subsManager.RemoveSubscription<T, TH>();
     }
 
-    private void StartBasicConsume(string eventName)
+    private void StartConsume(string eventName)
     {
-      _logger.LogTrace("Starting Kafka basic consume {EventName}", eventName);
+      _logger.LogTrace("----- Starting Kafka basic consume {EventName}", eventName);
 
       Task.Run(async () =>
       {
@@ -128,7 +128,7 @@ namespace Common.EventBus
 
             if (result is not null)
             {
-              _logger.LogInformation("Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
+              _logger.LogInformation("----- Consumer event started partition: {partition} offset: {offset} timestamp: {timestamp}",
                 result.Partition,
                 result.Offset,
                 result.Message.Timestamp.UtcDateTime);
@@ -151,7 +151,7 @@ namespace Common.EventBus
 
     private async Task ProcessEvent(string eventName, string message)
     {
-      _logger.LogTrace("Processing Kafka event: {EventName}", eventName);
+      _logger.LogTrace("----- Processing Kafka event: {EventName}", eventName);
 
       if (_subsManager.HasSubscriptionsForEvent(eventName))
       {
@@ -171,7 +171,7 @@ namespace Common.EventBus
       }
       else
       {
-        _logger.LogWarning("No subscription for Kafka event: {EventName}", eventName);
+        _logger.LogWarning("----- No subscription for Kafka event: {EventName}", eventName);
       }
     }
 
@@ -186,17 +186,17 @@ namespace Common.EventBus
 
     private void OnBreak(Exception exception, TimeSpan timespan)
     {
-      _logger.LogError("Consumer Open (onBreak) - {@exception}", exception);
+      _logger.LogError("----- Consumer Open (onBreak) - {@exception}", exception);
     }
 
     private void OnReset()
     {
-      _logger.LogWarning("Closed (onReset)");
+      _logger.LogWarning("----- Closed (onReset)");
     }
 
     private void OnHalfOpen()
     {
-      _logger.LogWarning("Half Open (onHalfOpen)");
+      _logger.LogWarning("----- Half Open (onHalfOpen)");
     }
   }
 }

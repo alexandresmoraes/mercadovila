@@ -34,6 +34,7 @@ builder.Services.AddSerilog();
 builder.Services.AddScoped<IDbConnection>(sp => sp.GetService<DbContext>()!.Database.GetDbConnection());
 builder.Services.AddScoped<IComprasQueries, ComprasQueries>();
 builder.Services.AddScoped<IComprasRepository, ComprasRepository>();
+builder.Services.AddScoped<ICompradoresRepository, CompradoresRepository>();
 
 builder.Services.AddScoped<INotificationsContext, NotificationsContext>();
 

@@ -11,22 +11,39 @@ namespace Compras.Infra.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "compradores",
+                columns: table => new
+                {
+                    user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    usuario_username = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    foto_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_compradores", x => x.user_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "compras",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    total = table.Column<decimal>(type: "numeric", nullable: false),
-                    usuario_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
-                    usuario_nome = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    usuario_username = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    usuario_email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    usuario_foto_url = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
+                    total = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_compras", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_compras_compradores_comprador_id",
+                        column: x => x.comprador_id,
+                        principalTable: "compradores",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +79,11 @@ namespace Compras.Infra.Migrations
                 name: "IX_compra_itens_compra_id",
                 table: "compra_itens",
                 column: "compra_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_compras_comprador_id",
+                table: "compras",
+                column: "comprador_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -71,6 +93,9 @@ namespace Compras.Infra.Migrations
 
             migrationBuilder.DropTable(
                 name: "compras");
+
+            migrationBuilder.DropTable(
+                name: "compradores");
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Vendas.Domain.Aggregates
 {
   public class Venda : Entity, IAggregateRoot
   {
-    private readonly List<VendaItem> _vendaItens = new List<VendaItem>();
+    private readonly List<VendaItem> _vendaItens = new();
     public IReadOnlyCollection<VendaItem> VendaItens => _vendaItens;
     public Comprador Comprador { get; private set; } = null!;
     public EnumVendaStatus Status { get; private set; }

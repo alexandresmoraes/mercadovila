@@ -15,6 +15,11 @@ namespace Compras.Infra.EntityMapping
         .HasColumnName("id")
         .ValueGeneratedOnAdd();
 
+      b.HasOne(_ => _.Comprador)
+        .WithMany()
+        .HasForeignKey("comprador_id")
+        .IsRequired();
+
       b.Property(_ => _.DataHora)
         .HasColumnName("datahora")
         .IsRequired();
@@ -27,30 +32,6 @@ namespace Compras.Infra.EntityMapping
         .WithOne(_ => _.Compra)
         .HasForeignKey(_ => _.CompraId)
         .OnDelete(DeleteBehavior.Cascade);
-
-      b.Property(c => c.UsuarioId)
-        .HasColumnName("usuario_id")
-        .HasMaxLength(36)
-        .IsRequired();
-
-      b.Property(c => c.UsuarioUsername)
-        .HasColumnName("usuario_username")
-        .HasMaxLength(128)
-        .IsRequired();
-
-      b.Property(c => c.UsuarioNome)
-       .HasColumnName("usuario_nome")
-       .HasMaxLength(256)
-       .IsRequired();
-
-      b.Property(c => c.UsuarioEmail)
-        .HasColumnName("usuario_email")
-        .HasMaxLength(128)
-        .IsRequired();
-
-      b.Property(c => c.UsuarioFotoUrl)
-        .HasColumnName("usuario_foto_url")
-        .HasMaxLength(128);
 
       b.Ignore(_ => _.DomainEvents);
     }

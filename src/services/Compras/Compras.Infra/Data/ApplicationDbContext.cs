@@ -19,6 +19,7 @@ namespace Compras.Infra.Data
 
     public DbSet<Compra> Compras { get; set; } = null!;
     public DbSet<CompraItem> CompraItens { get; set; } = null!;
+    public DbSet<Comprador> Compradores { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -30,6 +31,7 @@ namespace Compras.Infra.Data
     {
       modelBuilder.ApplyConfiguration(new CompraMapping());
       modelBuilder.ApplyConfiguration(new CompraItemMapping());
+      modelBuilder.ApplyConfiguration(new CompradorMapping());
     }
   }
 }
