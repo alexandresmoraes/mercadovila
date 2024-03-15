@@ -25,5 +25,11 @@ namespace Vendas.Infra.Repositories
 
       return comprador;
     }
+
+    public async Task UpdateAsync(Comprador comprador)
+    {
+      _context.Compradores.Update(comprador);
+      await _context.SaveChangesAsync();
+    }
   }
 }

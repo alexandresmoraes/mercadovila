@@ -9,14 +9,6 @@ namespace Common.WebAPI.PostgreSql
 {
   public static class PostgreSqlExtensions
   {
-    public static WebApplication RunMigrations<TDbContext>(this WebApplication app) where TDbContext : DbContext
-    {
-      using var scope = app.Services.CreateScope();
-      var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
-      context.Database.Migrate();
-      return app;
-    }
-
     public static DbContextOptionsBuilder UseNpgsqlExtension(this DbContextOptionsBuilder options, IConfiguration configuration)
     {
       options

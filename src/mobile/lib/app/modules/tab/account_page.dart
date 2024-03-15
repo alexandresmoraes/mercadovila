@@ -379,11 +379,12 @@ class AccountPageState extends State<AccountPage> {
                         actions: <CupertinoDialogAction>[
                           CupertinoDialogAction(
                             isDefaultAction: true,
-                            onPressed: () {
+                            onPressed: () async {
                               Modular.to.pop();
+                              Modular.get<IAuthService>().logout();
                             },
                             child: const Text(
-                              'Não',
+                              'Sim',
                               style: TextStyle(
                                 color: Colors.blue,
                               ),
@@ -391,11 +392,10 @@ class AccountPageState extends State<AccountPage> {
                           ),
                           CupertinoDialogAction(
                             isDestructiveAction: true,
-                            onPressed: () async {
+                            onPressed: () {
                               Modular.to.pop();
-                              Modular.get<IAuthService>().logout();
                             },
-                            child: const Text('Sim'),
+                            child: const Text('Não'),
                           ),
                         ],
                       ),

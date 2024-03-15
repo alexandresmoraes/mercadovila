@@ -53,9 +53,11 @@ namespace Vendas.API.Application.Commands
       }
       else
       {
-        comprador.Nome = request.CompradorNome;
-        comprador.Email = _authService.GetUserEmail();
-        comprador.FotoUrl = request.CompradorFotoUrl;
+        comprador.Atualizar(
+          nome: request.CompradorNome,
+          email: _authService.GetUserEmail(),
+          fotoUrl: request.CompradorFotoUrl
+        );
       }
 
       var venda = new Venda(

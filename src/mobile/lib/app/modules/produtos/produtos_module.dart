@@ -14,15 +14,12 @@ class ProdutosModule extends Module {
   final List<Bind> binds = [
     Bind.factory((i) => ProdutosEditController()),
     Bind.factory((i) => ProdutosDetailController()),
-    BindInject((i) => ProdutosRepository(), isSingleton: true, isLazy: true),
+    Bind.lazySingleton((i) => ProdutosRepository()),
   ];
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute('/',
-        child: (_, args) => const ProdutosPage(),
-        transition: TransitionType.rightToLeft,
-        duration: const Duration(milliseconds: 500)),
+    ChildRoute('/', child: (_, args) => const ProdutosPage(), transition: TransitionType.rightToLeft, duration: const Duration(milliseconds: 500)),
     ChildRoute('/edit/:id', child: (_, args) => ProdutosEditPage(id: args.params['id'])),
     ChildRoute('/new', child: (_, args) => const ProdutosEditPage()),
     ChildRoute('/details/:id', child: (_, args) => ProdutosDetailPage(id: args.params['id'])),

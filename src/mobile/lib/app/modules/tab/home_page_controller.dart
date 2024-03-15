@@ -29,6 +29,12 @@ abstract class HomePageControllerBase with Store, Disposable {
   bool isFavoritosEmpty = false;
 
   @observable
+  bool isUltimosVendidosEmpty = false;
+
+  @observable
+  bool isMaisVendidosEmpty = false;
+
+  @observable
   int currentIndexCarouselSlider = 0;
 
   @override

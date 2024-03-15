@@ -1,12 +1,14 @@
 using Common.EventBus;
 using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations;
+using Common.EventBus.Integrations.IntegrationEvents;
 using Common.EventBus.Integrations.IntegrationLog;
 using Common.WebAPI.Logs;
 using Common.WebAPI.Notifications;
 using Common.WebAPI.PostgreSql;
 using Compras.API.Application.Queries;
 using Compras.API.Config;
+using Compras.API.IntegrationEvents.EventHandling;
 using Compras.Domain.Aggregates;
 using Compras.Infra.Data;
 using Compras.Infra.Repositories;
@@ -37,6 +39,23 @@ builder.Services.AddScoped<IComprasRepository, ComprasRepository>();
 builder.Services.AddScoped<ICompradoresRepository, CompradoresRepository>();
 
 builder.Services.AddScoped<INotificationsContext, NotificationsContext>();
+
+
+
+
+builder.Services.AddTransient<UsuarioAlteradoIntegrationEventHandler>();
+
+
+builder.Services.AddSingleton<IEventBusSubscriptionsManager, EventBusSubscriptionsManager>();
+builder.Services.AddSingleton<IEventBus, KafkaEventBus>(sp =>
+{
+  var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
+  var eventBusSettings = sp.GetRequiredService<EventBusSettings>();
+  var subManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+  return new KafkaEventBus(logger, eventBusSettings, sp, subManager);
+});
+
 
 
 
@@ -85,6 +104,8 @@ try
   Log.Information("Configuring web app ({ApplicationContext})...", appName);
   var app = builder.Build();
 
+  ConfigureEventBus(app);
+
   app.UseApiConfiguration();
 
   Log.Information("Applying migrations ({ApplicationContext})...", appName);
@@ -112,4 +133,11 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
   return new LoggerConfiguration()
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
+}
+
+void ConfigureEventBus(IApplicationBuilder app)
+{
+  var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+  eventBus.Subscribe<UsuarioAlteradoIntegrationEvent, UsuarioAlteradoIntegrationEventHandler>();
 }

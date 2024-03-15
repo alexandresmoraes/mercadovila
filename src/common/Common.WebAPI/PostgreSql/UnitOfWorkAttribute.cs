@@ -1,6 +1,8 @@
-﻿using Common.WebAPI.Results;
+﻿using Common.EventBus.Integrations.IntegrationLog;
+using Common.WebAPI.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Common.WebAPI.PostgreSql
@@ -9,11 +11,13 @@ namespace Common.WebAPI.PostgreSql
   {
     private readonly IUnitOfWork _uow;
     private readonly ILogger<UnitOfWorkAttribute> _logger;
+    private readonly IIntegrationEventService _integrationEventService;
 
-    public UnitOfWorkAttribute(IUnitOfWork uow, ILogger<UnitOfWorkAttribute> logger)
+    public UnitOfWorkAttribute(IUnitOfWork uow, ILogger<UnitOfWorkAttribute> logger, IIntegrationEventService integrationEventService)
     {
-      _uow = uow ?? throw new ArgumentNullException(nameof(uow));
-      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+      _uow = uow;
+      _logger = logger;
+      _integrationEventService = integrationEventService;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -22,6 +26,9 @@ namespace Common.WebAPI.PostgreSql
       cancellationToken.ThrowIfCancellationRequested();
 
       await _uow.BeginTransactionAsync(cancellationToken);
+      using var transaction = _uow.GetTransaction<IDbContextTransaction>();
+
+      _logger.LogInformation("Begin transaction {TransactionId}", transaction.TransactionId);
 
       var result = await next();
 
@@ -32,23 +39,26 @@ namespace Common.WebAPI.PostgreSql
       {
         if (_uow.HasActiveTransaction)
         {
-          if (result.Result is ObjectResult objectResult
-            && objectResult.Value is Result resultValue
-            && resultValue.IsValid)
+          if (result.Result is ObjectResult objectResult && objectResult.Value is Result resultValue && resultValue.IsValid)
           {
             await _uow.CommitAsync(cancellationToken);
-            _logger.LogInformation("Commited.");
+
+            _logger.LogInformation("Commited transaction {TransactionId}", transaction.TransactionId);
+
+            await _integrationEventService.PublishEventsThroughEventBusAsync(transaction.TransactionId);
           }
           else
           {
             await _uow.RollbackAsync(cancellationToken);
-            _logger.LogInformation("Rollbacked.");
+
+            _logger.LogInformation("Rollbacked transaction {TransactionId}", transaction.TransactionId);
           }
         }
       }
       catch (OperationCanceledException)
       {
         await _uow.RollbackAsync(cancellationToken);
+
         _logger.LogInformation("Cancellation requested.");
       }
     }
@@ -74,8 +84,11 @@ namespace Common.WebAPI.PostgreSql
 
       if (result.Exception is not null && _uow.HasActiveTransaction)
       {
+        using var transaction = _uow.GetTransaction<IDbContextTransaction>();
+
         await _uow.RollbackAsync(cancellationToken);
-        _logger.LogInformation("Rollbacked exception.");
+
+        _logger.LogInformation("Rollbacked exception {TransactionId}", transaction.TransactionId);
       }
     }
   }

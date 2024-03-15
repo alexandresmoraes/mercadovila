@@ -43,8 +43,6 @@ namespace Compras.API.Config
       services.AddAuthServices();
       services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-      //services.AddScoped<IComprasRepository, Comprare>();
-
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));

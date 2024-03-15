@@ -7,7 +7,6 @@ import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart'
 import 'package:vilasesmo/app/modules/notificacoes/notificacoes_module.dart';
 import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
 import 'package:vilasesmo/app/modules/compras/compras_module.dart';
-import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
 import 'package:vilasesmo/app/modules/produtos/produtos_module.dart';
 import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
 import 'package:vilasesmo/app/modules/search/search_module.dart';
@@ -31,7 +30,6 @@ import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/compras_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
@@ -42,7 +40,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.1.110:8081',
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.1.120:8081',
         connectTimeout: kReleaseMode ? 20000 : 0,
         receiveTimeout: kReleaseMode ? 20000 : 0,
         sendTimeout: kReleaseMode ? 20000 : 0,
@@ -67,8 +65,8 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => PagamentosRepository()),
 
     //TODO: remover itens
-    Bind.factory((i) => ProdutosEditController()),
-    Bind.lazySingleton((i) => ProdutosRepository()),
+    // Bind.factory((i) => ProdutosEditController()),
+    // Bind.lazySingleton((i) => ProdutosRepository()),
   ];
 
   @override

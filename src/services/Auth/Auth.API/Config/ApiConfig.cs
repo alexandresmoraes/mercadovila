@@ -1,6 +1,7 @@
 ﻿using Auth.API.Data;
 using Auth.API.Data.Entities;
 using Auth.API.Data.Repositories;
+using Common.EventBus;
 using Common.WebAPI.Auth;
 using Common.WebAPI.HealthCheck;
 using Common.WebAPI.PostgreSql;
@@ -41,6 +42,8 @@ namespace Auth.API.Config
 
       services.AddAuthServices();
 
+      services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
+
       services.AddMvc(opt =>
       {
 #if DEBUG
@@ -53,7 +56,6 @@ namespace Auth.API.Config
 
     public static IApplicationBuilder UseApiConfiguration(this WebApplication app)
     {
-      app.RunMigrations<ApplicationDbContext>();
       app.MapHealthChecks();
 
       if (app.Environment.IsDevelopment())

@@ -36,10 +36,12 @@ namespace Compras.API.Application.Commands
       }
       else
       {
-        comprador.Nome = request.UsuarioNome;
-        comprador.Email = usuarioEmail;
-        comprador.Username = usuarioUsername;
-        comprador.FotoUrl = request.UsuarioFotoUrl;
+        comprador.Atualizar(
+          nome: request.UsuarioNome,
+          username: usuarioUsername,
+          email: usuarioEmail,
+          fotoUrl: request.UsuarioFotoUrl
+        );
       }
 
       var compra = new Compra(

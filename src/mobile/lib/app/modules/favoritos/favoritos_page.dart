@@ -112,19 +112,16 @@ class FavoritosPageState extends State<FavoritosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(
-                                    text: "\$",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: '${item.preco}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${item.unidadeMedida}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                              TextSpan(
+                                text: '${item.preco}',
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              TextSpan(
+                                text: ' / ${item.unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              )
+                            ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -200,11 +197,14 @@ class FavoritosPageState extends State<FavoritosPage> {
                                 actions: <CupertinoDialogAction>[
                                   CupertinoDialogAction(
                                     isDefaultAction: true,
-                                    onPressed: () {
+                                    onPressed: () async {
                                       Modular.to.pop();
+                                      var favoritoRepository = Modular.get<IFavoritosRepository>();
+                                      await favoritoRepository.removerFavorito(item.produtoId);
+                                      pagingController.refresh();
                                     },
                                     child: const Text(
-                                      'Não',
+                                      'Sim',
                                       style: TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -212,20 +212,16 @@ class FavoritosPageState extends State<FavoritosPage> {
                                   ),
                                   CupertinoDialogAction(
                                     isDestructiveAction: true,
-                                    onPressed: () async {
+                                    onPressed: () {
                                       Modular.to.pop();
-                                      var favoritoRepository = Modular.get<IFavoritosRepository>();
-                                      await favoritoRepository.removerFavorito(item.produtoId);
-                                      pagingController.refresh();
                                     },
-                                    child: const Text('Sim'),
+                                    child: const Text('Não'),
                                   ),
                                 ],
                               ),
                             );
                           },
-                          icon:
-                              item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                          icon: item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                         )
                       ],
                     ),

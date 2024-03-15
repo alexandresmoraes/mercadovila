@@ -14,7 +14,6 @@ import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_reposit
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class PagamentosPage extends StatefulWidget {
   final String title;

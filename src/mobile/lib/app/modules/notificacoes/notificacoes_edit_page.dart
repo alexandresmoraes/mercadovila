@@ -378,11 +378,14 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                               actions: <CupertinoDialogAction>[
                                                 CupertinoDialogAction(
                                                   isDefaultAction: true,
-                                                  onPressed: () {
+                                                  onPressed: () async {
                                                     Modular.to.pop();
+                                                    if (!_controller.isDeleting && !_controller.isSaving && _controller.isValid) {
+                                                      await _controller.delete();
+                                                    }
                                                   },
                                                   child: const Text(
-                                                    'Não',
+                                                    'Sim',
                                                     style: TextStyle(
                                                       color: Colors.blue,
                                                     ),
@@ -390,13 +393,10 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                                 ),
                                                 CupertinoDialogAction(
                                                   isDestructiveAction: true,
-                                                  onPressed: () async {
+                                                  onPressed: () {
                                                     Modular.to.pop();
-                                                    if (!_controller.isDeleting && !_controller.isSaving && _controller.isValid) {
-                                                      await _controller.delete();
-                                                    }
                                                   },
-                                                  child: const Text('Sim'),
+                                                  child: const Text('Não'),
                                                 ),
                                               ],
                                             ),

@@ -3,6 +3,8 @@ using Auth.API.Data.Entities;
 using Auth.API.Data.Queries;
 using Auth.API.Data.Repositories;
 using Auth.API.Models;
+using Common.EventBus.Integrations.IntegrationEvents;
+using Common.EventBus.Integrations.IntegrationLog;
 using Common.WebAPI.Auth;
 using Common.WebAPI.Results;
 using Common.WebAPI.Utils;
@@ -26,8 +28,9 @@ namespace Auth.API.Controllers
     private readonly IConfiguration _configuration;
     private readonly IFileUtils _fileUtils;
     private readonly IValidateUtils _validateUtils;
+    private readonly IIntegrationEventService _integrationEventService;
 
-    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils)
+    public AccountController(UserManager<ApplicationUser> userManager, IUserRepository userRepository, IAuthService authService, IConfiguration configuration, IFileUtils fileUtils, IValidateUtils validateUtils, IIntegrationEventService integrationEventService)
     {
       _userManager = userManager;
       _userRepository = userRepository;
@@ -35,6 +38,7 @@ namespace Auth.API.Controllers
       _configuration = configuration;
       _fileUtils = fileUtils;
       _validateUtils = validateUtils;
+      _integrationEventService = integrationEventService;
     }
 
     /// <summary>
@@ -174,6 +178,15 @@ namespace Auth.API.Controllers
           {
             await _userManager.RemoveFromRoleAsync(user, "admin");
           }
+
+          var usuarioAlteradoIntegrationEvent = new UsuarioAlteradoIntegrationEvent(
+            userId: user.Id,
+            nome: user.Nome,
+            username: user.UserName!,
+            email: user.Email!,
+            fotoUrl: user.FotoUrl
+          );
+          await _integrationEventService.AddAndSaveEventAsync(usuarioAlteradoIntegrationEvent);
 
           return Result.Ok();
         }
