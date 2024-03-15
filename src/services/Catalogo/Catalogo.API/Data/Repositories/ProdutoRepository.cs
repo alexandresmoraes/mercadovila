@@ -456,10 +456,9 @@ namespace Catalogo.API.Data.Repositories
           var estoqueAtual = produtoAtual.Estoque;
           var precoAtual = produtoAtual.Preco;
           var precoPago = produto.Item4 ?? 0;
+          var estoqueEntrada = produto.Item2;
 
-          novoPreco = estoqueAtual == 0
-            ? precoPago
-            : (precoAtual + precoPago) / 2;
+          novoPreco = ((precoAtual * estoqueAtual) + (precoPago * estoqueEntrada)) / (estoqueAtual + estoqueEntrada);
         }
 
         novoPreco = Math.Round(novoPreco, 2, MidpointRounding.AwayFromZero);

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/account/accounts_page.dart';
 import 'package:vilasesmo/app/modules/tab/home_page_controller.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
 import 'package:vilasesmo/app/stores/pagamentos_store.dart';
@@ -73,20 +74,49 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 onTap: () {},
                 horizontalTitleGap: 2,
                 contentPadding: const EdgeInsets.all(0),
-                leading: Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Image.asset(
-                        'assets/google_dark.png',
-                        height: 60,
-                        width: 30,
-                      )
-                    : Image.asset(
-                        'assets/google_light.png',
-                        height: 60,
-                        width: 30,
-                      ),
+                leading: Observer(builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: isNullorEmpty(Modular.get<AccountStore>().account!.fotoUrl)
+                        ? const CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 23,
+                              backgroundImage: AssetImage('assets/person.png'),
+                            ),
+                          )
+                        : CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.white,
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => CircularProgress(
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                              errorWidget: (context, url, error) {
+                                return const CircleAvatar(
+                                  radius: 23,
+                                  backgroundImage: AssetImage('assets/person.png'),
+                                );
+                              },
+                              imageUrl:
+                                  '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${Modular.get<AccountStore>().account!.fotoUrl!}',
+                              imageBuilder: (context, imageProvider) {
+                                return CircleAvatar(
+                                  radius: 23,
+                                  backgroundImage: imageProvider,
+                                );
+                              },
+                            ),
+                          ),
+                  );
+                }),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .displayMedium!
+                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -101,7 +131,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         opacity: pagamentosStore.isLoading ? 0 : 1,
                         duration: const Duration(milliseconds: 2000),
                         child: Container(
-                          decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                          decoration: const BoxDecoration(
+                              color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                           margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.only(left: 5, right: 5),
                           width: 84,
@@ -116,7 +147,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               Padding(
                                 padding: const EdgeInsets.only(left: 15),
                                 child: Text(
-                                  UtilBrasilFields.obterReal(pagamentosStore.pagamentoDetalheDto!.total.toDouble(), moeda: false),
+                                  UtilBrasilFields.obterReal(pagamentosStore.pagamentoDetalheDto!.total.toDouble(),
+                                      moeda: false),
                                   style: Theme.of(context).primaryTextTheme.bodySmall,
                                 ),
                               ),
@@ -183,36 +215,32 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                 );
               }),
-              Observer(
-                builder: (_) {
-                  return controller.isVisibleNovos
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Novos',
-                                style: Theme.of(context).primaryTextTheme.headlineSmall,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Modular.to.pushNamed('/search/');
-                                },
-                                child: Text(
-                                  'todos',
-                                  style: Theme.of(context).primaryTextTheme.displayLarge,
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                },
-              ),
               Observer(builder: (_) {
-                return listaNovos();
+                return controller.isVisibleUltimosVendidos
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Últimos vendidos',
+                              style: Theme.of(context).primaryTextTheme.headlineSmall,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Modular.to.pushNamed('/search/');
+                              },
+                              child: Text(
+                                'todos',
+                                style: Theme.of(context).primaryTextTheme.displayLarge,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink();
               }),
+              listaUltimosVendidos(),
               Observer(builder: (_) {
                 return controller.isVisibleFavoritos
                     ? Padding(
@@ -271,32 +299,36 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 },
               ),
               listaMaisVendidos(),
-              Observer(builder: (_) {
-                return controller.isVisibleUltimosVendidos
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Últimos vendidos',
-                              style: Theme.of(context).primaryTextTheme.headlineSmall,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Modular.to.pushNamed('/search/');
-                              },
-                              child: Text(
-                                'todos',
-                                style: Theme.of(context).primaryTextTheme.displayLarge,
+              Observer(
+                builder: (_) {
+                  return controller.isVisibleNovos
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Novos',
+                                style: Theme.of(context).primaryTextTheme.headlineSmall,
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    : const SizedBox.shrink();
+                              InkWell(
+                                onTap: () {
+                                  Modular.to.pushNamed('/search/');
+                                },
+                                child: Text(
+                                  'todos',
+                                  style: Theme.of(context).primaryTextTheme.displayLarge,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : const SizedBox.shrink();
+                },
+              ),
+              Observer(builder: (_) {
+                return listaNovos();
               }),
-              listaUltimosVendidos(),
             ],
           ),
         ),
@@ -397,7 +429,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         UtilBrasilFields.obterReal(item.preco, moeda: false),

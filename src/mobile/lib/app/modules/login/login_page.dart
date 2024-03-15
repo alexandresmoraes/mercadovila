@@ -143,7 +143,8 @@ class LoginPageState extends State<LoginPage> {
             Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
               height: MediaQuery.of(context).size.height * 0.60,
               width: MediaQuery.of(context).size.width,
@@ -252,67 +253,8 @@ class LoginPageState extends State<LoginPage> {
                                   width: 21,
                                   height: 21,
                                 )
-                              : const Text('Login')),
+                              : const Text('Entrar')),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 25),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Divider(
-                    //           color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                    //           thickness: 2,
-                    //         ),
-                    //       ),
-                    //       Text('  Login  ', style: Theme.of(context).primaryTextTheme.bodyLarge),
-                    //       Expanded(
-                    //           child: Divider(
-                    //         color: Theme.of(context).primaryTextTheme.bodyLarge!.color,
-                    //         thickness: 2,
-                    //       ))
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 30),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     children: [
-                    //       Container(
-                    //         height: 45,
-                    //         width: 45,
-                    //         decoration: const BoxDecoration(
-                    //             color: Color(0xFFEC5F60),
-                    //             borderRadius: BorderRadius.all(
-                    //               Radius.circular(45),
-                    //             )),
-                    //         alignment: Alignment.center,
-                    //         child: Icon(
-                    //           FontAwesomeIcons.google,
-                    //           size: 25,
-                    //           color: Theme.of(context).scaffoldBackgroundColor,
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         height: 45,
-                    //         width: 45,
-                    //         margin: const EdgeInsets.only(left: 20, right: 20),
-                    //         decoration: const BoxDecoration(
-                    //             color: Color(0xFF4C87D0),
-                    //             borderRadius: BorderRadius.all(
-                    //               Radius.circular(45),
-                    //             )),
-                    //         alignment: Alignment.center,
-                    //         child: Icon(
-                    //           FontAwesomeIcons.facebookF,
-                    //           color: Theme.of(context).scaffoldBackgroundColor,
-                    //           size: 25,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )
                   ],
                 ),
               ),

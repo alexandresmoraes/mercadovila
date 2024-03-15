@@ -66,7 +66,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 if (_currentIndex == 0) {
                   Modular.to.pop();
                 } else {
-                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  _pageController!.animateToPage(_currentIndex - 1,
+                      duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   if (_currentIndex == 0) {
                     step1Done = false;
                   } else if (_currentIndex == 1) {
@@ -132,7 +133,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -163,9 +166,12 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     children: [
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
                                               width: 1.5,
                                             ),
                                             borderRadius: const BorderRadius.all(
@@ -186,8 +192,11 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                         width: 20,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
+                                          border: Border.all(
+                                              color: _currentIndex >= i
+                                                  ? const Color(0xFF4A4352)
+                                                  : const Color(0xFFBcc8d2),
+                                              width: 1.5),
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(20.0),
                                           ),
@@ -220,7 +229,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   onPageChanged: (index) {
                     _currentIndex = index;
                     double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                    _scrollController!
+                        .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                     setState(() {});
                   },
                   children: [
@@ -266,7 +276,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                           if (carrinhoComprasStore.isLoading) return;
 
                           if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                            _pageController!.animateToPage(_currentIndex + 1,
+                                duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                           } else if (_currentIndex == 1) {
                             await carrinhoComprasStore.criarCompra();
                           }
@@ -335,7 +346,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(item.produtoId, true);
+                                      Modular.get<CarrinhoComprasStore>()
+                                          .removerCarrinhoComprasItem(item.produtoId, true);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -451,7 +463,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                       "Detalhes",
                       style: TextStyle(
                           fontSize: 14,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     )),
               );
@@ -523,28 +537,36 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           WoltModalSheetPage(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             hasSabGradient: false,
-            stickyActionBar: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  stops: const [0, .90],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                ),
-              ),
-              margin: const EdgeInsets.all(8.0),
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: TextButton(
-                onPressed: () async {
-                  carrinhoComprasStore.addCarrinhoComprasItem();
-                  Modular.to.pop();
-                },
-                child: const Text(
-                  'Adicionar',
-                ),
-              ),
+            stickyActionBar: Observer(
+              builder: (_) {
+                if (!carrinhoComprasStore.isSelectedItem) {
+                  return const SizedBox.shrink();
+                }
+
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    gradient: LinearGradient(
+                      stops: const [0, .90],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                    ),
+                  ),
+                  margin: const EdgeInsets.all(8.0),
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  child: TextButton(
+                    onPressed: () async {
+                      carrinhoComprasStore.addCarrinhoComprasItem();
+                      Modular.to.pop();
+                    },
+                    child: const Text(
+                      'Adicionar',
+                    ),
+                  ),
+                );
+              },
             ),
             topBarTitle: Text(
               'Adicionar item',
@@ -822,11 +844,13 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             contentPadding: const EdgeInsets.all(0),
                             leading: Text(
                               "Preço",
-                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              style:
+                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             trailing: Text(
                               UtilBrasilFields.obterReal(carrinhoComprasStore.selectedItem!.preco),
-                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              style:
+                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
