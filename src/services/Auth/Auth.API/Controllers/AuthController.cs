@@ -68,19 +68,19 @@ namespace Auth.API.Controllers
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<Result<AccessTokenDto>> LoginAsync([FromBody] LoginModel login, CancellationToken cancellationToken = default)
     {
-      _logger.LogInformation($"Login started {login}.");
+      _logger.LogInformation("----- Login starting {login}", login);
 
       var user = await _authService.GetUserByUsernameOrEmail(login.UsernameOrEmail!);
 
       if (user is null)
       {
-        _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
+        _logger.LogWarning("----- Login failed {UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Fail<AccessTokenDto>("Usuário ou senha não confere.");
       }
 
       if (!user.IsAtivo)
       {
-        _logger.LogWarning($"User is not active {login.UsernameOrEmail}.");
+        _logger.LogWarning("----- Login failed user is not active {UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Fail<AccessTokenDto>("Usuário inativo.");
       }
 
@@ -90,16 +90,16 @@ namespace Auth.API.Controllers
 
       if (resultSign.Succeeded)
       {
-        _logger.LogInformation($"Login succeeded {login.UsernameOrEmail}.");
+        _logger.LogInformation("Login succeeded {login.UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Ok(await _jwtService.GenerateToken(user!.UserName));
       }
       else if (resultSign.IsLockedOut)
       {
-        _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
+        _logger.LogWarning("----- Login failed {login.UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Fail<AccessTokenDto>("Usuário bloqueado.");
       }
 
-      _logger.LogWarning($"Login failed {login.UsernameOrEmail}.");
+      _logger.LogWarning("----- Login failed {login.UsernameOrEmail}", login.UsernameOrEmail);
       return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {await _authService.GetFailedAccessAttempts(user)} tentativas.");
     }
 
@@ -117,11 +117,11 @@ namespace Auth.API.Controllers
 
       if (tokenIsValid)
       {
-        _logger.LogInformation($"RefreskToken generate.");
+        _logger.LogInformation("----- refreskToken generate");
         return Result.Ok(await _jwtService.GenerateToken(username));
       }
 
-      _logger.LogWarning($"RefreskToken invalid.");
+      _logger.LogWarning("----- RefreskToken invalid {refreshtoken}", refreshToken.RefreshToken);
       return Result.Fail<AccessTokenDto>("Refresh token inválido.");
     }
   }
