@@ -55,4 +55,14 @@ class PagamentosRepository implements IPagamentosRepository {
 
     return PagedResult.fromJson(response.data);
   }
+
+  @override
+  Future<Either<ResultFailModel, void>> cancelarPagamento(int pagamentoId) async {
+    try {
+      await dio.put('/api/pagamentos/cancelar/$pagamentoId');
+      return const Right(null);
+    } on DioError catch (err) {
+      return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
+    }
+  }
 }

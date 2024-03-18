@@ -79,6 +79,11 @@ namespace Vendas.API.Application.Queries
                     c.nome AS compradornome,
 	                  c.foto_url AS compradorfotourl,
                     c.email AS compradoremail,
+                    p.recebido_por_user_id AS recebidoporuserid,
+                    p.recebido_por AS recebidopor,
+                    p.data_cancelamento AS datacancelamento,
+                    p.cancelado_por_user_id AS canceladoporuserid,
+                    p.cancelado_por AS canceladopor,
                     count(*) over() AS count
                   FROM pagamentos p
                   LEFT JOIN compradores c ON c.id = p.comprador_id";
@@ -115,6 +120,11 @@ namespace Vendas.API.Application.Queries
           CompradorUserId = row.compradoruserid,
           CompradorEmail = row.compradoremail,
           PagamentoValor = row.valor,
+          RecebidoPorUserId = row.recebidoporuserid,
+          RecebidoPor = row.recebidopor,
+          DataCancelamento = row.datacancelamento,
+          CanceladoPorUserId = row.canceladoporuserid,
+          CanceladoPor = row.canceladopor,
         });
       }
 

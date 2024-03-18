@@ -65,6 +65,17 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             title: Text(
               orderProcess[_currentIndex],
             ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  MdiIcons.barcode,
+                  color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                ),
+                onPressed: () async {
+                  Modular.to.pushNamed('/carrinho/scanner');
+                },
+              ),
+            ],
             leading: IconButton(
               onPressed: () {
                 if (_currentIndex == 0) {
@@ -230,6 +241,10 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           ),
           bottomNavigationBar: Observer(
             builder: (_) {
+              if (!carrinhoStore.isValidCarrinho) {
+                return const SizedBox.shrink();
+              }
+
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -453,6 +468,39 @@ class CarrinhoPageState extends State<CarrinhoPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Observer(builder: (_) {
+              return !carrinhoStore.selectOpcaoPagamento
+                  ? Container(
+                      padding: const EdgeInsets.all(2),
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Selecione a opção de pagamento",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color:
+                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    )
+                  : const SizedBox.shrink();
+            }),
             Padding(
               padding: const EdgeInsets.only(
                 top: 10,
@@ -494,39 +542,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
               );
             }),
-            Observer(builder: (_) {
-              return !carrinhoStore.selectOpcaoPagamento
-                  ? Container(
-                      padding: const EdgeInsets.all(2),
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.black : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Selecione a opção de pagamento",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color:
-                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    )
-                  : const SizedBox.shrink();
-            }),
+            const Divider(),
             ListTile(
               visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
               contentPadding: const EdgeInsets.all(0),

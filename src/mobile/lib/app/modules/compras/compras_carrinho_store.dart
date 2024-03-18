@@ -8,11 +8,11 @@ import 'package:vilasesmo/app/utils/models/compras/compra_model.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_compras_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
-part 'carrinho_compras_store.g.dart';
+part 'compras_carrinho_store.g.dart';
 
-class CarrinhoComprasStore = CarrinhoComprasStoreBase with _$CarrinhoComprasStore;
+class ComprasCarrinhoStore = ComprasCarrinhoStoreBase with _$ComprasCarrinhoStore;
 
-abstract class CarrinhoComprasStoreBase with Store {
+abstract class ComprasCarrinhoStoreBase with Store {
   TextEditingController produtoItemController = TextEditingController();
 
   @observable
@@ -27,8 +27,7 @@ abstract class CarrinhoComprasStoreBase with Store {
   @action
   void clearSelectedItem() {
     selectedItem = null;
-    produtoItemController.text = "";
-    update();
+    produtoItemController.clear();
   }
 
   @action
@@ -37,9 +36,11 @@ abstract class CarrinhoComprasStoreBase with Store {
   }
 
   @action
-  void addCarrinhoComprasItem() {
-    if (!addCarrinhoComprasItemExistente(selectedItem!.id)) {
-      carrinhoComprasItens.add(CarrinhoComprasItemDto(
+  CarrinhoComprasItemDto addCarrinhoComprasItem() {
+    var carrinhoItem = addCarrinhoComprasItemExistente(selectedItem!.id);
+
+    if (carrinhoItem == null) {
+      carrinhoItem = CarrinhoComprasItemDto(
         produtoId: selectedItem!.id,
         nome: selectedItem!.nome,
         descricao: selectedItem!.descricao,
@@ -55,22 +56,30 @@ abstract class CarrinhoComprasStoreBase with Store {
         precoSugerido: selectedItem!.preco,
         quantidade: 1,
         isPrecoMedioSugerido: true,
-      ));
+      );
+      carrinhoComprasItens.add(carrinhoItem);
     }
 
     clearSelectedItem();
+    refresh();
+
+    return carrinhoItem;
   }
 
   @action
-  bool addCarrinhoComprasItemExistente(String produtoId) {
+  void refresh() {
+    carrinhoComprasItens = ObservableList<CarrinhoComprasItemDto>.of(carrinhoComprasItens);
+  }
+
+  @action
+  CarrinhoComprasItemDto? addCarrinhoComprasItemExistente(String produtoId) {
     for (int i = 0; i < carrinhoComprasItens.length; i++) {
       if (carrinhoComprasItens[i].produtoId == produtoId) {
         carrinhoComprasItens[i].quantidade++;
-        update();
-        return true;
+        return carrinhoComprasItens[i];
       }
     }
-    return false;
+    return null;
   }
 
   @action
@@ -81,7 +90,6 @@ abstract class CarrinhoComprasStoreBase with Store {
       if (carrinhoComprasItens[i].produtoId == produtoId) {
         if (carrinhoComprasItens[i].quantidade > 1 && !removeAll) {
           carrinhoComprasItens[i].quantidade--;
-          update();
           return true;
         } else {
           removeIndex = i;
@@ -92,17 +100,10 @@ abstract class CarrinhoComprasStoreBase with Store {
 
     if (removeIndex != -1) {
       carrinhoComprasItens.removeAt(removeIndex);
-      update();
       return true;
     }
 
     return false;
-  }
-
-  @action
-  void update() {
-    subTotal = carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
-    total = carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
   }
 
   @observable
@@ -111,16 +112,14 @@ abstract class CarrinhoComprasStoreBase with Store {
   @computed
   bool get isValidCarrinhoCompras => carrinhoComprasItens.isNotEmpty;
 
-  @observable
-  double subTotal = 0;
+  @computed
+  double get subTotal => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
-  @observable
-  double total = 0;
+  @computed
+  double get total => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
   void clearCarrinhoCompras() {
     carrinhoComprasItens.clear();
-    total = 0;
-    subTotal = 0;
   }
 
   Future<void> criarCompra() async {

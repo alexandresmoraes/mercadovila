@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vilasesmo/app/app_widget.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
+import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/card_scanner_produto.dart';
 import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
-class ScannerPage extends StatefulWidget {
+class ComprasScannerPage extends StatefulWidget {
   final String title;
 
-  const ScannerPage({Key? key, this.title = 'Scanner'}) : super(key: key);
+  const ComprasScannerPage({Key? key, this.title = 'Scanner de compra'}) : super(key: key);
 
   @override
-  ScannerPageState createState() => ScannerPageState();
+  ComprasScannerPageState createState() => ComprasScannerPageState();
 }
 
-class ScannerPageState extends State<ScannerPage> {
+class ComprasScannerPageState extends State<ComprasScannerPage> {
   Barcode? result;
   QRViewController? controller;
   bool isLoading = false;
@@ -83,30 +83,28 @@ class ScannerPageState extends State<ScannerPage> {
           controller.resumeCamera();
         });
       }, ((r) {
-        var carrinho = Modular.get<CarrinhoStore>();
+        var carrinho = Modular.get<ComprasCarrinhoStore>();
 
-        carrinho.adicionarCarrinhoItem(r.id, 1).then((value) {
-          AnimatedSnackBar(
-            desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
-            builder: ((context) {
-              var quantidade = carrinho.getCarrinhoItemQuantidade(r.id);
-              debugPrint('$quantidade');
+        carrinho.setSelectItem(r);
+        var carrinhoItem = carrinho.addCarrinhoComprasItem();
 
-              return CardScannerProduto(
-                nome: r.nome,
-                descricao: r.descricao,
-                preco: r.preco,
-                quantidade: quantidade,
-                unidadeMedida: r.unidadeMedida,
-                imageUrl: r.imageUrl,
-              );
-            }),
-          ).show(AppWidget.navigatorKey.currentState!.context);
+        AnimatedSnackBar(
+          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+          builder: ((context) {
+            return CardScannerProduto(
+              nome: carrinhoItem.nome,
+              descricao: carrinhoItem.descricao,
+              preco: carrinhoItem.preco,
+              quantidade: carrinhoItem.quantidade,
+              unidadeMedida: carrinhoItem.unidadeMedida,
+              imageUrl: carrinhoItem.imageUrl,
+            );
+          }),
+        ).show(AppWidget.navigatorKey.currentState!.context);
 
-          setState(() {
-            result = scanData;
-            controller.resumeCamera();
-          });
+        setState(() {
+          result = scanData;
+          controller.resumeCamera();
         });
       }));
 

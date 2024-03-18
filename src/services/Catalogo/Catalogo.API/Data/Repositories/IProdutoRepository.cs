@@ -10,11 +10,12 @@ namespace Catalogo.API.Data.Repositories
     Task CreateAsync(Produto produto);
     Task UpdateAsync(Produto produto);
     Task<Produto?> GetAsync(string id);
+    Task<ProdutoDto?> GetProdutoPorCodigoBarrasAsync(string codigoBarra);
     Task<PagedResult<ProdutoDto>> GetProdutosAsync(ProdutoQuery produtoQuery);
     Task<bool> ExisteProdutoPorNome(string nome, string? id);
     Task<bool> ExisteProdutoPorId(string id);
     Task<bool> ExisteProdutoPorCodigoBarras(string codigoBarras, string? id);
-    Task<ProdutoDetailDto?> GetProdutoDetailAsync(string userId, string produtoId);
+    Task<ProdutoDetalheDto?> GetProdutoDetalheAsync(string userId, string produtoId);
     Task SaidaEstoqueAsync(Dictionary<string, int> produtos);
     Task EntradaEstoqueAsync(Dictionary<string, int> produtos);
     Task EntradaEstoqueAndUpdatePrecoAsync(List<(string, int, bool, decimal?)> produtos);

@@ -90,16 +90,16 @@ namespace Auth.API.Controllers
 
       if (resultSign.Succeeded)
       {
-        _logger.LogInformation("Login succeeded {login.UsernameOrEmail}", login.UsernameOrEmail);
+        _logger.LogInformation("Login succeeded {UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Ok(await _jwtService.GenerateToken(user!.UserName));
       }
       else if (resultSign.IsLockedOut)
       {
-        _logger.LogWarning("----- Login failed {login.UsernameOrEmail}", login.UsernameOrEmail);
+        _logger.LogWarning("----- Login failed {UsernameOrEmail}", login.UsernameOrEmail);
         return Result.Fail<AccessTokenDto>("Usuário bloqueado.");
       }
 
-      _logger.LogWarning("----- Login failed {login.UsernameOrEmail}", login.UsernameOrEmail);
+      _logger.LogWarning("----- Login failed {UsernameOrEmail}", login.UsernameOrEmail);
       return Result.Fail<AccessTokenDto>($"Usuário ou senha não confere, restam {await _authService.GetFailedAccessAttempts(user)} tentativas.");
     }
 
@@ -117,7 +117,7 @@ namespace Auth.API.Controllers
 
       if (tokenIsValid)
       {
-        _logger.LogInformation("----- refreskToken generate");
+        _logger.LogInformation("----- RefreskToken generate");
         return Result.Ok(await _jwtService.GenerateToken(username));
       }
 

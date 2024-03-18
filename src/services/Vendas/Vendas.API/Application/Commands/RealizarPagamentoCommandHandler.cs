@@ -1,4 +1,5 @@
-﻿using Common.WebAPI.Results;
+﻿using Common.WebAPI.Auth;
+using Common.WebAPI.Results;
 using MediatR;
 using Vendas.API.Application.Responses;
 using Vendas.Domain.Aggregates;
@@ -11,12 +12,14 @@ namespace Vendas.API.Application.Commands
     private readonly IPagamentosRepository _pagamentosRepository;
     private readonly IVendasRepository _vendasRepository;
     private readonly ICompradoresRepository _compradoresRepository;
+    private readonly IAuthService _authService;
 
-    public RealizarPagamentoCommandHandler(IPagamentosRepository pagamentosRepository, IVendasRepository vendasRepository, ICompradoresRepository compradoresRepository)
+    public RealizarPagamentoCommandHandler(IPagamentosRepository pagamentosRepository, IVendasRepository vendasRepository, ICompradoresRepository compradoresRepository, IAuthService authService)
     {
       _pagamentosRepository = pagamentosRepository;
       _vendasRepository = vendasRepository;
       _compradoresRepository = compradoresRepository;
+      _authService = authService;
     }
 
     public async Task<Result<RealizarPagamentoCommandResponse>> Handle(RealizarPagamentoCommand request, CancellationToken cancellationToken)
@@ -44,7 +47,7 @@ namespace Vendas.API.Application.Commands
         vendas.Add(venda!);
       }
 
-      var pagamento = new Pagamento(comprador, vendas, request.TipoPagamento);
+      var pagamento = new Pagamento(comprador, vendas, request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
 
       await _pagamentosRepository.AddAsync(pagamento);
 

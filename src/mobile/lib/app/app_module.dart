@@ -1,6 +1,6 @@
 import 'package:vilasesmo/app/modules/carrinho/carrinho_module.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
+import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
 import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
@@ -30,6 +30,7 @@ import 'package:vilasesmo/app/utils/repositories/catalogo_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/compras_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
@@ -47,8 +48,9 @@ class AppModule extends Module {
       ),
     ),
     Bind.lazySingleton((i) => CarrinhoStore()),
-    Bind.lazySingleton((i) => CarrinhoComprasStore()),
-    Bind.lazySingleton((i) => ThemeStore()),
+    Bind.lazySingleton((i) => ComprasCarrinhoStore()),
+    // Bind.lazySingleton((i) => ThemeStore()),
+    Bind.singleton((i) => ThemeStore()),
     Bind.lazySingleton((i) => AccountStore()),
     Bind.lazySingleton((i) => SearchFilterStore()),
     Bind.lazySingleton((i) => PagamentosStore()),
@@ -63,10 +65,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => VendasRepository()),
     Bind.lazySingleton((i) => ComprasRepository()),
     Bind.lazySingleton((i) => PagamentosRepository()),
-
-    //TODO: remover itens
-    // Bind.factory((i) => ProdutosEditController()),
-    // Bind.lazySingleton((i) => ProdutosRepository()),
+    Bind.lazySingleton((i) => ProdutosRepository()),
   ];
 
   @override

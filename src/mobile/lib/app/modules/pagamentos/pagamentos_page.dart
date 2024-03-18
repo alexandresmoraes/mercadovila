@@ -13,6 +13,7 @@ import 'package:vilasesmo/app/utils/dto/pagamentos/pagamentos_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
 class PagamentosPage extends StatefulWidget {
@@ -149,7 +150,7 @@ class PagamentosPageState extends State<PagamentosPage> {
               dismissible: DismissiblePane(
                 closeOnCancel: true,
                 confirmDismiss: () {
-                  return cancelar(item.pagamentoId.toString());
+                  return cancelar(item.pagamentoId);
                 },
                 onDismissed: () {},
               ),
@@ -160,7 +161,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                   label: 'Cancelar?',
                   icon: MdiIcons.closeOctagon,
                   onPressed: (_) {
-                    cancelar(item.pagamentoId.toString());
+                    cancelar(item.pagamentoId);
                   },
                 ),
               ],
@@ -250,18 +251,26 @@ class PagamentosPageState extends State<PagamentosPage> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 5,
-                          top: 5,
-                        ),
-                        child: Text(
-                          item.compradorEmail,
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
+                      Text(
+                        item.compradorEmail,
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            isNullorEmpty(item.canceladoPor) ? 'Recebido por: ' : 'Cancelado por:',
+                            style: Theme.of(context).primaryTextTheme.displayMedium,
+                          ),
+                          Text(
+                            isNullorEmpty(item.canceladoPor) ? item.recebidoPor : item.canceladoPor!,
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ],
                       ),
                       Text(
-                        '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}',
+                        isNullorEmpty(item.canceladoPor)
+                            ? '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}'
+                            : '${UtilData.obterDataDDMMAAAA(item.dataCancelamento!.toLocal())} ${UtilData.obterHoraHHMM(item.dataCancelamento!.toLocal())}',
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                       ),
                     ],
@@ -287,32 +296,42 @@ class PagamentosPageState extends State<PagamentosPage> {
     );
   }
 
-  Future<bool> cancelar(String pagamentoId) async {
+  Future<bool> cancelar(int pagamentoId) async {
     return await showCupertinoModalPopup<bool>(
           context: context,
           builder: (BuildContext context) => CupertinoActionSheet(
             title: const Icon(Icons.question_answer),
             actions: <Widget>[
               CupertinoActionSheetAction(
-                isDestructiveAction: true,
+                isDefaultAction: true,
                 onPressed: () async {
-                  Modular.to.pop(true);
-                  pagingController.refresh();
+                  var pagamentoRepository = Modular.get<IPagamentosRepository>();
+                  var result = await pagamentoRepository.cancelarPagamento(pagamentoId);
+
+                  result.fold((l) {
+                    var message = l.getErrorNotProperty();
+                    GlobalSnackbar.error(message);
+                    Modular.to.pop(false);
+                  }, (r) {
+                    GlobalSnackbar.success('Pagamento cancelado');
+                    pagingController.refresh();
+                    Modular.to.pop(true);
+                  });
                 },
                 child: const Text(
                   'Sim',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
                 ),
               ),
               CupertinoActionSheetAction(
-                isDefaultAction: true,
+                isDestructiveAction: true,
                 onPressed: () {
                   Modular.to.pop(false);
                 },
                 child: const Text(
                   'Não',
-                  style: TextStyle(
-                    color: Colors.blue,
-                  ),
                 ),
               ),
             ],

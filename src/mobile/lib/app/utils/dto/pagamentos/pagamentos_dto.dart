@@ -18,6 +18,10 @@ class PagamentosDto {
     required this.pagamentoTipo,
     required this.pagamentoStatus,
     required this.pagamentoValor,
+    required this.recebidoPorUserId,
+    required this.recebidoPor,
+    this.canceladoPorUserId,
+    this.canceladoPor,
   });
   late final String compradorUserId;
   late final String compradorNome;
@@ -28,6 +32,11 @@ class PagamentosDto {
   late final num pagamentoTipo;
   late final num pagamentoStatus;
   late final num pagamentoValor;
+  late final String recebidoPorUserId;
+  late final String recebidoPor;
+  late final DateTime? dataCancelamento;
+  late final String? canceladoPorUserId;
+  late final String? canceladoPor;
 
   PagamentosDto.fromJson(Map<String, dynamic> json) {
     compradorUserId = json['compradorUserId'];
@@ -39,5 +48,10 @@ class PagamentosDto {
     pagamentoTipo = json['pagamentoTipo'];
     pagamentoStatus = json['pagamentoStatus'];
     pagamentoValor = json['pagamentoValor'];
+    recebidoPorUserId = json['recebidoPorUserId'];
+    recebidoPor = json['recebidoPor'];
+    dataCancelamento = json['dataCancelamento'] != null ? DateTime.parse(json['dataCancelamento']) : null;
+    canceladoPorUserId = json['canceladoPorUserId'];
+    canceladoPor = json['canceladoPor'];
   }
 }

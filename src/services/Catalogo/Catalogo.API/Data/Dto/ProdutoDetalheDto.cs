@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Catalogo.API.Data.Dto
 {
-  public record ProdutoDetailDto
+  public record ProdutoDetalheDto
   {
     [BsonId]
     public string Id { get; set; } = null!;

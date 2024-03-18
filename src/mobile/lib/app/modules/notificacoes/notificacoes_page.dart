@@ -77,8 +77,10 @@ class NotificacoesPageState extends State<NotificacoesPage> {
         itemBuilder: (context, item, index) {
           return InkWell(
             onTap: () async {
-              var refresh = await Modular.to.pushNamed<bool>('/notificacoes/edit/${item.id}');
-              if (refresh ?? false) pagingController.refresh();
+              if (Modular.get<AccountStore>().account!.isAdmin) {
+                var refresh = await Modular.to.pushNamed<bool>('/notificacoes/edit/${item.id}');
+                if (refresh ?? false) pagingController.refresh();
+              }
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -135,10 +137,9 @@ class NotificacoesPageState extends State<NotificacoesPage> {
                   subtitle: RichText(
                     text: TextSpan(
                       text: item.mensagem,
-                      style: Theme.of(context)
-                          .primaryTextTheme
-                          .labelSmall!
-                          .copyWith(color: Theme.of(context).primaryTextTheme.labelSmall!.color!.withOpacity(0.6), letterSpacing: 0.1),
+                      style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(
+                          color: Theme.of(context).primaryTextTheme.labelSmall!.color!.withOpacity(0.6),
+                          letterSpacing: 0.1),
                       children: [
                         TextSpan(
                           text: '\n${timeago.format(locale: 'pt_BR', item.dataCriacao.toLocal())}',
@@ -152,7 +153,9 @@ class NotificacoesPageState extends State<NotificacoesPage> {
                   ),
                 ),
                 Divider(
-                  color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).dividerTheme.color : const Color(0xFFDFE8EF),
+                  color: Modular.get<ThemeStore>().isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color
+                      : const Color(0xFFDFE8EF),
                 ),
               ],
             ),

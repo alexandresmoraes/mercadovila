@@ -62,7 +62,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                           child: Center(
                             child: CircleAvatar(
                               radius: 60,
-                              backgroundColor: Colors.white,
+                              backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                               child: Observer(builder: (_) {
                                 if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                   return CachedNetworkImage(
@@ -165,17 +165,17 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                         contentPadding: const EdgeInsets.all(0),
                         minLeadingWidth: 0,
                         leading: isNullorEmpty(data.fotoUrl)
-                            ? const CircleAvatar(
+                            ? CircleAvatar(
                                 radius: 35,
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
+                                backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                                child: const CircleAvatar(
                                   radius: 21,
                                   backgroundImage: AssetImage('assets/person.png'),
                                 ),
                               )
                             : CircleAvatar(
                                 radius: 35,
-                                backgroundColor: Colors.white,
+                                backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                                 child: CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
                                     color: Theme.of(context).primaryColor,

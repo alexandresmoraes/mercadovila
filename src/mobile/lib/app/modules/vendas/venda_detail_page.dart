@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -15,7 +16,14 @@ import 'package:vilasesmo/app/utils/widgets/venda_status.dart';
 class VendaDetailPage extends StatefulWidget {
   final String title;
   final String id;
-  const VendaDetailPage({Key? key, this.title = 'Venda', required this.id}) : super(key: key);
+  final bool isMinhaCompra;
+
+  const VendaDetailPage({
+    Key? key,
+    this.title = 'Venda',
+    required this.id,
+    this.isMinhaCompra = false,
+  }) : super(key: key);
   @override
   VendaDetailPageState createState() => VendaDetailPageState();
 }
@@ -25,6 +33,18 @@ class VendaDetailPageState extends State<VendaDetailPage> {
 
   final VendaDetailController _controller = Modular.get<VendaDetailController>();
   final bool isAdmin = Modular.get<AccountStore>().account!.isAdmin;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _controller.vendaId = int.parse(widget.id);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +64,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
               child: Icon(MdiIcons.arrowLeft),
             ),
           ),
-          title: isAdmin ? Text("#${widget.id} - Venda") : Text("#${widget.id} - Compra"),
+          title: !widget.isMinhaCompra ? Text("Venda #${widget.id}") : Text("Minha compra #${widget.id}"),
         ),
         body: FutureTriple(
           future: _controller.load(),
@@ -77,7 +97,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
                         style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                       ),
                       trailing: Text(
-                        "R\$ ${_controller.vendaDetailDto!.total}",
+                        UtilBrasilFields.obterReal(_controller.vendaDetailDto!.total.toDouble()),
                         style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -103,9 +123,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
           },
         ),
         bottomNavigationBar: Observer(builder: (_) {
-          return isAdmin &&
-                  _controller.vendaDetailDto != null &&
-                  _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
+          return isAdmin && _controller.vendaDetailDto != null && _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -175,17 +193,5 @@ class VendaDetailPageState extends State<VendaDetailPage> {
         }),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _controller.vendaId = int.parse(widget.id);
-
-    super.initState();
   }
 }

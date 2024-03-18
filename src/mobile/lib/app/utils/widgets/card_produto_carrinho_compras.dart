@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/compras/carrinho_compras_store.dart';
+import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
@@ -26,11 +26,12 @@ class CardProdutoCarrinhoCompras extends StatefulWidget {
 class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> {
   TextEditingController precoPagoController = TextEditingController();
   TextEditingController precoSugeridoController = TextEditingController();
-  CarrinhoComprasStore carrinhoComprasStore = Modular.get<CarrinhoComprasStore>();
+  ComprasCarrinhoStore carrinhoComprasStore = Modular.get<ComprasCarrinhoStore>();
 
   @override
   void initState() {
     super.initState();
+
     precoPagoController = TextEditingController(text: UtilBrasilFields.obterReal(widget.item.precoPago));
     precoSugeridoController = TextEditingController(text: UtilBrasilFields.obterReal(widget.item.getPrecoSugerido()));
   }
@@ -108,11 +109,16 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       child: Focus(
                                         onFocusChange: (hasFocus) {
                                           if (!hasFocus) {
-                                            debugPrint(precoPagoController.text);
-                                            widget.item.precoPago = UtilBrasilFields.converterMoedaParaDouble(precoPagoController.text);
-                                            precoPagoController.text = UtilBrasilFields.obterReal(widget.item.precoPago);
-                                            precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
-                                            carrinhoComprasStore.update();
+                                            try {
+                                              debugPrint(precoPagoController.text);
+                                              widget.item.precoPago = UtilBrasilFields.converterMoedaParaDouble(precoPagoController.text);
+                                            } finally {
+                                              precoPagoController.text = UtilBrasilFields.obterReal(widget.item.precoPago);
+                                              precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+                                              carrinhoComprasStore.refresh();
+                                            }
+                                          } else {
+                                            precoPagoController.text = '';
                                           }
                                         },
                                         child: TextFormField(
@@ -156,10 +162,15 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                                       child: Focus(
                                         onFocusChange: (hasFocus) {
                                           if (!hasFocus) {
-                                            debugPrint(precoSugeridoController.text);
-                                            widget.item.precoSugerido = UtilBrasilFields.converterMoedaParaDouble(precoSugeridoController.text);
-                                            precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
-                                            carrinhoComprasStore.update();
+                                            try {
+                                              debugPrint(precoSugeridoController.text);
+                                              widget.item.precoSugerido = UtilBrasilFields.converterMoedaParaDouble(precoSugeridoController.text);
+                                            } finally {
+                                              precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+                                              carrinhoComprasStore.refresh();
+                                            }
+                                          } else {
+                                            precoSugeridoController.text = '';
                                           }
                                         },
                                         child: TextFormField(
@@ -192,7 +203,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                       onTap: () {
                         widget.item.isPrecoMedioSugerido = !widget.item.isPrecoMedioSugerido;
                         precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
-                        carrinhoComprasStore.update();
+                        carrinhoComprasStore.refresh();
                         setState(() {});
                       },
                       child: Row(
@@ -253,10 +264,14 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
             quantidade: widget.item.quantidade,
             onAdicionar: () {
               carrinhoComprasStore.addCarrinhoComprasItemExistente(widget.item.produtoId);
+              precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+              carrinhoComprasStore.refresh();
               setState(() {});
             },
             onRemover: () {
-              Modular.get<CarrinhoComprasStore>().removerCarrinhoComprasItem(widget.item.produtoId, false);
+              Modular.get<ComprasCarrinhoStore>().removerCarrinhoComprasItem(widget.item.produtoId, false);
+              precoSugeridoController.text = UtilBrasilFields.obterReal(widget.item.getPrecoSugerido());
+              carrinhoComprasStore.refresh();
               setState(() {});
             },
           ),

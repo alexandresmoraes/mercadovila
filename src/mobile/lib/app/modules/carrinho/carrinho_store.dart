@@ -25,6 +25,9 @@ abstract class CarrinhoStoreBase with Store {
   @observable
   ObservableList<CarrinhoItemDto> carrinhoItens = ObservableList<CarrinhoItemDto>();
 
+  @computed
+  bool get isValidCarrinho => carrinhoItens.isNotEmpty;
+
   @observable
   CarrinhoDto? carrinhoDto;
 

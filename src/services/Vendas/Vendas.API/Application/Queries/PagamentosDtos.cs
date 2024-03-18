@@ -31,6 +31,11 @@ namespace Vendas.API.Application.Queries
     public EnumTipoPagamento PagamentoTipo { get; init; }
     public EnumStatusPagamento PagamentoStatus { get; init; }
     public decimal PagamentoValor { get; set; }
+    public string RecebidoPorUserId { get; init; } = null!;
+    public string RecebidoPor { get; init; } = null!;
+    public DateTimeOffset? DataCancelamento { get; init; }
+    public string? CanceladoPorUserId { get; init; }
+    public string? CanceladoPor { get; init; }
   }
 
   public record PagamentosQuery

@@ -13,10 +13,15 @@ namespace Vendas.Domain.Aggregates
     public EnumStatusPagamento Status { get; private set; }
     public decimal Valor { get; private set; }
     public DateTimeOffset DataHora { get; private set; }
+    public string RecebidoPorUserId { get; private set; } = null!;
+    public string RecebidoPor { get; private set; } = null!;
+    public DateTimeOffset? DataCancelamento { get; private set; }
+    public string? CanceladoPorUserId { get; private set; }
+    public string? CanceladoPor { get; private set; }
 
     public Pagamento() { }
 
-    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumTipoPagamento tipo)
+    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumTipoPagamento tipo, string recebidoPorUserId, string recebidoPor)
     {
       Comprador = comprador;
       _vendas = vendas.ToList();
@@ -24,12 +29,17 @@ namespace Vendas.Domain.Aggregates
       Valor = vendas.Sum(_ => _.Total);
       DataHora = DateTimeOffset.UtcNow;
       Status = EnumStatusPagamento.Ativo;
+      RecebidoPorUserId = recebidoPorUserId;
+      RecebidoPor = recebidoPor;
 
       _vendas.ForEach(venda => venda.RealizarPagamento());
     }
 
-    public void Cancelar()
+    public void Cancelar(string canceladoPorUserId, string canceladoPor)
     {
+      DataCancelamento = DateTimeOffset.UtcNow;
+      CanceladoPorUserId = canceladoPorUserId;
+      CanceladoPor = canceladoPor;
       Status = EnumStatusPagamento.Cancelado;
 
       foreach (var venda in _vendas)

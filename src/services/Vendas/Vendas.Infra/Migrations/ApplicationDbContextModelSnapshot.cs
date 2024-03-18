@@ -60,9 +60,35 @@ namespace Vendas.Infra.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("CanceladoPor")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("cancelado_por");
+
+                    b.Property<string>("CanceladoPorUserId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("cancelado_por_user_id");
+
+                    b.Property<DateTimeOffset?>("DataCancelamento")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_cancelamento");
+
                     b.Property<DateTimeOffset>("DataHora")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
+
+                    b.Property<string>("RecebidoPor")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("recebido_por");
+
+                    b.Property<string>("RecebidoPorUserId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)")
+                        .HasColumnName("recebido_por_user_id");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")

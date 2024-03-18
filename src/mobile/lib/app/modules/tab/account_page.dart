@@ -67,7 +67,7 @@ class AccountPageState extends State<AccountPage> {
                             radius: 60,
                             backgroundColor: Colors.white,
                             child: CircleAvatar(
-                              radius: 53,
+                              radius: 57,
                               backgroundImage: AssetImage('assets/person.png'),
                             ),
                           ),
@@ -77,18 +77,18 @@ class AccountPageState extends State<AccountPage> {
                               radius: 60,
                               backgroundColor: Colors.white,
                               child: CircleAvatar(
-                                radius: 53,
+                                radius: 57,
                                 backgroundImage: imageProvider,
                               ),
                             );
                           },
                         );
                       }
-                      return const CircleAvatar(
+                      return CircleAvatar(
                         radius: 60,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 53,
+                        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                        child: const CircleAvatar(
+                          radius: 57,
                           backgroundImage: AssetImage('assets/person.png'),
                         ),
                       );

@@ -51,7 +51,9 @@ class ErrorInterceptor extends InterceptorsWrapper {
       case DioErrorType.response:
         if (dioError.response!.statusCode == 403) {
           errorDescription = 'Sem permissão';
-        } else if (dioError.response!.statusCode != 400 && dioError.response!.statusCode != 413) {
+        } else if (dioError.response!.statusCode != 400 &&
+            dioError.response!.statusCode != 413 &&
+            dioError.response!.statusCode != 404) {
           errorDescription = 'Problemas com a conexão';
         }
         break;

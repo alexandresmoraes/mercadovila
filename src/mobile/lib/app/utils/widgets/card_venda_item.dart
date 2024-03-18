@@ -72,7 +72,7 @@ class CardVendaItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${item.quantidade} x ${item.preco} ${item.unidadeMedida}',
+                        '${item.quantidade} x ${UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false)} ${item.unidadeMedida}',
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                         overflow: TextOverflow.ellipsis,
                       ),

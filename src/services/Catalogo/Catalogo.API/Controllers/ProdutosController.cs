@@ -47,6 +47,7 @@ namespace Catalogo.API.Controllers
     [HttpGet("{id}")]
     [Authorize("Admin")]
     [ProducesResponseType(typeof(ProdutoModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<ProdutoModel>> GetAsync([FromRoute] string id)
@@ -85,21 +86,22 @@ namespace Catalogo.API.Controllers
     /// <summary>
     /// Retorna detalhe do produto
     /// </summary>
-    // GET api/produtos/detail
-    [HttpGet("detail/{id}")]
-    [ProducesResponseType(typeof(ProdutoDetailDto), StatusCodes.Status200OK)]
+    // GET api/produtos/detalhe
+    [HttpGet("detalhe/{id}")]
+    [ProducesResponseType(typeof(ProdutoDetalheDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Result<ProdutoDetailDto>> GetProdutoDetailAsync([FromRoute] string id)
+    public async Task<Result<ProdutoDetalheDto>> GetProdutoDetalheAsync([FromRoute] string id)
     {
       var userId = _authService.GetUserId();
 
-      var produtoDetail = await _produtoRepository.GetProdutoDetailAsync(userId, id);
+      var produtoDetalhe = await _produtoRepository.GetProdutoDetalheAsync(userId, id);
 
-      if (produtoDetail is null) return Result.NotFound<ProdutoDetailDto>();
+      if (produtoDetalhe is null) return Result.NotFound<ProdutoDetalheDto>();
 
-      return Result.Ok(produtoDetail);
+      return Result.Ok(produtoDetalhe);
     }
 
     /// <summary>
@@ -145,6 +147,7 @@ namespace Catalogo.API.Controllers
     [Authorize("Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result> PutAsync([FromRoute] string id, [FromBody] ProdutoModel produtoModel)
@@ -243,5 +246,24 @@ namespace Catalogo.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<PagedResult<ListaCompraDto>>> GetListaComprasAsync([FromQuery] ListaCompraQuery query)
       => Result.Ok(await _produtoRepository.GetListaCompraAsync(query));
+
+    /// <summary>
+    /// Retorna produto por código de barras
+    /// </summary>
+    // GET api/produtos/codigobarras/{codigobarras}
+    [HttpGet("codigobarras/{codigobarras}")]
+    [ProducesResponseType(typeof(PagedResult<ProdutoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<ProdutoDto>> GetProdutoPorCodigoBarrasAsync([FromRoute] string codigobarras)
+    {
+      var produto = await _produtoRepository.GetProdutoPorCodigoBarrasAsync(codigobarras);
+
+      if (produto is null) return Result.NotFound<ProdutoDto>();
+
+      return Result.Ok(produto);
+    }
   }
 }

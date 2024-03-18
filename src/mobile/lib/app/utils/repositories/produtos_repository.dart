@@ -82,7 +82,7 @@ class ProdutosRepository implements IProdutosRepository {
 
   @override
   Future<ProdutoDetailDto> getProdutoDetail(String id) async {
-    var response = await dio.get('/api/produtos/detail/$id');
+    var response = await dio.get('/api/produtos/detalhe/$id');
 
     return ProdutoDetailDto.fromJson(response.data);
   }
@@ -95,5 +95,15 @@ class ProdutosRepository implements IProdutosRepository {
     });
 
     return PagedResult.fromJson(response.data);
+  }
+
+  @override
+  Future<Either<void, ProdutoDto>> getProdutoPorCodigoBarra(String codigoBarra) async {
+    try {
+      var response = await dio.get('/api/produtos/codigobarras/$codigoBarra');
+      return Right(ProdutoDto.fromJson(response.data));
+    } on DioError {
+      return const Left(null);
+    }
   }
 }

@@ -16,4 +16,5 @@ abstract class IProdutosRepository implements Disposable {
   Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageProdutos(String filepath);
   Future<ProdutoDetailDto> getProdutoDetail(String id);
   Future<PagedResult<ListaComprasDto>> getListaCompra(int page);
+  Future<Either<void, ProdutoDto>> getProdutoPorCodigoBarra(String codigoBarra);
 }

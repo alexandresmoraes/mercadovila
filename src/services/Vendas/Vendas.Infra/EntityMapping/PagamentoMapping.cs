@@ -47,6 +47,27 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("valor")
         .IsRequired();
 
+      b.Property(_ => _.RecebidoPorUserId)
+        .HasColumnName("recebido_por_user_id")
+        .HasMaxLength(36)
+        .IsRequired();
+
+      b.Property(_ => _.RecebidoPor)
+        .HasColumnName("recebido_por")
+        .HasMaxLength(128)
+        .IsRequired();
+
+      b.Property(_ => _.DataCancelamento)
+        .HasColumnName("data_cancelamento");
+
+      b.Property(_ => _.CanceladoPorUserId)
+       .HasColumnName("cancelado_por_user_id")
+       .HasMaxLength(36);
+
+      b.Property(_ => _.CanceladoPor)
+        .HasColumnName("cancelado_por")
+        .HasMaxLength(128);
+
       b.Ignore(_ => _.DomainEvents);
     }
   }

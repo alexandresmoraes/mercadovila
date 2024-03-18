@@ -142,12 +142,12 @@ namespace Catalogo.API.Data.Repositories
     public async Task UpdateAsync(Produto produto)
       => await Collection.ReplaceOneAsync(p => p.Id == produto.Id, produto);
 
-    public async Task<ProdutoDetailDto?> GetProdutoDetailAsync(string userId, string produtoId)
+    public async Task<ProdutoDetalheDto?> GetProdutoDetalheAsync(string userId, string produtoId)
     {
       var filtro = Builders<Notificacao>.Filter.Empty;
 
       var projections = Builders<Produto>.Projection
-        .Expression(p => new ProdutoDetailDto
+        .Expression(p => new ProdutoDetalheDto
         {
           Id = p.Id,
           ImageUrl = p.ImageUrl,
@@ -521,6 +521,34 @@ namespace Catalogo.API.Data.Repositories
       }
 
       _ = await Collection.BulkWriteAsync(loteUpdate);
+    }
+
+    public async Task<ProdutoDto?> GetProdutoPorCodigoBarrasAsync(string codigoBarra)
+    {
+      var filtro = Builders<Produto>.Filter.Eq(p => p.CodigoBarras, codigoBarra);
+
+      var projections = Builders<Produto>.Projection
+       .Expression(p => new ProdutoDto
+       {
+         Id = p.Id,
+         Nome = p.Nome,
+         Descricao = p.Descricao,
+         ImageUrl = p.ImageUrl,
+         Preco = p.Preco,
+         UnidadeMedida = p.UnidadeMedida,
+         CodigoBarras = p.CodigoBarras,
+         EstoqueAlvo = p.EstoqueAlvo,
+         Estoque = p.Estoque,
+         Rating = p.Rating,
+         RatingCount = p.RatingCount,
+         IsAtivo = p.IsAtivo
+       });
+
+      var produto = await Collection.Find(filtro)
+        .Project(projections)
+        .SingleOrDefaultAsync();
+
+      return produto;
     }
   }
 }

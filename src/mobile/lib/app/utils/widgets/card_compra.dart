@@ -108,8 +108,7 @@ class CardCompraState extends State<CardCompra> {
                   });
                 },
                 child: Container(
-                  decoration:
-                      const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                   margin: const EdgeInsets.only(right: 10, top: 5),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   width: 80,
@@ -197,34 +196,28 @@ class CardCompraState extends State<CardCompra> {
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    ' ',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  ),
-                                  Text(
-                                    'R\$ ',
-                                    style: TextStyle(
-                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
-                                  ),
-                                  Text(
-                                    UtilBrasilFields.obterReal(itens[i].precoPago, moeda: false),
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    ' x ',
-                                    style: TextStyle(
-                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
-                                  ),
-                                  Text(
-                                    '${itens[i].quantidade}',
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    itens[i].unidadeMedida,
-                                    style: TextStyle(
-                                        fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "R\$ ",
+                                      style: Theme.of(context).primaryTextTheme.displayMedium,
+                                      children: [
+                                        TextSpan(
+                                          text: UtilBrasilFields.obterReal(itens[i].precoPago * itens[i].quantidade.toDouble(), moeda: false),
+                                          style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${itens[i].quantidade} x ${UtilBrasilFields.obterReal(itens[i].precoPago.toDouble(), moeda: false)} ${itens[i].unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           )

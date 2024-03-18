@@ -34,7 +34,12 @@ namespace Vendas.Infra.Migrations
                     tipo = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
-                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    recebido_por_user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    recebido_por = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    data_cancelamento = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    cancelado_por_user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
+                    cancelado_por = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {

@@ -153,6 +153,22 @@ namespace Auth.API.Controllers
       if (user is null)
         return Result.NotFound();
 
+      if (user.UserName != updateAccountModel.Username!)
+      {
+        var userNome = await _userManager.FindByNameAsync(updateAccountModel.Username);
+
+        if (userNome is not null && userNome.Id != user.Id)
+          return Result.Fail<NewAccountResponseModel>(nameof(ApplicationUser.UserName), "Usuário indisponível");
+      }
+
+      if (user.Email != updateAccountModel.Email!)
+      {
+        var userEmail = await _userManager.FindByEmailAsync(updateAccountModel.Email);
+
+        if (userEmail is not null && userEmail.Id != user.Id)
+          return Result.Fail<NewAccountResponseModel>(nameof(ApplicationUser.Email), "Email indisponível");
+      }
+
       user.Nome = updateAccountModel.Nome!;
       user.Email = updateAccountModel.Email;
       user.PhoneNumber = updateAccountModel.Telefone;

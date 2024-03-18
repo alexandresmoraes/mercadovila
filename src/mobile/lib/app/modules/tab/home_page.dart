@@ -77,17 +77,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   return Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: isNullorEmpty(Modular.get<AccountStore>().account!.fotoUrl)
-                        ? const CircleAvatar(
+                        ? CircleAvatar(
                             radius: 25,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
+                            backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                            child: const CircleAvatar(
                               radius: 23,
                               backgroundImage: AssetImage('assets/person.png'),
                             ),
                           )
                         : CircleAvatar(
                             radius: 25,
-                            backgroundColor: Colors.white,
+                            backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                             child: CachedNetworkImage(
                               placeholder: (context, url) => CircularProgress(
                                 color: Theme.of(context).primaryColorLight,
