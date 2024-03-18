@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -11,7 +11,7 @@ import 'app/app_widget.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows) {
+  if (!kIsWeb && Platform.isWindows) {
     await windowManager.ensureInitialized();
 
     WindowManager.instance.setMinimumSize(const Size(450, 800));

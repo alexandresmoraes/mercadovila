@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -6,6 +8,7 @@ import 'package:vilasesmo/app/modules/tab/account_page.dart';
 import 'package:vilasesmo/app/modules/tab/home_page.dart';
 import 'package:vilasesmo/app/modules/tab/scanner_page.dart';
 import 'package:vilasesmo/app/modules/tab/search_page.dart';
+import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
 
 class TabPage extends StatefulWidget {
   final String title;
@@ -47,7 +50,11 @@ class _TabPageState extends State<TabPage> {
                     size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
                   ),
                   onPressed: () async {
-                    setState(() => _bottomNavIndex = index);
+                    if ((!Platform.isAndroid && !Platform.isIOS) && index == 2) {
+                      GlobalSnackbar.error('Recurso não suportado nessa plataforma');
+                    } else {
+                      setState(() => _bottomNavIndex = index);
+                    }
                   },
                 ),
                 const SizedBox(height: 5),
