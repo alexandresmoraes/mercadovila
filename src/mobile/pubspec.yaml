@@ -51,7 +51,7 @@ dev_dependencies:
   build_runner: ^2.3.3
   mobx_codegen: ^2.2.0
   modular_test: ^2.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.13.1  
 
 flutter:
   uses-material-design: true

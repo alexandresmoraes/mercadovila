@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -80,15 +82,17 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
             ),
             automaticallyImplyLeading: _currentIndex == 0,
             actions: [
-              IconButton(
-                icon: Icon(
-                  MdiIcons.barcode,
-                  color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                ),
-                onPressed: () async {
-                  Modular.to.pushNamed('/compras/scanner');
-                },
-              ),
+              Platform.isAndroid || Platform.isIOS
+                  ? IconButton(
+                      icon: Icon(
+                        MdiIcons.barcode,
+                        color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                      ),
+                      onPressed: () async {
+                        Modular.to.pushNamed('/compras/scanner');
+                      },
+                    )
+                  : const SizedBox.shrink(),
               IconButton(
                 onPressed: () async {
                   adicionarItemModalShow();

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,15 +68,17 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               orderProcess[_currentIndex],
             ),
             actions: [
-              IconButton(
-                icon: Icon(
-                  MdiIcons.barcode,
-                  color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                ),
-                onPressed: () async {
-                  Modular.to.pushNamed('/carrinho/scanner');
-                },
-              ),
+              Platform.isAndroid || Platform.isIOS
+                  ? IconButton(
+                      icon: Icon(
+                        MdiIcons.barcode,
+                        color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                      ),
+                      onPressed: () async {
+                        Modular.to.pushNamed('/carrinho/scanner');
+                      },
+                    )
+                  : const SizedBox.shrink(),
             ],
             leading: IconButton(
               onPressed: () {

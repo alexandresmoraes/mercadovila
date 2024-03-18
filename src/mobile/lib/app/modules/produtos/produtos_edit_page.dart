@@ -370,16 +370,18 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                   hintText: '7898357417892',
                                   contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                   errorText: _controller.getCodigoBarrasError,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      MdiIcons.barcode,
-                                      color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                                    ),
-                                    onPressed: () async {
-                                      var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');
-                                      if (!isNullorEmpty(barcode)) _controller.setCodigoBarras(barcode);
-                                    },
-                                  ),
+                                  suffixIcon: Platform.isAndroid || Platform.isIOS
+                                      ? IconButton(
+                                          icon: Icon(
+                                            MdiIcons.barcode,
+                                            color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                                          ),
+                                          onPressed: () async {
+                                            var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');
+                                            if (!isNullorEmpty(barcode)) _controller.setCodigoBarras(barcode);
+                                          },
+                                        )
+                                      : const SizedBox.shrink(),
                                 ),
                               );
                             }),
