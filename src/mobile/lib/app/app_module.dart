@@ -41,7 +41,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.0.100:8081',
+        baseUrl: kReleaseMode ? 'http://publicado' : 'http://192.168.1.120:8081',
         connectTimeout: kReleaseMode ? 20000 : 60000,
         receiveTimeout: kReleaseMode ? 20000 : 60000,
         sendTimeout: kReleaseMode ? 20000 : 60000,
