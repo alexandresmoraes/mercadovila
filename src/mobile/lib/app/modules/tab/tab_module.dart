@@ -5,9 +5,7 @@ class TabModule extends Module {
   static const routeName = '/tab/';
 
   @override
-  final List<Bind> binds = [
-    //Bind.lazySingleton((i) => HomeStore()),
-  ];
+  final List<Bind> binds = [];
 
   @override
   final List<ModularRoute> routes = [

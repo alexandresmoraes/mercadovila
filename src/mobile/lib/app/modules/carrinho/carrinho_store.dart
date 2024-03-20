@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/stores/account_store.dart';
@@ -109,8 +110,7 @@ abstract class CarrinhoStoreBase with Store {
         var message = resultFail.getErrorNotProperty();
         if (message.isNotEmpty) GlobalSnackbar.error(message);
       }, (response) async {
-        GlobalSnackbar.success("Compra efetuada com sucesso.");
-        Modular.to.pop();
+        Modular.to.pushNamedAndRemoveUntil('/carrinho/success', (Route<dynamic> route) => false);
         await load();
         await Modular.get<PagamentosStore>().load();
         setSelectOpcaoPagamento(false);
