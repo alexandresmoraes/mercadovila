@@ -258,7 +258,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                       Row(
                         children: [
                           Text(
-                            isNullorEmpty(item.canceladoPor) ? 'Recebido por: ' : 'Cancelado por:',
+                            isNullorEmpty(item.canceladoPor) ? 'Recebido por: ' : 'Cancelado por: ',
                             style: Theme.of(context).primaryTextTheme.displayMedium,
                           ),
                           Text(

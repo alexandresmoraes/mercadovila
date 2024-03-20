@@ -374,7 +374,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                       ? IconButton(
                                           icon: Icon(
                                             MdiIcons.barcode,
-                                            color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                                            color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                                           ),
                                           onPressed: () async {
                                             var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');

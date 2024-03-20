@@ -359,7 +359,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _controller.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                                      color: Colors.white,
+                                      color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                                     ),
                                     onPressed: () {
                                       _controller.isPasswordVisible = !_controller.isPasswordVisible;
@@ -393,7 +393,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _controller.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                                      color: Colors.white,
+                                      color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                                     ),
                                     onPressed: () {
                                       _controller.isConfirmPasswordVisible = !_controller.isConfirmPasswordVisible;

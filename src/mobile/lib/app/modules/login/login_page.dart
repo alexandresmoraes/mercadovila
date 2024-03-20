@@ -101,17 +101,6 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
             Positioned(
-              top: 30,
-              left: 10,
-              right: null,
-              child: IconButton(
-                onPressed: () {
-                  // exitAppDialog();
-                },
-                icon: const Icon(MdiIcons.arrowLeft, color: Colors.white),
-              ),
-            ),
-            Positioned(
               // top: 50,
               // left: MediaQuery.of(context).size.width / 8,
               child: SizedBox(
@@ -143,8 +132,7 @@ class LoginPageState extends State<LoginPage> {
             Container(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
+                  color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
               height: MediaQuery.of(context).size.height * 0.60,
               width: MediaQuery.of(context).size.width,
@@ -197,7 +185,7 @@ class LoginPageState extends State<LoginPage> {
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _controller.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                                color: Colors.white,
+                                color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                               ),
                               onPressed: () {
                                 _controller.isPasswordVisible = !_controller.isPasswordVisible;

@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     child: isNullorEmpty(Modular.get<AccountStore>().account!.fotoUrl)
                         ? CircleAvatar(
                             radius: 25,
-                            backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                            backgroundColor: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                             child: const CircleAvatar(
                               radius: 23,
                               backgroundImage: AssetImage('assets/person.png'),
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           )
                         : CircleAvatar(
                             radius: 25,
-                            backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                            backgroundColor: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                             child: CachedNetworkImage(
                               placeholder: (context, url) => CircularProgress(
                                 color: Theme.of(context).primaryColorLight,

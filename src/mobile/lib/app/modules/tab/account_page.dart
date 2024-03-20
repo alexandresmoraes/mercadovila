@@ -84,10 +84,10 @@ class AccountPageState extends State<AccountPage> {
                           },
                         );
                       }
-                      return CircleAvatar(
+                      return const CircleAvatar(
                         radius: 60,
-                        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                        child: const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
                           radius: 57,
                           backgroundImage: AssetImage('assets/person.png'),
                         ),
