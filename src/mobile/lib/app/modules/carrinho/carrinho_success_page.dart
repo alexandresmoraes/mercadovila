@@ -44,55 +44,25 @@ class CarrinhoSuccessPageState extends State<CarrinhoSuccessPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: Text(
-                  "Agradecemos por escolher o VilaSESMO! É uma satisfação saber que você fez uma compra conosco.",
+                  "Obrigado por sua compra! Valorizamos sua escolha e esperamos que você aproveite sua experiência. Tenha um ótimo dia!",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(color: Colors.white, letterSpacing: 0.0),
                 ),
               ),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.all(Radius.circular(10)),
-              //     color: Colors.white,
-              //   ),
-              //   margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-              //   height: 50,
-              //   width: MediaQuery.of(context).size.width,
-              //   child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context).push(MaterialPageRoute(builder: (context) => TrackOrderScreen(a: widget.analytics, o: widget.observer)));
-              //       },
-              //       child: Text('${AppLocalizations.of(context)!.btn_track_order}',
-              //           style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
-              // ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-              TextButton(
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent)),
-                onPressed: () {
-                  Modular.to.pushReplacementNamed(TabModule.routeName);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Voltar',
-                      style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        MdiIcons.arrowRight,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    )
-                  ],
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white,
                 ),
+                margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: TextButton(
+                    onPressed: () {
+                      Modular.to.pushReplacementNamed(TabModule.routeName);
+                    },
+                    child: const Text('Voltar', style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
               ),
             ],
           ),
