@@ -16,14 +16,16 @@ namespace Vendas.API.Application.Commands
     private readonly IAuthService _authService;
     private readonly Carrinho.CarrinhoClient _carrinhoClient;
     private readonly IIntegrationEventService _integrationEventService;
+    private readonly IPagamentosRepository _pagamentosRepository;
 
-    public CriarVendaCommandHandler(ICompradoresRepository compradorRepository, IVendasRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService)
+    public CriarVendaCommandHandler(ICompradoresRepository compradorRepository, IVendasRepository vendaRepository, IAuthService authService, Carrinho.CarrinhoClient carrinhoClient, IIntegrationEventService integrationEventService, IPagamentosRepository pagamentosRepository)
     {
       _compradorRepository = compradorRepository;
       _vendaRepository = vendaRepository;
       _authService = authService;
       _carrinhoClient = carrinhoClient;
       _integrationEventService = integrationEventService;
+      _pagamentosRepository = pagamentosRepository;
     }
 
     public async Task<Result<CriarVendaCommandResponse>> Handle(CriarVendaCommand request, CancellationToken cancellationToken)
@@ -74,6 +76,14 @@ namespace Vendas.API.Application.Commands
       );
 
       await _vendaRepository.AddAsync(venda);
+
+      if ((EnumTipoPagamento)request.TipoPagamento == EnumTipoPagamento.Dinheiro)
+      {
+        var vendas = new List<Venda> { venda };
+        var pagamento = new Pagamento(comprador, vendas, (EnumTipoPagamento)request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
+
+        await _pagamentosRepository.AddAsync(pagamento);
+      }
 
       var vendaCriadaIntegrationEvent = new VendaCriadaIntegrationEvent(userId, venda.VendaItens.ToDictionary(_ => _.ProdutoId, _ => _.Quantidade));
       await _integrationEventService.AddAndSaveEventAsync(vendaCriadaIntegrationEvent);

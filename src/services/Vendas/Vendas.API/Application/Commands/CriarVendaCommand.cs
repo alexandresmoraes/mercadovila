@@ -11,5 +11,6 @@ namespace Vendas.API.Application.Commands
     public string? UserId { get; set; }
     public string CompradorNome { get; init; } = null!;
     public string? CompradorFotoUrl { get; init; }
+    public short TipoPagamento { get; set; }
   }
 }

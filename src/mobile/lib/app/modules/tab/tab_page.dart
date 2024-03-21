@@ -51,7 +51,7 @@ class _TabPageState extends State<TabPage> {
                   ),
                   onPressed: () async {
                     if ((!Platform.isAndroid && !Platform.isIOS) && index == 2) {
-                      GlobalSnackbar.error('Recurso não disponível');
+                      GlobalSnackbar.error('Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
                     } else {
                       setState(() => _bottomNavIndex = index);
                     }

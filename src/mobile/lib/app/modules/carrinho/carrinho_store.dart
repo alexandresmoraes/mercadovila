@@ -16,11 +16,21 @@ class CarrinhoStore = CarrinhoStoreBase with _$CarrinhoStore;
 
 abstract class CarrinhoStoreBase with Store {
   @observable
-  bool selectOpcaoPagamento = false;
+  bool isDescontoSalario = false;
 
   @action
-  void setSelectOpcaoPagamento(bool value) {
-    selectOpcaoPagamento = value;
+  void setDescontoSalario() {
+    isDescontoSalario = true;
+    isDinheiro = false;
+  }
+
+  @observable
+  bool isDinheiro = false;
+
+  @action
+  void setDinheiro() {
+    isDinheiro = true;
+    isDescontoSalario = false;
   }
 
   @observable
@@ -90,7 +100,7 @@ abstract class CarrinhoStoreBase with Store {
   }
 
   Future<void> criarVenda() async {
-    if (!selectOpcaoPagamento) {
+    if (!isDescontoSalario && !isDinheiro) {
       GlobalSnackbar.error("Selecione a forma de pagamento.");
       return;
     }
@@ -101,9 +111,11 @@ abstract class CarrinhoStoreBase with Store {
       var vendasRepository = Modular.get<VendasRepository>();
       var compradorNome = Modular.get<AccountStore>().account!.nome;
       var compradorFotoUrl = Modular.get<AccountStore>().account!.fotoUrl;
+
       var result = await vendasRepository.criarVenda(VendaModel(
         compradorNome: compradorNome,
         compradorFotoUrl: compradorFotoUrl,
+        tipoPagamento: isDescontoSalario ? 0 : 1,
       ));
 
       await result.fold((resultFail) {
@@ -113,7 +125,8 @@ abstract class CarrinhoStoreBase with Store {
         Modular.to.pushNamedAndRemoveUntil('/carrinho/success', (Route<dynamic> route) => false);
         await load();
         await Modular.get<PagamentosStore>().load();
-        setSelectOpcaoPagamento(false);
+        isDescontoSalario = false;
+        isDinheiro = false;
       });
     } finally {
       isLoading = false;
