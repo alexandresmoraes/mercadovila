@@ -269,6 +269,25 @@ class AccountPageState extends State<AccountPage> {
                     ),
                   ),
                 ),
+                ListTile(
+                  onTap: () {
+                    Modular.to.pushNamed('/meus-pagamentos/');
+                  },
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  leading: Icon(
+                    MdiIcons.shoppingOutline,
+                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
+                    size: 20,
+                  ),
+                  title: Transform.translate(
+                    offset: const Offset(-10, 0),
+                    child: Text(
+                      "Meus pagamentos",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
                 !accountStore.account!.isAdmin
                     ? const SizedBox.shrink()
                     : ListTile(

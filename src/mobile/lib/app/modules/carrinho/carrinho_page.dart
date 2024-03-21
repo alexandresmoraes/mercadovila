@@ -537,9 +537,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     "Solicitar autorização para desconto em folha no próximo mês útil.",
                     style: Theme.of(context).primaryTextTheme.displayMedium,
                   ),
-                  trailing: Image.asset(
-                    'assets/dinheiro.png',
-                    scale: 1.5,
+                  trailing: Icon(
+                    Icons.account_balance,
+                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );
@@ -563,9 +563,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                     "Por favor, deposite seu dinheiro na caixa correspondente.",
                     style: Theme.of(context).primaryTextTheme.displayMedium,
                   ),
-                  trailing: Image.asset(
-                    'assets/dinheiro.png',
-                    scale: 1.5,
+                  trailing: Icon(
+                    MdiIcons.cash,
+                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );

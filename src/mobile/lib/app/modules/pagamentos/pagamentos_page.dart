@@ -167,47 +167,44 @@ class PagamentosPageState extends State<PagamentosPage> {
               ],
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                          color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        child: Text(
-                          '#${item.pagamentoId}',
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
+                        color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                       ),
-                      const Expanded(child: SizedBox()),
-                      Icon(
-                        item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
-                        size: 20,
-                        color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
-                            ? Colors.red
-                            : Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Colors.greenAccent
-                                : Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      child: Text(
+                        '#${item.pagamentoId}',
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Cancelado",
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    Icon(
+                      item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                      size: 20,
+                      color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
+                          ? Colors.red
+                          : Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Colors.greenAccent
+                              : Colors.green,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        item.pagamentoStatus == EnumStatusPagamento.ativo.index ? "Ativo" : "Cancelado",
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    )
+                  ],
                 ),
                 ListTile(
                   visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
@@ -276,12 +273,44 @@ class PagamentosPageState extends State<PagamentosPage> {
                     ],
                   ),
                   trailing: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        UtilBrasilFields.obterReal(item.pagamentoValor.toDouble()),
-                        style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            UtilBrasilFields.obterReal(item.pagamentoValor.toDouble()),
+                            style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Colors.red),
+                          ),
+                        ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? Icons.account_balance : MdiIcons.cash,
+                              size: 20,
+                              color: item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
+                                  ? Colors.blue
+                                  : Modular.get<ThemeStore>().isDarkModeEnable
+                                      ? Colors.greenAccent
+                                      : Colors.green,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? "Desconto em folha" : "Dinheiro",
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),

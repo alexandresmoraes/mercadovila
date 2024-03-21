@@ -12,4 +12,5 @@ abstract class IPagamentosRepository implements Disposable {
   Future<Either<ResultFailModel, RealizarPagamentoResponseModel>> realizarPagamento(RealizarPagamentoModel pagamentoModel);
   Future<PagedResult<PagamentosDto>> getPagamentos(int page, String? username);
   Future<Either<ResultFailModel, void>> cancelarPagamento(int pagamentoId);
+  Future<PagedResult<PagamentosDto>> getMeusPagamentos(int page);
 }

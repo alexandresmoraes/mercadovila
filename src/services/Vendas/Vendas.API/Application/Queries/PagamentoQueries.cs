@@ -14,6 +14,68 @@ namespace Vendas.API.Application.Queries
       _dbConnection = dbConnection;
     }
 
+    public async Task<PagedResult<PagamentosDto>> GetMeusPagamentos(MeusPagamentosQuery query, CancellationToken cancellationToken = default)
+    {
+      var pagamentos = new List<PagamentosDto>();
+
+      var sql = @"
+                  SELECT
+	                  p.id AS id,
+                    p.tipo AS tipo,
+	                  p.status AS status,
+	                  p.datahora AS datahora,
+	                  p.valor AS valor,	
+                    c.id AS compradoruserid,
+                    c.nome AS compradornome,
+	                  c.foto_url AS compradorfotourl,
+                    c.email AS compradoremail,
+                    p.recebido_por_user_id AS recebidoporuserid,
+                    p.recebido_por AS recebidopor,
+                    p.data_cancelamento AS datacancelamento,
+                    p.cancelado_por_user_id AS canceladoporuserid,
+                    p.cancelado_por AS canceladopor,
+                    count(*) over() AS count
+                  FROM pagamentos p
+                  LEFT JOIN compradores c ON c.id = p.comprador_id
+                  WHERE c.id = @userid
+                  ORDER BY p.datahora DESC 
+                  LIMIT @limit OFFSET @offset";
+
+      var offset = (query.page - 1) * query.limit;
+
+      var result = await _dbConnection.QueryAsync<dynamic>(sql, new
+      {
+        query.limit,
+        offset,
+        userid = query.userId!
+      });
+
+      foreach (var row in result)
+      {
+        pagamentos.Add(new PagamentosDto
+        {
+          PagamentoId = row.id,
+          PagamentoDataHora = row.datahora,
+          PagamentoTipo = (EnumTipoPagamento)row.tipo,
+          PagamentoStatus = (EnumStatusPagamento)row.status,
+          CompradorNome = row.compradornome,
+          CompradorFotoUrl = row.compradorfotourl,
+          CompradorUserId = row.compradoruserid,
+          CompradorEmail = row.compradoremail,
+          PagamentoValor = row.valor,
+          RecebidoPorUserId = row.recebidoporuserid,
+          RecebidoPor = row.recebidopor,
+          DataCancelamento = row.datacancelamento,
+          CanceladoPorUserId = row.canceladoporuserid,
+          CanceladoPor = row.canceladopor,
+        });
+      }
+
+      long total = result.FirstOrDefault()?.count ?? 0;
+
+      return new PagedResult<PagamentosDto>(offset, query.limit, total, pagamentos);
+    }
+
     public async Task<PagamentoDetalheDto> GetPagamentoPendentes(string userId, CancellationToken cancellationToken = default)
     {
       var result = await _dbConnection.QueryAsync<dynamic>(

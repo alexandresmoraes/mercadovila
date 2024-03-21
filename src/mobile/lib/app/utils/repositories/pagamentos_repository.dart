@@ -65,4 +65,14 @@ class PagamentosRepository implements IPagamentosRepository {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
+
+  @override
+  Future<PagedResult<PagamentosDto>> getMeusPagamentos(int page) async {
+    var response = await dio.get('/api/pagamentos/meus-pagamentos', queryParameters: {
+      "page": page.toString(),
+      "limit": 5,
+    });
+
+    return PagedResult.fromJson(response.data);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
 import 'package:vilasesmo/app/modules/favoritos/favoritos_module.dart';
 import 'package:vilasesmo/app/modules/lista_compras/lista_compras_module.dart';
+import 'package:vilasesmo/app/modules/meus_pagamentos/meus_pagamentos_module.dart';
 import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_module.dart';
 import 'package:vilasesmo/app/modules/notificacoes/notificacoes_module.dart';
 import 'package:vilasesmo/app/modules/pagamentos/pagamentos_module.dart';
@@ -83,5 +84,6 @@ class AppModule extends Module {
     ModuleRoute(FavoritosModule.routeName, module: FavoritosModule()),
     ModuleRoute(ListaComprasModule.routeName, module: ListaComprasModule()),
     ModuleRoute(NotificacoesModule.routeName, module: NotificacoesModule()),
+    ModuleRoute(MeusPagamentosModule.routeName, module: MeusPagamentosModule()),
   ];
 }

@@ -1,6 +1,4 @@
-using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations;
-using Common.EventBus.Integrations.IntegrationEvents;
 using Common.Grpc;
 using Common.WebAPI.Logs;
 using Common.WebAPI.Notifications;
@@ -12,7 +10,6 @@ using System.Data;
 using System.Reflection;
 using Vendas.API.Application.Queries;
 using Vendas.API.Config;
-using Vendas.API.IntegrationEvents.EventHandling;
 using Vendas.Infra.Data;
 
 var appName = Assembly.GetEntryAssembly()!.GetName().Name;
@@ -49,7 +46,7 @@ try
   Log.Information("Configuring web app ({ApplicationContext})...", appName);
   var app = builder.Build();
 
-  ConfigureEventBus(app);
+  EventBusConfig.ConfigureEventBus(app);
 
   app.UseApiConfiguration();
 
@@ -79,9 +76,3 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .CreateLogger();
 }
 
-void ConfigureEventBus(IApplicationBuilder app)
-{
-  var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
-  eventBus.Subscribe<UsuarioAlteradoIntegrationEvent, UsuarioAlteradoIntegrationEventHandler>();
-}

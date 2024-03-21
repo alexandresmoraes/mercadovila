@@ -75,6 +75,21 @@ namespace Vendas.API.Controllers
       => Result.Ok(await _pagamentosQueries.GetPagamentos(query, cancellationToken));
 
     /// <summary>
+    /// Retorna meus os pagamentos
+    /// </summary>
+    // GET api/pagamentos/meus-pagamentos
+    [HttpGet("meus-pagamentos")]
+    [Authorize]
+    [ProducesResponseType(typeof(PagamentosDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Result<PagedResult<PagamentosDto>>> GetMeusPagamentos([FromQuery] MeusPagamentosQuery query, CancellationToken cancellationToken = default)
+    {
+      query.userId = _authService.GetUserId();
+      return Result.Ok(await _pagamentosQueries.GetMeusPagamentos(query, cancellationToken));
+    }
+
+    /// <summary>
     /// Realiza o cancelamento de um pagamento
     /// </summary>
     // PUT api/pagamentos/cancelar/{pagamentoId}

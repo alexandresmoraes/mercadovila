@@ -1,6 +1,7 @@
 ﻿using Common.EventBus;
 using Common.EventBus.Abstractions;
 using Common.EventBus.Integrations;
+using Common.EventBus.Integrations.IntegrationEvents;
 using Common.EventBus.Integrations.IntegrationLog;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
@@ -50,6 +51,13 @@ namespace Vendas.API.Config
       });
 
       return services;
+    }
+
+    public static void ConfigureEventBus(IApplicationBuilder app)
+    {
+      var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+      eventBus.Subscribe<UsuarioAlteradoIntegrationEvent, UsuarioAlteradoIntegrationEventHandler>();
     }
   }
 }
