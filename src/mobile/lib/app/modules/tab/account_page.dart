@@ -276,7 +276,7 @@ class AccountPageState extends State<AccountPage> {
                   visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: Icon(
-                    MdiIcons.shoppingOutline,
+                    MdiIcons.cash,
                     color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
                     size: 20,
                   ),
