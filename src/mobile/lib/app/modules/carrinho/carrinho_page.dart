@@ -473,7 +473,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Observer(builder: (_) {
-              return !carrinhoStore.selectOpcaoPagamento
+              return !carrinhoStore.isDescontoSalario && !carrinhoStore.isDinheiro
                   ? Container(
                       padding: const EdgeInsets.all(2),
                       width: MediaQuery.of(context).size.width,
@@ -521,22 +521,46 @@ class CarrinhoPageState extends State<CarrinhoPage> {
             Observer(builder: (_) {
               return InkWell(
                 onTap: () {
-                  carrinhoStore.setSelectOpcaoPagamento(true);
+                  carrinhoStore.setDescontoSalario();
                 },
                 child: ListTile(
                   leading: Radio(
                     value: true,
-                    groupValue: carrinhoStore.selectOpcaoPagamento,
-                    onChanged: (value) {
-                      carrinhoStore.setSelectOpcaoPagamento(value!);
-                    },
+                    groupValue: carrinhoStore.isDescontoSalario,
+                    onChanged: (value) {},
                   ),
                   title: Text(
                     "Desconto em folha",
                     style: Theme.of(context).primaryTextTheme.bodyLarge,
                   ),
                   subtitle: Text(
-                    "Autorizar o desconto em folha no próximo mês útil",
+                    "Solicitar autorização para desconto em folha no próximo mês útil.",
+                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                  ),
+                  trailing: Image.asset(
+                    'assets/dinheiro.png',
+                    scale: 1.5,
+                  ),
+                ),
+              );
+            }),
+            Observer(builder: (_) {
+              return InkWell(
+                onTap: () {
+                  carrinhoStore.setDinheiro();
+                },
+                child: ListTile(
+                  leading: Radio(
+                    value: true,
+                    groupValue: carrinhoStore.isDinheiro,
+                    onChanged: (value) {},
+                  ),
+                  title: Text(
+                    "Dinheiro",
+                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  ),
+                  subtitle: Text(
+                    "Por favor, deposite seu dinheiro na caixa correspondente.",
                     style: Theme.of(context).primaryTextTheme.displayMedium,
                   ),
                   trailing: Image.asset(

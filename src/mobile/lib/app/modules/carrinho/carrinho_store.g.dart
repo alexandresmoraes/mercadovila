@@ -17,20 +17,35 @@ mixin _$CarrinhoStore on CarrinhoStoreBase, Store {
               name: 'CarrinhoStoreBase.isValidCarrinho'))
           .value;
 
-  late final _$selectOpcaoPagamentoAtom =
-      Atom(name: 'CarrinhoStoreBase.selectOpcaoPagamento', context: context);
+  late final _$isDescontoSalarioAtom =
+      Atom(name: 'CarrinhoStoreBase.isDescontoSalario', context: context);
 
   @override
-  bool get selectOpcaoPagamento {
-    _$selectOpcaoPagamentoAtom.reportRead();
-    return super.selectOpcaoPagamento;
+  bool get isDescontoSalario {
+    _$isDescontoSalarioAtom.reportRead();
+    return super.isDescontoSalario;
   }
 
   @override
-  set selectOpcaoPagamento(bool value) {
-    _$selectOpcaoPagamentoAtom.reportWrite(value, super.selectOpcaoPagamento,
-        () {
-      super.selectOpcaoPagamento = value;
+  set isDescontoSalario(bool value) {
+    _$isDescontoSalarioAtom.reportWrite(value, super.isDescontoSalario, () {
+      super.isDescontoSalario = value;
+    });
+  }
+
+  late final _$isDinheiroAtom =
+      Atom(name: 'CarrinhoStoreBase.isDinheiro', context: context);
+
+  @override
+  bool get isDinheiro {
+    _$isDinheiroAtom.reportRead();
+    return super.isDinheiro;
+  }
+
+  @override
+  set isDinheiro(bool value) {
+    _$isDinheiroAtom.reportWrite(value, super.isDinheiro, () {
+      super.isDinheiro = value;
     });
   }
 
@@ -94,11 +109,22 @@ mixin _$CarrinhoStore on CarrinhoStoreBase, Store {
       ActionController(name: 'CarrinhoStoreBase', context: context);
 
   @override
-  void setSelectOpcaoPagamento(bool value) {
+  void setDescontoSalario() {
     final _$actionInfo = _$CarrinhoStoreBaseActionController.startAction(
-        name: 'CarrinhoStoreBase.setSelectOpcaoPagamento');
+        name: 'CarrinhoStoreBase.setDescontoSalario');
     try {
-      return super.setSelectOpcaoPagamento(value);
+      return super.setDescontoSalario();
+    } finally {
+      _$CarrinhoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDinheiro() {
+    final _$actionInfo = _$CarrinhoStoreBaseActionController.startAction(
+        name: 'CarrinhoStoreBase.setDinheiro');
+    try {
+      return super.setDinheiro();
     } finally {
       _$CarrinhoStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -107,7 +133,8 @@ mixin _$CarrinhoStore on CarrinhoStoreBase, Store {
   @override
   String toString() {
     return '''
-selectOpcaoPagamento: ${selectOpcaoPagamento},
+isDescontoSalario: ${isDescontoSalario},
+isDinheiro: ${isDinheiro},
 carrinhoItens: ${carrinhoItens},
 carrinhoDto: ${carrinhoDto},
 isLoading: ${isLoading},
