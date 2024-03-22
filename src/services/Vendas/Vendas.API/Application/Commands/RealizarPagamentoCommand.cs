@@ -9,6 +9,7 @@ namespace Vendas.API.Application.Commands
   {
     public string UserId { get; init; } = null!;
     public EnumTipoPagamento TipoPagamento { get; init; }
+    public EnumMesReferencia MesReferencia { get; init; }
     public IEnumerable<long> VendasId { get; init; } = Enumerable.Empty<long>();
   }
 }

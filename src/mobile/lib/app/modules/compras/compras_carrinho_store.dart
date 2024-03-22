@@ -157,7 +157,7 @@ abstract class ComprasCarrinhoStoreBase with Store {
         var message = fail.getErrorNotProperty();
         if (message.isNotEmpty) GlobalSnackbar.error(message);
       }, (accountResponse) async {
-        GlobalSnackbar.success('Compra criada com sucesso!');
+        GlobalSnackbar.success('Compra criada com sucesso');
         Modular.to.pop(true);
         clearCarrinhoCompras();
       });

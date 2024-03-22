@@ -105,7 +105,7 @@ abstract class NotificacoesEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (response) async {
-        GlobalSnackbar.success('Criado com sucesso!');
+        GlobalSnackbar.success('Criado com sucesso');
         Modular.to.pop(true);
       });
     } else {
@@ -114,7 +114,7 @@ abstract class NotificacoesEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (accountResponse) async {
-        GlobalSnackbar.success('Editado com sucesso!');
+        GlobalSnackbar.success('Editado com sucesso');
         Modular.to.pop(true);
       });
     }
@@ -129,7 +129,7 @@ abstract class NotificacoesEditControllerBase with Store {
         var result = await notificacoesRepository.uploadImageNotificacao(imagePath!);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
-            GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+            GlobalSnackbar.error('Tamanho máximo da foto é 8MB');
             isSaving = false;
           }
         }, (response) async {
@@ -155,7 +155,7 @@ abstract class NotificacoesEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (accountResponse) async {
-        GlobalSnackbar.success('Excluído com sucesso!');
+        GlobalSnackbar.success('Excluído com sucesso');
         Modular.to.pop(true);
       });
     } finally {

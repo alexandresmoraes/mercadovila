@@ -78,6 +78,10 @@ namespace Vendas.Infra.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
 
+                    b.Property<int>("MesReferencia")
+                        .HasColumnType("integer")
+                        .HasColumnName("mes_referencia");
+
                     b.Property<string>("RecebidoPor")
                         .IsRequired()
                         .HasMaxLength(128)

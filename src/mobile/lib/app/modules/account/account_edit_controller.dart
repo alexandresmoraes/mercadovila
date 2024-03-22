@@ -215,7 +215,7 @@ abstract class AccountEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (accountResponse) async {
-        GlobalSnackbar.success('Criado com sucesso!');
+        GlobalSnackbar.success('Criado com sucesso');
         Modular.to.pop(true);
       });
     } else {
@@ -226,7 +226,7 @@ abstract class AccountEditControllerBase with Store {
       }, (accountResponse) async {
         var me = await Modular.get<IAuthService>().me();
         Modular.get<AccountStore>().setAccount(me);
-        GlobalSnackbar.success('Editado com sucesso!');
+        GlobalSnackbar.success('Editado com sucesso');
         Modular.to.pop(true);
       });
     }
@@ -243,7 +243,7 @@ abstract class AccountEditControllerBase with Store {
         var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
-            GlobalSnackbar.error('Tamanho máximo da foto é 8MB!');
+            GlobalSnackbar.error('Tamanho máximo da foto é 8MB');
             isSaving = false;
           }
         }, (response) async {

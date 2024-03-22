@@ -39,7 +39,7 @@ abstract class VendaDetailControllerBase with Store {
           if (message.isNotEmpty) GlobalSnackbar.error(message);
         }
       }, (response) {
-        GlobalSnackbar.success('Venda cancelada com sucesso!');
+        GlobalSnackbar.success('Venda cancelada com sucesso');
         Modular.to.pop(true);
       });
     } finally {

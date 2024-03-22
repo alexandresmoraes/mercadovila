@@ -12,7 +12,7 @@ using Vendas.Infra.Data;
 namespace Vendas.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240317022824_Initial_Create")]
+    [Migration("20240322190952_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,10 @@ namespace Vendas.Infra.Migrations
                     b.Property<DateTimeOffset>("DataHora")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("datahora");
+
+                    b.Property<int>("MesReferencia")
+                        .HasColumnType("integer")
+                        .HasColumnName("mes_referencia");
 
                     b.Property<string>("RecebidoPor")
                         .IsRequired()

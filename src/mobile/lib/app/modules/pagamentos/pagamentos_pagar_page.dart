@@ -359,8 +359,94 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             _controller.setTipoPagamento(data);
                           },
                         ),
+                      ],
+                    ),
+                  );
+                }),
+                Observer(builder: (_) {
+                  if (!_controller.isPagamentoDetalheSelected) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TypeAheadField<int>(
+                          controller: _controller.mesReferenciaController,
+                          emptyBuilder: (context) => const SizedBox.shrink(),
+                          suggestionsCallback: (search) {
+                            if (_controller.isMesReferenciaSelected) {
+                              return Future.value(const Iterable<int>.empty().toList());
+                            }
+
+                            return _controller.enumMesReferencia.keys
+                                .where((key) => _controller.enumMesReferencia[key]!.toLowerCase().contains(search.toLowerCase()))
+                                .toList();
+                          },
+                          builder: (context, controller, focusNode) {
+                            return Observer(builder: (_) {
+                              if (!_controller.isValidPagamento) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      enabled: !_controller.isMesReferenciaSelected,
+                                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        fillColor: Modular.get<ThemeStore>().isDarkModeEnable
+                                            ? Theme.of(context).inputDecorationTheme.fillColor
+                                            : Theme.of(context).scaffoldBackgroundColor,
+                                        hintText: 'Mês de referência',
+                                        contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                                      ),
+                                    ),
+                                  ),
+                                  _controller.isMesReferenciaSelected
+                                      ? IconButton(
+                                          icon: const Icon(MdiIcons.closeOctagon),
+                                          onPressed: _controller.clearMesReferencia,
+                                        )
+                                      : const SizedBox.shrink()
+                                ],
+                              );
+                            });
+                          },
+                          itemBuilder: (context, data) {
+                            return ListTile(
+                              tileColor: Theme.of(context).cardTheme.color,
+                              visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                              contentPadding: const EdgeInsets.all(0),
+                              minLeadingWidth: 0,
+                              title: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  _controller.enumMesReferencia[data]!,
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                ),
+                              ),
+                            );
+                          },
+                          onSelected: (data) {
+                            _controller.setMesReferencia(data);
+                          },
+                        ),
                         const SizedBox(
-                          height: 100,
+                          height: 150,
                         )
                       ],
                     ),

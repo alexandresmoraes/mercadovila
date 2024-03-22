@@ -47,7 +47,7 @@ namespace Vendas.API.Application.Commands
         vendas.Add(venda!);
       }
 
-      var pagamento = new Pagamento(comprador, vendas, request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
+      var pagamento = new Pagamento(comprador, vendas, request.MesReferencia, request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
 
       await _pagamentosRepository.AddAsync(pagamento);
 

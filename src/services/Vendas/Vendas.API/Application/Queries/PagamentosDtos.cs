@@ -30,6 +30,7 @@ namespace Vendas.API.Application.Queries
     public DateTimeOffset PagamentoDataHora { get; init; }
     public EnumTipoPagamento PagamentoTipo { get; init; }
     public EnumStatusPagamento PagamentoStatus { get; init; }
+    public EnumMesReferencia MesReferencia { get; init; }
     public decimal PagamentoValor { get; set; }
     public string RecebidoPorUserId { get; init; } = null!;
     public string RecebidoPor { get; init; } = null!;

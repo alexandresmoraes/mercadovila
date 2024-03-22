@@ -1,11 +1,13 @@
 class RealizarPagamentoModel {
   late String userId;
   late num tipoPagamento;
+  late num mesReferencia;
   late List<num> vendasId;
 
   RealizarPagamentoModel({
     required this.userId,
     required this.tipoPagamento,
+    required this.mesReferencia,
     required this.vendasId,
   });
 
@@ -13,6 +15,7 @@ class RealizarPagamentoModel {
     final data = <String, dynamic>{};
     data['userId'] = userId;
     data['tipoPagamento'] = tipoPagamento;
+    data['mesReferencia'] = mesReferencia;
     data['vendasId'] = vendasId;
     return data;
   }

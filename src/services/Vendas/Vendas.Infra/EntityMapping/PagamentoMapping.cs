@@ -29,15 +29,22 @@ namespace Vendas.Infra.EntityMapping
         .HasColumnName("tipo")
         .IsRequired()
         .HasConversion(
-          p => (int)p,
-          p => (EnumTipoPagamento)p);
+          _ => (int)_,
+          _ => (EnumTipoPagamento)_);
 
       b.Property(_ => _.Status)
         .HasColumnName("status")
         .IsRequired()
         .HasConversion(
-          p => (int)p,
-          p => (EnumStatusPagamento)p);
+          _ => (int)_,
+          _ => (EnumStatusPagamento)_);
+
+      b.Property(_ => _.MesReferencia)
+        .HasColumnName("mes_referencia")
+        .IsRequired()
+        .HasConversion(
+          _ => (int)_,
+          _ => (EnumMesReferencia)_);
 
       b.Property(_ => _.DataHora)
         .HasColumnName("datahora")

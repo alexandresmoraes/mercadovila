@@ -11,6 +11,7 @@ namespace Vendas.Domain.Aggregates
 
     public EnumTipoPagamento Tipo { get; private set; }
     public EnumStatusPagamento Status { get; private set; }
+    public EnumMesReferencia MesReferencia { get; private set; }
     public decimal Valor { get; private set; }
     public DateTimeOffset DataHora { get; private set; }
     public string RecebidoPorUserId { get; private set; } = null!;
@@ -21,10 +22,11 @@ namespace Vendas.Domain.Aggregates
 
     public Pagamento() { }
 
-    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumTipoPagamento tipo, string recebidoPorUserId, string recebidoPor)
+    public Pagamento(Comprador comprador, IEnumerable<Venda> vendas, EnumMesReferencia mesReferencia, EnumTipoPagamento tipo, string recebidoPorUserId, string recebidoPor)
     {
       Comprador = comprador;
       _vendas = vendas.ToList();
+      MesReferencia = mesReferencia;
       Tipo = tipo;
       Valor = vendas.Sum(_ => _.Total);
       DataHora = DateTimeOffset.UtcNow;

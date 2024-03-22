@@ -203,7 +203,7 @@ abstract class ProdutosEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (response) async {
-        GlobalSnackbar.success('Criado com sucesso!');
+        GlobalSnackbar.success('Criado com sucesso');
         Modular.to.pop(true);
       });
     } else {
@@ -212,7 +212,7 @@ abstract class ProdutosEditControllerBase with Store {
       await result.fold((fail) {
         apiErrors(fail);
       }, (accountResponse) async {
-        GlobalSnackbar.success('Editado com sucesso!');
+        GlobalSnackbar.success('Editado com sucesso');
         Modular.to.pop(true);
       });
     }
@@ -227,7 +227,7 @@ abstract class ProdutosEditControllerBase with Store {
         var result = await produtosRepository.uploadImageProdutos(imagePath!);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
-            GlobalSnackbar.error('Tamanho máximo da imagem é 8MB!');
+            GlobalSnackbar.error('Tamanho máximo da imagem é 8MB');
             isSaving = false;
           }
         }, (response) async {

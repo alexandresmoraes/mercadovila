@@ -33,6 +33,7 @@ namespace Vendas.Infra.Migrations
                     comprador_id = table.Column<string>(type: "character varying(36)", nullable: false),
                     tipo = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
+                    mes_referencia = table.Column<int>(type: "integer", nullable: false),
                     valor = table.Column<decimal>(type: "numeric", nullable: false),
                     datahora = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     recebido_por_user_id = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),

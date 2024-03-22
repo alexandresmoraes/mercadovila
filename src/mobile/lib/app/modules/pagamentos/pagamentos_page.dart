@@ -8,6 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/modules/pagamentos/pagamentos_pagar_controller.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/pagamentos/pagamentos_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
@@ -264,6 +265,18 @@ class PagamentosPageState extends State<PagamentosPage> {
                           ),
                         ],
                       ),
+                      Row(
+                        children: [
+                          Text(
+                            'Mês de referência: ',
+                            style: Theme.of(context).primaryTextTheme.displayMedium,
+                          ),
+                          Text(
+                            Modular.get<PagamentosPagarController>().enumMesReferencia[item.mesReferencia]!,
+                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
                       Text(
                         isNullorEmpty(item.canceladoPor)
                             ? '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}'
@@ -310,7 +323,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

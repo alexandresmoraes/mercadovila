@@ -8,6 +8,25 @@ enum EnumStatusPagamento {
   cancelado,
 }
 
+enum EnumMesReferencia {
+  janeiro(1),
+  fevereiro(2),
+  marco(3),
+  abril(4),
+  maio(5),
+  junho(6),
+  julho(7),
+  agosto(8),
+  setembro(9),
+  outubro(10),
+  novembro(11),
+  dezembro(12);
+
+  const EnumMesReferencia(this.value);
+
+  final int value;
+}
+
 class PagamentosDto {
   PagamentosDto({
     required this.compradorUserId,
@@ -17,6 +36,7 @@ class PagamentosDto {
     required this.pagamentoDataHora,
     required this.pagamentoTipo,
     required this.pagamentoStatus,
+    required this.mesReferencia,
     required this.pagamentoValor,
     required this.recebidoPorUserId,
     required this.recebidoPor,
@@ -31,6 +51,7 @@ class PagamentosDto {
   late final DateTime pagamentoDataHora;
   late final num pagamentoTipo;
   late final num pagamentoStatus;
+  late final num mesReferencia;
   late final num pagamentoValor;
   late final String recebidoPorUserId;
   late final String recebidoPor;
@@ -47,6 +68,7 @@ class PagamentosDto {
     pagamentoDataHora = DateTime.parse(json['pagamentoDataHora'] as String);
     pagamentoTipo = json['pagamentoTipo'];
     pagamentoStatus = json['pagamentoStatus'];
+    mesReferencia = json['mesReferencia'];
     pagamentoValor = json['pagamentoValor'];
     recebidoPorUserId = json['recebidoPorUserId'];
     recebidoPor = json['recebidoPor'];

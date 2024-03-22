@@ -13,10 +13,26 @@ class PagamentosPagarController = PagamentosPagarControllerBase with _$Pagamento
 abstract class PagamentosPagarControllerBase with Store {
   TextEditingController usuarioEditingController = TextEditingController();
   TextEditingController tipoPagamentoController = TextEditingController();
+  TextEditingController mesReferenciaController = TextEditingController();
 
   Map<int, String> enumTipoPagamento = {
     0: 'Desconto em folha',
     1: 'Dinheiro',
+  };
+
+  Map<int, String> enumMesReferencia = {
+    1: 'Janeiro',
+    2: 'Fevereiro',
+    3: 'Março',
+    4: 'Abril',
+    5: 'Maio',
+    6: 'Junho',
+    7: 'Julho',
+    8: 'Agosto',
+    9: 'Setembro',
+    10: 'Outubro',
+    11: 'Novembro',
+    12: 'Dezembro'
   };
 
   @observable
@@ -35,9 +51,25 @@ abstract class PagamentosPagarControllerBase with Store {
   }
 
   @computed
-  bool get isTipoPagamentoSelected {
-    return tipoPagamento != null;
+  bool get isTipoPagamentoSelected => tipoPagamento != null;
+
+  @observable
+  int? mesReferencia;
+
+  @action
+  void setMesReferencia(int mesReferenciaId) {
+    mesReferencia = mesReferenciaId;
+    mesReferenciaController.text = enumMesReferencia[mesReferenciaId]!;
   }
+
+  @action
+  void clearMesReferencia() {
+    mesReferenciaController.text = "";
+    mesReferencia = null;
+  }
+
+  @computed
+  bool get isMesReferenciaSelected => mesReferencia != null;
 
   @observable
   PagamentoDetalheDto? pagamentoDetalheDto;
@@ -62,7 +94,7 @@ abstract class PagamentosPagarControllerBase with Store {
 
   @computed
   bool get isValid {
-    return isPagamentoDetalheSelected && isTipoPagamentoSelected && isValidPagamento;
+    return isPagamentoDetalheSelected && isTipoPagamentoSelected && isValidPagamento && isMesReferenciaSelected;
   }
 
   @computed
@@ -84,6 +116,7 @@ abstract class PagamentosPagarControllerBase with Store {
         RealizarPagamentoModel(
           userId: pagamentoDetalheDto!.compradorUserId,
           tipoPagamento: tipoPagamento!,
+          mesReferencia: mesReferencia!,
           vendasId: pagamentoDetalheDto!.vendas.map((e) => e.vendaId).toList(),
         ),
       );
@@ -94,7 +127,7 @@ abstract class PagamentosPagarControllerBase with Store {
           if (message.isNotEmpty) GlobalSnackbar.error(message);
         }
       }, (response) async {
-        GlobalSnackbar.success('Pagamento realizado com sucesso!');
+        GlobalSnackbar.success('Pagamento realizado com sucesso');
         Modular.to.pop(true);
       });
     } finally {

@@ -16,6 +16,13 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
           Computed<bool>(() => super.isTipoPagamentoSelected,
               name: 'PagamentosPagarControllerBase.isTipoPagamentoSelected'))
       .value;
+  Computed<bool>? _$isMesReferenciaSelectedComputed;
+
+  @override
+  bool get isMesReferenciaSelected => (_$isMesReferenciaSelectedComputed ??=
+          Computed<bool>(() => super.isMesReferenciaSelected,
+              name: 'PagamentosPagarControllerBase.isMesReferenciaSelected'))
+      .value;
   Computed<bool>? _$isValidPagamentoComputed;
 
   @override
@@ -51,6 +58,22 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
   set tipoPagamento(int? value) {
     _$tipoPagamentoAtom.reportWrite(value, super.tipoPagamento, () {
       super.tipoPagamento = value;
+    });
+  }
+
+  late final _$mesReferenciaAtom = Atom(
+      name: 'PagamentosPagarControllerBase.mesReferencia', context: context);
+
+  @override
+  int? get mesReferencia {
+    _$mesReferenciaAtom.reportRead();
+    return super.mesReferencia;
+  }
+
+  @override
+  set mesReferencia(int? value) {
+    _$mesReferenciaAtom.reportWrite(value, super.mesReferencia, () {
+      super.mesReferencia = value;
     });
   }
 
@@ -132,6 +155,28 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
   }
 
   @override
+  void setMesReferencia(int mesReferenciaId) {
+    final _$actionInfo = _$PagamentosPagarControllerBaseActionController
+        .startAction(name: 'PagamentosPagarControllerBase.setMesReferencia');
+    try {
+      return super.setMesReferencia(mesReferenciaId);
+    } finally {
+      _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearMesReferencia() {
+    final _$actionInfo = _$PagamentosPagarControllerBaseActionController
+        .startAction(name: 'PagamentosPagarControllerBase.clearMesReferencia');
+    try {
+      return super.clearMesReferencia();
+    } finally {
+      _$PagamentosPagarControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void clearPagamentoDetalhe() {
     final _$actionInfo =
         _$PagamentosPagarControllerBaseActionController.startAction(
@@ -147,9 +192,11 @@ mixin _$PagamentosPagarController on PagamentosPagarControllerBase, Store {
   String toString() {
     return '''
 tipoPagamento: ${tipoPagamento},
+mesReferencia: ${mesReferencia},
 pagamentoDetalheDto: ${pagamentoDetalheDto},
 isLoadingRealizarPagamento: ${isLoadingRealizarPagamento},
 isTipoPagamentoSelected: ${isTipoPagamentoSelected},
+isMesReferenciaSelected: ${isMesReferenciaSelected},
 isValidPagamento: ${isValidPagamento},
 isValid: ${isValid},
 isPagamentoDetalheSelected: ${isPagamentoDetalheSelected}
