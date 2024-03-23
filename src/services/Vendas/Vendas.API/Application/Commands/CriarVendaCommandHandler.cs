@@ -80,8 +80,14 @@ namespace Vendas.API.Application.Commands
       if ((EnumTipoPagamento)request.TipoPagamento == EnumTipoPagamento.Dinheiro)
       {
         var mesReferencia = (EnumMesReferencia)DateTimeOffset.UtcNow.Month;
-        var vendas = new List<Venda> { venda };
-        var pagamento = new Pagamento(comprador, vendas, mesReferencia, (EnumTipoPagamento)request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
+
+        var pagamento = new Pagamento(
+          comprador: comprador,
+          vendas: new List<Venda> { venda },
+          mesReferencia: (EnumMesReferencia)DateTimeOffset.UtcNow.Month,
+          tipo: (EnumTipoPagamento)request.TipoPagamento,
+          recebidoPorUserId: _authService.GetUserId(),
+          recebidoPor: _authService.GetUserName());
 
         await _pagamentosRepository.AddAsync(pagamento);
       }
