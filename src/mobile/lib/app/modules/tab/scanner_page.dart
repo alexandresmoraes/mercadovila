@@ -3,7 +3,6 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:vilasesmo/app/app_widget.dart';
 import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
@@ -50,7 +49,7 @@ class ScannerPageState extends State<ScannerPage> {
     var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
+      onQRViewCreated: (controller) => _onQRViewCreated(controller, context),
       overlay: QrScannerOverlayShape(
         borderColor: isLoading ? Colors.black : Theme.of(context).primaryColor,
         borderRadius: 10,
@@ -62,7 +61,7 @@ class ScannerPageState extends State<ScannerPage> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(QRViewController controller, BuildContext context) {
     setState(() {
       this.controller = controller;
     });
@@ -88,6 +87,7 @@ class ScannerPageState extends State<ScannerPage> {
         carrinho.adicionarCarrinhoItem(r.id, 1).then((value) {
           AnimatedSnackBar(
             desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+            snackBarStrategy: StackSnackBarStrategy(),
             builder: ((context) {
               var quantidade = carrinho.getCarrinhoItemQuantidade(r.id);
               debugPrint('$quantidade');
@@ -101,7 +101,7 @@ class ScannerPageState extends State<ScannerPage> {
                 imageUrl: r.imageUrl,
               );
             }),
-          ).show(AppWidget.navigatorKey.currentState!.context);
+          ).show(context);
 
           setState(() {
             result = scanData;

@@ -14,7 +14,7 @@ class CarrinhoSuccessPageState extends State<CarrinhoSuccessPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Modular.to.pushReplacementNamed(TabModule.routeName);
+        await Modular.to.pushReplacementNamed(TabModule.routeName);
         return false;
       },
       child: Scaffold(
@@ -58,8 +58,8 @@ class CarrinhoSuccessPageState extends State<CarrinhoSuccessPage> {
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
-                    onPressed: () {
-                      Modular.to.pushReplacementNamed(TabModule.routeName);
+                    onPressed: () async {
+                      await Modular.to.pushReplacementNamed(TabModule.routeName);
                     },
                     child: const Text('Voltar', style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
               ),

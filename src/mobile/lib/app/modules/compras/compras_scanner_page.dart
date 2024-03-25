@@ -50,7 +50,7 @@ class ComprasScannerPageState extends State<ComprasScannerPage> {
     var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
+      onQRViewCreated: (controller) => _onQRViewCreated(controller, context),
       overlay: QrScannerOverlayShape(
         borderColor: isLoading ? Colors.black : Theme.of(context).primaryColor,
         borderRadius: 10,
@@ -62,7 +62,7 @@ class ComprasScannerPageState extends State<ComprasScannerPage> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(QRViewController controller, BuildContext context) {
     setState(() {
       this.controller = controller;
     });
@@ -90,6 +90,7 @@ class ComprasScannerPageState extends State<ComprasScannerPage> {
 
         AnimatedSnackBar(
           desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+          snackBarStrategy: StackSnackBarStrategy(),
           builder: ((context) {
             return CardScannerProduto(
               nome: carrinhoItem.nome,
@@ -100,7 +101,7 @@ class ComprasScannerPageState extends State<ComprasScannerPage> {
               imageUrl: carrinhoItem.imageUrl,
             );
           }),
-        ).show(AppWidget.navigatorKey.currentState!.context);
+        ).show(context);
 
         setState(() {
           result = scanData;

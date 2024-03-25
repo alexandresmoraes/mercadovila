@@ -265,18 +265,20 @@ class PagamentosPageState extends State<PagamentosPage> {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            'Mês de referência: ',
-                            style: Theme.of(context).primaryTextTheme.displayMedium,
-                          ),
-                          Text(
-                            Modular.get<PagamentosPagarController>().enumMesReferencia[item.mesReferencia]!,
-                            style: Theme.of(context).primaryTextTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
+                      item.pagamentoTipo.toInt() == EnumTipoPagamento.descontoEmFolha.index
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Mês de referência: ',
+                                  style: Theme.of(context).primaryTextTheme.displayMedium,
+                                ),
+                                Text(
+                                  Modular.get<PagamentosPagarController>().enumMesReferencia[item.mesReferencia]!,
+                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
                       Text(
                         isNullorEmpty(item.canceladoPor)
                             ? '${UtilData.obterDataDDMMAAAA(item.pagamentoDataHora.toLocal())} ${UtilData.obterHoraHHMM(item.pagamentoDataHora.toLocal())}'
@@ -299,7 +301,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsets.only(top: 8),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
