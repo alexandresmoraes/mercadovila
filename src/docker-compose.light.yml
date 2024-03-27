@@ -30,12 +30,12 @@ services:
 
   kafdrop:
     image: obsidiandynamics/kafdrop:4.0.0
-    depends_on:
-      - kafka
     ports:
       - 19000:9000
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
+    depends_on:
+      - kafka
 
   seq:
     image: datalust/seq:2023.3
@@ -100,8 +100,6 @@ services:
     build:
       context: .
       dockerfile: Services/Auth/Auth.API/Dockerfile
-    # ports:
-    #   - ${AUTH_API_PORT}:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
@@ -128,9 +126,6 @@ services:
     build:
       context: .
       dockerfile: Services/Catalogo/Catalogo.API/Dockerfile
-    # ports:
-    #   - ${CATALOGO_API_PORT}:7013
-    #   - ${CATALOGO_API_GRPC_PORT}:7021
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
