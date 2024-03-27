@@ -1,0 +1,205 @@
+version: '3.4'
+
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.0.14
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - ${ZOOKEEPER_DATA_DIR}:/var/lib/zookeeper/data
+      - ${ZOOKEEPER_LOG_DIR}:/var/lib/zookeeper/log
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    user: root
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - ${KAFKA_DATA_DIR}:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:4.0.0
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+  seq:
+    image: datalust/seq:2023.3
+    restart: unless-stopped
+    ports:
+      - ${SERILOG_PORT}:80
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ${SERILOG_DATA_DIR}:/data
+
+  postgres:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_USER=${DATABASE_USER}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ${DATABASE_DATA_DIR}:/var/lib/postgresql/data
+      - ${DATABASE_LOG_DIR}:/var/log/postgresql
+
+  pgadmin:
+    image: dpage/pgadmin4:7.0
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    volumes:
+      - ${PGADMIN_DATA}:/var/lib/pgadmin
+    ports:
+      - ${PGADMIN_PORT}:80
+    depends_on:
+      - postgres
+
+  mongo:
+    image: mongo:5
+    volumes:
+      - ${MONGODB_DATA}:/data/db
+
+  mongo-express:
+    image: mongo-express:0.54
+    restart: always
+    ports:
+      - ${MONGOEXPRESS_PORT}:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=${MONGODB_PORT}
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+    depends_on:
+      - mongo
+
+  gateway:
+    image: nginx
+    restart: always
+    volumes:
+      - ${NGINX_CONF}:/etc/nginx/nginx.conf:ro
+    ports:
+      - ${NGINX_PORT}:80
+
+  auth.api:
+    image: authapi
+    build:
+      context: .
+      dockerfile: Services/Auth/Auth.API/Dockerfile
+    # ports:
+    #   - ${AUTH_API_PORT}:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
+      - ConnectionStrings__Default=${AUTH_API_CONNECTION_STRING}
+      - AuthSettings__SecretKey=${AUTH_API_SECRET_KEY}
+      - AuthSettings__Issuer=sesmo.com.br
+      - AuthSettings__Audience=auth.sesmo.com.br
+      - AuthSettings__ExpiresIn=3600
+      - AuthSettings__RefreshTokenExpiration=7
+      - EventBusSettings__BootstrapServer=${AUTH_API_EVENTBUS_SERVER}
+      - EventBusSettings__Group=${AUTH_API_EVENTBUS_GROUP}
+      - ImagesSettings__UserImagePath=${AUTH_API_USER_IMAGE_PATH}
+    volumes:
+      - ${AUTH_API_USER_IMAGE_LOCAL_PATH}:${AUTH_API_USER_IMAGE_PATH}
+      - ${AUTH_API_ASPNET_KEYS}:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - postgres
+      - kafka
+      - seq
+
+  catalogo.api:
+    image: catalogoapi
+    build:
+      context: .
+      dockerfile: Services/Catalogo/Catalogo.API/Dockerfile
+    # ports:
+    #   - ${CATALOGO_API_PORT}:7013
+    #   - ${CATALOGO_API_GRPC_PORT}:7021
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
+      - ConnectionStrings__Default=${CATALOGO_API_CONNECTION_STRING}
+      - AuthSettings__SecretKey=${CATALOGO_API_SECRET_KEY}
+      - AuthSettings__Issuer=sesmo.com.br
+      - AuthSettings__Audience=auth.sesmo.com.br
+      - AuthSettings__ExpiresIn=3600
+      - AuthSettings__RefreshTokenExpiration=7
+      - EventBusSettings__BootstrapServer=${CATALOGO_API_EVENTBUS_SERVER}
+      - EventBusSettings__Group=${CATALOGO_API_EVENTBUS_GROUP}
+      - ImagesSettings__ProdutoImagePath=${CATALOGO_API_PRODUTOS_IMAGE_PATH}
+      - ImagesSettings__NotificacoesImagePath=${CATALOGO_API_NOTIFICACOES_IMAGE_PATH}
+      - Kestrel__Endpoints__WebApi__Url=${CATALOGO_API_WEBAPI_URL}
+      - Kestrel__Endpoints__Grpc__Url=${CATALOGO_API_GRPC_URL}
+    volumes:
+      - ${CATALOGO_API_PRODUTOS_IMAGE_LOCAL_PATH}:${CATALOGO_API_PRODUTOS_IMAGE_PATH}
+      - ${CATALOGO_API_NOTIFICACOES_IMAGE_LOCAL_PATH}:${CATALOGO_API_NOTIFICACOES_IMAGE_PATH}
+      - ${AUTH_API_ASPNET_KEYS}:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - mongo
+      - kafka
+      - seq
+
+  compras.api:
+    image: comprasapi
+    build:
+      context: .
+      dockerfile: Services/Compras/Compras.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
+      - ConnectionStrings__Default=${COMPRAS_API_CONNECTION_STRING}
+      - AuthSettings__SecretKey=${COMPRAS_API_SECRET_KEY}
+      - AuthSettings__Issuer=sesmo.com.br
+      - AuthSettings__Audience=auth.sesmo.com.br
+      - AuthSettings__ExpiresIn=3600
+      - AuthSettings__RefreshTokenExpiration=7
+      - EventBusSettings__BootstrapServer=${COMPRAS_API_EVENTBUS_SERVER}
+      - EventBusSettings__Group=${COMPRAS_API_EVENTBUS_GROUP}
+    volumes:
+      - ${COMPRAS_API_ASPNET_KEYS}:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - postgres
+      - kafka
+      - seq
+
+  vendas.api:
+    image: vendasapi
+    build:
+      context: .
+      dockerfile: Services/Vendas/Vendas.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
+      - ConnectionStrings__Default=${VENDAS_API_CONNECTION_STRING}
+      - AuthSettings__SecretKey=${VENDAS_API_SECRET_KEY}
+      - AuthSettings__Issuer=sesmo.com.br
+      - AuthSettings__Audience=auth.sesmo.com.br
+      - AuthSettings__ExpiresIn=3600
+      - AuthSettings__RefreshTokenExpiration=7
+      - EventBusSettings__BootstrapServer=${VENDAS_API_EVENTBUS_SERVER}
+      - EventBusSettings__Group=${VENDAS_API_EVENTBUS_GROUP}
+      - CatalogoUrlGrpc=${VENDAS_API_CATALOGO_GRPC_URL}
+    volumes:
+      - ${VENDAS_API_ASPNET_KEYS}:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - postgres
+      - kafka
+      - seq

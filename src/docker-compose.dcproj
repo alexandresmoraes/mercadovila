@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.dev.yml" />
+    <None Include="docker-compose.light.yml" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>

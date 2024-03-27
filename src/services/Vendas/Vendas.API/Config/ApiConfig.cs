@@ -20,11 +20,13 @@ namespace Vendas.API.Config
   {
     public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
+      bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
       var authSettings = configuration.GetSection(nameof(AuthSettings));
       services.Configure<AuthSettings>(authSettings);
       services.AddResultFilter();
       services.AddDefaultHealthCheck().AddPostgresHealthCheck(configuration);
-      services.AddDefaultHealthCheckUI();
+      if (isDevelopment) services.AddDefaultHealthCheckUI();
       services.AddControllers().AddJsonOptions(options =>
       {
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
