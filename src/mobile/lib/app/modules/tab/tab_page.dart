@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -50,7 +51,7 @@ class _TabPageState extends State<TabPage> {
                     size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
                   ),
                   onPressed: () async {
-                    if ((!Platform.isAndroid && !Platform.isIOS) && index == 2) {
+                    if (!kIsWeb && (!Platform.isAndroid && !Platform.isIOS) && index == 2) {
                       GlobalSnackbar.error('Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
                     } else {
                       setState(() => _bottomNavIndex = index);
