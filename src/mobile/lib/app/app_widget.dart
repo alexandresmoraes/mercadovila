@@ -13,7 +13,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Modular.setNavigatorKey(navigatorKey);
     return Observer(
-      builder: (_) => MaterialApp.router(
+      builder: (context) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'VilaSESMO',
         theme: nativeTheme(isDarkModeEnable: Modular.get<ThemeStore>().isDarkModeEnable),

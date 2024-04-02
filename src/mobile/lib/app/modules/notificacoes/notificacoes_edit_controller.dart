@@ -24,6 +24,12 @@ abstract class NotificacoesEditControllerBase with Store {
   String? imageUrl;
 
   @observable
+  String? imageMimeType;
+
+  @observable
+  String? imageFilenameWeb;
+
+  @observable
   String? titulo;
   @observable
   String? _tituloApiError;
@@ -126,7 +132,7 @@ abstract class NotificacoesEditControllerBase with Store {
       var notificacoesRepository = Modular.get<INotificacoesRepository>();
 
       if (!isNullorEmpty(imagePath)) {
-        var result = await notificacoesRepository.uploadImageNotificacao(imagePath!);
+        var result = await notificacoesRepository.uploadImageNotificacao(imagePath!, imageMimeType, imageFilenameWeb);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
             GlobalSnackbar.error('Tamanho máximo da foto é 8MB');

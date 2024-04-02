@@ -51,7 +51,7 @@ class _TabPageState extends State<TabPage> {
                     size: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme!.size,
                   ),
                   onPressed: () async {
-                    if (!kIsWeb && (!Platform.isAndroid && !Platform.isIOS) && index == 2) {
+                    if (index == 2 && (kIsWeb || (!Platform.isAndroid && !Platform.isIOS))) {
                       GlobalSnackbar.error('Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
                     } else {
                       setState(() => _bottomNavIndex = index);

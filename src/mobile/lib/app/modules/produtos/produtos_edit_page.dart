@@ -3,6 +3,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -28,7 +29,6 @@ class ProdutosEditPage extends StatefulWidget {
 class ProdutosEditPageState extends State<ProdutosEditPage> {
   bool isAdmin = false;
   final ProdutosEditController _controller = Modular.get<ProdutosEditController>();
-  TextEditingController barcodeController = TextEditingController();
 
   _getImagePicker(ImageSource source) async {
     var pickedFile = await ImagePicker().pickImage(
@@ -37,43 +37,52 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
       maxHeight: 1080,
       imageQuality: 100,
     );
-    if (pickedFile != null) _cropImage(pickedFile.path);
+
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        _controller.imageMimeType = pickedFile.mimeType;
+        _controller.imageFilenameWeb = pickedFile.name;
+      }
+
+      _cropImage(pickedFile.path);
+    }
   }
 
   _cropImage(filePath) async {
-    if (Theme.of(context).platform == TargetPlatform.android || Theme.of(context).platform == TargetPlatform.iOS) {
-      var croppedImage = await ImageCropper().cropImage(
-          sourcePath: filePath,
-          maxWidth: 1920,
-          maxHeight: 1080,
-          aspectRatioPresets: CropAspectRatioPreset.values,
-          compressQuality: 100,
-          aspectRatio: const CropAspectRatio(
-            ratioX: 1,
-            ratioY: 1,
+    var croppedImage = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        aspectRatioPresets: CropAspectRatioPreset.values,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(
+          ratioX: 1,
+          ratioY: 1,
+        ),
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.png,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Recortar',
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
+          IOSUiSettings(
+            title: 'Recortar',
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
           ),
-          cropStyle: CropStyle.circle,
-          compressFormat: ImageCompressFormat.png,
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Recortar',
-                initAspectRatio: CropAspectRatioPreset.square,
-                lockAspectRatio: true,
-                toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-                toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
-            IOSUiSettings(
-              title: 'Recortar',
-              minimumAspectRatio: 1.0,
-              aspectRatioLockEnabled: true,
-            ),
-            WebUiSettings(context: context)
-          ]);
-      if (croppedImage != null) {
-        _controller.setImagePath(croppedImage.path);
-        Modular.to.pop();
-      }
-    } else {
-      _controller.setImagePath(filePath);
+          WebUiSettings(
+            context: context,
+            presentStyle: CropperPresentStyle.page,
+            enableZoom: true,
+            mouseWheelZoom: false,
+          )
+        ]);
+
+    if (croppedImage != null) {
+      _controller.setImagePath(croppedImage.path);
       Modular.to.pop();
     }
   }
@@ -128,11 +137,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       image: DecorationImage(
-                                        image: Image.file(
-                                          File(
-                                            _controller.imagePath!,
-                                          ),
-                                        ).image,
+                                        image: kIsWeb ? Image.network(_controller.imagePath!).image : Image.file(File(_controller.imagePath!)).image,
                                       ),
                                     ),
                                   );
@@ -187,17 +192,19 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      _getImagePicker(ImageSource.camera);
-                                    },
-                                    child: const Text(
-                                      'Camera',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ),
+                                  !kIsWeb
+                                      ? CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            _getImagePicker(ImageSource.camera);
+                                          },
+                                          child: const Text(
+                                            'Camera',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       _getImagePicker(ImageSource.gallery);
@@ -357,10 +364,12 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                             margin: const EdgeInsets.only(top: 5, bottom: 15),
                             padding: const EdgeInsets.only(),
                             child: Observer(builder: (_) {
-                              barcodeController.text = _controller.codigoBarras!;
-
                               return TextFormField(
-                                controller: barcodeController,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(13),
+                                ],
+                                initialValue: _controller.codigoBarras,
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 onChanged: _controller.setCodigoBarras,
                                 decoration: InputDecoration(
@@ -370,7 +379,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                   hintText: '7898357417892',
                                   contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                                   errorText: _controller.getCodigoBarrasError,
-                                  suffixIcon: Platform.isAndroid || Platform.isIOS
+                                  suffixIcon: !kIsWeb && (Platform.isAndroid || Platform.isIOS)
                                       ? IconButton(
                                           icon: Icon(
                                             MdiIcons.barcode,

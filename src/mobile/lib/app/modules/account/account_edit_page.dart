@@ -3,6 +3,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -41,43 +42,54 @@ class AccountEditPageState extends State<AccountEditPage> {
       maxHeight: 1080,
       imageQuality: 100,
     );
-    if (pickedFile != null) _cropImage(pickedFile.path);
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        _controller.fotoMimeType = pickedFile.mimeType;
+        _controller.fotoFilenameWeb = pickedFile.name;
+      }
+
+      _cropImage(pickedFile.path);
+    }
   }
 
   _cropImage(filePath) async {
-    if (Theme.of(context).platform == TargetPlatform.android || Theme.of(context).platform == TargetPlatform.iOS) {
-      var croppedImage = await ImageCropper().cropImage(
-          sourcePath: filePath,
-          maxWidth: 1920,
-          maxHeight: 1080,
-          aspectRatioPresets: CropAspectRatioPreset.values,
-          compressQuality: 100,
-          aspectRatio: const CropAspectRatio(
-            ratioX: 1,
-            ratioY: 1,
+    var croppedImage = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        aspectRatioPresets: CropAspectRatioPreset.values,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(
+          ratioX: 1,
+          ratioY: 1,
+        ),
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.png,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Recortar',
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
+          IOSUiSettings(
+            title: 'Recortar',
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
           ),
-          cropStyle: CropStyle.circle,
-          compressFormat: ImageCompressFormat.png,
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Recortar',
-                initAspectRatio: CropAspectRatioPreset.square,
-                lockAspectRatio: true,
-                toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-                toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
-            IOSUiSettings(
-              title: 'Recortar',
-              minimumAspectRatio: 1.0,
-              aspectRatioLockEnabled: true,
+          WebUiSettings(
+            context: context,
+            enableZoom: true,
+            mouseWheelZoom: false,
+            viewPort: const CroppieViewPort(
+              width: 200,
+              height: 200,
             ),
-            WebUiSettings(context: context)
-          ]);
-      if (croppedImage != null) {
-        _controller.setFotoPath(croppedImage.path);
-        Modular.to.pop();
-      }
-    } else {
-      _controller.setFotoPath(filePath);
+          )
+        ]);
+
+    if (croppedImage != null) {
+      _controller.setFotoPath(croppedImage.path);
       Modular.to.pop();
     }
   }
@@ -130,11 +142,8 @@ class AccountEditPageState extends State<AccountEditPage> {
                                 if (!isNullorEmpty(_controller.fotoPath)) {
                                   return CircleAvatar(
                                     radius: 100,
-                                    backgroundImage: Image.file(
-                                      File(
-                                        _controller.fotoPath!,
-                                      ),
-                                    ).image,
+                                    backgroundImage:
+                                        kIsWeb ? Image.network(_controller.fotoPath!).image : Image.file(File(_controller.fotoPath!)).image,
                                   );
                                 } else if (!isNullorEmpty(_controller.fotoUrl)) {
                                   return CachedNetworkImage(
@@ -175,17 +184,19 @@ class AccountEditPageState extends State<AccountEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      _getImagePicker(ImageSource.camera);
-                                    },
-                                    child: const Text(
-                                      'Camera',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ),
+                                  kIsWeb
+                                      ? const SizedBox.shrink()
+                                      : CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            _getImagePicker(ImageSource.camera);
+                                          },
+                                          child: const Text(
+                                            'Camera',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        ),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       _getImagePicker(ImageSource.gallery);

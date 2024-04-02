@@ -21,6 +21,12 @@ abstract class ProdutosEditControllerBase with Store {
   }
 
   @observable
+  String? imageMimeType;
+
+  @observable
+  String? imageFilenameWeb;
+
+  @observable
   String? imageUrl;
   @computed
   String? get getImageUrlError => isNullorEmpty(imageUrl) ? 'Imagem do produto não pode ser vazio.' : null;
@@ -224,7 +230,7 @@ abstract class ProdutosEditControllerBase with Store {
       var produtosRepository = Modular.get<IProdutosRepository>();
 
       if (!isNullorEmpty(imagePath)) {
-        var result = await produtosRepository.uploadImageProdutos(imagePath!);
+        var result = await produtosRepository.uploadImageProdutos(imagePath!, imageMimeType, imageFilenameWeb);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
             GlobalSnackbar.error('Tamanho máximo da imagem é 8MB');

@@ -12,5 +12,5 @@ abstract class IAccountRepository implements Disposable {
   Future<Either<ResultFailModel, NewAccountResponseModel>> newAccount(NewAndUpdateAccountModel newAccountModel);
   Future<Either<ResultFailModel, String>> updateAccount(String id, NewAndUpdateAccountModel updateAccountModel);
   Future<PagedResult<AccountDto>> getAccounts(int page, String? usernameOrEmail);
-  Future<Either<ResultFailModel, PhotoUploadResponseModel>> uploadPhotoAccount(String id, String filepath);
+  Future<Either<ResultFailModel, PhotoUploadResponseModel>> uploadPhotoAccount(String id, String filepath, String? mimeType, String? filenameWeb);
 }

@@ -13,7 +13,7 @@ abstract class IProdutosRepository implements Disposable {
   Future<Either<ResultFailModel, ProdutoResponseModel>> createProduto(ProdutoModel produtoModel);
   Future<Either<ResultFailModel, String>> editProduto(String id, ProdutoModel produtoModel);
   Future<PagedResult<ProdutoDto>> getProdutos(int page, String? nome);
-  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageProdutos(String filepath);
+  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageProdutos(String filepath, String? mimeType, String? filenameWeb);
   Future<ProdutoDetailDto> getProdutoDetail(String id);
   Future<PagedResult<ListaComprasDto>> getListaCompra(int page);
   Future<Either<void, ProdutoDto>> getProdutoPorCodigoBarra(String codigoBarra);

@@ -42,6 +42,8 @@ dependencies:
   window_manager: ^0.2.7
   wolt_modal_sheet: ^0.4.1
   brasil_fields: ^1.14.3
+  mime: ^1.0.4
+  http_parser: ^4.0.2
   
 dev_dependencies:
   flutter_test:

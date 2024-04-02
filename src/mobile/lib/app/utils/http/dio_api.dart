@@ -1,10 +1,7 @@
-import 'dart:io';
-
-import 'package:dio/adapter.dart';
-import 'package:dio/adapter_browser.dart';
+import 'dio_adapter_stub.dart' if (dart.library.io) 'dio_adapter_mobile.dart' if (dart.library.js) 'dio_adapter_web.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/native_imp.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
 
@@ -17,13 +14,6 @@ class DioApi extends DioForNative {
     interceptors.add(LogInterceptor());
     interceptors.add(CustomLogInterceptor());
 
-    HttpClientAdapter client;
-    if (kIsWeb) {
-      client = BrowserHttpClientAdapter();
-    } else {
-      client = DefaultHttpClientAdapter();
-    }
-
-    httpClientAdapter = client;
+    httpClientAdapter = getAdapter();
   }
 }

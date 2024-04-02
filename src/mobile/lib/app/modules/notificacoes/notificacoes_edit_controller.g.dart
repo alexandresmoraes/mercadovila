@@ -62,6 +62,39 @@ mixin _$NotificacoesEditController on NotificacoesEditControllerBase, Store {
     });
   }
 
+  late final _$imageMimeTypeAtom = Atom(
+      name: 'NotificacoesEditControllerBase.imageMimeType', context: context);
+
+  @override
+  String? get imageMimeType {
+    _$imageMimeTypeAtom.reportRead();
+    return super.imageMimeType;
+  }
+
+  @override
+  set imageMimeType(String? value) {
+    _$imageMimeTypeAtom.reportWrite(value, super.imageMimeType, () {
+      super.imageMimeType = value;
+    });
+  }
+
+  late final _$imageFilenameWebAtom = Atom(
+      name: 'NotificacoesEditControllerBase.imageFilenameWeb',
+      context: context);
+
+  @override
+  String? get imageFilenameWeb {
+    _$imageFilenameWebAtom.reportRead();
+    return super.imageFilenameWeb;
+  }
+
+  @override
+  set imageFilenameWeb(String? value) {
+    _$imageFilenameWebAtom.reportWrite(value, super.imageFilenameWeb, () {
+      super.imageFilenameWeb = value;
+    });
+  }
+
   late final _$tituloAtom =
       Atom(name: 'NotificacoesEditControllerBase.titulo', context: context);
 
@@ -217,6 +250,8 @@ mixin _$NotificacoesEditController on NotificacoesEditControllerBase, Store {
     return '''
 imagePath: ${imagePath},
 imageUrl: ${imageUrl},
+imageMimeType: ${imageMimeType},
+imageFilenameWeb: ${imageFilenameWeb},
 titulo: ${titulo},
 mensagem: ${mensagem},
 isSaving: ${isSaving},

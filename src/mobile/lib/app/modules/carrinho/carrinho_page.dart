@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -68,7 +69,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               orderProcess[_currentIndex],
             ),
             actions: [
-              Platform.isAndroid || Platform.isIOS
+              !kIsWeb && (Platform.isAndroid || Platform.isIOS)
                   ? IconButton(
                       icon: Icon(
                         MdiIcons.barcode,
