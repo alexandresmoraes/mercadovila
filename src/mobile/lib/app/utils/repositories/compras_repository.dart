@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/compras/compra_dto.dart';
 import 'package:vilasesmo/app/utils/models/compras/compra_model.dart';
@@ -25,7 +25,7 @@ class ComprasRepository implements IComprasRepository {
       var response = await dio.post('/api/compras', data: compraModel.toJson());
       var result = CompraResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }

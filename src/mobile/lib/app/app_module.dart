@@ -43,9 +43,9 @@ class AppModule extends Module {
     Bind(
       (i) => BaseOptions(
         baseUrl: kReleaseMode ? 'https://vila.sesmo.com.br' : 'https://vila.sesmo.com.br',
-        connectTimeout: kReleaseMode ? 20000 : 60000,
-        receiveTimeout: kReleaseMode ? 20000 : 60000,
-        sendTimeout: kReleaseMode ? 20000 : 60000,
+        connectTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
+        receiveTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
+        sendTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
       ),
     ),
     Bind.lazySingleton((i) => CarrinhoStore()),

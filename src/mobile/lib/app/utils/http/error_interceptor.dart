@@ -7,7 +7,7 @@ import 'package:vilasesmo/app/app_widget.dart';
 class ErrorInterceptor extends InterceptorsWrapper {
   @override
   void onError(
-    DioError err,
+    DioException err,
     ErrorInterceptorHandler handler,
   ) {
     var error = _handleError(err);
@@ -33,32 +33,36 @@ class ErrorInterceptor extends InterceptorsWrapper {
     return;
   }
 
-  String _handleError(DioError dioError) {
+  String _handleError(DioException dioError) {
     String errorDescription = "";
     switch (dioError.type) {
-      case DioErrorType.cancel:
+      case DioExceptionType.cancel:
         errorDescription = 'Requisição foi cancelada';
         break;
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.receiveTimeout:
         errorDescription = 'Tempo limite de conexão esgotado';
         break;
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.sendTimeout:
         errorDescription = 'Tempo limite de envio em conexão com o servidor';
         break;
-      case DioErrorType.connectTimeout:
+      case DioExceptionType.connectionTimeout:
         errorDescription = 'Tempo limite de conexão esgotado';
         break;
-      case DioErrorType.response:
+      case DioExceptionType.badResponse:
         if (dioError.response!.statusCode == 403) {
           errorDescription = 'Sem permissão';
-        } else if (dioError.response!.statusCode != 400 &&
-            dioError.response!.statusCode != 413 &&
-            dioError.response!.statusCode != 404) {
+        } else if (dioError.response!.statusCode != 400 && dioError.response!.statusCode != 413 && dioError.response!.statusCode != 404) {
           errorDescription = 'Problemas com a conexão';
         }
         break;
-      case DioErrorType.other:
+      case DioExceptionType.unknown:
         errorDescription = 'Problemas com a conexão';
+        break;
+      case DioExceptionType.badCertificate:
+        // TODO: Handle this case.
+        break;
+      case DioExceptionType.connectionError:
+        // TODO: Handle this case.
         break;
     }
 

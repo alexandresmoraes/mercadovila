@@ -20,7 +20,7 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
   carousel_slider: ^4.2.1
   dots_indicator: ^2.1.1
-  dio: ^4.0.6
+  dio: ^5.4.2+1
   dartz: ^0.10.1
   shared_preferences: ^2.1.1
   font_awesome_flutter: ^10.4.0
@@ -41,7 +41,7 @@ dependencies:
   flutter_typeahead: ^5.0.1
   window_manager: ^0.2.7
   wolt_modal_sheet: ^0.4.1
-  brasil_fields: ^1.14.3
+  brasil_fields: ^1.14.3  
   
 dev_dependencies:
   flutter_test:
