@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/modules/login/login_module.dart';
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
@@ -57,7 +57,7 @@ class AuthService implements IAuthService {
       var response = await dio.post('/api/auth/login', data: loginModel.toJson());
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -71,11 +71,10 @@ class AuthService implements IAuthService {
   @override
   Future<Either<ResultFailModel, AccessTokenModel>> refreshToken(String refreshTokenModel) async {
     try {
-      var response =
-          await dioWithoutJwt.post('/api/auth/refresh-token', data: jsonEncode({'refreshToken': refreshTokenModel}));
+      var response = await dioWithoutJwt.post('/api/auth/refresh-token', data: jsonEncode({'refreshToken': refreshTokenModel}));
       var result = AccessTokenModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -89,6 +88,5 @@ class AuthService implements IAuthService {
   }
 
   @override
-  Future setCurrentToken(AccessTokenModel token) async =>
-      await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
+  Future setCurrentToken(AccessTokenModel token) async => await LocalStorageService.setValue<String>(_currentToken, jsonEncode(token.toJson()));
 }

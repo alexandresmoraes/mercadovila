@@ -1,9 +1,6 @@
-import 'dart:io';
-
-import 'package:dio/adapter.dart';
-import 'package:dio/adapter_browser.dart';
+import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
@@ -21,7 +18,7 @@ class DioApi extends DioForNative {
     if (kIsWeb) {
       client = BrowserHttpClientAdapter();
     } else {
-      client = DefaultHttpClientAdapter();
+      client = IOHttpClientAdapter();
     }
 
     httpClientAdapter = client;
