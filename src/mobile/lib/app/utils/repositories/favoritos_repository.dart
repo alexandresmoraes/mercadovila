@@ -1,4 +1,4 @@
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/favoritos/favorito_item_dto.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';

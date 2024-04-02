@@ -1,7 +1,7 @@
+import 'package:dio/io.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,7 +29,7 @@ class NotificacoesRepository implements INotificacoesRepository {
       var response = await dio.post('/api/notificacoes', data: notificacaoModel.toJson());
       var result = NotificacaoResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -39,7 +39,7 @@ class NotificacoesRepository implements INotificacoesRepository {
     try {
       await dio.put('/api/notificacoes/$id', data: notificacaoModel.toJson());
       return Right(id);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -88,7 +88,7 @@ class NotificacoesRepository implements INotificacoesRepository {
       var response = await dio.post('/api/notificacoes/image', data: formData);
       var result = ImageUploadResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       if (err.response?.statusCode == 413) {
         return Left(ResultFailModel.fromJson(null, err.response?.statusCode));
       } else {
@@ -102,7 +102,7 @@ class NotificacoesRepository implements INotificacoesRepository {
     try {
       await dio.delete('/api/notificacoes/$id');
       return Right(id);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }

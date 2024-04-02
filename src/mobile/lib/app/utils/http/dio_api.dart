@@ -1,7 +1,7 @@
+import 'package:dio/io.dart';
+
 import 'dio_adapter_stub.dart' if (dart.library.io) 'dio_adapter_mobile.dart' if (dart.library.js) 'dio_adapter_web.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
-
 import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
 import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
 

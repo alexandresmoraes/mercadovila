@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:vilasesmo/app/utils/dto/pagamentos/pagamento_detalhe_dto.dart';
 import 'package:vilasesmo/app/utils/dto/pagamentos/pagamentos_dto.dart';
@@ -40,7 +40,7 @@ class PagamentosRepository implements IPagamentosRepository {
       var response = await dio.post('/api/pagamentos', data: pagamentoModel.toJson());
       var result = RealizarPagamentoResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -61,7 +61,7 @@ class PagamentosRepository implements IPagamentosRepository {
     try {
       await dio.put('/api/pagamentos/cancelar/$pagamentoId');
       return const Right(null);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }

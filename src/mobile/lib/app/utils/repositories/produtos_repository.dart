@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http_parser/http_parser.dart';
@@ -31,7 +31,7 @@ class ProdutosRepository implements IProdutosRepository {
       var response = await dio.post('/api/produtos', data: produtoModel.toJson());
       var result = ProdutoResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -41,7 +41,7 @@ class ProdutosRepository implements IProdutosRepository {
     try {
       await dio.put('/api/produtos/$id', data: produtoModel.toJson());
       return Right(id);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return Left(ResultFailModel.fromJson(err.response?.data, err.response?.statusCode));
     }
   }
@@ -91,7 +91,7 @@ class ProdutosRepository implements IProdutosRepository {
       var response = await dio.post('/api/produtos/image', data: formData);
       var result = ImageUploadResponseModel.fromJson(response.data);
       return Right(result);
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       if (err.response?.statusCode == 413) {
         return Left(ResultFailModel.fromJson(null, err.response?.statusCode));
       } else {
@@ -122,7 +122,7 @@ class ProdutosRepository implements IProdutosRepository {
     try {
       var response = await dio.get('/api/produtos/codigobarras/$codigoBarra');
       return Right(ProdutoDto.fromJson(response.data));
-    } on DioError {
+    } on DioException {
       return const Left(null);
     }
   }
