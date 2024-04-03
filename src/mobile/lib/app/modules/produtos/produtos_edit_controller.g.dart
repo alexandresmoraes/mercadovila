@@ -81,6 +81,38 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
     });
   }
 
+  late final _$imageMimeTypeAtom =
+      Atom(name: 'ProdutosEditControllerBase.imageMimeType', context: context);
+
+  @override
+  String? get imageMimeType {
+    _$imageMimeTypeAtom.reportRead();
+    return super.imageMimeType;
+  }
+
+  @override
+  set imageMimeType(String? value) {
+    _$imageMimeTypeAtom.reportWrite(value, super.imageMimeType, () {
+      super.imageMimeType = value;
+    });
+  }
+
+  late final _$imageFilenameWebAtom = Atom(
+      name: 'ProdutosEditControllerBase.imageFilenameWeb', context: context);
+
+  @override
+  String? get imageFilenameWeb {
+    _$imageFilenameWebAtom.reportRead();
+    return super.imageFilenameWeb;
+  }
+
+  @override
+  set imageFilenameWeb(String? value) {
+    _$imageFilenameWebAtom.reportWrite(value, super.imageFilenameWeb, () {
+      super.imageFilenameWeb = value;
+    });
+  }
+
   late final _$imageUrlAtom =
       Atom(name: 'ProdutosEditControllerBase.imageUrl', context: context);
 
@@ -472,6 +504,8 @@ mixin _$ProdutosEditController on ProdutosEditControllerBase, Store {
   String toString() {
     return '''
 imagePath: ${imagePath},
+imageMimeType: ${imageMimeType},
+imageFilenameWeb: ${imageFilenameWeb},
 imageUrl: ${imageUrl},
 nome: ${nome},
 descricao: ${descricao},

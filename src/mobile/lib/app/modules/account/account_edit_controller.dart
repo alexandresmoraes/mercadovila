@@ -28,6 +28,12 @@ abstract class AccountEditControllerBase with Store {
   String? fotoUrl;
 
   @observable
+  String? fotoMimeType;
+
+  @observable
+  String? fotoFilenameWeb;
+
+  @observable
   String? nome;
   @observable
   String? _nomeApiError;
@@ -240,7 +246,7 @@ abstract class AccountEditControllerBase with Store {
 
       if (!isNullorEmpty(fotoPath)) {
         var globalAccount = Modular.get<AccountStore>();
-        var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!);
+        var result = await accountRepository.uploadPhotoAccount(globalAccount.account!.id!, fotoPath!, fotoMimeType, fotoFilenameWeb);
         await result.fold((fail) {
           if (fail.statusCode == 413) {
             GlobalSnackbar.error('Tamanho máximo da foto é 8MB');

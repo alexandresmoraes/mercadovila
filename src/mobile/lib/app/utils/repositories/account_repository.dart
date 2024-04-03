@@ -1,7 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
 import 'package:vilasesmo/app/utils/models/account/new_and_update_account_model.dart';
 import 'package:vilasesmo/app/utils/models/account/photo_upload_response_model.dart';
@@ -61,12 +64,30 @@ class AccountRepository implements IAccountRepository {
   }
 
   @override
-  Future<Either<ResultFailModel, PhotoUploadResponseModel>> uploadPhotoAccount(String id, String filepath) async {
+  Future<Either<ResultFailModel, PhotoUploadResponseModel>> uploadPhotoAccount(
+      String id, String filepath, String? mimeType, String? filenameWeb) async {
     try {
       String filename = filepath.split('/').last;
-      FormData formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(filepath, filename: filename),
-      });
+
+      FormData formData;
+      if (kIsWeb) {
+        var file = XFile(filepath);
+        var content = await file.readAsBytes();
+        var mediaType = MediaType.parse(mimeType!);
+        formData = FormData.fromMap({
+          "file": MultipartFile.fromBytes(
+            content,
+            contentType: mediaType,
+            filename: filenameWeb,
+          ),
+        });
+      } else {
+        var multipartFile = await MultipartFile.fromFile(filepath, filename: filename);
+        formData = FormData.fromMap({
+          "file": multipartFile,
+        });
+      }
+
       var response = await dio.post('/api/account/photo/$id', data: formData);
       var result = PhotoUploadResponseModel.fromJson(response.data);
       return Right(result);

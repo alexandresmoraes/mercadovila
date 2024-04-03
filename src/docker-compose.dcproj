@@ -11,10 +11,6 @@
   <ItemGroup>
     <None Include="docker-compose.dev.yml" />
     <None Include="docker-compose.light.yml" />
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
-    <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
     <None Include="sample.mac.env" />
     <None Include="sample.win.env" />

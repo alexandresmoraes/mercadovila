@@ -210,7 +210,7 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
                         children: [
                           Icon(
                             widget.item.isPrecoMedioSugerido ? Icons.check_box : Icons.check_box_outline_blank,
-                            color: Colors.white,
+                            color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 4),

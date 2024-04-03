@@ -90,6 +90,38 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
     });
   }
 
+  late final _$fotoMimeTypeAtom =
+      Atom(name: 'AccountEditControllerBase.fotoMimeType', context: context);
+
+  @override
+  String? get fotoMimeType {
+    _$fotoMimeTypeAtom.reportRead();
+    return super.fotoMimeType;
+  }
+
+  @override
+  set fotoMimeType(String? value) {
+    _$fotoMimeTypeAtom.reportWrite(value, super.fotoMimeType, () {
+      super.fotoMimeType = value;
+    });
+  }
+
+  late final _$fotoFilenameWebAtom =
+      Atom(name: 'AccountEditControllerBase.fotoFilenameWeb', context: context);
+
+  @override
+  String? get fotoFilenameWeb {
+    _$fotoFilenameWebAtom.reportRead();
+    return super.fotoFilenameWeb;
+  }
+
+  @override
+  set fotoFilenameWeb(String? value) {
+    _$fotoFilenameWebAtom.reportWrite(value, super.fotoFilenameWeb, () {
+      super.fotoFilenameWeb = value;
+    });
+  }
+
   late final _$nomeAtom =
       Atom(name: 'AccountEditControllerBase.nome', context: context);
 
@@ -489,6 +521,8 @@ mixin _$AccountEditController on AccountEditControllerBase, Store {
     return '''
 fotoPath: ${fotoPath},
 fotoUrl: ${fotoUrl},
+fotoMimeType: ${fotoMimeType},
+fotoFilenameWeb: ${fotoFilenameWeb},
 nome: ${nome},
 username: ${username},
 email: ${email},

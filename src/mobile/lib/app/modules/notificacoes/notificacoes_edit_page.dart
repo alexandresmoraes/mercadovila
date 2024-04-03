@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,7 +20,7 @@ import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
 class NotificacoesEditPage extends StatefulWidget {
   final String title;
   final String? id;
-  const NotificacoesEditPage({Key? key, this.title = 'NotificacoesEditPage', this.id}) : super(key: key);
+  const NotificacoesEditPage({Key? key, this.title = 'Notificações', this.id}) : super(key: key);
   @override
   NotificacoesEditPageState createState() => NotificacoesEditPageState();
 }
@@ -34,43 +35,54 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
       maxHeight: 1080,
       imageQuality: 100,
     );
-    if (pickedFile != null) _cropImage(pickedFile.path);
+
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        _controller.imageMimeType = pickedFile.mimeType;
+        _controller.imageFilenameWeb = pickedFile.name;
+      }
+      _cropImage(pickedFile.path);
+    }
   }
 
   _cropImage(filePath) async {
-    if (Theme.of(context).platform == TargetPlatform.android || Theme.of(context).platform == TargetPlatform.iOS) {
-      var croppedImage = await ImageCropper().cropImage(
-          sourcePath: filePath,
-          maxWidth: 1920,
-          maxHeight: 1080,
-          aspectRatioPresets: CropAspectRatioPreset.values,
-          compressQuality: 100,
-          aspectRatio: const CropAspectRatio(
-            ratioX: 1,
-            ratioY: 1,
+    var croppedImage = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        aspectRatioPresets: CropAspectRatioPreset.values,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(
+          ratioX: 1,
+          ratioY: 1,
+        ),
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.png,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Recortar',
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
+              toolbarColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
+          IOSUiSettings(
+            title: 'Recortar',
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
           ),
-          cropStyle: CropStyle.circle,
-          compressFormat: ImageCompressFormat.png,
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Recortar',
-                initAspectRatio: CropAspectRatioPreset.square,
-                lockAspectRatio: true,
-                toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-                toolbarWidgetColor: Theme.of(context).primaryIconTheme.color),
-            IOSUiSettings(
-              title: 'Recortar',
-              minimumAspectRatio: 1.0,
-              aspectRatioLockEnabled: true,
+          WebUiSettings(
+            context: context,
+            enableZoom: true,
+            mouseWheelZoom: false,
+            viewPort: const CroppieViewPort(
+              width: 200,
+              height: 200,
             ),
-            WebUiSettings(context: context)
-          ]);
-      if (croppedImage != null) {
-        _controller.setImagePath(croppedImage.path);
-        Modular.to.pop();
-      }
-    } else {
-      _controller.setImagePath(filePath);
+          )
+        ]);
+
+    if (croppedImage != null) {
+      _controller.setImagePath(croppedImage.path);
       Modular.to.pop();
     }
   }
@@ -117,18 +129,14 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                           child: Center(
                             child: CircleAvatar(
                               radius: 60,
-                              backgroundColor: Colors.white,
+                              backgroundColor: Colors.transparent,
                               child: Observer(builder: (_) {
                                 if (!isNullorEmpty(_controller.imagePath)) {
                                   return Container(
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       image: DecorationImage(
-                                        image: Image.file(
-                                          File(
-                                            _controller.imagePath!,
-                                          ),
-                                        ).image,
+                                        image: kIsWeb ? Image.network(_controller.imagePath!).image : Image.file(File(_controller.imagePath!)).image,
                                       ),
                                     ),
                                   );
@@ -179,17 +187,19 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      _getImagePicker(ImageSource.camera);
-                                    },
-                                    child: const Text(
-                                      'Camera',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ),
+                                  !kIsWeb
+                                      ? CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            _getImagePicker(ImageSource.camera);
+                                          },
+                                          child: const Text(
+                                            'Camera',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       _getImagePicker(ImageSource.gallery);

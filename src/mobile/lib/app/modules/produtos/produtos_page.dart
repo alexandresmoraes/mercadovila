@@ -98,7 +98,7 @@ class ProdutosPageState extends State<ProdutosPage> {
               ),
             ),
             Expanded(
-              child: _allProdutos(),
+              child: _todosProdutos(),
             ),
           ],
         ),
@@ -106,7 +106,7 @@ class ProdutosPageState extends State<ProdutosPage> {
     );
   }
 
-  Widget _allProdutos() {
+  Widget _todosProdutos() {
     final ThemeStore themeStore = Modular.get<ThemeStore>();
 
     return Padding(
@@ -180,19 +180,16 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(
-                                    text: "R\$ ",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: UtilBrasilFields.obterReal(item.preco, moeda: false),
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${item.unidadeMedida}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                              TextSpan(
+                                text: UtilBrasilFields.obterReal(item.preco, moeda: false),
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              TextSpan(
+                                text: ' / ${item.unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              )
+                            ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -224,19 +221,35 @@ class ProdutosPageState extends State<ProdutosPage> {
                                 ],
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0),
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.barcode,
+                                        size: 18,
+                                        color: Theme.of(context).primaryTextTheme.displayMedium!.color,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        overflow: TextOverflow.ellipsis,
+                                        item.codigoBarras,
+                                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                item.id,
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              ),
+                              ],
                             ),
                           ],
                         ),

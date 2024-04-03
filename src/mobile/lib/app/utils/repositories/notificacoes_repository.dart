@@ -1,7 +1,10 @@
+import 'package:dio/io.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vilasesmo/app/utils/dto/notificacoes/notificacao_dto.dart';
 import 'package:vilasesmo/app/utils/models/notificacoes/notificacao_model.dart';
 import 'package:vilasesmo/app/utils/models/paged_result.dart';
@@ -59,12 +62,29 @@ class NotificacoesRepository implements INotificacoesRepository {
   }
 
   @override
-  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageNotificacao(String filepath) async {
+  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageNotificacao(String filepath, String? mimeType, String? filenameWeb) async {
     try {
       String filename = filepath.split('/').last;
-      FormData formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(filepath, filename: filename),
-      });
+
+      FormData formData;
+      if (kIsWeb) {
+        var file = XFile(filepath);
+        var content = await file.readAsBytes();
+        MediaType mediaType = MediaType.parse(mimeType!);
+        formData = FormData.fromMap({
+          "file": MultipartFile.fromBytes(
+            content,
+            contentType: mediaType,
+            filename: filenameWeb,
+          ),
+        });
+      } else {
+        var multipartFile = await MultipartFile.fromFile(filepath, filename: filename);
+        formData = FormData.fromMap({
+          "file": multipartFile,
+        });
+      }
+
       var response = await dio.post('/api/notificacoes/image', data: formData);
       var result = ImageUploadResponseModel.fromJson(response.data);
       return Right(result);

@@ -11,6 +11,6 @@ abstract class INotificacoesRepository implements Disposable {
   Future<Either<ResultFailModel, NotificacaoResponseModel>> createNotificacao(NotificacaoModel notificacaoModel);
   Future<Either<ResultFailModel, String>> editNotificacao(String id, NotificacaoModel notificacaoModel);
   Future<PagedResult<NotificacaoDto>> getNotificacoes(int page);
-  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageNotificacao(String filepath);
+  Future<Either<ResultFailModel, ImageUploadResponseModel>> uploadImageNotificacao(String filepath, String? mimeType, String? filenameWeb);
   Future<Either<ResultFailModel, String>> deleteNotificacao(String id);
 }

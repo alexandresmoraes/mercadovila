@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,7 +34,7 @@ class FavoritosPageState extends State<FavoritosPage> {
         body: Column(
           children: [
             Expanded(
-              child: _allFavoritos(),
+              child: _todosFavoritos(),
             ),
           ],
         ),
@@ -41,7 +42,7 @@ class FavoritosPageState extends State<FavoritosPage> {
     );
   }
 
-  Widget _allFavoritos() {
+  Widget _todosFavoritos() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<FavoritoItemDto>(
@@ -112,9 +113,9 @@ class FavoritosPageState extends State<FavoritosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "\$", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
                               TextSpan(
-                                text: '${item.preco}',
+                                text: UtilBrasilFields.obterReal(item.preco, moeda: false),
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                               ),
                               TextSpan(
