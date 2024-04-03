@@ -59,10 +59,9 @@ class ErrorInterceptor extends InterceptorsWrapper {
         errorDescription = 'Problemas com a conexão';
         break;
       case DioExceptionType.badCertificate:
-        // TODO: Handle this case.
         break;
       case DioExceptionType.connectionError:
-        // TODO: Handle this case.
+        errorDescription = 'Problemas com a conexão';
         break;
     }
 
