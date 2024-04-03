@@ -221,19 +221,35 @@ class ProdutosPageState extends State<ProdutosPage> {
                                 ],
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0),
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.barcode,
+                                        size: 18,
+                                        color: Theme.of(context).primaryTextTheme.displayMedium!.color,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        overflow: TextOverflow.ellipsis,
+                                        item.codigoBarras,
+                                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                item.codigoBarras,
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              ),
+                              ],
                             ),
                           ],
                         ),
