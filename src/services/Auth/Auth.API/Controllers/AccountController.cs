@@ -153,6 +153,9 @@ namespace Auth.API.Controllers
       if (user is null)
         return Result.NotFound();
 
+      if (!User.IsInRole("admin") && updateAccountModel.IsAdmin)
+        return Result.Forbidden();
+
       if (user.UserName != updateAccountModel.Username!)
       {
         var userNome = await _userManager.FindByNameAsync(updateAccountModel.Username);

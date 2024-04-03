@@ -42,7 +42,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'https://vila.sesmo.com.br' : 'https://vila.sesmo.com.br',
+        baseUrl: kReleaseMode ? 'https://vila.sesmo.com.br' : 'http://host.docker.internal:8081',
         connectTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
         receiveTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
         sendTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),

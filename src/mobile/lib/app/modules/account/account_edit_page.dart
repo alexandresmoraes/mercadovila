@@ -431,18 +431,20 @@ class AccountEditPageState extends State<AccountEditPage> {
                           const SizedBox(
                             height: 15,
                           ),
-                          Card(
-                            child: Observer(builder: (_) {
-                              return SwitchListTile(
-                                value: _controller.isAdmin,
-                                onChanged: _controller.setIsAdmin,
-                                title: Text(
-                                  "Admin",
-                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                ),
-                              );
-                            }),
-                          ),
+                          Modular.get<AccountStore>().account!.isAdmin
+                              ? Card(
+                                  child: Observer(builder: (_) {
+                                    return SwitchListTile(
+                                      value: _controller.isAdmin,
+                                      onChanged: _controller.setIsAdmin,
+                                      title: Text(
+                                        "Admin",
+                                        style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                      ),
+                                    );
+                                  }),
+                                )
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ),
