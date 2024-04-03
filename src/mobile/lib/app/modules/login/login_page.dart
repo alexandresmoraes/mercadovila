@@ -1,4 +1,5 @@
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -38,21 +39,13 @@ class LoginPageState extends State<LoginPage> {
         setState(() {
           animationType = 'hands_up';
         });
-      } else {
-        setState(() {
-          animationType = 'hands_down';
-        });
       }
     });
 
     usernameFocusNode.addListener(() {
-      if (usernameFocusNode.hasFocus) {
+      if (usernameFocusNode.hasFocus && animationType == 'hands_up') {
         setState(() {
-          animationType = 'test';
-        });
-      } else {
-        setState(() {
-          animationType = 'idle';
+          animationType = 'hands_down';
         });
       }
     });
@@ -80,41 +73,25 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Positioned(
-            // top: 50,
-            // left: MediaQuery.of(context).size.width / 8,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width,
-              child: FlareActor(
-                'assets/Teddy.flr',
-                alignment: Alignment.center,
-                fit: BoxFit.contain,
-                animation: animationType,
-                callback: (animation) {
-                  // setState(() {
-                  //   animationType = 'idle';
-                  // });
-
-                  if (1 == 1) {
-                    setState(() {
-                      animationType = 'success';
-                    });
-                  } else {
-                    setState(() {
-                      animationType = 'fail';
-                    });
-                  }
-                },
-              ),
-            ),
-          ),
+          !kIsWeb
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.43,
+                  width: MediaQuery.of(context).size.width,
+                  child: FlareActor(
+                    'assets/Teddy.flr',
+                    alignment: Alignment.bottomCenter,
+                    fit: BoxFit.contain,
+                    animation: animationType,
+                    callback: (animation) {},
+                  ),
+                )
+              : const SizedBox.shrink(),
           Container(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 35),
             decoration:
                 BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(40))),
             margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45 - 20),
-            height: MediaQuery.of(context).size.height * 0.60,
+            height: MediaQuery.of(context).size.height * 0.6,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               child: Column(
@@ -204,7 +181,17 @@ class LoginPageState extends State<LoginPage> {
                             await result.fold((resultFail) {
                               var message = resultFail.getErrorNotProperty();
                               if (message.isNotEmpty) GlobalSnackbar.error(message);
+
+                              setState(() {
+                                animationType = 'fail';
+                              });
                             }, (r) async {
+                              setState(() {
+                                animationType = 'success';
+                              });
+
+                              await Future.delayed(const Duration(seconds: 2));
+
                               await authService.setCurrentToken(r);
                               Modular.get<CarrinhoStore>().load();
                               Modular.get<AccountStore>().setAccount(await authService.me());
