@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:vilasesmo/app/utils/dto/rating/rating_item.dart';
 import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_rating_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
@@ -89,14 +90,22 @@ class CardVendaItem extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 4.0),
                         child: FutureTriple(
                           error: const SizedBox.shrink(),
-                          loading: const SizedBox.shrink(),
+                          loading: const AnimatedOpacity(
+                            opacity: 0,
+                            duration: Duration(milliseconds: 2000),
+                            child: SizedBox.shrink(),
+                          ),
                           future: Modular.get<IRatingRepository>().getRating(vendaId.toString(), item.produtoId),
                           data: (_, snapshot) {
-                            return RatingProduto(
-                              isAtualizarRating: isMinhaCompra,
-                              vendaId: vendaId,
-                              produtoId: item.produtoId,
-                              rating: snapshot.data!.rating,
+                            return AnimatedOpacity(
+                              opacity: 1,
+                              duration: const Duration(milliseconds: 2000),
+                              child: RatingProduto(
+                                isAtualizarRating: isMinhaCompra,
+                                vendaId: vendaId,
+                                produtoId: item.produtoId,
+                                rating: snapshot.data!.rating,
+                              ),
                             );
                           },
                         ),
