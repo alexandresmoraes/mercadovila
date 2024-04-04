@@ -41,7 +41,13 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
         _controller.imageMimeType = pickedFile.mimeType;
         _controller.imageFilenameWeb = pickedFile.name;
       }
-      _cropImage(pickedFile.path);
+
+      if (!kIsWeb && Platform.isWindows) {
+        _controller.setImagePath(pickedFile.path);
+        Modular.to.pop();
+      } else {
+        _cropImage(pickedFile.path);
+      }
     }
   }
 
@@ -187,8 +193,9 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  !kIsWeb
-                                      ? CupertinoActionSheetAction(
+                                  kIsWeb || Platform.isWindows
+                                      ? const SizedBox.shrink()
+                                      : CupertinoActionSheetAction(
                                           onPressed: () {
                                             _getImagePicker(ImageSource.camera);
                                           },
@@ -198,8 +205,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                               color: Colors.blue,
                                             ),
                                           ),
-                                        )
-                                      : const SizedBox.shrink(),
+                                        ),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       _getImagePicker(ImageSource.gallery);

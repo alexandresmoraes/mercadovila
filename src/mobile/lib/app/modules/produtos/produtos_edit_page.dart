@@ -44,7 +44,12 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
         _controller.imageFilenameWeb = pickedFile.name;
       }
 
-      _cropImage(pickedFile.path);
+      if (!kIsWeb && Platform.isWindows) {
+        _controller.setImagePath(pickedFile.path);
+        Modular.to.pop();
+      } else {
+        _cropImage(pickedFile.path);
+      }
     }
   }
 
@@ -192,8 +197,9 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  !kIsWeb
-                                      ? CupertinoActionSheetAction(
+                                  kIsWeb || Platform.isWindows
+                                      ? const SizedBox.shrink()
+                                      : CupertinoActionSheetAction(
                                           onPressed: () {
                                             _getImagePicker(ImageSource.camera);
                                           },
@@ -203,8 +209,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                               color: Colors.blue,
                                             ),
                                           ),
-                                        )
-                                      : const SizedBox.shrink(),
+                                        ),
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       _getImagePicker(ImageSource.gallery);

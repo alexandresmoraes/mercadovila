@@ -48,7 +48,12 @@ class AccountEditPageState extends State<AccountEditPage> {
         _controller.fotoFilenameWeb = pickedFile.name;
       }
 
-      _cropImage(pickedFile.path);
+      if (!kIsWeb && Platform.isWindows) {
+        _controller.setFotoPath(pickedFile.path);
+        Modular.to.pop();
+      } else {
+        _cropImage(pickedFile.path);
+      }
     }
   }
 
@@ -184,7 +189,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                               builder: (BuildContext context) => CupertinoActionSheet(
                                 title: const Icon(Icons.camera_alt_rounded),
                                 actions: <Widget>[
-                                  kIsWeb
+                                  kIsWeb || Platform.isWindows
                                       ? const SizedBox.shrink()
                                       : CupertinoActionSheetAction(
                                           onPressed: () {
