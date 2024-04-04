@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class CardListaCompraState extends State<CardListaCompra> {
                             ),
                             RichText(
                               text: TextSpan(
-                                text: "${widget.item.rating} ",
+                                text: "${UtilBrasilFields.obterReal(widget.item.rating.toDouble(), moeda: false, decimal: 1)} ",
                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 children: [
                                   TextSpan(

@@ -373,22 +373,6 @@ class AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 ListTile(
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  leading: Icon(
-                    MdiIcons.textBox,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color!.withOpacity(0.7),
-                  ),
-                  title: Transform.translate(
-                    offset: const Offset(-10, 0),
-                    child: Text(
-                      "Sobre nós",
-                      style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    ),
-                  ),
-                ),
-                ListTile(
                   onTap: () {
                     showCupertinoModalPopup<void>(
                       context: context,

@@ -34,9 +34,7 @@ class SearchPageState extends State<SearchPage> {
                   var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
                   if (refresh ?? false) pagingController.refresh();
                 },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable
-                    ? Image.asset('assets/filter_white.png')
-                    : Image.asset('assets/filter_black.png')),
+                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
           ],
         ),
         body: Column(
@@ -44,7 +42,7 @@ class SearchPageState extends State<SearchPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: _allProdutos(),
+                child: _todosProdutos(),
               ),
             ),
           ],
@@ -53,7 +51,7 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _allProdutos() {
+  Widget _todosProdutos() {
     var store = Modular.get<SearchFilterStore>();
 
     return Padding(

@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +147,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                           ),
                                           RichText(
                                             text: TextSpan(
-                                              text: "${snapshot.data!.rating} ",
+                                              text: "${UtilBrasilFields.obterReal(snapshot.data!.rating.toDouble(), moeda: false, decimal: 1)} ",
                                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                                               children: [
                                                 TextSpan(

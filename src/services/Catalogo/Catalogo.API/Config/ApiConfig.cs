@@ -35,6 +35,7 @@ namespace Catalogo.API.Config
       services.AddSingleton<FavoritoItemRepository>();
       services.AddSingleton<NotificacoesRepository>();
       services.AddSingleton<FavoritoItemRepository>();
+      services.AddSingleton<RatingItemRepository>();
 
       services.AddTransient<IProdutoRepository>(sp => sp.GetRequiredService<ProdutoRepository>());
       services.AddTransient<ICarrinhoItemRepository>(sp => sp.GetRequiredService<CarrinhoItemRepository>());
