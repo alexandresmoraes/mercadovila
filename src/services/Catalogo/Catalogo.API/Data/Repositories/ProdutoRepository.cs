@@ -14,8 +14,9 @@ namespace Catalogo.API.Data.Repositories
   public class ProdutoRepository : MongoService<Produto>, IProdutoRepository
   {
     private readonly FavoritoItemRepository _favoriteItemRepository;
+    private readonly RatingItemRepository _ratingItemRepository;
 
-    public ProdutoRepository(IMongoClient mongoClient, IOptions<MongoDbSettings> opt, FavoritoItemRepository favoriteItemRepository)
+    public ProdutoRepository(IMongoClient mongoClient, IOptions<MongoDbSettings> opt, FavoritoItemRepository favoriteItemRepository, RatingItemRepository ratingItemRepository)
      : base(mongoClient, opt, "produtos")
     {
       Collection.Indexes.CreateOne(new CreateIndexModel<Produto>(
@@ -53,6 +54,7 @@ namespace Catalogo.API.Data.Repositories
       ));
 
       _favoriteItemRepository = favoriteItemRepository;
+      _ratingItemRepository = ratingItemRepository;
     }
 
     public async Task CreateAsync(Produto produto)
@@ -549,6 +551,32 @@ namespace Catalogo.API.Data.Repositories
         .SingleOrDefaultAsync();
 
       return produto;
+    }
+
+    public async Task AtualizarRating(string produtoId)
+    {
+      var aggregate = _ratingItemRepository.Collection.Aggregate()
+            .Match(x => x.ProdutoId == produtoId)
+            .Group(
+                p => p.ProdutoId,
+                g => new Produto
+                {
+                  Id = g.Key,
+                  RatingCount = g.Count(),
+                  Rating = g.Average(p => p.Rating)
+                });
+
+      var result = aggregate.FirstOrDefault();
+
+      if (result is not null)
+      {
+        var filter = Builders<Produto>.Filter.Eq(p => p.Id, result.Id);
+        var update = Builders<Produto>.Update
+            .Set(p => p.RatingCount, result.RatingCount)
+            .Set(p => p.Rating, result.Rating);
+
+        await Collection.UpdateOneAsync(filter, update);
+      }
     }
   }
 }

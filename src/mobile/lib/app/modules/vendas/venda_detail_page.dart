@@ -78,7 +78,13 @@ class VendaDetailPageState extends State<VendaDetailPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    ..._controller.vendaDetailDto!.itens.map((item) => CardVendaItem(item: item)),
+                    ..._controller.vendaDetailDto!.itens.map(
+                      (item) => CardVendaItem(
+                        isMinhaCompra: widget.isMinhaCompra,
+                        item: item,
+                        vendaId: int.parse(widget.id),
+                      ),
+                    ),
                     ListTile(
                       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                       contentPadding: const EdgeInsets.all(0),
@@ -111,9 +117,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
                           style: Theme.of(context).primaryTextTheme.labelSmall,
                         ),
                         const Expanded(child: SizedBox()),
-                        VendasStatus(
-                          status: _controller.vendaDetailDto!.status,
-                        ),
+                        VendasStatus(status: _controller.vendaDetailDto!.status),
                       ],
                     ),
                   ],

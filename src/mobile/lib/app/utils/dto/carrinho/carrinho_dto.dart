@@ -38,7 +38,7 @@ class CarrinhoItemDto {
   late final double preco;
   late final String unidadeMedida;
   late final int estoque;
-  late final int rating;
+  late final num rating;
   late final int ratingCount;
   late final bool isAtivo;
   late final bool isFavorito;

@@ -28,5 +28,7 @@ namespace Catalogo.API.Data.Repositories
     Task<PagedResult<CatalogoDto>> GetTodosProdutosAtivosAsync(string userId, CatalogoTodosQuery query);
 
     Task<PagedResult<ListaCompraDto>> GetListaCompraAsync(ListaCompraQuery query);
+
+    Task AtualizarRating(string produtoId);
   }
 }

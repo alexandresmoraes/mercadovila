@@ -32,6 +32,7 @@ import 'package:vilasesmo/app/utils/repositories/compras_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/favoritos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/pagamentos_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
+import 'package:vilasesmo/app/utils/repositories/rating_item_repository.dart';
 import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
 import 'package:vilasesmo/app/utils/services/auth_service.dart';
 import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
@@ -66,6 +67,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => ComprasRepository()),
     Bind.lazySingleton((i) => PagamentosRepository()),
     Bind.lazySingleton((i) => ProdutosRepository()),
+    Bind.lazySingleton((i) => RatingRepository()),
   ];
 
   @override

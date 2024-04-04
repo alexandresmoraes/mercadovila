@@ -137,7 +137,7 @@ class FavoritosPageState extends State<FavoritosPage> {
                                   ),
                                   RichText(
                                     text: TextSpan(
-                                      text: "${item.rating} ",
+                                      text: "${UtilBrasilFields.obterReal(item.rating.toDouble(), moeda: false, decimal: 1)} ",
                                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                                       children: [
                                         TextSpan(

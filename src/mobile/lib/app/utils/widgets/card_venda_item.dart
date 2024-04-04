@@ -5,13 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
+import 'package:vilasesmo/app/utils/repositories/interfaces/i_rating_repository.dart';
 import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
 import 'package:vilasesmo/app/utils/widgets/rating_produto.dart';
 
 class CardVendaItem extends StatelessWidget {
+  final int vendaId;
   final VendaDetalheItemDto item;
+  final bool isMinhaCompra;
 
-  const CardVendaItem({super.key, required this.item});
+  const CardVendaItem({
+    super.key,
+    required this.item,
+    required this.vendaId,
+    required this.isMinhaCompra,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +85,20 @@ class CardVendaItem extends StatelessWidget {
                         style: Theme.of(context).primaryTextTheme.displayMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 4.0),
-                        child: RatingProduto(
-                          rating: 4.5,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: FutureTriple(
+                          error: const SizedBox.shrink(),
+                          loading: const SizedBox.shrink(),
+                          future: Modular.get<IRatingRepository>().getRating(vendaId.toString(), item.produtoId),
+                          data: (_, snapshot) {
+                            return RatingProduto(
+                              isAtualizarRating: isMinhaCompra,
+                              vendaId: vendaId,
+                              produtoId: item.produtoId,
+                              rating: snapshot.data!.rating,
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -108,9 +127,7 @@ class CardVendaItem extends StatelessWidget {
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                      ),
+                      image: DecorationImage(image: imageProvider),
                     ),
                     height: 100,
                     width: 120,
