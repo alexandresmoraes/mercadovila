@@ -60,124 +60,72 @@ class CarrinhoPageState extends State<CarrinhoPage> {
         Modular.to.pop();
         return false;
       },
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              orderProcess[_currentIndex],
-            ),
-            actions: [
-              !kIsWeb && (Platform.isAndroid || Platform.isIOS)
-                  ? IconButton(
-                      icon: Icon(
-                        MdiIcons.barcode,
-                        color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                      ),
-                      onPressed: () async {
-                        Modular.to.pushNamed('/carrinho/scanner');
-                      },
-                    )
-                  : const SizedBox.shrink(),
-            ],
-            leading: IconButton(
-              onPressed: () {
-                if (_currentIndex == 0) {
-                  Modular.to.pop();
-                } else {
-                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                  if (_currentIndex == 0) {
-                    step1Done = false;
-                  } else if (_currentIndex == 1) {
-                    step2Done = false;
-                  }
-
-                  setState(() {});
-                }
-              },
-              icon: const Icon(MdiIcons.arrowLeft),
-            ),
-            automaticallyImplyLeading: _currentIndex == 0 ? true : false,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            orderProcess[_currentIndex],
           ),
-          body: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 20,
-                margin: const EdgeInsets.only(left: 8, right: 8, bottom: 0, top: 10),
-                child: Center(
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: orderProcess.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int i) {
-                        return Modular.get<ThemeStore>().isDarkModeEnable
-                            ? Row(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
-                                            border: Border.all(
-                                              color: Colors.black,
-                                              width: 1.5,
-                                            ),
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ),
-                                          ),
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(left: 25, right: 10),
-                                          child: Text(
-                                            orderProcess[i],
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                            ),
-                                          )),
-                                      Container(
-                                        height: 20,
-                                        width: 20,
+          actions: [
+            !kIsWeb && (Platform.isAndroid || Platform.isIOS)
+                ? IconButton(
+                    icon: Icon(
+                      MdiIcons.barcode,
+                      color: !Modular.get<ThemeStore>().isDarkModeEnable
+                          ? const Color(0xFF373C58)
+                          : const Color(0xFFF2F5F8),
+                    ),
+                    onPressed: () async {
+                      Modular.to.pushNamed('/carrinho/scanner');
+                    },
+                  )
+                : const SizedBox.shrink(),
+          ],
+          leading: IconButton(
+            onPressed: () {
+              if (_currentIndex == 0) {
+                Modular.to.pop();
+              } else {
+                _pageController!.animateToPage(_currentIndex - 1,
+                    duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                if (_currentIndex == 0) {
+                  step1Done = false;
+                } else if (_currentIndex == 1) {
+                  step2Done = false;
+                }
+
+                setState(() {});
+              }
+            },
+            icon: const Icon(MdiIcons.arrowLeft),
+          ),
+          automaticallyImplyLeading: _currentIndex == 0 ? true : false,
+        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 20,
+              margin: const EdgeInsets.only(left: 8, right: 8, bottom: 0, top: 10),
+              child: Center(
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: orderProcess.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Row(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Container(
                                         decoration: BoxDecoration(
-                                          color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8,
                                           color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  i == 1
-                                      ? const SizedBox()
-                                      : Container(
-                                          height: 2,
-                                          color: _currentIndex <= i ? const Color(0xFF505266) : Colors.black,
-                                          width: 20,
-                                          margin: const EdgeInsets.all(0),
-                                        ),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                           border: Border.all(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color: Colors.black,
                                             width: 1.5,
                                           ),
                                           borderRadius: const BorderRadius.all(
@@ -192,112 +140,171 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                             color: Colors.white,
                                             fontSize: 10,
                                           ),
+                                        )),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: _currentIndex >= i ? Colors.white : Colors.black,
+                                        border: Border.all(
+                                            color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                            width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20.0),
                                         ),
                                       ),
-                                      Container(
-                                        height: 20,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                i == 1
+                                    ? const SizedBox()
+                                    : Container(
+                                        height: 2,
+                                        color: _currentIndex <= i ? const Color(0xFF505266) : Colors.black,
                                         width: 20,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8,
+                                        margin: const EdgeInsets.all(0),
+                                      ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                        border: Border.all(
                                           color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  i == 1
-                                      ? const SizedBox()
-                                      : Container(
-                                          height: 2,
-                                          color: _currentIndex <= i ? const Color(0xFFBcc8d2) : const Color(0xFF4A4352),
-                                          width: 20,
-                                          margin: const EdgeInsets.all(0),
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.only(left: 25, right: 10),
+                                      child: Text(
+                                        orderProcess[i],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
                                         ),
-                                ],
-                              );
-                      }),
-                ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20.0),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                i == 1
+                                    ? const SizedBox()
+                                    : Container(
+                                        height: 2,
+                                        color: _currentIndex <= i ? const Color(0xFFBcc8d2) : const Color(0xFF4A4352),
+                                        width: 20,
+                                        margin: const EdgeInsets.all(0),
+                                      ),
+                              ],
+                            );
+                    }),
               ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    _currentIndex = index;
-                    double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                    setState(() {});
-                  },
-                  children: [
-                    _carrinho(),
-                    _pagamento(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: Observer(
-            builder: (_) {
-              if (!carrinhoStore.isValidCarrinho) {
-                return const SizedBox.shrink();
-              }
-
-              return Row(
-                mainAxisSize: MainAxisSize.min,
+            ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  _currentIndex = index;
+                  double currentIndex = _currentIndex.toDouble();
+                  _scrollController!
+                      .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  setState(() {});
+                },
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: carrinhoStore.isLoading
-                            ? LinearGradient(
-                                stops: const [0, .90],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [Theme.of(context).primaryColorLight, Theme.of(context).iconTheme.color!],
-                              )
-                            : LinearGradient(
-                                stops: const [0, .90],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                              ),
-                      ),
-                      margin: const EdgeInsets.all(8.0),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                        onPressed: () async {
-                          if (carrinhoStore.isLoading) return;
+                  _carrinho(),
+                  _pagamento(),
+                ],
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Observer(
+          builder: (_) {
+            if (!carrinhoStore.isValidCarrinho) {
+              return const SizedBox.shrink();
+            }
 
-                          if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                          } else if (_currentIndex == 1) {
-                            await carrinhoStore.criarVenda();
-                          }
-                        },
-                        child: Text(
-                          carrinhoStore.isLoading
-                              ? 'Aguarde..'
-                              : _currentIndex == 0
-                                  ? 'Ir para o pagamento'
-                                  : 'Pagar',
-                        ),
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      gradient: carrinhoStore.isLoading
+                          ? LinearGradient(
+                              stops: const [0, .90],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Theme.of(context).primaryColorLight, Theme.of(context).iconTheme.color!],
+                            )
+                          : LinearGradient(
+                              stops: const [0, .90],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                            ),
+                    ),
+                    margin: const EdgeInsets.all(8.0),
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                      onPressed: () async {
+                        if (carrinhoStore.isLoading) return;
+
+                        if (_currentIndex == 0) {
+                          _pageController!.animateToPage(_currentIndex + 1,
+                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                        } else if (_currentIndex == 1) {
+                          await carrinhoStore.criarVenda();
+                        }
+                      },
+                      child: Text(
+                        carrinhoStore.isLoading
+                            ? 'Aguarde..'
+                            : _currentIndex == 0
+                                ? 'Ir para o pagamento'
+                                : 'Pagar',
                       ),
                     ),
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -499,8 +506,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             "Selecione a opção de pagamento",
                             style: TextStyle(
                                 fontSize: 14,
-                                color:
-                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                                color: Modular.get<ThemeStore>().isDarkModeEnable
+                                    ? Theme.of(context).primaryColorLight
+                                    : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           )),
                     )
@@ -540,7 +548,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Icon(
                     Icons.account_balance,
-                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                    color:
+                        !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );
@@ -566,7 +575,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Icon(
                     MdiIcons.cash,
-                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                    color:
+                        !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );

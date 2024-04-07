@@ -59,246 +59,254 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
         Modular.to.pop();
         return false;
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(widget.title),
-            leading: IconButton(
-              onPressed: () {
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(widget.title),
+          leading: IconButton(
+            onPressed: () {
+              if (_currentIndex == 0) {
+                Modular.to.pop();
+              } else {
+                _pageController!.animateToPage(_currentIndex - 1,
+                    duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                 if (_currentIndex == 0) {
-                  Modular.to.pop();
-                } else {
-                  _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                  if (_currentIndex == 0) {
-                    step1Done = false;
-                  } else if (_currentIndex == 1) {
-                    step2Done = false;
-                  }
-
-                  setState(() {});
+                  step1Done = false;
+                } else if (_currentIndex == 1) {
+                  step2Done = false;
                 }
-              },
-              icon: const Icon(MdiIcons.arrowLeft),
-            ),
-            automaticallyImplyLeading: _currentIndex == 0,
-            actions: [
-              !kIsWeb && (Platform.isAndroid || Platform.isIOS)
-                  ? IconButton(
-                      icon: Icon(
-                        MdiIcons.barcode,
-                        color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
-                      ),
-                      onPressed: () async {
-                        Modular.to.pushNamed('/compras/scanner');
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              IconButton(
-                onPressed: () async {
-                  adicionarItemModalShow();
-                },
-                icon: const Icon(MdiIcons.plus),
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 20,
-                margin: const EdgeInsets.only(left: 8, right: 8, bottom: 0, top: 10),
-                child: Center(
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: orderProcess.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int i) {
-                        return Modular.get<ThemeStore>().isDarkModeEnable
-                            ? Row(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
-                                            border: Border.all(
-                                              color: Colors.black,
-                                              width: 1.5,
-                                            ),
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ),
-                                          ),
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(left: 25, right: 10),
-                                          child: Text(
-                                            orderProcess[i],
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                            ),
-                                          )),
-                                      Container(
-                                        height: 20,
-                                        width: 20,
-                                        decoration: BoxDecoration(
-                                          color: _currentIndex >= i ? Colors.white : Colors.black,
-                                          border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8,
-                                          color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  i == 1
-                                      ? const SizedBox()
-                                      : Container(
-                                          height: 2,
-                                          color: _currentIndex <= i ? const Color(0xFF505266) : Colors.black,
-                                          width: 20,
-                                          margin: const EdgeInsets.all(0),
-                                        ),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                            border: Border.all(
-                                              color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                              width: 1.5,
-                                            ),
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ),
-                                          ),
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(left: 25, right: 10),
-                                          child: Text(
-                                            orderProcess[i],
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                            ),
-                                          )),
-                                      Container(
-                                        height: 20,
-                                        width: 20,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border:
-                                              Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8,
-                                          color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  i == 1
-                                      ? const SizedBox()
-                                      : Container(
-                                          height: 2,
-                                          color: _currentIndex <= i ? const Color(0xFFBcc8d2) : const Color(0xFF4A4352),
-                                          width: 20,
-                                          margin: const EdgeInsets.all(0),
-                                        ),
-                                ],
-                              );
-                      }),
-                ),
-              ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    _currentIndex = index;
-                    double currentIndex = _currentIndex.toDouble();
-                    _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                    setState(() {});
-                  },
-                  children: [
-                    _carrinho(),
-                    _pagamento(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: Observer(
-            builder: (_) {
-              if (!carrinhoComprasStore.isValidCarrinhoCompras) {
-                return const SizedBox.shrink();
+
+                setState(() {});
               }
-
-              return Row(
-                mainAxisSize: MainAxisSize.min,
+            },
+            icon: const Icon(MdiIcons.arrowLeft),
+          ),
+          automaticallyImplyLeading: _currentIndex == 0,
+          actions: [
+            !kIsWeb && (Platform.isAndroid || Platform.isIOS)
+                ? IconButton(
+                    icon: Icon(
+                      MdiIcons.barcode,
+                      color: !Modular.get<ThemeStore>().isDarkModeEnable
+                          ? const Color(0xFF373C58)
+                          : const Color(0xFFF2F5F8),
+                    ),
+                    onPressed: () async {
+                      Modular.to.pushNamed('/compras/scanner');
+                    },
+                  )
+                : const SizedBox.shrink(),
+            IconButton(
+              onPressed: () async {
+                adicionarItemModalShow();
+              },
+              icon: const Icon(MdiIcons.plus),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 20,
+              margin: const EdgeInsets.only(left: 8, right: 8, bottom: 0, top: 10),
+              child: Center(
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: orderProcess.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Modular.get<ThemeStore>().isDarkModeEnable
+                          ? Row(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 1.5,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.only(left: 25, right: 10),
+                                        child: Text(
+                                          orderProcess[i],
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        )),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: _currentIndex >= i ? Colors.white : Colors.black,
+                                        border: Border.all(
+                                            color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
+                                            width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20.0),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: _currentIndex >= i ? Colors.black : const Color(0xFF505266),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                i == 1
+                                    ? const SizedBox()
+                                    : Container(
+                                        height: 2,
+                                        color: _currentIndex <= i ? const Color(0xFF505266) : Colors.black,
+                                        width: 20,
+                                        margin: const EdgeInsets.all(0),
+                                      ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                          border: Border.all(
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            width: 1.5,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.only(left: 25, right: 10),
+                                        child: Text(
+                                          orderProcess[i],
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        )),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color:
+                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20.0),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                i == 1
+                                    ? const SizedBox()
+                                    : Container(
+                                        height: 2,
+                                        color: _currentIndex <= i ? const Color(0xFFBcc8d2) : const Color(0xFF4A4352),
+                                        width: 20,
+                                        margin: const EdgeInsets.all(0),
+                                      ),
+                              ],
+                            );
+                    }),
+              ),
+            ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  _currentIndex = index;
+                  double currentIndex = _currentIndex.toDouble();
+                  _scrollController!
+                      .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  setState(() {});
+                },
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: carrinhoComprasStore.isLoading
-                            ? LinearGradient(
-                                stops: const [0, .90],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [Theme.of(context).primaryColorLight, Theme.of(context).iconTheme.color!],
-                              )
-                            : LinearGradient(
-                                stops: const [0, .90],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
-                              ),
-                      ),
-                      margin: const EdgeInsets.all(8.0),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                        onPressed: () async {
-                          if (carrinhoComprasStore.isLoading) return;
+                  _carrinho(),
+                  _pagamento(),
+                ],
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Observer(
+          builder: (_) {
+            if (!carrinhoComprasStore.isValidCarrinhoCompras) {
+              return const SizedBox.shrink();
+            }
 
-                          if (_currentIndex == 0) {
-                            _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-                          } else if (_currentIndex == 1) {
-                            await carrinhoComprasStore.criarCompra();
-                          }
-                        },
-                        child: Text(
-                          carrinhoComprasStore.isLoading
-                              ? 'Aguarde..'
-                              : _currentIndex == 0
-                                  ? 'Ir para detalhes'
-                                  : 'Comprar',
-                        ),
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      gradient: carrinhoComprasStore.isLoading
+                          ? LinearGradient(
+                              stops: const [0, .90],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Theme.of(context).primaryColorLight, Theme.of(context).iconTheme.color!],
+                            )
+                          : LinearGradient(
+                              stops: const [0, .90],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                            ),
+                    ),
+                    margin: const EdgeInsets.all(8.0),
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                      onPressed: () async {
+                        if (carrinhoComprasStore.isLoading) return;
+
+                        if (_currentIndex == 0) {
+                          _pageController!.animateToPage(_currentIndex + 1,
+                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                        } else if (_currentIndex == 1) {
+                          await carrinhoComprasStore.criarCompra();
+                        }
+                      },
+                      child: Text(
+                        carrinhoComprasStore.isLoading
+                            ? 'Aguarde..'
+                            : _currentIndex == 0
+                                ? 'Ir para detalhes'
+                                : 'Comprar',
                       ),
                     ),
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -349,7 +357,8 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      Modular.get<ComprasCarrinhoStore>().removerCarrinhoComprasItem(item.produtoId, true);
+                                      Modular.get<ComprasCarrinhoStore>()
+                                          .removerCarrinhoComprasItem(item.produtoId, true);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -465,7 +474,9 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                       "Detalhes",
                       style: TextStyle(
                           fontSize: 14,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     )),
               );
@@ -846,11 +857,13 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                             contentPadding: const EdgeInsets.all(0),
                             leading: Text(
                               "Preço",
-                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              style:
+                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             trailing: Text(
-                              UtilBrasilFields.obterReal(carrinhoComprasStore.selectedItem!.preco),
-                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              UtilBrasilFields.obterReal(carrinhoComprasStore.selectedItem!.preco.toDouble()),
+                              style:
+                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],

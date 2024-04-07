@@ -21,70 +21,68 @@ class ComprasPageState extends State<ComprasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: InkWell(
-              customBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              onTap: () {
-                Modular.to.pop();
-              },
-              child: const Align(
-                alignment: Alignment.center,
-                child: Icon(MdiIcons.arrowLeft),
-              ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: InkWell(
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-            centerTitle: true,
-            title: const Text("Compras"),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  var refresh = await Modular.to.pushNamed<bool>('/compras/carrinho');
-                  if (refresh ?? false) pagingController.refresh();
-                },
-                icon: const Icon(MdiIcons.plus),
-              ),
-            ],
+            onTap: () {
+              Modular.to.pop();
+            },
+            child: const Align(
+              alignment: Alignment.center,
+              child: Icon(MdiIcons.arrowLeft),
+            ),
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InfiniteList<CompraDto>(
-                    pagingController: pagingController,
-                    cast: CompraDto.fromJson,
-                    noMoreItemsBuilder: const SizedBox.shrink(),
-                    request: (page) async {
-                      return await Modular.get<IComprasRepository>().getCompras(page, null, null);
-                    },
-                    emptyBuilder: (_) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/empty_list.png',
-                              width: 300,
-                              height: 300,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    itemBuilder: (context, item, index) {
-                      return CardCompra(item: item);
-                    },
-                  ),
+          centerTitle: true,
+          title: const Text("Compras"),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                var refresh = await Modular.to.pushNamed<bool>('/compras/carrinho');
+                if (refresh ?? false) pagingController.refresh();
+              },
+              icon: const Icon(MdiIcons.plus),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InfiniteList<CompraDto>(
+                  pagingController: pagingController,
+                  cast: CompraDto.fromJson,
+                  noMoreItemsBuilder: const SizedBox.shrink(),
+                  request: (page) async {
+                    return await Modular.get<IComprasRepository>().getCompras(page, null, null);
+                  },
+                  emptyBuilder: (_) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/empty_list.png',
+                            width: 300,
+                            height: 300,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  itemBuilder: (context, item, index) {
+                    return CardCompra(item: item);
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -35,84 +35,91 @@ class VendasPageState extends State<VendasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: InkWell(
-              customBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              onTap: () {
-                Modular.to.pop();
-              },
-              child: const Align(
-                alignment: Alignment.center,
-                child: Icon(MdiIcons.arrowLeft),
-              ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: InkWell(
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-            centerTitle: true,
-            title: const Text("Vendas"),
+            onTap: () {
+              Modular.to.pop();
+            },
+            child: const Align(
+              alignment: Alignment.center,
+              child: Icon(MdiIcons.arrowLeft),
+            ),
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50,
-                  child: AppBar(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
+          centerTitle: true,
+          title: const Text("Vendas"),
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                height: 50,
+                child: AppBar(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
-                    backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
-                    bottom: TabBar(
-                      indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(
-                          width: 3.0,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
-                        ),
-                        insets: const EdgeInsets.symmetric(horizontal: 8.0),
+                  ),
+                  backgroundColor:
+                      Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                  bottom: TabBar(
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 3.0,
+                        color: Modular.get<ThemeStore>().isDarkModeEnable
+                            ? Theme.of(context).primaryColor
+                            : const Color(0xFFEF5656),
                       ),
-                      labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                      indicatorWeight: 4,
-                      unselectedLabelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
-                      labelStyle: TextStyle(
-                          fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
-                      tabs: const [
-                        Tab(
-                            child: Text(
-                          'Hoje',
-                        )),
-                        Tab(
-                            child: Text(
-                          'Semana',
-                        )),
-                        Tab(
-                            child: Text(
-                          'Todas',
-                        )),
-                      ],
+                      insets: const EdgeInsets.symmetric(horizontal: 8.0),
                     ),
+                    labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                    indicatorWeight: 4,
+                    unselectedLabelStyle: TextStyle(
+                        fontSize: 13,
+                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w400),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.bold),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
+                        ? Theme.of(context).primaryColor
+                        : const Color(0xFFEF5656),
+                    tabs: const [
+                      Tab(
+                          child: Text(
+                        'Hoje',
+                      )),
+                      Tab(
+                          child: Text(
+                        'Semana',
+                      )),
+                      Tab(
+                          child: Text(
+                        'Todas',
+                      )),
+                    ],
                   ),
                 ),
               ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    _vendasHoje(),
-                    _vendasSemana(),
-                    _vendasTodas(),
-                  ],
-                ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _vendasHoje(),
+                  _vendasSemana(),
+                  _vendasTodas(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

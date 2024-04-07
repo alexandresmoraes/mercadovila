@@ -46,7 +46,8 @@ class ScannerPageState extends State<ScannerPage> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    var scanArea =
+        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: (controller) => _onQRViewCreated(controller, context),
@@ -95,7 +96,7 @@ class ScannerPageState extends State<ScannerPage> {
               return CardScannerProduto(
                 nome: r.nome,
                 descricao: r.descricao,
-                preco: r.preco,
+                preco: r.preco.toDouble(),
                 quantidade: quantidade,
                 unidadeMedida: r.unidadeMedida,
                 imageUrl: r.imageUrl,

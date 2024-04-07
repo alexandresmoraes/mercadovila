@@ -35,81 +35,79 @@ class PagamentosPageState extends State<PagamentosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "Pagamentos",
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  setState(() {
-                    isSearchVisibled = !isSearchVisibled;
-                    if (!isSearchVisibled && !isNullorEmpty(usernameFilter)) {
-                      usernameFilter = "";
-                      searchController.clear();
-                      pagingController.refresh();
-                    }
-                    if (isSearchVisibled) {
-                      searchNode.requestFocus();
-                    } else {
-                      searchNode.unfocus();
-                    }
-                  });
-                },
-                icon: const Icon(MdiIcons.magnify),
-              ),
-              IconButton(
-                onPressed: () async {
-                  var refresh = await Modular.to.pushNamed<bool>('/pagamentos/pagar');
-                  if (refresh ?? false) pagingController.refresh();
-                },
-                icon: const Icon(MdiIcons.plus),
-              ),
-            ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "Pagamentos",
           ),
-          body: Column(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: isSearchVisibled ? 70 : 0,
-                child: Container(
-                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.only(),
-                  child: TextFormField(
-                    focusNode: searchNode,
-                    controller: searchController,
-                    onChanged: ((value) {
-                      if (_debounce?.isActive ?? false) _debounce!.cancel();
-                      _debounce = Timer(const Duration(milliseconds: 500), () {
-                        setState(() {
-                          usernameFilter = value;
-                          pagingController.refresh();
-                        });
+          actions: [
+            IconButton(
+              onPressed: () async {
+                setState(() {
+                  isSearchVisibled = !isSearchVisibled;
+                  if (!isSearchVisibled && !isNullorEmpty(usernameFilter)) {
+                    usernameFilter = "";
+                    searchController.clear();
+                    pagingController.refresh();
+                  }
+                  if (isSearchVisibled) {
+                    searchNode.requestFocus();
+                  } else {
+                    searchNode.unfocus();
+                  }
+                });
+              },
+              icon: const Icon(MdiIcons.magnify),
+            ),
+            IconButton(
+              onPressed: () async {
+                var refresh = await Modular.to.pushNamed<bool>('/pagamentos/pagar');
+                if (refresh ?? false) pagingController.refresh();
+              },
+              icon: const Icon(MdiIcons.plus),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isSearchVisibled ? 70 : 0,
+              child: Container(
+                decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(),
+                child: TextFormField(
+                  focusNode: searchNode,
+                  controller: searchController,
+                  onChanged: ((value) {
+                    if (_debounce?.isActive ?? false) _debounce!.cancel();
+                    _debounce = Timer(const Duration(milliseconds: 500), () {
+                      setState(() {
+                        usernameFilter = value;
+                        pagingController.refresh();
                       });
-                    }),
-                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                    decoration: InputDecoration(
-                      hintText: 'Buscar por nome de usuários ou email',
-                      prefixIcon: Icon(
-                        MdiIcons.magnify,
-                        size: isSearchVisibled ? 20 : 0,
-                      ),
-                      contentPadding: const EdgeInsets.only(top: 10),
+                    });
+                  }),
+                  style: Theme.of(context).primaryTextTheme.bodyLarge,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar por nome de usuários ou email',
+                    prefixIcon: Icon(
+                      MdiIcons.magnify,
+                      size: isSearchVisibled ? 20 : 0,
                     ),
+                    contentPadding: const EdgeInsets.only(top: 10),
                   ),
                 ),
               ),
-              Expanded(
-                child: _todosPagamentos(),
-              ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: _todosPagamentos(),
+            ),
+          ],
         ),
       ),
     );
@@ -190,7 +188,9 @@ class PagamentosPageState extends State<PagamentosPage> {
                     ),
                     const Expanded(child: SizedBox()),
                     Icon(
-                      item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                      item.pagamentoStatus == EnumStatusPagamento.cancelado.index
+                          ? MdiIcons.closeOctagon
+                          : MdiIcons.checkDecagram,
                       size: 20,
                       color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
                           ? Colors.red
@@ -233,7 +233,8 @@ class PagamentosPageState extends State<PagamentosPage> {
                                 backgroundImage: AssetImage('assets/person.png'),
                               );
                             },
-                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
+                            imageUrl:
+                                '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${item.compradorFotoUrl!}',
                             imageBuilder: (context, imageProvider) {
                               return CircleAvatar(
                                 radius: 21,
@@ -308,7 +309,9 @@ class PagamentosPageState extends State<PagamentosPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
-                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? Icons.account_balance : MdiIcons.cash,
+                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
+                                  ? Icons.account_balance
+                                  : MdiIcons.cash,
                               size: 20,
                               color: item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
                                   ? Colors.blue
@@ -319,7 +322,9 @@ class PagamentosPageState extends State<PagamentosPage> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? "Desconto em folha" : "Dinheiro",
+                                item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
+                                    ? "Desconto em folha"
+                                    : "Dinheiro",
                                 style: Theme.of(context).primaryTextTheme.displayMedium,
                               ),
                             ),
@@ -330,7 +335,9 @@ class PagamentosPageState extends State<PagamentosPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable
+                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                      : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),

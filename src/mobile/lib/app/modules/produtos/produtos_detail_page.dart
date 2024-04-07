@@ -34,304 +34,313 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Detalhes do produto"),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Detalhes do produto"),
+      ),
+      body: FutureTriple(
+        future: _controller.load(),
+        error: RefreshWidget(
+          onTap: () => setState(() {}),
         ),
-        body: FutureTriple(
-          future: _controller.load(),
-          error: RefreshWidget(
-            onTap: () => setState(() {}),
-          ),
-          loading: const CircularProgress(),
-          data: (context, snapshot) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Container(
-                    height: 350,
-                    margin: const EdgeInsets.only(top: 25),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? BoxDecoration(
-                                  gradient: LinearGradient(
-                                    stops: const [0, .90],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [const Color(0xFF545975).withOpacity(0.44), const Color(0xFF333550).withOpacity(0.22)],
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                )
-                              : BoxDecoration(
-                                  gradient: LinearGradient(
-                                    stops: const [0, .90],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [const Color(0xFFA6C1D6).withOpacity(0.07), const Color(0xFF7C96AA).withOpacity(0.33)],
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
+        loading: const CircularProgress(),
+        data: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 350,
+                  margin: const EdgeInsets.only(top: 25),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: Modular.get<ThemeStore>().isDarkModeEnable
+                            ? BoxDecoration(
+                                gradient: LinearGradient(
+                                  stops: const [0, .90],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    const Color(0xFF545975).withOpacity(0.44),
+                                    const Color(0xFF333550).withOpacity(0.22)
+                                  ],
                                 ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 75),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  snapshot.data!.nome,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(5),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    snapshot.data!.descricao,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context).primaryTextTheme.labelLarge,
-                                  ),
+                              )
+                            : BoxDecoration(
+                                gradient: LinearGradient(
+                                  stops: const [0, .90],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    const Color(0xFFA6C1D6).withOpacity(0.07),
+                                    const Color(0xFF7C96AA).withOpacity(0.33)
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              text: "R\$ ",
-                                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                                              children: [
-                                                TextSpan(
-                                                  text: snapshot.data!.preco.toString(),
-                                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                                ),
-                                                TextSpan(
-                                                  text: ' / ${snapshot.data!.unidadeMedida}',
-                                                  style: Theme.of(context).primaryTextTheme.displayMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            size: 18,
-                                            color: Theme.of(context).primaryColorLight,
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                              text: "${UtilBrasilFields.obterReal(snapshot.data!.rating.toDouble(), moeda: false, decimal: 1)} ",
-                                              style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                              children: [
-                                                TextSpan(
-                                                  text: '|',
-                                                  style: Theme.of(context).primaryTextTheme.displayMedium,
-                                                ),
-                                                TextSpan(
-                                                  text: ' ${snapshot.data!.ratingCount} ratings',
-                                                  style: Theme.of(context).primaryTextTheme.displayLarge,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            !snapshot.data!.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
-                                            size: 20,
-                                            color: !snapshot.data!.isAtivo
-                                                ? Colors.red
-                                                : Modular.get<ThemeStore>().isDarkModeEnable
-                                                    ? Colors.greenAccent
-                                                    : Colors.green,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
-                                            child: Text(
-                                              snapshot.data!.isAtivo ? "Ativo" : "Inativo",
-                                              style: Theme.of(context).primaryTextTheme.displayMedium,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Observer(builder: (_) {
-                                  if (_controller.svgCodigoBarras != null) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SvgPicture.string(_controller.svgCodigoBarras!),
-                                        ),
-                                      ),
-                                    );
-                                  }
-
-                                  return const SizedBox.shrink();
-                                })
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: (MediaQuery.of(context).size.width - 231) / 2,
-                          top: -35,
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => CircularProgress(
-                              color: Theme.of(context).primaryColorLight,
-                              width: 215,
-                              height: 140,
-                            ),
-                            errorWidget: (context, url, error) => const CircleAvatar(
-                              radius: 100,
-                              child: Icon(
-                                MdiIcons.cameraOff,
-                                size: 70,
-                                color: Colors.white,
                               ),
-                            ),
-                            imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
-                            imageBuilder: (context, imageProvider) {
-                              return Container(
-                                width: 215,
-                                height: 140,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Observer(builder: (_) {
-                          return CardCountProduto(
-                            produtoId: widget.id,
-                            estoqueDisponivel: _controller.produtoDetailDto!.estoque,
-                            isAtivo: _controller.produtoDetailDto!.isAtivo,
-                          );
-                        }),
-                        Positioned(
-                          right: 0,
-                          top: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 75),
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                height: 20,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: !snapshot.data!.isDisponivel() ? Colors.redAccent : Colors.green,
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                  ),
+                              Text(
+                                snapshot.data!.nome,
+                                textAlign: TextAlign.center,
+                                style:
+                                    Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  snapshot.data!.descricao,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).primaryTextTheme.labelLarge,
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      snapshot.data!.getDisponiveis(),
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context).primaryTextTheme.bodySmall,
+                                    Row(
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(
+                                            text: "R\$ ",
+                                            style: Theme.of(context).primaryTextTheme.displayMedium,
+                                            children: [
+                                              TextSpan(
+                                                text: snapshot.data!.preco.toString(),
+                                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                              ),
+                                              TextSpan(
+                                                text: ' / ${snapshot.data!.unidadeMedida}',
+                                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          size: 18,
+                                          color: Theme.of(context).primaryColorLight,
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                            text:
+                                                "${UtilBrasilFields.obterReal(snapshot.data!.rating.toDouble(), moeda: false, decimal: 1)} ",
+                                            style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                            children: [
+                                              TextSpan(
+                                                text: '|',
+                                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                                              ),
+                                              TextSpan(
+                                                text: ' ${snapshot.data!.ratingCount} ratings',
+                                                style: Theme.of(context).primaryTextTheme.displayLarge,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          !snapshot.data!.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                                          size: 20,
+                                          color: !snapshot.data!.isAtivo
+                                              ? Colors.red
+                                              : Modular.get<ThemeStore>().isDarkModeEnable
+                                                  ? Colors.greenAccent
+                                                  : Colors.green,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Text(
+                                            snapshot.data!.isAtivo ? "Ativo" : "Inativo",
+                                            style: Theme.of(context).primaryTextTheme.displayMedium,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                               Observer(builder: (_) {
-                                return IconButton(
-                                  onPressed: () async {
-                                    var favoritoRepository = Modular.get<IFavoritosRepository>();
-                                    try {
-                                      if (_controller.isFavorito) {
-                                        _controller.isFavorito = !_controller.isFavorito;
-                                        await favoritoRepository.removerFavorito(_controller.id!);
-                                      } else {
-                                        _controller.isFavorito = !_controller.isFavorito;
-                                        await favoritoRepository.adicionarFavorito(_controller.id!);
-                                      }
-                                    } catch (e) {
-                                      _controller.isFavorito = !_controller.isFavorito;
-                                    }
-                                  },
-                                  icon: _controller.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
-                                );
-                              }),
+                                if (_controller.svgCodigoBarras != null) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.string(_controller.svgCodigoBarras!),
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                return const SizedBox.shrink();
+                              })
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Observer(builder: (_) {
-                    return _controller.isVisibleFavoritos
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.all(0),
-                              title: Text(
-                                "Favoritos",
-                                style: Theme.of(context).primaryTextTheme.headlineSmall,
+                      ),
+                      Positioned(
+                        left: (MediaQuery.of(context).size.width - 231) / 2,
+                        top: -35,
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => CircularProgress(
+                            color: Theme.of(context).primaryColorLight,
+                            width: 215,
+                            height: 140,
+                          ),
+                          errorWidget: (context, url, error) => const CircleAvatar(
+                            radius: 100,
+                            child: Icon(
+                              MdiIcons.cameraOff,
+                              size: 70,
+                              color: Colors.white,
+                            ),
+                          ),
+                          imageUrl:
+                              '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              width: 215,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Observer(builder: (_) {
+                        return CardCountProduto(
+                          produtoId: widget.id,
+                          estoqueDisponivel: _controller.produtoDetailDto!.estoque,
+                          isAtivo: _controller.produtoDetailDto!.isAtivo,
+                        );
+                      }),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: !snapshot.data!.isDisponivel() ? Colors.redAccent : Colors.green,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    snapshot.data!.getDisponiveis(),
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).primaryTextTheme.bodySmall,
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : const SizedBox.shrink();
-                  }),
-                  listaFavoritos()
-                ],
-              ),
-            );
-          },
-        ),
+                            Observer(builder: (_) {
+                              return IconButton(
+                                onPressed: () async {
+                                  var favoritoRepository = Modular.get<IFavoritosRepository>();
+                                  try {
+                                    if (_controller.isFavorito) {
+                                      _controller.isFavorito = !_controller.isFavorito;
+                                      await favoritoRepository.removerFavorito(_controller.id!);
+                                    } else {
+                                      _controller.isFavorito = !_controller.isFavorito;
+                                      await favoritoRepository.adicionarFavorito(_controller.id!);
+                                    }
+                                  } catch (e) {
+                                    _controller.isFavorito = !_controller.isFavorito;
+                                  }
+                                },
+                                icon: _controller.isFavorito
+                                    ? Image.asset('assets/fav_red.png')
+                                    : Image.asset('assets/fav_grey.png'),
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Observer(builder: (_) {
+                  return _controller.isVisibleFavoritos
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: Text(
+                              "Favoritos",
+                              style: Theme.of(context).primaryTextTheme.headlineSmall,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink();
+                }),
+                listaFavoritos()
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -24,23 +24,21 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "Meus Pagamentos",
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "Meus Pagamentos",
+          ),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: _meusPagamentos(),
             ),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: _meusPagamentos(),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -97,7 +95,9 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                   ),
                   const Expanded(child: SizedBox()),
                   Icon(
-                    item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                    item.pagamentoStatus == EnumStatusPagamento.cancelado.index
+                        ? MdiIcons.closeOctagon
+                        : MdiIcons.checkDecagram,
                     size: 20,
                     color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
                         ? Colors.red
@@ -201,7 +201,9 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(
-                            item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? Icons.account_balance : MdiIcons.cash,
+                            item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
+                                ? Icons.account_balance
+                                : MdiIcons.cash,
                             size: 20,
                             color: item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
                                 ? Colors.blue
@@ -212,7 +214,9 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? "Desconto em folha" : "Dinheiro",
+                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
+                                  ? "Desconto em folha"
+                                  : "Dinheiro",
                               style: Theme.of(context).primaryTextTheme.displayMedium,
                             ),
                           ),
@@ -223,7 +227,9 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                 ),
               ),
               Divider(
-                color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
+                color: themeStore.isDarkModeEnable
+                    ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                    : Theme.of(context).dividerTheme.color,
               ),
             ],
           );

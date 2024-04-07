@@ -30,15 +30,13 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: const Text("Produtos"),
-        ),
-        body: _buildQrView(context),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text("Produtos"),
       ),
+      body: _buildQrView(context),
     );
   }
 

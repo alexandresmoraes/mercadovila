@@ -27,25 +27,23 @@ class NotificacoesPageState extends State<NotificacoesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Notificações"),
-          actions: [
-            Modular.get<AccountStore>().account!.isAdmin
-                ? IconButton(
-                    onPressed: () async {
-                      var refresh = await Modular.to.pushNamed<bool>('/notificacoes/new');
-                      if (refresh ?? false) pagingController.refresh();
-                    },
-                    icon: const Icon(MdiIcons.plus),
-                  )
-                : const SizedBox.shrink(),
-          ],
-        ),
-        body: _allNotificacoes(),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Notificações"),
+        actions: [
+          Modular.get<AccountStore>().account!.isAdmin
+              ? IconButton(
+                  onPressed: () async {
+                    var refresh = await Modular.to.pushNamed<bool>('/notificacoes/new');
+                    if (refresh ?? false) pagingController.refresh();
+                  },
+                  icon: const Icon(MdiIcons.plus),
+                )
+              : const SizedBox.shrink(),
+        ],
       ),
+      body: _allNotificacoes(),
     );
   }
 

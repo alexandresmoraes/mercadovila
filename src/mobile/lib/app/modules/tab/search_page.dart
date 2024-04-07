@@ -23,30 +23,30 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Todos"),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
-                  if (refresh ?? false) pagingController.refresh();
-                },
-                icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _todosProdutos(),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Todos"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
+                if (refresh ?? false) pagingController.refresh();
+              },
+              icon: Modular.get<ThemeStore>().isDarkModeEnable
+                  ? Image.asset('assets/filter_white.png')
+                  : Image.asset('assets/filter_black.png')),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _todosProdutos(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

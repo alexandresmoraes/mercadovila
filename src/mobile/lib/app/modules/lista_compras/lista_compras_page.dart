@@ -21,52 +21,50 @@ class ListaComprasPageState extends State<ListaComprasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            onTap: () {
-              Modular.to.pop();
-            },
-            child: const Align(
-              alignment: Alignment.center,
-              child: Icon(MdiIcons.arrowLeft),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: InkWell(
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
-          title: const Text("Lista de compras"),
+          onTap: () {
+            Modular.to.pop();
+          },
+          child: const Align(
+            alignment: Alignment.center,
+            child: Icon(MdiIcons.arrowLeft),
+          ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InfiniteList<ListaComprasDto>(
-            pagingController: pagingController,
-            request: (page) async {
-              return await Modular.get<IProdutosRepository>().getListaCompra(page);
-            },
-            cast: ListaComprasDto.fromJson,
-            noMoreItemsBuilder: const SizedBox.shrink(),
-            emptyBuilder: (_) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/empty_list.png',
-                      width: 300,
-                      height: 300,
-                    ),
-                  ],
-                ),
-              );
-            },
-            itemBuilder: (context, item, index) {
-              return CardListaCompra(item: item);
-            },
-          ),
+        title: const Text("Lista de compras"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InfiniteList<ListaComprasDto>(
+          pagingController: pagingController,
+          request: (page) async {
+            return await Modular.get<IProdutosRepository>().getListaCompra(page);
+          },
+          cast: ListaComprasDto.fromJson,
+          noMoreItemsBuilder: const SizedBox.shrink(),
+          emptyBuilder: (_) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/empty_list.png',
+                    width: 300,
+                    height: 300,
+                  ),
+                ],
+              ),
+            );
+          },
+          itemBuilder: (context, item, index) {
+            return CardListaCompra(item: item);
+          },
         ),
       ),
     );

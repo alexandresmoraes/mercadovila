@@ -3,7 +3,7 @@ class CompraItemDto {
   late final String nome;
   late final String descricao;
   late final String imageUrl;
-  late final double precoPago;
+  late final num precoPago;
   late final int quantidade;
   late final String unidadeMedida;
 
@@ -64,7 +64,7 @@ class CompraDto {
 class CompraDetalheDto {
   late final int id;
   late final DateTime dataHora;
-  late final double total;
+  late final num total;
   late final String usuarioId;
   late final String usuarioNome;
   late final String usuarioEmail;
@@ -109,8 +109,8 @@ class CompraDetalheItemDto {
   late final String nome;
   late final String descricao;
   late final String imageUrl;
-  late final double precoPago;
-  late final double precoSugerido;
+  late final num precoPago;
+  late final num precoSugerido;
   late final bool isPrecoMedioSugerido;
   late final num quantidade;
   late final String unidadeMedida;

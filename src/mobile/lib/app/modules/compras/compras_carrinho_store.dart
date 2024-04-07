@@ -45,15 +45,15 @@ abstract class ComprasCarrinhoStoreBase with Store {
         nome: selectedItem!.nome,
         descricao: selectedItem!.descricao,
         imageUrl: selectedItem!.imageUrl,
-        preco: selectedItem!.preco,
-        precoPago: selectedItem!.preco,
+        preco: selectedItem!.preco.toDouble(),
+        precoPago: selectedItem!.preco.toDouble(),
         unidadeMedida: selectedItem!.unidadeMedida,
         codigoBarras: selectedItem!.codigoBarras,
         estoque: selectedItem!.estoque,
         rating: selectedItem!.ratingCount,
         ratingCount: selectedItem!.ratingCount,
         isAtivo: selectedItem!.isAtivo,
-        precoSugerido: selectedItem!.preco,
+        precoSugerido: selectedItem!.preco.toDouble(),
         quantidade: 1,
         isPrecoMedioSugerido: true,
       );
@@ -113,10 +113,12 @@ abstract class ComprasCarrinhoStoreBase with Store {
   bool get isValidCarrinhoCompras => carrinhoComprasItens.isNotEmpty;
 
   @computed
-  double get subTotal => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+  double get subTotal =>
+      carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
   @computed
-  double get total => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+  double get total =>
+      carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
   void clearCarrinhoCompras() {
     carrinhoComprasItens.clear();

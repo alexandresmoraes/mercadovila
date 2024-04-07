@@ -34,8 +34,7 @@ class _TabPageState extends State<TabPage> {
       onWillPop: () async {
         return false;
       },
-      child: SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
           itemCount: _iconDataList.length,
@@ -52,7 +51,8 @@ class _TabPageState extends State<TabPage> {
                   ),
                   onPressed: () async {
                     if (index == 2 && (kIsWeb || (!Platform.isAndroid && !Platform.isIOS))) {
-                      GlobalSnackbar.error('Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
+                      GlobalSnackbar.error(
+                          'Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
                     } else {
                       setState(() => _bottomNavIndex = index);
                     }
@@ -91,7 +91,7 @@ class _TabPageState extends State<TabPage> {
           ),
         ),
         body: _screens().elementAt(_bottomNavIndex),
-      )),
+      ),
     );
   }
 

@@ -25,19 +25,17 @@ class FavoritosPageState extends State<FavoritosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Favoritos"),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: _todosFavoritos(),
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Favoritos"),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: _todosFavoritos(),
+          ),
+        ],
       ),
     );
   }
@@ -113,16 +111,19 @@ class FavoritosPageState extends State<FavoritosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
-                              TextSpan(
-                                text: UtilBrasilFields.obterReal(item.preco, moeda: false),
-                                style: Theme.of(context).primaryTextTheme.bodyLarge,
-                              ),
-                              TextSpan(
-                                text: ' / ${item.unidadeMedida}',
-                                style: Theme.of(context).primaryTextTheme.displayMedium,
-                              )
-                            ])),
+                                text: TextSpan(
+                                    text: "R\$ ",
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                    children: [
+                                  TextSpan(
+                                    text: UtilBrasilFields.obterReal(item.preco, moeda: false),
+                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
+                                  ),
+                                  TextSpan(
+                                    text: ' / ${item.unidadeMedida}',
+                                    style: Theme.of(context).primaryTextTheme.displayMedium,
+                                  )
+                                ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -137,7 +138,8 @@ class FavoritosPageState extends State<FavoritosPage> {
                                   ),
                                   RichText(
                                     text: TextSpan(
-                                      text: "${UtilBrasilFields.obterReal(item.rating.toDouble(), moeda: false, decimal: 1)} ",
+                                      text:
+                                          "${UtilBrasilFields.obterReal(item.rating.toDouble(), moeda: false, decimal: 1)} ",
                                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                                       children: [
                                         TextSpan(
@@ -222,7 +224,8 @@ class FavoritosPageState extends State<FavoritosPage> {
                               ),
                             );
                           },
-                          icon: item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                          icon:
+                              item.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                         )
                       ],
                     ),

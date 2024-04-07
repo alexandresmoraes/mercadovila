@@ -35,7 +35,7 @@ class CarrinhoItemDto {
   late final String nome;
   late final String descricao;
   late final String imageUrl;
-  late final double preco;
+  late final num preco;
   late final String unidadeMedida;
   late final int estoque;
   late final num rating;

@@ -92,7 +92,7 @@ class CardProdutoColor extends StatelessWidget {
                                     style: Theme.of(context).primaryTextTheme.titleSmall,
                                   ),
                                   Text(
-                                    UtilBrasilFields.obterReal(item.preco, moeda: false),
+                                    UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
                                     style: Theme.of(context).primaryTextTheme.titleMedium,
                                   ),
                                   Text(

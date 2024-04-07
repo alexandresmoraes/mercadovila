@@ -59,9 +59,10 @@ class CardProdutoCarrinho extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     RichText(
-                        text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                        text:
+                            TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
                       TextSpan(
-                        text: UtilBrasilFields.obterReal(item.preco, moeda: false),
+                        text: UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                       ),
                       TextSpan(
@@ -150,7 +151,9 @@ class CardProdutoCarrinho extends StatelessWidget {
                         favoritoController.isFavorito = !favoritoController.isFavorito;
                       }
                     },
-                    icon: favoritoController.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
+                    icon: favoritoController.isFavorito
+                        ? Image.asset('assets/fav_red.png')
+                        : Image.asset('assets/fav_grey.png'),
                   );
                 })
               ],
