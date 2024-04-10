@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ${CERTBOT_LETSENCRYPT_PATH}:/etc/letsencrypt:rw
+      - ${CERTBOT_WWW_PATH}:/var/www/certbot:rw
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ${CERTBOT_EMAIL} -d ${CERTBOT_DOMAIN} --agree-tos
