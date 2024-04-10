@@ -49,12 +49,13 @@ services:
 
   postgres:
     image: postgres:15.2
+    restart: always
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USER}
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ${DATABASE_DATA_DIR}:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
       - ${DATABASE_LOG_DIR}:/var/log/postgresql
 
   pgadmin:
@@ -71,8 +72,9 @@ services:
 
   mongo:
     image: mongo:5
+    restart: always
     volumes:
-      - ${MONGODB_DATA}:/data/db
+      - mongo:/data/db
 
   mongo-express:
     image: mongo-express:0.54
@@ -81,7 +83,7 @@ services:
       - ${MONGOEXPRESS_PORT}:8081
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=${MONGODB_PORT}
+      - ME_CONFIG_MONGODB_PORT=27017
       - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_USERNAME}
       - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
     depends_on:
@@ -228,3 +230,7 @@ services:
       - compras.api
       - vendas.api
       - kafka
+
+volumes:
+  postgres:  
+  mongo:
