@@ -215,6 +215,8 @@ services:
     build:
       context: .
       dockerfile: Web/WebStatus/Dockerfile
+    ports:
+        - ${WEB_STATUS_PORT}:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80      
