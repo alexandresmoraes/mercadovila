@@ -222,7 +222,7 @@ services:
       - ASPNETCORE_URLS=http://+:80      
       - ConnectionStrings__Kafka=${WEB_STATUS_CONNECTION_STRING_KAFKA}
       - HealthChecks__1=Auth API;http://auth.api/healthz
-      - HealthChecks__2=Catalogo API;http://catalogo.api/healthz
+      - HealthChecks__2=Catalogo API;http://catalogo.api:7013/healthz
       - HealthChecks__3=Compras API;http://compras.api/healthz
       - HealthChecks__4=Vendas API;http://vendas.api/healthz
       - HealthChecks__5=Kafka;http://web.status/healthz
