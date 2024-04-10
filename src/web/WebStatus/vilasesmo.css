@@ -1,0 +1,9 @@
+﻿:root { 
+  --bgMenuActive: #2f2f2f;
+  --bcMenuActive: #fffb00;
+  --primaryColor: #8625d2;
+  --secondaryColor: #9343d1;
+  --bgMenuActive: #7a0bcf6e;
+  --bgButton: #63199b;  
+  --bgAside: var(--primaryColor); 
+}

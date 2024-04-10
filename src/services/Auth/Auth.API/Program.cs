@@ -16,9 +16,7 @@ builder.Services.AddAuthConfig(builder.Configuration);
 builder.Logging.AddSerilog(builder.Configuration);
 builder.Services.AddSerilog();
 
-
 builder.Services.AddEventBusConfig(builder.Configuration, appName!);
-
 
 Log.Logger = CreateSerilogLogger(builder.Configuration);
 

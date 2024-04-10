@@ -198,3 +198,24 @@ services:
       - postgres
       - kafka
       - seq
+
+  web.status:
+    image: webstatus
+    build:
+      context: .
+      dockerfile: Web/WebStatus/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80      
+      - ConnectionStrings__Kafka=${VENDAS_API_CONNECTION_STRING}
+      - HealthChecks__1=Auth API;http://auth.api/healthz
+      - HealthChecks__2=Catalogo API;http://catalogo.api/healthz
+      - HealthChecks__3=Compras API;http://compras.api/healthz
+      - HealthChecks__4=Vendas API;http://vendas.api/healthz
+      - HealthChecks__5=Kafka;http://web.status/healthz
+    depends_on:
+      - auth.api
+      - catalogo.api
+      - compras.api
+      - vendas.api
+      - kafka
