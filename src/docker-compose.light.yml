@@ -218,7 +218,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80      
-      - ConnectionStrings__Kafka=${VENDAS_API_CONNECTION_STRING}
+      - ConnectionStrings__Kafka=${WEB_STATUS_CONNECTION_STRING_KAFKA}
       - HealthChecks__1=Auth API;http://auth.api/healthz
       - HealthChecks__2=Catalogo API;http://catalogo.api/healthz
       - HealthChecks__3=Compras API;http://compras.api/healthz
