@@ -34,19 +34,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   final CarouselController _carouselController = CarouselController();
   final PagamentosStore pagamentosStore = Modular.get<PagamentosStore>();
 
-  final List<String> _imagesList = ['assets/homescreen_banner.png', 'assets/Banner0.png', 'assets/Banner1.png'];
+  final List<String> _imagesList = ['assets/Banner0.png', 'assets/Banner1.png', 'assets/Banner2.png'];
 
   List<Widget> _items() {
     List<Widget> list = [];
     for (int i = 0; i < _imagesList.length; i++) {
-      list.add(Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(
-              image: AssetImage(
-                _imagesList[i],
-              ),
-            )),
+      list.add(ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Image.asset(
+          _imagesList[i],
+          fit: BoxFit.cover,
+        ),
       ));
     }
     return list;
@@ -98,8 +96,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                   backgroundImage: AssetImage('assets/person.png'),
                                 );
                               },
-                              imageUrl:
-                                  '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${Modular.get<AccountStore>().account!.fotoUrl!}',
+                              imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${Modular.get<AccountStore>().account!.fotoUrl!}',
                               imageBuilder: (context, imageProvider) {
                                 return CircleAvatar(
                                   radius: 23,
@@ -112,10 +109,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 }),
                 title: Text(greetingMessage(), style: Theme.of(context).primaryTextTheme.bodyLarge),
                 subtitle: Text('@${Modular.get<AccountStore>().account!.nome}',
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .displayMedium!
-                        .copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
+                    style: Theme.of(context).primaryTextTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontFamily: 'PoppinsLight')),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -130,8 +124,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         opacity: pagamentosStore.isLoading ? 0 : 1,
                         duration: const Duration(milliseconds: 2000),
                         child: Container(
-                          decoration: const BoxDecoration(
-                              color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                          decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                           margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.only(left: 5, right: 5),
                           width: 84,
@@ -146,8 +139,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               Padding(
                                 padding: const EdgeInsets.only(left: 15),
                                 child: Text(
-                                  UtilBrasilFields.obterReal(pagamentosStore.pagamentoDetalheDto!.total.toDouble(),
-                                      moeda: false),
+                                  UtilBrasilFields.obterReal(pagamentosStore.pagamentoDetalheDto!.total.toDouble(), moeda: false),
                                   style: Theme.of(context).primaryTextTheme.bodySmall,
                                 ),
                               ),
@@ -437,9 +429,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       ),
                                       Text(
                                         'R\$ ',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Theme.of(context).primaryTextTheme.displayMedium!.color),
+                                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryTextTheme.displayMedium!.color),
                                       ),
                                       Text(
                                         UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),

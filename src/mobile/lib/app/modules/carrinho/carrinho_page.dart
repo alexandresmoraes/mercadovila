@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -72,9 +71,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ? IconButton(
                     icon: Icon(
                       MdiIcons.barcode,
-                      color: !Modular.get<ThemeStore>().isDarkModeEnable
-                          ? const Color(0xFF373C58)
-                          : const Color(0xFFF2F5F8),
+                      color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                     ),
                     onPressed: () async {
                       Modular.to.pushNamed('/carrinho/scanner');
@@ -87,8 +84,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
               if (_currentIndex == 0) {
                 Modular.to.pop();
               } else {
-                _pageController!.animateToPage(_currentIndex - 1,
-                    duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                 if (_currentIndex == 0) {
                   step1Done = false;
                 } else if (_currentIndex == 1) {
@@ -146,9 +142,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                       width: 20,
                                       decoration: BoxDecoration(
                                         color: _currentIndex >= i ? Colors.white : Colors.black,
-                                        border: Border.all(
-                                            color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
-                                            width: 1.5),
+                                        border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20.0),
                                         ),
@@ -203,10 +197,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                                       width: 20,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            color:
-                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                            width: 1.5),
+                                        border: Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20.0),
                                         ),
@@ -239,8 +230,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 onPageChanged: (index) {
                   _currentIndex = index;
                   double currentIndex = _currentIndex.toDouble();
-                  _scrollController!
-                      .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   setState(() {});
                 },
                 children: [
@@ -286,8 +276,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                         if (carrinhoStore.isLoading) return;
 
                         if (_currentIndex == 0) {
-                          _pageController!.animateToPage(_currentIndex + 1,
-                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                          _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                         } else if (_currentIndex == 1) {
                           await carrinhoStore.criarVenda();
                         }
@@ -436,8 +425,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                 ),
                 Modular.get<ThemeStore>().isDarkModeEnable
                     ? Container(
+                        width: 450,
                         height: 120,
-                        width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
@@ -449,8 +438,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                         ),
                       )
                     : Container(
+                        width: 450,
                         height: 120,
-                        width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
@@ -506,9 +495,8 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                             "Selecione a opção de pagamento",
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Modular.get<ThemeStore>().isDarkModeEnable
-                                    ? Theme.of(context).primaryColorLight
-                                    : Theme.of(context).primaryColor,
+                                color:
+                                    Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           )),
                     )
@@ -536,7 +524,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   leading: Radio(
                     value: true,
                     groupValue: carrinhoStore.isDescontoSalario,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      carrinhoStore.setDescontoSalario();
+                    },
                   ),
                   title: Text(
                     "Desconto em folha",
@@ -548,8 +538,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Icon(
                     Icons.account_balance,
-                    color:
-                        !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );
@@ -563,7 +552,9 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   leading: Radio(
                     value: true,
                     groupValue: carrinhoStore.isDinheiro,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      carrinhoStore.setDinheiro();
+                    },
                   ),
                   title: Text(
                     "Dinheiro",
@@ -575,8 +566,7 @@ class CarrinhoPageState extends State<CarrinhoPage> {
                   ),
                   trailing: Icon(
                     MdiIcons.cash,
-                    color:
-                        !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                    color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                   ),
                 ),
               );

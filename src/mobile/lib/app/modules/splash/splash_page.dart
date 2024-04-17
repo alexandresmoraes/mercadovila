@@ -35,17 +35,17 @@ class SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+          colors: [Colors.white, Color(0xFFedf2f6)],
         ),
       ),
       child: Center(
           child: Image.asset(
         'assets/appicon_512x512.png',
-        fit: BoxFit.cover,
+        fit: BoxFit.scaleDown,
       )),
     ));
   }

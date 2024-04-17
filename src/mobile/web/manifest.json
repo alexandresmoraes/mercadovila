@@ -3,9 +3,9 @@
     "short_name": "vilasesmo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#hexcode",
-    "theme_color": "#hexcode",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FFFFFF",
+    "description": "Aplicativo do mercadinho interno.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
