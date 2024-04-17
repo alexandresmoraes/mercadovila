@@ -9,7 +9,7 @@
     <DockerServiceName>auth.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docer-compose.certbot.yml" />
+    <None Include="docker-compose.certbot.yml" />
     <None Include="docker-compose.dev.yml" />
     <None Include="docker-compose.light.yml" />
     <None Include=".dockerignore" />
