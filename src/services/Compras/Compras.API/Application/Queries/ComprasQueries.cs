@@ -50,28 +50,18 @@ namespace Compras.API.Application.Queries
 
     public async Task<PagedResult<CompraDto>> GetComprasAsync(CompraQuery compraQuery, CancellationToken cancellationToken = default)
     {
-      var comprasDictionary = new Dictionary<long, CompraDto>();
-
       var sql = @"
           SELECT
-             c.id AS id,   
-             c.datahora AS datahora,
-             c.total AS total,
-             co.id AS usuarioid,
-             co.nome AS usuarionome,
-             co.email AS usuarioemail,
-             co.foto_url AS usuariofotourl,
-             ci.produto_id AS itemprodutoid,
-             ci.nome AS itemnome,	 
-             ci.descricao AS itemdescricao,
-             ci.image_url AS itemimageurl,
-             ci.preco_pago AS itemprecopago,             
-             ci.quantidade AS itemquantidade,
-             ci.unidade_medida AS itemunidademedida,   
-             count(*) over() AS count
+	           c.id AS id,   
+	           c.datahora AS datahora,
+	           c.total AS total,
+	           co.id AS usuarioid,
+	           co.nome AS usuarionome,
+	           co.email AS usuarioemail,
+	           co.foto_url AS usuariofotourl,
+	           count(*) over() AS count
           FROM compras c
-          LEFT JOIN compradores co ON co.id = c.comprador_id
-          LEFT JOIN compra_itens ci ON c.id = ci.compra_id  
+	          LEFT JOIN compradores co ON co.id = c.comprador_id
       ";
 
       if (compraQuery.dataInicial.HasValue && compraQuery.dataFinal.HasValue)
@@ -101,40 +91,61 @@ namespace Compras.API.Application.Queries
         offset = start
       });
 
+      List<CompraDto> compras = new List<CompraDto>();
+
       foreach (var row in result)
       {
         var compraId = row.id;
-        if (!comprasDictionary.TryGetValue(compraId, out CompraDto venda))
+
+        var compra = new CompraDto
         {
-          venda = new CompraDto
+          Id = row.id,
+          DataHora = row.datahora,
+          Total = row.total,
+          UsuarioId = row.usuarioid,
+          UsuarioNome = row.usuarionome,
+          UsuarioEmail = row.usuarioemail,
+          UsuarioFotoUrl = row.usuariofotourl
+        };
+
+        var compraItens = await _dbConnection.QueryAsync<dynamic>(
+          @"
+            SELECT
+             ci.produto_id AS itemprodutoid,
+             ci.nome AS itemnome,	 
+             ci.image_url AS itemimageurl,
+             ci.descricao AS itemdescricao,
+             ci.estoque_atual AS itemestoqueatual,
+             ci.preco_pago AS itemprecopago,
+             ci.preco_sugerido AS itemprecosugerido,
+             ci.preco_medio_sugerido AS itemprecomediosugerido,
+             ci.quantidade AS itemquantidade,
+             ci.unidade_medida AS itemunidademedida
+            FROM compras c                
+            LEFT JOIN compra_itens ci ON c.id = ci.compra_id
+            WHERE c.id=@id
+          ", new { id = compraId });
+
+        foreach (var compraItem in compraItens)
+        {
+          compra.Itens.Add(new CompraItemto
           {
-            Id = compraId,
-            DataHora = row.datahora,
-            Total = row.total,
-            UsuarioId = row.usuarioid,
-            UsuarioNome = row.usuarionome,
-            UsuarioEmail = row.usuarioemail,
-            UsuarioFotoUrl = row.usuariofotourl
-          };
-          comprasDictionary.Add(compraId, venda);
+            ProdutoId = compraItem.itemprodutoid,
+            Nome = compraItem.itemnome,
+            Descricao = compraItem.itemdescricao,
+            ImageUrl = compraItem.itemimageurl,
+            PrecoPago = compraItem.itemprecopago,
+            Quantidade = compraItem.itemquantidade,
+            UnidadeMedida = compraItem.itemunidademedida
+          });
         }
 
-        var vendaItem = new CompraItemto
-        {
-          ProdutoId = row.itemprodutoid,
-          Nome = row.itemnome,
-          Descricao = row.itemdescricao,
-          ImageUrl = row.itemimageurl,
-          PrecoPago = row.itemprecopago,
-          Quantidade = row.itemquantidade,
-          UnidadeMedida = row.itemunidademedida
-        };
-        venda.Itens.Add(vendaItem);
+        compras.Add(compra);
       }
 
       long total = result.FirstOrDefault()?.count ?? 0;
 
-      return new PagedResult<CompraDto>(start, compraQuery.limit, total, comprasDictionary.Values.ToList());
+      return new PagedResult<CompraDto>(start, compraQuery.limit, total, compras);
     }
 
     private CompraDetalheDto MapCompraDetalhe(dynamic result)

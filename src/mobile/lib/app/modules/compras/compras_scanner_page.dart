@@ -72,7 +72,8 @@ class ComprasScannerPageState extends State<ComprasScannerPage> {
         isLoading = true;
       });
 
-      var produtoResult = await produtosRepository.getProdutoPorCodigoBarra(scanData.code.toString());
+      var barCode = scanData.code!.length == 12 ? '0${scanData.code!}' : scanData.code.toString();
+      var produtoResult = await produtosRepository.getProdutoPorCodigoBarra(barCode);
 
       produtoResult.fold((l) {
         GlobalSnackbar.error('Código de barras não encontrado.');

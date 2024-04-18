@@ -41,8 +41,7 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea =
-        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
@@ -64,8 +63,9 @@ class ScannerPageProdutoState extends State<ScannerPageProduto> {
     controller.scannedDataStream.listen((scanData) {
       controller.pauseCamera();
 
-      if (scanData.format == BarcodeFormat.ean13) {
-        Modular.to.pop(scanData.code);
+      if (scanData.format == BarcodeFormat.ean13 || scanData.format == BarcodeFormat.upcA || scanData.format == BarcodeFormat.ean8) {
+        var barcode = scanData.format == BarcodeFormat.upcA ? '0${scanData.code}' : scanData.code;
+        Modular.to.pop(barcode);
       } else {
         controller.resumeCamera();
       }

@@ -46,8 +46,7 @@ class ScannerPageState extends State<ScannerPage> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea =
-        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    var scanArea = (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: (controller) => _onQRViewCreated(controller, context),
@@ -73,7 +72,8 @@ class ScannerPageState extends State<ScannerPage> {
         isLoading = true;
       });
 
-      var produtoResult = await produtosRepository.getProdutoPorCodigoBarra(scanData.code.toString());
+      var barCode = scanData.code!.length == 12 ? '0${scanData.code!}' : scanData.code.toString();
+      var produtoResult = await produtosRepository.getProdutoPorCodigoBarra(barCode);
 
       produtoResult.fold((l) {
         GlobalSnackbar.error('Código de barras não encontrado.');
