@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:vilasesmo/app/utils/models/produtos/produto_model.dart';
@@ -95,6 +96,8 @@ abstract class ProdutosEditControllerBase with Store {
     _unidadeMedidaApiError = null;
   }
 
+  TextEditingController codigoBarrasController = TextEditingController();
+
   @observable
   String? codigoBarras;
   @observable
@@ -109,6 +112,7 @@ abstract class ProdutosEditControllerBase with Store {
   void setCodigoBarras(String? v) {
     codigoBarras = v;
     _codigoBarrasApiError = null;
+    codigoBarrasController.text = v!;
   }
 
   @observable
@@ -185,6 +189,8 @@ abstract class ProdutosEditControllerBase with Store {
     codigoBarras = produtoModel!.codigoBarras;
     estoqueAlvo = produtoModel!.estoqueAlvo == 0 ? "0" : produtoModel!.estoqueAlvo.toString();
     isAtivo = produtoModel!.isAtivo;
+
+    codigoBarrasController.text = codigoBarras!;
 
     isLoading = false;
     return produtoModel!;

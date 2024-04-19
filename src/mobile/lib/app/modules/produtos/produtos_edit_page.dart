@@ -95,9 +95,8 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-          ? Theme.of(context).scaffoldBackgroundColor
-          : Theme.of(context).inputDecorationTheme.fillColor,
+      backgroundColor:
+          Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(isNullorEmpty(widget.id) ? "Criando produto" : "Editando produto"),
@@ -142,9 +141,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                                     image: DecorationImage(
-                                      image: kIsWeb
-                                          ? Image.network(_controller.imagePath!).image
-                                          : Image.file(File(_controller.imagePath!)).image,
+                                      image: kIsWeb ? Image.network(_controller.imagePath!).image : Image.file(File(_controller.imagePath!)).image,
                                     ),
                                   ),
                                 );
@@ -163,8 +160,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  imageUrl:
-                                      '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
+                                  imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${_controller.imageUrl!}',
                                   imageBuilder: (context, imageProvider) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -242,9 +238,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                         },
                         child: Observer(builder: (_) {
                           return Text(
-                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
-                                ? 'Escolher imagem'
-                                : 'Trocar imagem',
+                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath) ? 'Escolher imagem' : 'Trocar imagem',
                             style: Theme.of(context).primaryTextTheme.displayLarge,
                           );
                         }),
@@ -329,8 +323,7 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                               ],
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                               initialValue: UtilBrasilFields.obterReal(_controller.preco ?? 0),
-                              onChanged: (value) =>
-                                  _controller.setPreco(UtilBrasilFields.converterMoedaParaDouble(value)),
+                              onChanged: (value) => _controller.setPreco(UtilBrasilFields.converterMoedaParaDouble(value)),
                               decoration: InputDecoration(
                                 fillColor: Modular.get<ThemeStore>().isDarkModeEnable
                                     ? Theme.of(context).inputDecorationTheme.fillColor
@@ -375,12 +368,16 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                           margin: const EdgeInsets.only(top: 5, bottom: 15),
                           padding: const EdgeInsets.only(),
                           child: Observer(builder: (_) {
+                            debugPrint(_controller.codigoBarras);
                             return TextFormField(
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(13),
+                                LengthLimitingTextInputFormatter(8),
                               ],
-                              initialValue: _controller.codigoBarras,
+                              controller: _controller.codigoBarrasController,
+                              keyboardType: TextInputType.number,
+                              // initialValue: _controller.codigoBarras,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                               onChanged: _controller.setCodigoBarras,
                               decoration: InputDecoration(
@@ -398,7 +395,9 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                                         ),
                                         onPressed: () async {
                                           var barcode = await Modular.to.pushNamed<String?>('/produtos/scanner');
-                                          if (!isNullorEmpty(barcode)) _controller.setCodigoBarras(barcode);
+                                          if (!isNullorEmpty(barcode)) {
+                                            _controller.setCodigoBarras(barcode!);
+                                          }
                                         },
                                       )
                                     : const SizedBox.shrink(),
