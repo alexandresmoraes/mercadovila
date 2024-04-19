@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace Common.WebAPI.Validation
 {
@@ -15,13 +14,52 @@ namespace Common.WebAPI.Validation
 
       string codigoDeBarras = value.ToString()!;
 
-      if (!Regex.IsMatch(codigoDeBarras, @"^\d{13}$"))
-      {
+      return Ean13IsValid(codigoDeBarras) || Ean8Isvalid(codigoDeBarras);
+    }
+
+    private bool Ean8Isvalid(string codigoDeBarras)
+    {
+      if (codigoDeBarras.Length != 8)
         return false;
+
+      var ean8 = codigoDeBarras;
+
+      int somaPares = 0;
+      int somaImpares = 0;
+
+      for (int i = 0; i < 7; i += 2)
+      {
+        somaPares += int.Parse(ean8[i].ToString());
       }
 
-      var pares = codigoDeBarras.Take(codigoDeBarras.Length - 1).Where((c, i) => i % 2 == 0).Select(c => int.Parse(c.ToString()));
-      var impares = codigoDeBarras.Take(codigoDeBarras.Length - 1).Where((c, i) => i % 2 != 0).Select(c => int.Parse(c.ToString()));
+      for (int i = 1; i < 7; i += 2)
+      {
+        somaImpares += int.Parse(ean8[i].ToString());
+      }
+
+      int somaTotal = (somaPares * 3) + somaImpares;
+
+      int digitoVerificadorCalculado = 10 - (somaTotal % 10);
+
+      if (digitoVerificadorCalculado == 10)
+      {
+        digitoVerificadorCalculado = 0;
+      }
+
+      int digitoVerificador = int.Parse(ean8[7].ToString());
+
+      return digitoVerificador == digitoVerificadorCalculado;
+    }
+
+    private bool Ean13IsValid(string codigoDeBarras)
+    {
+      if (codigoDeBarras.Length != 13)
+        return false;
+
+      var ean13 = codigoDeBarras;
+
+      var pares = ean13.Take(codigoDeBarras.Length - 1).Where((c, i) => i % 2 == 0).Select(c => int.Parse(c.ToString()));
+      var impares = ean13.Take(codigoDeBarras.Length - 1).Where((c, i) => i % 2 != 0).Select(c => int.Parse(c.ToString()));
 
       int somaPares = pares.Sum();
       int somaImpares = impares.Sum();
@@ -34,7 +72,7 @@ namespace Common.WebAPI.Validation
 
       int digitoVerificador = proximoMultiploDe10 - somaTotal;
 
-      int digitoVerificadorReal = int.Parse(codigoDeBarras[12].ToString());
+      int digitoVerificadorReal = int.Parse(ean13[12].ToString());
 
       return digitoVerificadorReal == digitoVerificador;
     }

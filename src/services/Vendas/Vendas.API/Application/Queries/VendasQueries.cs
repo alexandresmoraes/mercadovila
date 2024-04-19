@@ -164,15 +164,15 @@ namespace Vendas.API.Application.Queries
 
       if (vendaQuery.dataInicial.HasValue && vendaQuery.dataFinal.HasValue)
       {
-        sql += " WHERE v.datahora BETWEEN @dataInicial AND @datafinal";
+        sql += " AND v.datahora BETWEEN @dataInicial AND @datafinal";
       }
       else if (vendaQuery.dataInicial.HasValue)
       {
-        sql += " WHERE v.datahora > @dataInicial";
+        sql += " AND v.datahora > @dataInicial";
       }
       else if (vendaQuery.dataFinal.HasValue)
       {
-        sql += " WHERE v.datahora < @datafinal";
+        sql += " AND v.datahora < @datafinal";
       }
 
       var start = (vendaQuery.page - 1) * vendaQuery.limit;
@@ -233,12 +233,12 @@ namespace Vendas.API.Application.Queries
         {
           venda.Itens.Add(new VendaItemto
           {
-            ProdutoId = row.itemprodutoid,
-            Nome = row.itemnome,
-            ImageUrl = row.itemimageurl,
-            Preco = row.itempreco,
-            Quantidade = row.itemquantidade,
-            UnidadeMedida = row.itemunidademedida
+            ProdutoId = vendaItem.itemprodutoid,
+            Nome = vendaItem.itemnome,
+            ImageUrl = vendaItem.itemimageurl,
+            Preco = vendaItem.itempreco,
+            Quantidade = vendaItem.itemquantidade,
+            UnidadeMedida = vendaItem.itemunidademedida
           });
         }
 
