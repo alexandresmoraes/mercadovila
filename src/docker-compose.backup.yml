@@ -16,9 +16,10 @@ services:
       - ${MONGODB_RESTORE_PATH}:/backup
     environment:
       MONGODB_RESTORE_URL: ${MONGODB_RESTORE_URL}
+      MONGODB_RESTORE_PATH: ${MONGODB_RESTORE_PATH}
       MONGODB_RESTORE_DB: ${MONGODB_RESTORE_DB}
     command: >
-      sh -c "mongorestore --uri=\"$$MONGODB_RESTORE_URL\" --db=\"$$MONGODB_RESTORE_DB\" /backup/$$MONGODB_RESTORE_DB"
+      sh -c "mongorestore --uri=\"$$MONGODB_RESTORE_URL\" --db=\"$$MONGODB_RESTORE_DB\" /backup/$$MONGODB_RESTORE_PATH/$$MONGODB_RESTORE_DB"
 
   pgbackup:
     image: postgres:15.2          
@@ -34,9 +35,9 @@ services:
       POSTGRES_BACKUP_DB_3: ${POSTGRES_BACKUP_DB_3}
     entrypoint: >
         sh -c "export PGPASSWORD=${POSTGRES_BACKUP_PASSWORD} &&
-               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_1} > \"/backup/backup_$${POSTGRES_BACKUP_DB_1}_$$(date +%Y-%m-%d_%H-%M-%S).sql\" &&
-               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_2} > \"/backup/backup_$${POSTGRES_BACKUP_DB_2}_$$(date +%Y-%m-%d_%H-%M-%S).sql\" &&
-               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_3} > \"/backup/backup_$${POSTGRES_BACKUP_DB_3}_$$(date +%Y-%m-%d_%H-%M-%S).sql\""
+               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_1} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_1}.sql\" &&
+               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_2} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_2}.sql\" &&
+               pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_3} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_3}.sql\""
 
   pgrestore:
     image: postgres:15.2
