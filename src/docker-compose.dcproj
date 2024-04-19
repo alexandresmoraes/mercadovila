@@ -9,6 +9,8 @@
     <DockerServiceName>auth.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="backup.win.env" />
+    <None Include="docker-compose.backup.yml" />
     <None Include="docker-compose.certbot.yml" />
     <None Include="docker-compose.dev.yml" />
     <None Include="docker-compose.light.yml" />
