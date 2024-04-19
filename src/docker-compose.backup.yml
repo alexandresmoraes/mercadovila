@@ -18,7 +18,7 @@ services:
       MONGODB_RESTORE_URL: ${MONGODB_RESTORE_URL}
       MONGODB_RESTORE_DB: ${MONGODB_RESTORE_DB}
     command: >
-      sh -c "mongorestore --uri=\"$$MONGODB_RESTORE_URL\" --db=/backup/$$MONGODB_RESTORE_DB"    
+      sh -c "mongorestore --uri=\"$$MONGODB_RESTORE_URL\" --db=\"$$MONGODB_RESTORE_DB\" /backup/$$MONGODB_RESTORE_DB"
 
   pgbackup:
     image: postgres:15.2          
