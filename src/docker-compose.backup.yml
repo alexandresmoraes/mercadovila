@@ -22,14 +22,17 @@ services:
       POSTGRES_PORT: ${POSTGRES_BACKUP_PORT}
       POSTGRES_USER: ${POSTGRES_BACKUP_USER}
       POSTGRES_PASSWORD: ${POSTGRES_BACKUP_PASSWORD}
+      POSTGRES_BACKUP_DB_1: ${POSTGRES_BACKUP_DB_1}
+      POSTGRES_BACKUP_DB_2: ${POSTGRES_BACKUP_DB_2}
+      POSTGRES_BACKUP_DB_3: ${POSTGRES_BACKUP_DB_3}
     entrypoint: >
-      sh -c "export PGPASSWORD=${POSTGRES_BACKUP_PASSWORD} &&\
-      backup_file=\"/backup/backup_${POSTGRES_BACKUP_DB_1}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
-      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" ${POSTGRES_BACKUP_DB_1} > \"$$backup_file\" &&\
-      backup_file=\"/backup/backup_${POSTGRES_BACKUP_DB_2}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
-      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" ${POSTGRES_BACKUP_DB_2} > \"$$backup_file\" &&\
-      backup_file=\"/backup/backup_${POSTGRES_BACKUP_DB_3}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
-      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" ${POSTGRES_BACKUP_DB_3} > \"$$backup_file\""
+      sh -c "export PGPASSWORD=$$POSTGRES_PASSWORD &&\
+      backup_file=\"/backup/backup_$${POSTGRES_BACKUP_DB_1}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
+      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" $$POSTGRES_BACKUP_DB_1 > \"$$backup_file\" &&\
+      backup_file=\"/backup/backup_$${POSTGRES_BACKUP_DB_2}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
+      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" $$POSTGRES_BACKUP_DB_2 > \"$$backup_file\" &&\
+      backup_file=\"/backup/backup_$${POSTGRES_BACKUP_DB_3}_$(date +%Y-%m-%d_%H-%M-%S).sql\" &&\
+      pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" $$POSTGRES_BACKUP_DB_3 > \"$$backup_file\""
 
   pgrestore:
     image: postgres:15.2
