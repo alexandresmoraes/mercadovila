@@ -129,12 +129,12 @@ namespace Vendas.API.Application.Queries
         {
           venda.Itens.Add(new VendaItemto
           {
-            ProdutoId = row.itemprodutoid,
-            Nome = row.itemnome,
-            ImageUrl = row.itemimageurl,
-            Preco = row.itempreco,
-            Quantidade = row.itemquantidade,
-            UnidadeMedida = row.itemunidademedida
+            ProdutoId = vendaItem.itemprodutoid,
+            Nome = vendaItem.itemnome,
+            ImageUrl = vendaItem.itemimageurl,
+            Preco = vendaItem.itempreco,
+            Quantidade = vendaItem.itemquantidade,
+            UnidadeMedida = vendaItem.itemunidademedida
           });
         }
 
