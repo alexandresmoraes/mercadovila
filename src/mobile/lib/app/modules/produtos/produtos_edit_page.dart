@@ -377,7 +377,6 @@ class ProdutosEditPageState extends State<ProdutosEditPage> {
                               ],
                               controller: _controller.codigoBarrasController,
                               keyboardType: TextInputType.number,
-                              // initialValue: _controller.codigoBarras,
                               style: Theme.of(context).primaryTextTheme.bodyLarge,
                               onChanged: _controller.setCodigoBarras,
                               decoration: InputDecoration(

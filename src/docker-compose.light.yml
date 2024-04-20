@@ -116,7 +116,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
       - ConnectionStrings__Default=${AUTH_API_CONNECTION_STRING}
-      - AuthSettings__SecretKey=${AUTH_API_SECRET_KEY}
+      - AuthSettings__SecretKey=${JWT_SECRET_KEY}
       - AuthSettings__Issuer=sesmo.com.br
       - AuthSettings__Audience=auth.sesmo.com.br
       - AuthSettings__ExpiresIn=3600
@@ -141,7 +141,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
       - ConnectionStrings__Default=${CATALOGO_API_CONNECTION_STRING}
-      - AuthSettings__SecretKey=${CATALOGO_API_SECRET_KEY}
+      - AuthSettings__SecretKey=${JWT_SECRET_KEY}
       - AuthSettings__Issuer=sesmo.com.br
       - AuthSettings__Audience=auth.sesmo.com.br
       - AuthSettings__ExpiresIn=3600
@@ -171,7 +171,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
       - ConnectionStrings__Default=${COMPRAS_API_CONNECTION_STRING}
-      - AuthSettings__SecretKey=${COMPRAS_API_SECRET_KEY}
+      - AuthSettings__SecretKey=${JWT_SECRET_KEY}
       - AuthSettings__Issuer=sesmo.com.br
       - AuthSettings__Audience=auth.sesmo.com.br
       - AuthSettings__ExpiresIn=3600
@@ -195,7 +195,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
       - ConnectionStrings__Default=${VENDAS_API_CONNECTION_STRING}
-      - AuthSettings__SecretKey=${VENDAS_API_SECRET_KEY}
+      - AuthSettings__SecretKey=${JWT_SECRET_KEY}
       - AuthSettings__Issuer=sesmo.com.br
       - AuthSettings__Audience=auth.sesmo.com.br
       - AuthSettings__ExpiresIn=3600

@@ -33,10 +33,15 @@ abstract class ProdutosDetailControllerBase with Store {
     var produtosRepository = Modular.get<IProdutosRepository>();
     produtoDetailDto = await produtosRepository.getProdutoDetail(id!);
 
-    final ean = Barcode.ean13();
-    svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 180, height: 70);
-    pictureInfo = await vg.loadPicture(SvgStringLoader(svgCodigoBarras!), null);
-
+    if (produtoDetailDto!.codigoBarras.length == 13) {
+      final ean = Barcode.ean13();
+      svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 180, height: 70);
+      pictureInfo = await vg.loadPicture(SvgStringLoader(svgCodigoBarras!), null);
+    } else if (produtoDetailDto!.codigoBarras.length == 8) {
+      final ean = Barcode.ean8();
+      svgCodigoBarras = ean.toSvg(produtoDetailDto!.codigoBarras, width: 180, height: 70);
+      pictureInfo = await vg.loadPicture(SvgStringLoader(svgCodigoBarras!), null);
+    }
     isFavorito = produtoDetailDto!.isFavorito;
 
     isLoading = false;
