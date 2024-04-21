@@ -81,7 +81,8 @@ class CardVendaState extends State<CardVenda> {
                         backgroundImage: AssetImage('assets/person.png'),
                       );
                     },
-                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
+                    imageUrl:
+                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
                     imageBuilder: (context, imageProvider) {
                       return CircleAvatar(
                         radius: 24,
@@ -112,7 +113,8 @@ class CardVendaState extends State<CardVenda> {
                   });
                 },
                 child: Container(
-                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  decoration:
+                      const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                   margin: const EdgeInsets.only(right: 10, top: 5),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   width: 80,
@@ -138,10 +140,10 @@ class CardVendaState extends State<CardVenda> {
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: isProductsVisible ? 180 : 0,
+          height: isProductsVisible ? 200 : 0,
           child: SingleChildScrollView(
             child: SizedBox(
-              height: 180,
+              height: 200,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: _vendaItens(widget.item.itens),
@@ -164,13 +166,13 @@ class CardVendaState extends State<CardVenda> {
       for (int i = 0; i < itens.length; i++) {
         widgetList.add(
           Container(
-            height: 172,
+            height: 200,
             margin: const EdgeInsets.only(top: 40, left: 10),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 SizedBox(
-                  height: 172,
+                  height: 200,
                   width: 145,
                   child: Container(
                     decoration: BoxDecoration(
@@ -195,7 +197,8 @@ class CardVendaState extends State<CardVenda> {
                               style: Theme.of(context).primaryTextTheme.displayMedium,
                               children: [
                                 TextSpan(
-                                  text: UtilBrasilFields.obterReal(itens[i].preco * itens[i].quantidade.toDouble(), moeda: false),
+                                  text: UtilBrasilFields.obterReal(itens[i].preco * itens[i].quantidade.toDouble(),
+                                      moeda: false),
                                   style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 ),
                               ],
