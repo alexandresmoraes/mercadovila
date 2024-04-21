@@ -16,6 +16,8 @@ namespace Catalogo.API.Data.Queries
     public bool inStock { get; set; }
 
     public bool outOfStock { get; set; }
+
+    public string? nome { get; set; }
   }
 
   public enum ECatalogoTodosQueryOrder

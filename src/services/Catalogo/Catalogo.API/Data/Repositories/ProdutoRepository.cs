@@ -345,6 +345,11 @@ namespace Catalogo.API.Data.Repositories
           filtro &= Builders<Produto>.Filter.Lt(p => p.Estoque, 1);
       }
 
+      if (!string.IsNullOrEmpty(query.nome))
+      {
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(query.nome!, RegexOptions.IgnoreCase)));
+      }
+
       var start = (query.page - 1) * query.limit;
 
       var catalogoPipeline = new BsonDocument[]
