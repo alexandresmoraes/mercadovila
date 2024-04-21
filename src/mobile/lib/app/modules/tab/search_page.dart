@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
 import 'package:vilasesmo/app/stores/theme_store.dart';
 import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:vilasesmo/app/utils/queries/catalogo_todos_query.dart';
 import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
+import 'package:vilasesmo/app/utils/utils.dart';
 import 'package:vilasesmo/app/utils/widgets/card_produto_search.dart';
 import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
 
@@ -17,6 +21,12 @@ class SearchPage extends StatefulWidget {
 }
 
 class SearchPageState extends State<SearchPage> {
+  String? nomeFilter;
+  bool isSearchVisibled = false;
+  final searchController = TextEditingController();
+  final searchNode = FocusNode();
+  Timer? _debounce;
+
   SearchPageState() : super();
 
   PagingController<int, CatalogoDto> pagingController = PagingController(firstPageKey: 1);
@@ -29,17 +39,64 @@ class SearchPageState extends State<SearchPage> {
         title: const Text("Todos"),
         actions: [
           IconButton(
+            onPressed: () async {
+              setState(() {
+                isSearchVisibled = !isSearchVisibled;
+                if (!isSearchVisibled && !isNullorEmpty(nomeFilter)) {
+                  nomeFilter = "";
+                  searchController.clear();
+                  pagingController.refresh();
+                }
+                if (isSearchVisibled) {
+                  searchNode.requestFocus();
+                } else {
+                  searchNode.unfocus();
+                }
+              });
+            },
+            icon: const Icon(MdiIcons.magnify),
+          ),
+          IconButton(
               onPressed: () async {
                 var refresh = await Modular.to.pushNamed<bool>('/search/search-filter');
                 if (refresh ?? false) pagingController.refresh();
               },
-              icon: Modular.get<ThemeStore>().isDarkModeEnable
-                  ? Image.asset('assets/filter_white.png')
-                  : Image.asset('assets/filter_black.png')),
+              icon: Modular.get<ThemeStore>().isDarkModeEnable ? Image.asset('assets/filter_white.png') : Image.asset('assets/filter_black.png')),
         ],
       ),
       body: Column(
         children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: isSearchVisibled ? 70 : 0,
+            child: Container(
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(),
+              child: TextFormField(
+                focusNode: searchNode,
+                controller: searchController,
+                onChanged: ((value) {
+                  if (_debounce?.isActive ?? false) _debounce!.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 500), () {
+                    setState(() {
+                      nomeFilter = value;
+                      pagingController.refresh();
+                    });
+                  });
+                }),
+                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                decoration: InputDecoration(
+                  hintText: 'Buscar por nome do produto',
+                  prefixIcon: Icon(
+                    MdiIcons.magnify,
+                    size: isSearchVisibled ? 20 : 0,
+                  ),
+                  contentPadding: const EdgeInsets.only(top: 10),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -65,6 +122,7 @@ class SearchPageState extends State<SearchPage> {
             order: store.selectOrder,
             inStock: store.inStock,
             outOfStock: store.outOfStock,
+            nome: nomeFilter,
           ));
         },
         cast: CatalogoDto.fromJson,
