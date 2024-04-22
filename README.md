@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="logo" src="" />    
+    <img alt="logo" src="https://github.com/alexandresmoraes/mercadovila/blob/master/assets/logo.png?raw=true" />    
 </p>
 
 # MercadoVila - Um aplicativo de referência de microsserviços desenvolvido com ASP.NET 6
