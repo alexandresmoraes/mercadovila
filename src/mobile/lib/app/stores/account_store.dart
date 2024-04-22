@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/models/account_model.dart';
+import 'package:mercadovila/app/utils/models/account_model.dart';
 
 part 'account_store.g.dart';
 

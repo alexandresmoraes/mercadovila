@@ -1,10 +1,10 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/models/notificacoes/notificacao_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/utils/models/notificacoes/notificacao_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'notificacoes_edit_controller.g.dart';
 

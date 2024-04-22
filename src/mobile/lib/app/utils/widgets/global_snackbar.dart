@@ -1,5 +1,5 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:vilasesmo/app/app_widget.dart';
+import 'package:mercadovila/app/app_widget.dart';
 
 class GlobalSnackbar {
   static void warning(String content) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 
 class InfiniteList<T> extends StatefulWidget {
   final Future<PagedResult<T>> Function(int nextIndex) request;

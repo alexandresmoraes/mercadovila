@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/search/search_filter_store.dart';
+import 'package:mercadovila/app/modules/search/search_filter_store.dart';
 
 class SearchFilterPage extends StatefulWidget {
   final String title;

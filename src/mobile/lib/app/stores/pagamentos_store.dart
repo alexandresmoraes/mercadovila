@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/dto/pagamentos/pagamento_detalhe_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
+import 'package:mercadovila/app/utils/dto/pagamentos/pagamento_detalhe_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 
 part 'pagamentos_store.g.dart';
 

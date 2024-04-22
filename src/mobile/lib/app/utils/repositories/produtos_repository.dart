@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
-import 'package:vilasesmo/app/utils/models/produtos/produto_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_detail_dto.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/models/produtos/image_upload_response_model.dart';
+import 'package:mercadovila/app/utils/models/produtos/produto_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
 
 @Injectable()
 class ProdutosRepository implements IProdutosRepository {

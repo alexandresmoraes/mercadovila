@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/compras/compras_carrinho_page.dart';
-import 'package:vilasesmo/app/modules/compras/compras_page.dart';
-import 'package:vilasesmo/app/modules/compras/compras_scanner_page.dart';
+import 'package:mercadovila/app/modules/compras/compras_carrinho_page.dart';
+import 'package:mercadovila/app/modules/compras/compras_page.dart';
+import 'package:mercadovila/app/modules/compras/compras_scanner_page.dart';
 
 class ComprasModule extends Module {
   static const routeName = '/compras/';

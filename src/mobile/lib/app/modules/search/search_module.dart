@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/search/search_filter_page.dart';
-import 'package:vilasesmo/app/modules/tab/search_page.dart';
+import 'package:mercadovila/app/modules/search/search_filter_page.dart';
+import 'package:mercadovila/app/modules/tab/search_page.dart';
 
 class SearchModule extends Module {
   static const routeName = '/search/';

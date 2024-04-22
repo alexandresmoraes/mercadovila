@@ -7,16 +7,16 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/produtos/produtos_detail_controller.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/modules/produtos/produtos_detail_controller.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_catalogo_repository.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_favoritos_repository.dart';
+import 'package:mercadovila/app/utils/widgets/card_count_produto.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 
 class ProdutosDetailPage extends StatefulWidget {
   final String title;
@@ -64,10 +64,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                   stops: const [0, .90],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  colors: [
-                                    const Color(0xFF545975).withOpacity(0.44),
-                                    const Color(0xFF333550).withOpacity(0.22)
-                                  ],
+                                  colors: [const Color(0xFF545975).withOpacity(0.44), const Color(0xFF333550).withOpacity(0.22)],
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(5),
@@ -78,10 +75,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                   stops: const [0, .90],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  colors: [
-                                    const Color(0xFFA6C1D6).withOpacity(0.07),
-                                    const Color(0xFF7C96AA).withOpacity(0.33)
-                                  ],
+                                  colors: [const Color(0xFFA6C1D6).withOpacity(0.07), const Color(0xFF7C96AA).withOpacity(0.33)],
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(10),
@@ -96,8 +90,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                               Text(
                                 snapshot.data!.nome,
                                 textAlign: TextAlign.center,
-                                style:
-                                    Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
@@ -153,8 +146,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                         ),
                                         RichText(
                                           text: TextSpan(
-                                            text:
-                                                "${UtilBrasilFields.obterReal(snapshot.data!.rating.toDouble(), moeda: false, decimal: 1)} ",
+                                            text: "${UtilBrasilFields.obterReal(snapshot.data!.rating.toDouble(), moeda: false, decimal: 1)} ",
                                             style: Theme.of(context).primaryTextTheme.bodyLarge,
                                             children: [
                                               TextSpan(
@@ -243,8 +235,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                               color: Colors.white,
                             ),
                           ),
-                          imageUrl:
-                              '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
+                          imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${snapshot.data!.imageUrl}',
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               width: 215,
@@ -311,9 +302,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                     _controller.isFavorito = !_controller.isFavorito;
                                   }
                                 },
-                                icon: _controller.isFavorito
-                                    ? Image.asset('assets/fav_red.png')
-                                    : Image.asset('assets/fav_grey.png'),
+                                icon: _controller.isFavorito ? Image.asset('assets/fav_red.png') : Image.asset('assets/fav_grey.png'),
                               );
                             }),
                           ],

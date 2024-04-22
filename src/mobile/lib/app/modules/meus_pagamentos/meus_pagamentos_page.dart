@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/pagamentos/pagamentos_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/pagamentos/pagamentos_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class MeusPagamentosPage extends StatefulWidget {
   final String title;
@@ -95,9 +95,7 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                   ),
                   const Expanded(child: SizedBox()),
                   Icon(
-                    item.pagamentoStatus == EnumStatusPagamento.cancelado.index
-                        ? MdiIcons.closeOctagon
-                        : MdiIcons.checkDecagram,
+                    item.pagamentoStatus == EnumStatusPagamento.cancelado.index ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
                     size: 20,
                     color: item.pagamentoStatus == EnumStatusPagamento.cancelado.index
                         ? Colors.red
@@ -201,9 +199,7 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(
-                            item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
-                                ? Icons.account_balance
-                                : MdiIcons.cash,
+                            item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? Icons.account_balance : MdiIcons.cash,
                             size: 20,
                             color: item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
                                 ? Colors.blue
@@ -214,9 +210,7 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index
-                                  ? "Desconto em folha"
-                                  : "Dinheiro",
+                              item.pagamentoTipo == EnumTipoPagamento.descontoEmFolha.index ? "Desconto em folha" : "Dinheiro",
                               style: Theme.of(context).primaryTextTheme.displayMedium,
                             ),
                           ),
@@ -227,9 +221,7 @@ class MeusPagamentosPageState extends State<MeusPagamentosPage> {
                 ),
               ),
               Divider(
-                color: themeStore.isDarkModeEnable
-                    ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                    : Theme.of(context).dividerTheme.color,
+                color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
               ),
             ],
           );

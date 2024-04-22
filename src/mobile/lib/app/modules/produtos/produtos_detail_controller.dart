@@ -2,8 +2,8 @@ import 'package:barcode/barcode.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_detail_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
 
 part 'produtos_detail_controller.g.dart';
 

@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/venda_status.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/venda_status.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CardVenda extends StatefulWidget {
@@ -81,8 +81,7 @@ class CardVendaState extends State<CardVenda> {
                         backgroundImage: AssetImage('assets/person.png'),
                       );
                     },
-                    imageUrl:
-                        '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
+                    imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${widget.item.compradorFotoUrl!}',
                     imageBuilder: (context, imageProvider) {
                       return CircleAvatar(
                         radius: 24,
@@ -113,8 +112,7 @@ class CardVendaState extends State<CardVenda> {
                   });
                 },
                 child: Container(
-                  decoration:
-                      const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                  decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                   margin: const EdgeInsets.only(right: 10, top: 5),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   width: 80,
@@ -197,8 +195,7 @@ class CardVendaState extends State<CardVenda> {
                               style: Theme.of(context).primaryTextTheme.displayMedium,
                               children: [
                                 TextSpan(
-                                  text: UtilBrasilFields.obterReal(itens[i].preco * itens[i].quantidade.toDouble(),
-                                      moeda: false),
+                                  text: UtilBrasilFields.obterReal(itens[i].preco * itens[i].quantidade.toDouble(), moeda: false),
                                   style: Theme.of(context).primaryTextTheme.bodyLarge,
                                 ),
                               ],

@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/queries/catalogo_todos_query.dart';
+import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/queries/catalogo_todos_query.dart';
 
 abstract class ICatalogoRepository implements Disposable {
   Future<PagedResult<CatalogoDto>> getProdutosNovos(int page);

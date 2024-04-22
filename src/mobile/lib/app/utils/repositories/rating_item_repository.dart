@@ -1,7 +1,7 @@
 import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/rating/rating_item.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_rating_repository.dart';
+import 'package:mercadovila/app/utils/dto/rating/rating_item.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_rating_repository.dart';
 
 @Injectable()
 class RatingRepository implements IRatingRepository {

@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/services/local_storage_service.dart';
+import 'package:mercadovila/app/utils/services/local_storage_service.dart';
 
 part 'theme_store.g.dart';
 

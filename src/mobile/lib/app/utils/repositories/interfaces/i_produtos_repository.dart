@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_detail_dto.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
-import 'package:vilasesmo/app/utils/models/produtos/produto_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_detail_dto.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/models/produtos/image_upload_response_model.dart';
+import 'package:mercadovila/app/utils/models/produtos/produto_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
 
 abstract class IProdutosRepository implements Disposable {
   Future<ProdutoModel> getProduto(String id);

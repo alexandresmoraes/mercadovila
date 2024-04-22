@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras_count.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/modules/compras/compras_carrinho_store.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/compras/carrinho_compras_dto.dart';
+import 'package:mercadovila/app/utils/widgets/card_produto_carrinho_compras_count.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoCarrinhoCompras extends StatefulWidget {
   final CarrinhoComprasItemDto item;

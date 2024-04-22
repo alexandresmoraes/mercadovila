@@ -1,4 +1,4 @@
-package com.sesmo.vilasesmo.mobile
+package com.sesmo.mercadovila.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

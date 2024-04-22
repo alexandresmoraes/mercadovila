@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/minhas_compras/minhas_compras_page.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detail_controller.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detail_page.dart';
+import 'package:mercadovila/app/modules/minhas_compras/minhas_compras_page.dart';
+import 'package:mercadovila/app/modules/vendas/venda_detail_controller.dart';
+import 'package:mercadovila/app/modules/vendas/venda_detail_page.dart';
 
 class MinhasComprasModule extends Module {
   static const routeName = '/minhas-compras/';

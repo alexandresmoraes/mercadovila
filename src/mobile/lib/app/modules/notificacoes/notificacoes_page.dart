@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/notificacoes/notificacao_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/notificacoes/notificacao_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NotificacoesPage extends StatefulWidget {
@@ -135,9 +135,10 @@ class NotificacoesPageState extends State<NotificacoesPage> {
                   subtitle: RichText(
                     text: TextSpan(
                       text: item.mensagem,
-                      style: Theme.of(context).primaryTextTheme.labelSmall!.copyWith(
-                          color: Theme.of(context).primaryTextTheme.labelSmall!.color!.withOpacity(0.6),
-                          letterSpacing: 0.1),
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .labelSmall!
+                          .copyWith(color: Theme.of(context).primaryTextTheme.labelSmall!.color!.withOpacity(0.6), letterSpacing: 0.1),
                       children: [
                         TextSpan(
                           text: '\n${timeago.format(locale: 'pt_BR', item.dataCriacao.toLocal())}',
@@ -151,9 +152,7 @@ class NotificacoesPageState extends State<NotificacoesPage> {
                   ),
                 ),
                 Divider(
-                  color: Modular.get<ThemeStore>().isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color
-                      : const Color(0xFFDFE8EF),
+                  color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).dividerTheme.color : const Color(0xFFDFE8EF),
                 ),
               ],
             ),

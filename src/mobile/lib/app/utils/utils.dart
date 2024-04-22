@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
 
 bool isNullorEmpty(String? str) {
   return str == null || str.isEmpty;

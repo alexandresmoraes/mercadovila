@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class ProdutosPage extends StatefulWidget {
   final String title;
@@ -178,19 +178,16 @@ class ProdutosPageState extends State<ProdutosPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             RichText(
-                                text: TextSpan(
-                                    text: "R\$ ",
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                    children: [
-                                  TextSpan(
-                                    text: UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
-                                    style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                  ),
-                                  TextSpan(
-                                    text: ' / ${item.unidadeMedida}',
-                                    style: Theme.of(context).primaryTextTheme.displayMedium,
-                                  )
-                                ])),
+                                text: TextSpan(text: "R\$ ", style: Theme.of(context).primaryTextTheme.displayMedium, children: [
+                              TextSpan(
+                                text: UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              TextSpan(
+                                text: ' / ${item.unidadeMedida}',
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              )
+                            ])),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Row(
@@ -205,8 +202,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                                   ),
                                   RichText(
                                     text: TextSpan(
-                                      text:
-                                          "${UtilBrasilFields.obterReal(item.rating.toDouble(), moeda: false, decimal: 1)} ",
+                                      text: "${UtilBrasilFields.obterReal(item.rating.toDouble(), moeda: false, decimal: 1)} ",
                                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                                       children: [
                                         TextSpan(
@@ -230,8 +226,7 @@ class ProdutosPageState extends State<ProdutosPage> {
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(10.0),
                                     ),
-                                    color:
-                                        themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                                    color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                                   ),
                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                   child: Row(

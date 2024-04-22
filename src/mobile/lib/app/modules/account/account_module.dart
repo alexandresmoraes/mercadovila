@@ -1,7 +1,7 @@
-import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
+import 'package:mercadovila/app/modules/account/account_edit_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/account/accounts_page.dart';
-import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
+import 'package:mercadovila/app/modules/account/accounts_page.dart';
+import 'package:mercadovila/app/modules/vendas/vendas_page.dart';
 
 import 'account_edit_page.dart';
 

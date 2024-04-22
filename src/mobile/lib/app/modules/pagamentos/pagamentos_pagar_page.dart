@@ -6,12 +6,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/pagamentos/pagamentos_pagar_controller.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/modules/pagamentos/pagamentos_pagar_controller.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/account/account_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class PagamentosPagarPage extends StatefulWidget {
   final String title;
@@ -28,9 +28,8 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).inputDecorationTheme.fillColor,
+        backgroundColor:
+            Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Pagamento'),
@@ -63,8 +62,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                             radius: 60,
                             backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                             child: Observer(builder: (_) {
-                              if (_controller.isPagamentoDetalheSelected &&
-                                  !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
+                              if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                 return CachedNetworkImage(
                                   placeholder: (context, url) => CircularProgress(
                                     color: Theme.of(context).primaryColorLight,
@@ -302,8 +300,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                           }
 
                           return _controller.enumTipoPagamento.keys
-                              .where((key) =>
-                                  _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
+                              .where((key) => _controller.enumTipoPagamento[key]!.toLowerCase().contains(search.toLowerCase()))
                               .toList();
                         },
                         builder: (context, controller, focusNode) {
@@ -389,8 +386,7 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                           }
 
                           return _controller.enumMesReferencia.keys
-                              .where((key) =>
-                                  _controller.enumMesReferencia[key]!.toLowerCase().contains(search.toLowerCase()))
+                              .where((key) => _controller.enumMesReferencia[key]!.toLowerCase().contains(search.toLowerCase()))
                               .toList();
                         },
                         builder: (context, controller, focusNode) {

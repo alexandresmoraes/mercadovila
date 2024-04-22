@@ -10,13 +10,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vilasesmo/app/modules/account/account_edit_controller.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/modules/account/account_edit_controller.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 
 class AccountEditPage extends StatefulWidget {
   final String title;
@@ -102,9 +102,8 @@ class AccountEditPageState extends State<AccountEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable
-          ? Theme.of(context).scaffoldBackgroundColor
-          : Theme.of(context).inputDecorationTheme.fillColor,
+      backgroundColor:
+          Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.id != null ? "Editando usuário" : "Criando usuário"),
@@ -147,9 +146,8 @@ class AccountEditPageState extends State<AccountEditPage> {
                               if (!isNullorEmpty(_controller.fotoPath)) {
                                 return CircleAvatar(
                                   radius: 100,
-                                  backgroundImage: kIsWeb
-                                      ? Image.network(_controller.fotoPath!).image
-                                      : Image.file(File(_controller.fotoPath!)).image,
+                                  backgroundImage:
+                                      kIsWeb ? Image.network(_controller.fotoPath!).image : Image.file(File(_controller.fotoPath!)).image,
                                 );
                               } else if (!isNullorEmpty(_controller.fotoUrl)) {
                                 return CachedNetworkImage(
@@ -162,8 +160,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                                     radius: 100,
                                     backgroundImage: AssetImage('assets/person.png'),
                                   ),
-                                  imageUrl:
-                                      '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
+                                  imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/account/photo/${_controller.fotoUrl!}',
                                   imageBuilder: (context, imageProvider) {
                                     return CircleAvatar(
                                       radius: 100,
@@ -233,9 +230,7 @@ class AccountEditPageState extends State<AccountEditPage> {
                         },
                         child: Observer(builder: (_) {
                           return Text(
-                            isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath)
-                                ? 'Escolher foto'
-                                : 'Trocar foto',
+                            isNullorEmpty(_controller.fotoUrl) && isNullorEmpty(_controller.fotoPath) ? 'Escolher foto' : 'Trocar foto',
                             style: Theme.of(context).primaryTextTheme.displayLarge,
                           );
                         }),

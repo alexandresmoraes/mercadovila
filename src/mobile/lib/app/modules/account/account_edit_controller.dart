@@ -1,14 +1,14 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/utils/models/account/new_and_update_account_model.dart';
-import 'package:vilasesmo/app/utils/models/account_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
-import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/utils/models/account/new_and_update_account_model.dart';
+import 'package:mercadovila/app/utils/models/account_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'account_edit_controller.g.dart';
 

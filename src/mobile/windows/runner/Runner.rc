@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.sesmo.vilasesmo" "\0"
-            VALUE "FileDescription", "vilasesmo" "\0"
+            VALUE "CompanyName", "com.sesmo.mercadovila" "\0"
+            VALUE "FileDescription", "mercadovila" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "vilasesmo" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.sesmo.vilasesmo. All rights reserved." "\0"
-            VALUE "OriginalFilename", "vilasesmo.exe" "\0"
-            VALUE "ProductName", "vilasesmo" "\0"
+            VALUE "InternalName", "mercadovila" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.sesmo.mercadovila. All rights reserved." "\0"
+            VALUE "OriginalFilename", "mercadovila.exe" "\0"
+            VALUE "ProductName", "mercadovila" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

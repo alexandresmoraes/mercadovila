@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/account/account_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_account_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/account/account_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_account_repository.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class AccountsPage extends StatefulWidget {
   final String title;
@@ -241,8 +241,7 @@ class AccountsPageState extends State<AccountsPage> {
                           }
 
                           return Container(
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
+                            decoration: const BoxDecoration(color: Color(0xFFF05656), borderRadius: BorderRadius.all(Radius.circular(6))),
                             margin: const EdgeInsets.only(right: 10, top: 5),
                             padding: const EdgeInsets.only(left: 5, right: 5),
                             width: 80,
@@ -268,9 +267,7 @@ class AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 Divider(
-                  color: themeStore.isDarkModeEnable
-                      ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
-                      : Theme.of(context).dividerTheme.color,
+                  color: themeStore.isDarkModeEnable ? Theme.of(context).dividerTheme.color!.withOpacity(0.05) : Theme.of(context).dividerTheme.color,
                 ),
               ],
             ),

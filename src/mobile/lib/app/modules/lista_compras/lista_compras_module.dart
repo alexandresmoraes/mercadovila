@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/lista_compras/lista_compras_page.dart';
+import 'package:mercadovila/app/modules/lista_compras/lista_compras_page.dart';
 
 class ListaComprasModule extends Module {
   static const routeName = '/lista-compras/';

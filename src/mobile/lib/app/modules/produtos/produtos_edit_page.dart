@@ -11,12 +11,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/produtos/produtos_edit_controller.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/modules/produtos/produtos_edit_controller.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 
 class ProdutosEditPage extends StatefulWidget {
   final String title;

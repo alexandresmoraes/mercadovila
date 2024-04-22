@@ -1,8 +1,8 @@
 import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/favoritos/favorito_item_dto.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_favoritos_repository.dart';
+import 'package:mercadovila/app/utils/dto/favoritos/favorito_item_dto.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_favoritos_repository.dart';
 
 @Injectable()
 class FavoritosRepository implements IFavoritosRepository {

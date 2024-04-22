@@ -10,12 +10,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/notificacoes/notificacoes_edit_controller.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/modules/notificacoes/notificacoes_edit_controller.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 
 class NotificacoesEditPage extends StatefulWidget {
   final String title;
@@ -96,9 +96,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarkModeEnabled()
-          ? Theme.of(context).scaffoldBackgroundColor
-          : Theme.of(context).inputDecorationTheme.fillColor,
+      backgroundColor: isDarkModeEnabled() ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).inputDecorationTheme.fillColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(isNullorEmpty(widget.id) ? "Criando notificação" : "Editando notificação"),
@@ -143,9 +141,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                                     image: DecorationImage(
-                                      image: kIsWeb
-                                          ? Image.network(_controller.imagePath!).image
-                                          : Image.file(File(_controller.imagePath!)).image,
+                                      image: kIsWeb ? Image.network(_controller.imagePath!).image : Image.file(File(_controller.imagePath!)).image,
                                     ),
                                   ),
                                 );
@@ -160,8 +156,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                     radius: 100,
                                     backgroundImage: AssetImage('assets/person.png'),
                                   ),
-                                  imageUrl:
-                                      '${Modular.get<BaseOptions>().baseUrl}/api/notificacoes/image/${_controller.imageUrl!}',
+                                  imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/notificacoes/image/${_controller.imageUrl!}',
                                   imageBuilder: (context, imageProvider) {
                                     return Container(
                                       decoration: BoxDecoration(
@@ -239,9 +234,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                         },
                         child: Observer(builder: (_) {
                           return Text(
-                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath)
-                                ? 'Escolher imagem'
-                                : 'Trocar imagem',
+                            isNullorEmpty(_controller.imageUrl) && isNullorEmpty(_controller.imagePath) ? 'Escolher imagem' : 'Trocar imagem',
                             style: Theme.of(context).primaryTextTheme.displayLarge,
                           );
                         }),
@@ -402,9 +395,7 @@ class NotificacoesEditPageState extends State<NotificacoesEditPage> {
                                                 isDefaultAction: true,
                                                 onPressed: () async {
                                                   Modular.to.pop();
-                                                  if (!_controller.isDeleting &&
-                                                      !_controller.isSaving &&
-                                                      _controller.isValid) {
+                                                  if (!_controller.isDeleting && !_controller.isSaving && _controller.isValid) {
                                                     await _controller.delete();
                                                   }
                                                 },

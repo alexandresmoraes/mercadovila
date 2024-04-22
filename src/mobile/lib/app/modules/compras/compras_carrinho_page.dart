@@ -11,13 +11,13 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/compras/compras_carrinho_store.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
-import 'package:vilasesmo/app/utils/widgets/card_produto_carrinho_compras.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/modules/compras/compras_carrinho_store.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/card_produto_carrinho_compras.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CopmprasCarrinhoPage extends StatefulWidget {
@@ -68,8 +68,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
               if (_currentIndex == 0) {
                 Modular.to.pop();
               } else {
-                _pageController!.animateToPage(_currentIndex - 1,
-                    duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                _pageController!.animateToPage(_currentIndex - 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                 if (_currentIndex == 0) {
                   step1Done = false;
                 } else if (_currentIndex == 1) {
@@ -87,9 +86,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                 ? IconButton(
                     icon: Icon(
                       MdiIcons.barcode,
-                      color: !Modular.get<ThemeStore>().isDarkModeEnable
-                          ? const Color(0xFF373C58)
-                          : const Color(0xFFF2F5F8),
+                      color: !Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                     ),
                     onPressed: () async {
                       Modular.to.pushNamed('/compras/scanner');
@@ -148,9 +145,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                       width: 20,
                                       decoration: BoxDecoration(
                                         color: _currentIndex >= i ? Colors.white : Colors.black,
-                                        border: Border.all(
-                                            color: _currentIndex == i ? Colors.black : const Color(0xFF505266),
-                                            width: 1.5),
+                                        border: Border.all(color: _currentIndex == i ? Colors.black : const Color(0xFF505266), width: 1.5),
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20.0),
                                         ),
@@ -183,8 +178,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                         decoration: BoxDecoration(
                                           color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                           border: Border.all(
-                                            color:
-                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
+                                            color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
                                             width: 1.5,
                                           ),
                                           borderRadius: const BorderRadius.all(
@@ -205,10 +199,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                       width: 20,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            color:
-                                                _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2),
-                                            width: 1.5),
+                                        border: Border.all(color: _currentIndex >= i ? const Color(0xFF4A4352) : const Color(0xFFBcc8d2), width: 1.5),
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20.0),
                                         ),
@@ -241,8 +232,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                 onPageChanged: (index) {
                   _currentIndex = index;
                   double currentIndex = _currentIndex.toDouble();
-                  _scrollController!
-                      .animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                  _scrollController!.animateTo(currentIndex, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                   setState(() {});
                 },
                 children: [
@@ -288,8 +278,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                         if (carrinhoComprasStore.isLoading) return;
 
                         if (_currentIndex == 0) {
-                          _pageController!.animateToPage(_currentIndex + 1,
-                              duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+                          _pageController!.animateToPage(_currentIndex + 1, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
                         } else if (_currentIndex == 1) {
                           await carrinhoComprasStore.criarCompra();
                         }
@@ -357,8 +346,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                     isDestructiveAction: true,
                                     onPressed: () async {
                                       Modular.to.pop();
-                                      Modular.get<ComprasCarrinhoStore>()
-                                          .removerCarrinhoComprasItem(item.produtoId, true);
+                                      Modular.get<ComprasCarrinhoStore>().removerCarrinhoComprasItem(item.produtoId, true);
                                     },
                                     child: const Text(
                                       'Remover',
@@ -474,9 +462,7 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                       "Detalhes",
                       style: TextStyle(
                           fontSize: 14,
-                          color: Modular.get<ThemeStore>().isDarkModeEnable
-                              ? Theme.of(context).primaryColorLight
-                              : Theme.of(context).primaryColor,
+                          color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     )),
               );
@@ -857,13 +843,11 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                             contentPadding: const EdgeInsets.all(0),
                             leading: Text(
                               "Preço",
-                              style:
-                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             trailing: Text(
                               UtilBrasilFields.obterReal(carrinhoComprasStore.selectedItem!.preco.toDouble()),
-                              style:
-                                  Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                              style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],

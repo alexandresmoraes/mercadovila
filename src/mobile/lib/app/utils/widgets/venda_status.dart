@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
+import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
 
 class VendasStatus extends StatelessWidget {
   final int status;

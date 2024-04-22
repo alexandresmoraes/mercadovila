@@ -1,6 +1,6 @@
-import 'package:vilasesmo/app/modules/login/login_controller.dart';
+import 'package:mercadovila/app/modules/login/login_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/login/login_page.dart';
+import 'package:mercadovila/app/modules/login/login_page.dart';
 
 class LoginModule extends Module {
   static const routeName = '/login/';

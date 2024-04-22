@@ -5,12 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vilasesmo/app/utils/dto/notificacoes/notificacao_dto.dart';
-import 'package:vilasesmo/app/utils/models/notificacoes/notificacao_model.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/models/produtos/image_upload_response_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
+import 'package:mercadovila/app/utils/dto/notificacoes/notificacao_dto.dart';
+import 'package:mercadovila/app/utils/models/notificacoes/notificacao_model.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/models/produtos/image_upload_response_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
 
 @Injectable()
 class NotificacoesRepository implements INotificacoesRepository {

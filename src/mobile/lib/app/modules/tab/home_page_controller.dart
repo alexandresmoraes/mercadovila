@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
+import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
 
 part 'home_page_controller.g.dart';
 
