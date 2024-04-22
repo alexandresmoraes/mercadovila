@@ -1,9 +1,9 @@
 import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/queries/catalogo_todos_query.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_catalogo_repository.dart';
+import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/queries/catalogo_todos_query.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_catalogo_repository.dart';
 
 @Injectable()
 class CatalogoRepository implements ICatalogoRepository {

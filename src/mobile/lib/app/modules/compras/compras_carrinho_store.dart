@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/utils/dto/compras/carrinho_compras_dto.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/produto_dto.dart';
-import 'package:vilasesmo/app/utils/models/compras/compra_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_compras_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/utils/dto/compras/carrinho_compras_dto.dart';
+import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
+import 'package:mercadovila/app/utils/models/compras/compra_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_compras_repository.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'compras_carrinho_store.g.dart';
 
@@ -113,12 +113,10 @@ abstract class ComprasCarrinhoStoreBase with Store {
   bool get isValidCarrinhoCompras => carrinhoComprasItens.isNotEmpty;
 
   @computed
-  double get subTotal =>
-      carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+  double get subTotal => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
   @computed
-  double get total =>
-      carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
+  double get total => carrinhoComprasItens.fold(0, (previousValue, item) => previousValue + (item.precoPago * item.quantidade));
 
   void clearCarrinhoCompras() {
     carrinhoComprasItens.clear();

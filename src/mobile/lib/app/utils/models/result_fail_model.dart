@@ -1,4 +1,4 @@
-import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/utils.dart';
 
 class ResultError {
   String? code;
@@ -42,8 +42,6 @@ class ResultFailModel {
       );
 
   String getErrorNotProperty() => errors.where((e) => isNullorEmpty(e.property)).map((e) => e.message).join('\n');
-  String getErrorByProperty(String propertyName) => errors
-      .where((e) => (e.property ?? '').toLowerCase() == propertyName.toLowerCase())
-      .map((e) => e.message)
-      .join('\n');
+  String getErrorByProperty(String propertyName) =>
+      errors.where((e) => (e.property ?? '').toLowerCase() == propertyName.toLowerCase()).map((e) => e.message).join('\n');
 }

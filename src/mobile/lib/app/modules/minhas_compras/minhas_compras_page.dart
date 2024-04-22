@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_vendas_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/card_venda.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_vendas_repository.dart';
+import 'package:mercadovila/app/utils/widgets/card_venda.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class MinhasComprasPage extends StatefulWidget {
   final String title;
@@ -66,32 +66,23 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
                       Radius.circular(10.0),
                     ),
                   ),
-                  backgroundColor:
-                      Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
+                  backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? const Color(0xFF435276) : const Color(0xFFEDF2F6),
                   bottom: TabBar(
                     indicator: UnderlineTabIndicator(
                       borderSide: BorderSide(
                         width: 3.0,
-                        color: Modular.get<ThemeStore>().isDarkModeEnable
-                            ? Theme.of(context).primaryColor
-                            : const Color(0xFFEF5656),
+                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                       ),
                       insets: const EdgeInsets.symmetric(horizontal: 8.0),
                     ),
                     labelColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                     indicatorWeight: 4,
                     unselectedLabelStyle: TextStyle(
-                        fontSize: 13,
-                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w400),
+                        fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
                     labelStyle: TextStyle(
-                        fontSize: 13,
-                        color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 13, color: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
                     indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable
-                        ? Theme.of(context).primaryColor
-                        : const Color(0xFFEF5656),
+                    indicatorColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).primaryColor : const Color(0xFFEF5656),
                     tabs: const [
                       Tab(
                           child: Text(

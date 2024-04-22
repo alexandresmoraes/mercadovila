@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/stores/pagamentos_store.dart';
-import 'package:vilasesmo/app/utils/dto/carrinho/carrinho_dto.dart';
-import 'package:vilasesmo/app/utils/models/vendas/venda_model.dart';
-import 'package:vilasesmo/app/utils/repositories/carrinho_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_carrinho_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/vendas_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/stores/pagamentos_store.dart';
+import 'package:mercadovila/app/utils/dto/carrinho/carrinho_dto.dart';
+import 'package:mercadovila/app/utils/models/vendas/venda_model.dart';
+import 'package:mercadovila/app/utils/repositories/carrinho_repository.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_carrinho_repository.dart';
+import 'package:mercadovila/app/utils/repositories/vendas_repository.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'carrinho_store.g.dart';
 

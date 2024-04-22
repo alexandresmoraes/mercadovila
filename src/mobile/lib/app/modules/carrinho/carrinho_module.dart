@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_page.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_success_page.dart';
-import 'package:vilasesmo/app/modules/tab/scanner_page.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_page.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_success_page.dart';
+import 'package:mercadovila/app/modules/tab/scanner_page.dart';
 
 class CarrinhoModule extends Module {
   static const routeName = '/carrinho/';

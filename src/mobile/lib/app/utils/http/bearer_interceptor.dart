@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
 
 class BearerInterceptor extends InterceptorsWrapper {
   @override

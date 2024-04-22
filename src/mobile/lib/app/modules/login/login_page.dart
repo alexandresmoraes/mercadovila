@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/modules/login/login_controller.dart';
-import 'package:vilasesmo/app/modules/tab/tab_module.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/utils/models/login_model.dart';
-import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
+import 'package:mercadovila/app/modules/login/login_controller.dart';
+import 'package:mercadovila/app/modules/tab/tab_module.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/utils/models/login_model.dart';
+import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;

@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/tab/tab_page.dart';
+import 'package:mercadovila/app/modules/tab/tab_page.dart';
 
 class TabModule extends Module {
   static const routeName = '/tab/';

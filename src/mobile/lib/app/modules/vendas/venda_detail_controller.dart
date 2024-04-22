@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_vendas_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_vendas_repository.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'venda_detail_controller.g.dart';
 

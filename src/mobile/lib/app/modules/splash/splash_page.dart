@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/modules/login/login_module.dart';
-import 'package:vilasesmo/app/modules/tab/tab_module.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/utils/services/interfaces/i_auth_service.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
+import 'package:mercadovila/app/modules/login/login_module.dart';
+import 'package:mercadovila/app/modules/tab/tab_module.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_rating_repository.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_rating_repository.dart';
 
 class RatingProduto extends StatefulWidget {
   final num rating;

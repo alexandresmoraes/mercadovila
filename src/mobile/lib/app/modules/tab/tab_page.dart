@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/tab/account_page.dart';
-import 'package:vilasesmo/app/modules/tab/home_page.dart';
-import 'package:vilasesmo/app/modules/tab/scanner_page.dart';
-import 'package:vilasesmo/app/modules/tab/search_page.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/modules/tab/account_page.dart';
+import 'package:mercadovila/app/modules/tab/home_page.dart';
+import 'package:mercadovila/app/modules/tab/scanner_page.dart';
+import 'package:mercadovila/app/modules/tab/search_page.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 class TabPage extends StatefulWidget {
   final String title;
@@ -51,8 +51,7 @@ class _TabPageState extends State<TabPage> {
                   ),
                   onPressed: () async {
                     if (index == 2 && (kIsWeb || (!Platform.isAndroid && !Platform.isIOS))) {
-                      GlobalSnackbar.error(
-                          'Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
+                      GlobalSnackbar.error('Ops! Parece que esta funcionalidade não está disponível para o seu dispositivo.');
                     } else {
                       setState(() => _bottomNavIndex = index);
                     }

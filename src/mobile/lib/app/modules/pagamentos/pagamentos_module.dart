@@ -1,7 +1,7 @@
-import 'package:vilasesmo/app/modules/pagamentos/pagamentos_pagar_controller.dart';
+import 'package:mercadovila/app/modules/pagamentos/pagamentos_pagar_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/pagamentos/pagamentos_pagar_page.dart';
-import 'package:vilasesmo/app/modules/pagamentos/pagamentos_page.dart';
+import 'package:mercadovila/app/modules/pagamentos/pagamentos_pagar_page.dart';
+import 'package:mercadovila/app/modules/pagamentos/pagamentos_page.dart';
 
 class PagamentosModule extends Module {
   static const routeName = '/pagamentos/';

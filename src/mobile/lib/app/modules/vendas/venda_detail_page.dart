@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detail_controller.dart';
-import 'package:vilasesmo/app/stores/account_store.dart';
-import 'package:vilasesmo/app/utils/dto/vendas/venda_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/card_venda_item.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
-import 'package:vilasesmo/app/utils/widgets/future_triple.dart';
-import 'package:vilasesmo/app/utils/widgets/refresh_widget.dart';
-import 'package:vilasesmo/app/utils/widgets/venda_status.dart';
+import 'package:mercadovila/app/modules/vendas/venda_detail_controller.dart';
+import 'package:mercadovila/app/stores/account_store.dart';
+import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
+import 'package:mercadovila/app/utils/widgets/card_venda_item.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/widgets/future_triple.dart';
+import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
+import 'package:mercadovila/app/utils/widgets/venda_status.dart';
 
 class VendaDetailPage extends StatefulWidget {
   final String title;
@@ -126,9 +126,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
         },
       ),
       bottomNavigationBar: Observer(builder: (_) {
-        return isAdmin &&
-                _controller.vendaDetailDto != null &&
-                _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
+        return isAdmin && _controller.vendaDetailDto != null && _controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

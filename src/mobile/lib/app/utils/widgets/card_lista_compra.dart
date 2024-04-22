@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/stores/theme_store.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/stores/theme_store.dart';
+import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardListaCompra extends StatefulWidget {
   final ListaComprasDto item;

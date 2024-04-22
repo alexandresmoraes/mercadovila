@@ -1,4 +1,4 @@
-import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/utils.dart';
 
 class AccountModel {
   AccountModel({

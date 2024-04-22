@@ -9,7 +9,7 @@ builder.Services.AddSerilog();
 
 var healthCheckBuilder = builder.Services.AddHealthChecksUI(setupSettings: setup =>
 {
-  setup.SetHeaderText("VilaSESMO - Status Page");
+  setup.SetHeaderText("MercadoVila - Status Page");
   var endpoints = builder.Configuration.GetSection("HealthChecks").Get<List<string>>();
 
   foreach (var endpoint in endpoints)
@@ -31,8 +31,8 @@ app.MapHealthChecks();
 
 app.MapHealthChecksUI(setup =>
 {
-  setup.AddCustomStylesheet("vilasesmo.css");
+  setup.AddCustomStylesheet("site.css");
   setup.UIPath = "/";
-  setup.PageTitle = "VilaSESMO - Status Page";
+  setup.PageTitle = "MercadoVila - Status Page";
 });
 app.Run();

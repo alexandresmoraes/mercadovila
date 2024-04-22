@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/tab/tab_module.dart';
+import 'package:mercadovila/app/modules/tab/tab_module.dart';
 
 class CarrinhoSuccessPage extends StatefulWidget {
   final String title;

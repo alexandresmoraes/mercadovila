@@ -2,8 +2,8 @@ import 'package:dio/io.dart';
 
 import 'dio_adapter_stub.dart' if (dart.library.io) 'dio_adapter_mobile.dart' if (dart.library.js) 'dio_adapter_web.dart';
 import 'package:dio/dio.dart';
-import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
-import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
+import 'package:mercadovila/app/utils/http/error_interceptor.dart';
+import 'package:mercadovila/app/utils/http/log_interceptor.dart';
 
 import 'bearer_interceptor.dart';
 

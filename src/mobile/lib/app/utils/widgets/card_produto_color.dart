@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/utils/dto/catalogo/catalogo_dto.dart';
-import 'package:vilasesmo/app/utils/widgets/card_count_produto.dart';
-import 'package:vilasesmo/app/utils/widgets/circular_progress.dart';
+import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
+import 'package:mercadovila/app/utils/widgets/card_count_produto.dart';
+import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoColor extends StatelessWidget {
   final CatalogoDto item;

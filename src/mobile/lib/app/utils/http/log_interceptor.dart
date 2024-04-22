@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vilasesmo/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/utils.dart';
 
 class CustomLogInterceptor extends InterceptorsWrapper {
   @override

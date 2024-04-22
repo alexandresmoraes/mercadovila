@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:vilasesmo/app/utils/dto/produtos/lista_compras_dto.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/card_lista_compra.dart';
-import 'package:vilasesmo/app/utils/widgets/infinite_list.dart';
+import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/widgets/card_lista_compra.dart';
+import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class ListaComprasPage extends StatefulWidget {
   final String title;

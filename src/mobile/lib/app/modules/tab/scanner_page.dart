@@ -3,11 +3,11 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_produtos_repository.dart';
-import 'package:vilasesmo/app/utils/repositories/produtos_repository.dart';
-import 'package:vilasesmo/app/utils/widgets/card_scanner_produto.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
+import 'package:mercadovila/app/utils/repositories/produtos_repository.dart';
+import 'package:mercadovila/app/utils/widgets/card_scanner_produto.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 class ScannerPage extends StatefulWidget {
   final String title;

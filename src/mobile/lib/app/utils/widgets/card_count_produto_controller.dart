@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/utils/widgets/global_snackbar.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
+import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 
 part 'card_count_produto_controller.g.dart';
 

@@ -2,11 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/utils/dto/compras/compra_dto.dart';
-import 'package:vilasesmo/app/utils/models/compras/compra_model.dart';
-import 'package:vilasesmo/app/utils/models/paged_result.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/repositories/interfaces/i_compras_repository.dart';
+import 'package:mercadovila/app/utils/dto/compras/compra_dto.dart';
+import 'package:mercadovila/app/utils/models/compras/compra_model.dart';
+import 'package:mercadovila/app/utils/models/paged_result.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/repositories/interfaces/i_compras_repository.dart';
 
 @Injectable()
 class ComprasRepository implements IComprasRepository {

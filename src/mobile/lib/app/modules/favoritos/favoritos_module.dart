@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/favoritos/favoritos_page.dart';
+import 'package:mercadovila/app/modules/favoritos/favoritos_page.dart';
 
 class FavoritosModule extends Module {
   static const routeName = '/favoritos/';

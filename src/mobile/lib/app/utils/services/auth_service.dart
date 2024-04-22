@@ -3,14 +3,14 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/login/login_module.dart';
-import 'package:vilasesmo/app/utils/http/error_interceptor.dart';
-import 'package:vilasesmo/app/utils/http/log_interceptor.dart';
-import 'package:vilasesmo/app/utils/models/login_model.dart';
-import 'package:vilasesmo/app/utils/models/result_fail_model.dart';
-import 'package:vilasesmo/app/utils/models/account_model.dart';
-import 'package:vilasesmo/app/utils/models/access_token_model.dart';
-import 'package:vilasesmo/app/utils/services/local_storage_service.dart';
+import 'package:mercadovila/app/modules/login/login_module.dart';
+import 'package:mercadovila/app/utils/http/error_interceptor.dart';
+import 'package:mercadovila/app/utils/http/log_interceptor.dart';
+import 'package:mercadovila/app/utils/models/login_model.dart';
+import 'package:mercadovila/app/utils/models/result_fail_model.dart';
+import 'package:mercadovila/app/utils/models/account_model.dart';
+import 'package:mercadovila/app/utils/models/access_token_model.dart';
+import 'package:mercadovila/app/utils/services/local_storage_service.dart';
 import 'interfaces/i_auth_service.dart';
 
 class AuthService implements IAuthService {

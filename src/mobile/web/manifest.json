@@ -1,6 +1,6 @@
 {
-    "name": "vilasesmo",
-    "short_name": "vilasesmo",
+    "name": "Mercado Vila",
+    "short_name": "mercadovila",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",

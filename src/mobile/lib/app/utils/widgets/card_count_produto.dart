@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vilasesmo/app/modules/carrinho/carrinho_store.dart';
-import 'package:vilasesmo/app/utils/widgets/card_count_produto_controller.dart';
+import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
+import 'package:mercadovila/app/utils/widgets/card_count_produto_controller.dart';
 
 class CardCountProduto extends StatelessWidget {
   final controller = Modular.get<CardCountProdutoController>();
@@ -77,9 +77,7 @@ class CardCountProduto extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  !isAtivo || controller.quantidade > controller.estoqueDisponivel
-                      ? Colors.redAccent
-                      : Theme.of(context).primaryColorLight,
+                  !isAtivo || controller.quantidade > controller.estoqueDisponivel ? Colors.redAccent : Theme.of(context).primaryColorLight,
                   controller.quantidade < controller.estoqueDisponivel && isAtivo
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).iconTheme.color!
@@ -142,10 +140,7 @@ class CardCountProduto extends StatelessWidget {
                     )),
                 Text(
                   "${controller.quantidade}",
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .bodyLarge!
-                      .copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
+                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryTextTheme.bodySmall!.color),
                 ),
                 IconButton(
                   padding: const EdgeInsets.all(0),

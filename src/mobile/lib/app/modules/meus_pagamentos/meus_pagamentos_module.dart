@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/meus_pagamentos/meus_pagamentos_page.dart';
+import 'package:mercadovila/app/modules/meus_pagamentos/meus_pagamentos_page.dart';
 
 class MeusPagamentosModule extends Module {
   static const routeName = '/meus-pagamentos/';

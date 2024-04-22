@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detail_controller.dart';
-import 'package:vilasesmo/app/modules/vendas/venda_detail_page.dart';
-import 'package:vilasesmo/app/modules/vendas/vendas_page.dart';
+import 'package:mercadovila/app/modules/vendas/venda_detail_controller.dart';
+import 'package:mercadovila/app/modules/vendas/venda_detail_page.dart';
+import 'package:mercadovila/app/modules/vendas/vendas_page.dart';
 
 class VendasModule extends Module {
   static const routeName = '/vendas/';

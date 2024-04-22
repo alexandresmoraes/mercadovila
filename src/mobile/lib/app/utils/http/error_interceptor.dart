@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vilasesmo/app/app_widget.dart';
+import 'package:mercadovila/app/app_widget.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
   @override
