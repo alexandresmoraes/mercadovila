@@ -4,7 +4,8 @@
 
 # MercadoVila - Um aplicativo de referência de microsserviços desenvolvido com ASP.NET 6
 
-![mini-movie](https://github.com/alexandresmoraes/mercadovila/assets/26805150/963792ae-d4d1-4ff9-889a-76d46df924a3)
+
+https://github.com/alexandresmoraes/mercadovila/assets/26805150/86ae31da-65e2-4c3f-8f6b-f69759724d51
 
 
 O aplicativo é um projeto de código aberto desenvolvido com objetivo compartilhar as melhores práticas e abordagens para o desenvolvimento de aplicativos completos e complexos utilizando tecnologias .NET.
