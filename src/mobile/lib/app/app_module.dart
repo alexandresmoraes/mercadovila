@@ -24,6 +24,7 @@ import 'package:mercadovila/app/stores/account_store.dart';
 import 'package:mercadovila/app/stores/pagamentos_store.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/controllers/favorito_controller.dart';
+import 'package:mercadovila/app/utils/guard/auth_guard.dart';
 import 'package:mercadovila/app/utils/http/dio_api.dart';
 import 'package:mercadovila/app/utils/repositories/account_repository.dart';
 import 'package:mercadovila/app/utils/repositories/carrinho_repository.dart';
@@ -73,19 +74,19 @@ class AppModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ModuleRoute(Modular.initialRoute, module: SplashModule()),
-    ModuleRoute(TabModule.routeName, module: TabModule()),
+    ModuleRoute(TabModule.routeName, module: TabModule(), guards: [AuthGuard()]),
     ModuleRoute(LoginModule.routeName, module: LoginModule()),
-    ModuleRoute(AccountModule.routeName, module: AccountModule()),
-    ModuleRoute(CarrinhoModule.routeName, module: CarrinhoModule()),
-    ModuleRoute(SearchModule.routeName, module: SearchModule()),
-    ModuleRoute(ProdutosModule.routeName, module: ProdutosModule()),
-    ModuleRoute(VendasModule.routeName, module: VendasModule()),
-    ModuleRoute(ComprasModule.routeName, module: ComprasModule()),
-    ModuleRoute(MinhasComprasModule.routeName, module: MinhasComprasModule()),
-    ModuleRoute(PagamentosModule.routeName, module: PagamentosModule()),
-    ModuleRoute(FavoritosModule.routeName, module: FavoritosModule()),
-    ModuleRoute(ListaComprasModule.routeName, module: ListaComprasModule()),
-    ModuleRoute(NotificacoesModule.routeName, module: NotificacoesModule()),
-    ModuleRoute(MeusPagamentosModule.routeName, module: MeusPagamentosModule()),
+    ModuleRoute(AccountModule.routeName, module: AccountModule(), guards: [AuthGuard()]),
+    ModuleRoute(CarrinhoModule.routeName, module: CarrinhoModule(), guards: [AuthGuard()]),
+    ModuleRoute(SearchModule.routeName, module: SearchModule(), guards: [AuthGuard()]),
+    ModuleRoute(ProdutosModule.routeName, module: ProdutosModule(), guards: [AuthGuard()]),
+    ModuleRoute(VendasModule.routeName, module: VendasModule(), guards: [AuthGuard()]),
+    ModuleRoute(ComprasModule.routeName, module: ComprasModule(), guards: [AuthGuard()]),
+    ModuleRoute(MinhasComprasModule.routeName, module: MinhasComprasModule(), guards: [AuthGuard()]),
+    ModuleRoute(PagamentosModule.routeName, module: PagamentosModule(), guards: [AuthGuard()]),
+    ModuleRoute(FavoritosModule.routeName, module: FavoritosModule(), guards: [AuthGuard()]),
+    ModuleRoute(ListaComprasModule.routeName, module: ListaComprasModule(), guards: [AuthGuard()]),
+    ModuleRoute(NotificacoesModule.routeName, module: NotificacoesModule(), guards: [AuthGuard()]),
+    ModuleRoute(MeusPagamentosModule.routeName, module: MeusPagamentosModule(), guards: [AuthGuard()]),
   ];
 }

@@ -11,4 +11,7 @@ abstract class AccountStoreBase with Store {
 
   @action
   void setAccount(AccountModel account) => this.account = account;
+
+  @computed
+  bool get isLogged => account != null;
 }
