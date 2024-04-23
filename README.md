@@ -2,7 +2,7 @@
     <img alt="logo" src="https://github.com/alexandresmoraes/mercadovila/blob/master/assets/logo.png?raw=true" />    
 </p>
 
-# MercadoVila - Um aplicativo de referência de microsserviços desenvolvido com ASP.NET 6
+# MercadoVila - Um aplicativo de referência de microsserviços desenvolvido com ASP.NET 6 & FLutter
 
 
 https://github.com/alexandresmoraes/mercadovila/assets/26805150/86ae31da-65e2-4c3f-8f6b-f69759724d51
