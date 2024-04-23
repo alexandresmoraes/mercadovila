@@ -71,7 +71,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 
 ## Mobile/Web:
 
-- Flutter (Android, IOS, Web, Windows, macOS)
+- Flutter (Android, iOS, Web, Windows, macOS)
 - Flutter Modular
 - Flutter Mobx (Stores/Controllers)
 
