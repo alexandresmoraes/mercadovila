@@ -72,9 +72,8 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Flutter (Android, IOS, Web, Windows, macOS)
 - Flutter Modular
 - Flutter Mobx (Stores/Controllers)
-- Clean Code
 
-### A solução é baseada em API's, e como gateway usado o NGINX para direcionar as chamadas.
+### A solução é baseada em API's, e para direcionar as chamadas usamos de gateway NGINX.
 
 <p align="center">
     <img alt="MercadoMaluco" src="https://github.com/alexandresmoraes/vilasesmo/raw/master/assets/arch_vilasesmo.png?raw=true" />
