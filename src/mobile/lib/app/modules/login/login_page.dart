@@ -128,7 +128,6 @@ class LoginPageState extends State<LoginPage> {
                         focusNode: passwordFocusNode,
                         obscureText: !_controller.isPasswordVisible,
                         textInputAction: TextInputAction.done,
-                        maxLength: 10,
                         onChanged: _controller.setPassword,
                         style: Theme.of(context).primaryTextTheme.bodyLarge,
                         decoration: InputDecoration(
