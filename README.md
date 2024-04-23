@@ -67,6 +67,13 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Result Pattern
 - Pub/Sub Pattern
 
+## Mobile/Web:
+
+- Flutter (Android, IOS, Web, Windows, macOS)
+- Flutter Modular
+- Flutter Mobx (Stores/Controllers)
+- Clean Code
+
 ### A solução é baseada em API's, e como gateway usado o NGINX para direcionar as chamadas.
 
 <p align="center">
