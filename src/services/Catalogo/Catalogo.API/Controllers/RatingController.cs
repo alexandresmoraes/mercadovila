@@ -45,7 +45,12 @@ namespace Catalogo.API.Controllers
       }
       else
       {
-        await _ratingItemRepository.AdicionarAsync(vendaId, produtoId, rating);
+        await _ratingItemRepository.AdicionarAsync(new RatingItem
+        {
+          VendaId = vendaId,
+          ProdutoId = produtoId,
+          Rating = rating
+        });
       }
 
       await _produtoRepository.AtualizarRating(produtoId);

@@ -19,16 +19,7 @@ namespace Catalogo.API.Data.Repositories
       Collection.Indexes.CreateOne(indexModel);
     }
 
-    public async Task AdicionarAsync(long vendaId, string produtoId, short rating)
-    {
-      var ratingItem = new RatingItem()
-      {
-        VendaId = vendaId,
-        ProdutoId = produtoId,
-      };
-
-      await Collection.InsertOneAsync(ratingItem);
-    }
+    public async Task AdicionarAsync(RatingItem rating) => await Collection.InsertOneAsync(rating);
 
     public async Task AtualizarAsync(RatingItem rating)
       => await Collection.ReplaceOneAsync(r => r.Id == rating.Id, rating);
