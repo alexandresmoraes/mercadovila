@@ -69,7 +69,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Result Pattern
 - Pub/Sub Pattern
 
-## Mobile/Web:
+## Mobile/Web/Desktop:
 
 - Flutter (Android, iOS, Web, Windows, macOS)
 - Flutter Modular
