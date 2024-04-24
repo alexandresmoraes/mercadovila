@@ -55,6 +55,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 
 - Clean Code
 - Clean Architecture
+- SOLID
 - DDD - Domain Driven Design
 - Domain Events
 - Domain Notification
