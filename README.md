@@ -86,9 +86,9 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 
 ## Pull-Requests
 
-Abra um problema e vamos discutir! Não envie PRs para recursos não discutidos ou não aprovados.
+Vamos abrir uma discussão sobre problemas e possíveis soluções! Se você está interessado em contribuir, é importante focarmos em problemas já identificados e discutidos. Antes de enviar um Pull Request, vamos garantir que o problema tenha sido aprovado e discutido adequadamente pela equipe.
 
-Se você quiser nos ajudar, escolha um problema aprovado e implemente-o.
+Se estiver disposto a ajudar, escolha um problema que tenha sido aprovado e debatido. Uma vez selecionado, podemos discutir como abordar a implementação de forma eficaz e alinhada com as diretrizes do projeto.
 
 ## About
 
