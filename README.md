@@ -55,7 +55,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 
 - Clean Code
 - Clean Architecture
-- SOLID
+- SOLID Principles
 - DDD - Domain Driven Design
 - Domain Events
 - Domain Notification
@@ -65,8 +65,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Retry Pattern
 - Circuit Breaker
 - Unit of Work
-- Repository
-- Specification Pattern
+- Repository Pattern
 - Result Pattern
 - Publish/Subscribe Pattern
 
