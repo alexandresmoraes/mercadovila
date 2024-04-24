@@ -67,7 +67,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Repository
 - Specification Pattern
 - Result Pattern
-- Pub/Sub Pattern
+- Publish/Subscribe Pattern
 
 ## Mobile/Web/Desktop:
 
