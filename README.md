@@ -31,7 +31,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
   - ASP.NET Identity Core
   - Refresh Token
   - JWT
-  - GRPC
+  - gRPC
   - Entity Framework Core 6
 
 - Componentes / Serviços
