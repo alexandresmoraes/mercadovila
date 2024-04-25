@@ -97,6 +97,7 @@ services:
       - ${CERTBOT_WWW_PATH}:/var/www/certbot/:ro
       - ${CERTBOT_LETSENCRYPT_PATH}:/etc/letsencrypt:ro
       - ${NGINX_WEB_PATH}:/var/www/web:ro
+      - ${NGINX_PRIVACY}:/var/www/privacy:ro
     ports:
       - ${NGINX_HTTP_PORT}:80
       - ${NGINX_HTTPS_PORT}:443
