@@ -26,3 +26,13 @@ String greetingMessage() {
   if (h < 18) return 'Boa tarde';
   return 'Boa noite';
 }
+
+String getBaseUrl() {
+  String baseUrl = const String.fromEnvironment("BASE_URL", defaultValue: "");
+
+  if (isNullorEmpty(baseUrl)) {
+    throw Exception('Defina sua BASE_URL em --dart-define.');
+  }
+
+  return baseUrl;
+}
