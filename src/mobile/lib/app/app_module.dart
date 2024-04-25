@@ -36,6 +36,7 @@ import 'package:mercadovila/app/utils/repositories/produtos_repository.dart';
 import 'package:mercadovila/app/utils/repositories/rating_item_repository.dart';
 import 'package:mercadovila/app/utils/repositories/vendas_repository.dart';
 import 'package:mercadovila/app/utils/services/auth_service.dart';
+import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_count_produto_controller.dart';
 
 class AppModule extends Module {
@@ -44,7 +45,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => DioApi(i.get<BaseOptions>())),
     Bind(
       (i) => BaseOptions(
-        baseUrl: kReleaseMode ? 'https://domain.exemplo.com' : 'http://192.168.1.120:8081',
+        baseUrl: getBaseUrl(),
         connectTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
         receiveTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
         sendTimeout: const Duration(milliseconds: kReleaseMode ? 20000 : 60000),
