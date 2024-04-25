@@ -18,8 +18,6 @@ O aplicativo é um projeto de código aberto desenvolvido com objetivo compartil
 
 Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos desse uma estrela. Seu apoio nos ajuda a continuar fornecendo conteúdo valioso e aprimorando nossos projetos.
 
-### A solução é baseada em API's, e para direcionar as chamadas usamos de gateway NGINX.
-
 <p align="center">
     <img alt="MercadoMaluco" src="https://github.com/alexandresmoraes/vilasesmo/raw/master/assets/arch_vilasesmo.png?raw=true" />
 </p>
