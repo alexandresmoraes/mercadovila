@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   mongobackup:
     image: mongo:5
@@ -9,17 +7,6 @@ services:
       MONGODB_BACKUP_URL: ${MONGODB_BACKUP_URL}
     command: >
       sh -c "mongodump --uri=\"$$MONGODB_BACKUP_URL\" --out=\"/backup/$$(date +%Y-%m-%d_%H-%M-%S)\""
-
-  mongorestore:
-    image: mongo:5
-    volumes:
-      - ${MONGODB_RESTORE_PATH}:/backup
-    environment:
-      MONGODB_RESTORE_URL: ${MONGODB_RESTORE_URL}
-      MONGODB_RESTORE_PATH_VERSION: ${MONGODB_RESTORE_PATH_VERSION}
-      MONGODB_RESTORE_DB: ${MONGODB_RESTORE_DB}
-    command: >
-      sh -c "mongorestore --uri=\"$$MONGODB_RESTORE_URL\" --db=\"$$MONGODB_RESTORE_DB\" /backup/$$MONGODB_RESTORE_PATH_VERSION/$$MONGODB_RESTORE_DB"
 
   pgbackup:
     image: postgres:15.2          
@@ -38,27 +25,3 @@ services:
                pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_1} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_1}.sql\" &&
                pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_2} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_2}.sql\" &&
                pg_dump -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d $${POSTGRES_BACKUP_DB_3} > \"/backup/backup_$$(date +%Y-%m-%d_%H-%M-%S)_$${POSTGRES_BACKUP_DB_3}.sql\""
-
-  pgrestore:
-    image: postgres:15.2
-    volumes:
-      - ${POSTGRES_RESTORE_PATH}:/backup
-    environment:
-      POSTGRES_HOST: ${POSTGRES_RESTORE_HOST}
-      POSTGRES_PORT: ${POSTGRES_RESTORE_PORT}
-      POSTGRES_USER: ${POSTGRES_RESTORE_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_RESTORE_PASSWORD}
-      POSTGRES_RESTORE_DB_1: ${POSTGRES_RESTORE_DB_1}
-      POSTGRES_RESTORE_DB_2: ${POSTGRES_RESTORE_DB_2}
-      POSTGRES_RESTORE_DB_3: ${POSTGRES_RESTORE_DB_3}
-      POSTGRES_FILE_BACKUP_DB_1: ${POSTGRES_FILE_BACKUP_DB_1}
-      POSTGRES_FILE_BACKUP_DB_2: ${POSTGRES_FILE_BACKUP_DB_2}
-      POSTGRES_FILE_BACKUP_DB_3: ${POSTGRES_FILE_BACKUP_DB_3}
-    entrypoint: >
-      sh -c "export PGPASSWORD=$$POSTGRES_PASSWORD &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -tc \"SELECT 1 FROM pg_database WHERE datname='$$POSTGRES_RESTORE_DB_1'\" | grep -q 1 || psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -c \"CREATE DATABASE \\\"$$POSTGRES_RESTORE_DB_1\\\"\" &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -tc \"SELECT 1 FROM pg_database WHERE datname='$$POSTGRES_RESTORE_DB_2'\" | grep -q 1 || psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -c \"CREATE DATABASE \\\"$$POSTGRES_RESTORE_DB_2\\\"\" &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -tc \"SELECT 1 FROM pg_database WHERE datname='$$POSTGRES_RESTORE_DB_3}'\" | grep -q 1 || psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -c \"CREATE DATABASE \\\"$$POSTGRES_RESTORE_DB_3\\\"\" &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d ${POSTGRES_RESTORE_DB_1} -f /backup/$$POSTGRES_FILE_BACKUP_DB_1 &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d ${POSTGRES_RESTORE_DB_2} -f /backup/$$POSTGRES_FILE_BACKUP_DB_2 &&\
-      psql -U \"$$POSTGRES_USER\" -h \"$$POSTGRES_HOST\" -p \"$$POSTGRES_PORT\" -d ${POSTGRES_RESTORE_DB_3} -f /backup/$$POSTGRES_FILE_BACKUP_DB_3"
