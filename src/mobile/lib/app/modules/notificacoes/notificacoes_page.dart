@@ -11,6 +11,7 @@ import 'package:mercadovila/app/utils/repositories/interfaces/i_notificacoes_rep
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NotificacoesPage extends StatefulWidget {
@@ -43,14 +44,76 @@ class NotificacoesPageState extends State<NotificacoesPage> {
               : const SizedBox.shrink(),
         ],
       ),
-      body: _allNotificacoes(),
+      body: _todasNotificacoes(),
     );
   }
 
-  Widget _allNotificacoes() {
+  Widget _todasNotificacoes() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: InfiniteList<NotificacaoDto>(
+        firstPageProgressIndicatorWidget: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Shimmer.fromColors(
+            baseColor: Modular.get<ThemeStore>().isDarkModeEnable ? Theme.of(context).cardTheme.color! : const Color.fromARGB(255, 193, 206, 216),
+            highlightColor: Colors.white,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0),
+              itemCount: 5,
+              itemBuilder: (_, __) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+                    contentPadding: const EdgeInsets.all(8),
+                    minLeadingWidth: 0,
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        color: Theme.of(context).colorScheme.background,
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                    title: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Container(
+                        width: 100,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(2.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Container(
+                        width: 50,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(2.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Modular.get<ThemeStore>().isDarkModeEnable
+                        ? Theme.of(context).dividerTheme.color!.withOpacity(0.05)
+                        : Theme.of(context).dividerTheme.color,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         pagingController: pagingController,
         request: (page) async {
           return await Modular.get<INotificacoesRepository>().getNotificacoes(page);

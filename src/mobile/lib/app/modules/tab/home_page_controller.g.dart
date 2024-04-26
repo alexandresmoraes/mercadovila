@@ -76,55 +76,6 @@ mixin _$HomePageController on HomePageControllerBase, Store {
     });
   }
 
-  late final _$isFavoritosEmptyAtom =
-      Atom(name: 'HomePageControllerBase.isFavoritosEmpty', context: context);
-
-  @override
-  bool get isFavoritosEmpty {
-    _$isFavoritosEmptyAtom.reportRead();
-    return super.isFavoritosEmpty;
-  }
-
-  @override
-  set isFavoritosEmpty(bool value) {
-    _$isFavoritosEmptyAtom.reportWrite(value, super.isFavoritosEmpty, () {
-      super.isFavoritosEmpty = value;
-    });
-  }
-
-  late final _$isUltimosVendidosEmptyAtom = Atom(
-      name: 'HomePageControllerBase.isUltimosVendidosEmpty', context: context);
-
-  @override
-  bool get isUltimosVendidosEmpty {
-    _$isUltimosVendidosEmptyAtom.reportRead();
-    return super.isUltimosVendidosEmpty;
-  }
-
-  @override
-  set isUltimosVendidosEmpty(bool value) {
-    _$isUltimosVendidosEmptyAtom
-        .reportWrite(value, super.isUltimosVendidosEmpty, () {
-      super.isUltimosVendidosEmpty = value;
-    });
-  }
-
-  late final _$isMaisVendidosEmptyAtom = Atom(
-      name: 'HomePageControllerBase.isMaisVendidosEmpty', context: context);
-
-  @override
-  bool get isMaisVendidosEmpty {
-    _$isMaisVendidosEmptyAtom.reportRead();
-    return super.isMaisVendidosEmpty;
-  }
-
-  @override
-  set isMaisVendidosEmpty(bool value) {
-    _$isMaisVendidosEmptyAtom.reportWrite(value, super.isMaisVendidosEmpty, () {
-      super.isMaisVendidosEmpty = value;
-    });
-  }
-
   late final _$currentIndexCarouselSliderAtom = Atom(
       name: 'HomePageControllerBase.currentIndexCarouselSlider',
       context: context);
@@ -150,9 +101,6 @@ isVisibleNovos: ${isVisibleNovos},
 isVisibleMaisVendidos: ${isVisibleMaisVendidos},
 isVisibleUltimosVendidos: ${isVisibleUltimosVendidos},
 isVisibleFavoritos: ${isVisibleFavoritos},
-isFavoritosEmpty: ${isFavoritosEmpty},
-isUltimosVendidosEmpty: ${isUltimosVendidosEmpty},
-isMaisVendidosEmpty: ${isMaisVendidosEmpty},
 currentIndexCarouselSlider: ${currentIndexCarouselSlider}
     ''';
   }

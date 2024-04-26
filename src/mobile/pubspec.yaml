@@ -44,6 +44,7 @@ dependencies:
   brasil_fields: ^1.14.3
   mime: ^1.0.4
   http_parser: ^4.0.2
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

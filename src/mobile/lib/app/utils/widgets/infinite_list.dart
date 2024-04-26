@@ -81,7 +81,7 @@ class InfiniteListState<T> extends State<InfiniteList<T>> {
         scrollDirection: widget.scrollDirection ?? Axis.vertical,
         builderDelegate: PagedChildBuilderDelegate<T>(
           firstPageProgressIndicatorBuilder: (context) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
-          newPageProgressIndicatorBuilder: (_) => const CircularProgress(),
+          newPageProgressIndicatorBuilder: (_) => widget.firstPageProgressIndicatorWidget ?? const CircularProgress(),
           itemBuilder: widget.itemBuilder,
           newPageErrorIndicatorBuilder: (context) {
             if (widget.errorBuilder != null) {

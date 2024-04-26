@@ -16,9 +16,11 @@ import 'package:mercadovila/app/utils/repositories/interfaces/i_catalogo_reposit
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_count_produto.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_color.dart';
+import 'package:mercadovila/app/utils/widgets/card_produto_color_loading.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -233,7 +235,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               }),
               Observer(
                 builder: (_) {
-                  return controller.isUltimosVendidosEmpty ? const SizedBox.shrink() : listaUltimosVendidos();
+                  return listaUltimosVendidos();
                 },
               ),
               Observer(builder: (_) {
@@ -263,7 +265,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               }),
               Observer(
                 builder: (_) {
-                  return controller.isFavoritosEmpty ? const SizedBox.shrink() : listaFavoritos();
+                  return listaFavoritos();
                 },
               ),
               Observer(
@@ -295,7 +297,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
               Observer(
                 builder: (_) {
-                  return controller.isMaisVendidosEmpty ? const SizedBox.shrink() : listaMaisVendidos();
+                  return listaMaisVendidos();
                 },
               ),
               Observer(
@@ -368,8 +370,42 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   Widget listaNovos() {
     return SizedBox(
-      height: controller.isVisibleNovos ? 200 : 500,
+      height: controller.isVisibleNovos ? 200 : 200,
       child: InfiniteList<CatalogoDto>(
+        firstPageProgressIndicatorWidget: SizedBox(
+          height: 200,
+          width: 145,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return Shimmer.fromColors(
+                baseColor: Theme.of(context).cardTheme.color!,
+                highlightColor: Colors.white,
+                child: SizedBox(
+                  height: 200,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(top: 40, left: 10),
+                        height: 172,
+                        width: 145,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardTheme.color!,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         noMoreItemsBuilder: const SizedBox.shrink(),
         scrollDirection: Axis.horizontal,
         pagingController: controller.pagingNovosController,
@@ -521,12 +557,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return SizedBox(
       height: controller.isVisibleMaisVendidos ? 210 : 0,
       child: InfiniteList<CatalogoDto>(
+        firstPageProgressIndicatorWidget: const CardProdutoColorLoading(),
         noMoreItemsBuilder: const SizedBox.shrink(),
         scrollDirection: Axis.horizontal,
         pagingController: controller.pagingMaisVendidosController,
         request: (page) async {
           var maisVendidos = await Modular.get<ICatalogoRepository>().getProdutosMaisVendidos(page);
-          controller.isMaisVendidosEmpty = maisVendidos.total == 0;
+          controller.isVisibleMaisVendidos = maisVendidos.total == 0;
           return maisVendidos;
         },
         itemBuilder: (context, item, index) {
@@ -554,151 +591,184 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget listaFavoritos() {
     return SizedBox(
       height: controller.isVisibleFavoritos ? 135 : 0,
-      child: SizedBox(
-        height: controller.isVisibleFavoritos ? 210 : 0,
-        child: InfiniteList<CatalogoDto>(
-          noMoreItemsBuilder: const SizedBox.shrink(),
-          scrollDirection: Axis.horizontal,
-          pagingController: controller.pagingFavoritosController,
-          request: (page) async {
-            var favoritos = await Modular.get<ICatalogoRepository>().getProdutosFavoritos(page);
-            controller.isFavoritosEmpty = favoritos.total == 0;
-            return favoritos;
-          },
-          itemBuilder: (context, item, index) {
-            controller.isVisibleFavoritos = true;
-
-            return SizedBox(
-              height: 200,
-              child: InkWell(
-                onTap: () async {
-                  await Modular.to.pushNamed('/produtos/details/${item.produtoId}');
-                },
+      child: InfiniteList<CatalogoDto>(
+        firstPageProgressIndicatorWidget: SizedBox(
+          height: 105,
+          width: 180,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return Shimmer.fromColors(
+                baseColor: Theme.of(context).cardTheme.color!,
+                highlightColor: Colors.white,
                 child: Container(
+                  height: 180,
                   margin: const EdgeInsets.only(top: 10, left: 10),
-                  child: Stack(
-                    children: [
-                      SizedBox(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
                         height: 105,
                         width: 180,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardTheme.color,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(17),
-                              bottomLeft: Radius.circular(17),
-                              bottomRight: Radius.circular(17),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 28, left: 10, right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.nome,
-                                  style: Theme.of(context).primaryTextTheme.bodyLarge,
-                                ),
-                                Container(
-                                  width: 130,
-                                  padding: const EdgeInsets.only(top: 2),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "R\$ ",
-                                            style: Theme.of(context).primaryTextTheme.displayMedium,
-                                          ),
-                                          Text(
-                                            UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
-                                            style: Theme.of(context).primaryTextTheme.headlineSmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  item.getDisponiveis(),
-                                  style: Theme.of(context).primaryTextTheme.displayMedium,
-                                ),
-                              ],
-                            ),
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(17),
+                            bottomLeft: Radius.circular(17),
+                            bottomRight: Radius.circular(17),
                           ),
                         ),
                       ),
-                      Positioned(
-                        right: 0,
-                        left: null,
-                        top: 30,
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Container(
-                            alignment: Alignment.center,
-                            height: 100,
-                            width: 98,
-                            child: CircularProgress(
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => const SizedBox(
-                            height: 100,
-                            width: 98,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 100,
-                                child: Icon(
-                                  MdiIcons.cameraOff,
-                                  size: 70,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${item.imageUrl}',
-                          imageBuilder: (context, imageProvider) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                ),
-                              ),
-                              height: 100,
-                              width: 98,
-                            );
-                          },
-                        ),
-                      ),
-                      Observer(builder: (_) {
-                        return CardCountProduto(
-                          produtoId: item.produtoId,
-                          estoqueDisponivel: item.estoque,
-                          isAtivo: item.isAtivo,
-                          isTop: true,
-                        );
-                      }),
                     ],
                   ),
                 ),
-              ),
-            );
-          },
-          cast: CatalogoDto.fromJson,
-          emptyBuilder: (context) {
-            controller.isVisibleFavoritos = false;
-            return const SizedBox.shrink();
-          },
-          errorBuilder: (context) {
-            return _errorList(context, () {
-              controller.pagingFavoritosController.refresh();
-            });
-          },
+              );
+            },
+          ),
         ),
+        noMoreItemsBuilder: const SizedBox.shrink(),
+        scrollDirection: Axis.horizontal,
+        pagingController: controller.pagingFavoritosController,
+        request: (page) async {
+          var favoritos = await Modular.get<ICatalogoRepository>().getProdutosFavoritos(page);
+          controller.isVisibleFavoritos = favoritos.total == 0;
+          return favoritos;
+        },
+        itemBuilder: (context, item, index) {
+          controller.isVisibleFavoritos = true;
+
+          return SizedBox(
+            height: 200,
+            child: InkWell(
+              onTap: () async {
+                await Modular.to.pushNamed('/produtos/details/${item.produtoId}');
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 10, left: 10),
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      height: 105,
+                      width: 180,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardTheme.color,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(17),
+                            bottomLeft: Radius.circular(17),
+                            bottomRight: Radius.circular(17),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 28, left: 10, right: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.nome,
+                                style: Theme.of(context).primaryTextTheme.bodyLarge,
+                              ),
+                              Container(
+                                width: 130,
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "R\$ ",
+                                          style: Theme.of(context).primaryTextTheme.displayMedium,
+                                        ),
+                                        Text(
+                                          UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
+                                          style: Theme.of(context).primaryTextTheme.headlineSmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                item.getDisponiveis(),
+                                style: Theme.of(context).primaryTextTheme.displayMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      left: null,
+                      top: 30,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Container(
+                          alignment: Alignment.center,
+                          height: 100,
+                          width: 98,
+                          child: CircularProgress(
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(
+                          height: 100,
+                          width: 98,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 100,
+                              child: Icon(
+                                MdiIcons.cameraOff,
+                                size: 70,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        imageUrl: '${Modular.get<BaseOptions>().baseUrl}/api/produtos/image/${item.imageUrl}',
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                              ),
+                            ),
+                            height: 100,
+                            width: 98,
+                          );
+                        },
+                      ),
+                    ),
+                    Observer(builder: (_) {
+                      return CardCountProduto(
+                        produtoId: item.produtoId,
+                        estoqueDisponivel: item.estoque,
+                        isAtivo: item.isAtivo,
+                        isTop: true,
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        cast: CatalogoDto.fromJson,
+        emptyBuilder: (context) {
+          controller.isVisibleFavoritos = false;
+          return const SizedBox.shrink();
+        },
+        errorBuilder: (context) {
+          return _errorList(context, () {
+            controller.pagingFavoritosController.refresh();
+          });
+        },
       ),
     );
   }
@@ -707,12 +777,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return SizedBox(
       height: controller.isVisibleUltimosVendidos ? 210 : 0,
       child: InfiniteList<CatalogoDto>(
+        firstPageProgressIndicatorWidget: const CardProdutoColorLoading(),
         noMoreItemsBuilder: const SizedBox.shrink(),
         scrollDirection: Axis.horizontal,
         pagingController: controller.pagingUltimosVendidosController,
         request: (page) async {
           var ultimosVendidos = await Modular.get<ICatalogoRepository>().getProdutosUltimosVendidos(page);
-          controller.isUltimosVendidosEmpty = ultimosVendidos.total == 0;
+          controller.isVisibleUltimosVendidos = ultimosVendidos.total == 0;
           return ultimosVendidos;
         },
         itemBuilder: (context, item, index) {

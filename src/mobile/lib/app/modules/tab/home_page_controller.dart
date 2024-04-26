@@ -14,25 +14,16 @@ abstract class HomePageControllerBase with Store, Disposable {
   PagingController<int, CatalogoDto> pagingUltimosVendidosController = PagingController(firstPageKey: 1);
 
   @observable
-  bool isVisibleNovos = false;
+  bool isVisibleNovos = true;
 
   @observable
-  bool isVisibleMaisVendidos = false;
+  bool isVisibleMaisVendidos = true;
 
   @observable
-  bool isVisibleUltimosVendidos = false;
+  bool isVisibleUltimosVendidos = true;
 
   @observable
-  bool isVisibleFavoritos = false;
-
-  @observable
-  bool isFavoritosEmpty = false;
-
-  @observable
-  bool isUltimosVendidosEmpty = false;
-
-  @observable
-  bool isMaisVendidosEmpty = false;
+  bool isVisibleFavoritos = true;
 
   @observable
   int currentIndexCarouselSlider = 0;

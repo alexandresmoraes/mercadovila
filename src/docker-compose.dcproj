@@ -9,13 +9,15 @@
     <DockerServiceName>auth.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="backup.win.env" />
+    <None Include="backup.env" />
     <None Include="docker-compose.backup.yml" />
     <None Include="docker-compose.certbot.yml" />
     <None Include="docker-compose.dev.yml" />
     <None Include="docker-compose.light.yml" />
     <None Include=".dockerignore" />
-    <None Include="sample.mac.env" />
-    <None Include="sample.win.env" />
+    <None Include="docker-compose.restore.yml" />
+    <None Include="light.env" />
+    <None Include="restore.env" />
+    <None Include="sample.env" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@ import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_vendas_repository.dart';
 import 'package:mercadovila/app/utils/widgets/card_venda.dart';
+import 'package:mercadovila/app/utils/widgets/card_venda_loading.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class VendasPage extends StatefulWidget {
@@ -120,6 +121,7 @@ class VendasPageState extends State<VendasPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<VendaDto>(
+        firstPageProgressIndicatorWidget: CardVendaLoading(),
         pagingController: pagingVendasHojeController,
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
@@ -158,6 +160,7 @@ class VendasPageState extends State<VendasPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<VendaDto>(
+        firstPageProgressIndicatorWidget: CardVendaLoading(),
         pagingController: pagingVendasSemanaController,
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),
@@ -196,6 +199,7 @@ class VendasPageState extends State<VendasPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<VendaDto>(
+        firstPageProgressIndicatorWidget: CardVendaLoading(),
         pagingController: pagingVendasTodasController,
         cast: VendaDto.fromJson,
         noMoreItemsBuilder: const SizedBox.shrink(),

@@ -15,6 +15,7 @@ import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final String title;
@@ -458,7 +459,108 @@ class CarrinhoPageState extends State<CarrinhoPage> {
       error: RefreshWidget(
         onTap: () => setState(() {}),
       ),
-      loading: const CircularProgress(),
+      loading: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                child: Shimmer.fromColors(
+                  baseColor: Theme.of(context).cardTheme.color!,
+                  highlightColor: Colors.white,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(0),
+                    itemCount: 2,
+                    itemBuilder: (_, __) => Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, bottom: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          height: 110,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                contentPadding: const EdgeInsets.all(0),
+                title: Text(
+                  "Preço",
+                  style: Theme.of(context).primaryTextTheme.headlineSmall,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Sub-Total",
+                    style: Theme.of(context).primaryTextTheme.labelSmall,
+                  ),
+                  Text(
+                    UtilBrasilFields.obterReal(0),
+                    style: Theme.of(context).primaryTextTheme.labelSmall,
+                  ),
+                ],
+              ),
+              const Divider(),
+              ListTile(
+                minVerticalPadding: 0,
+                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                minLeadingWidth: 30,
+                contentPadding: const EdgeInsets.all(0),
+                leading: Text(
+                  "Total",
+                  style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                ),
+                trailing: Observer(builder: (_) {
+                  return Text(
+                    UtilBrasilFields.obterReal(0),
+                    style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700),
+                  );
+                }),
+              ),
+              Modular.get<ThemeStore>().isDarkModeEnable
+                  ? Container(
+                      width: 450,
+                      height: 120,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/checkout_cart_dark.png',
+                          ),
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 450,
+                      height: 120,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/checkout_cart_light.png',
+                          ),
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    )
+            ],
+          ),
+        ),
+      ),
     );
   }
 

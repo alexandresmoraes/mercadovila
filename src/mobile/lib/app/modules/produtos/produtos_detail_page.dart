@@ -17,6 +17,7 @@ import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProdutosDetailPage extends StatefulWidget {
   final String title;
@@ -340,11 +341,49 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
       child: SizedBox(
         height: 210,
         child: InfiniteList<CatalogoDto>(
+          firstPageProgressIndicatorWidget: SizedBox(
+            height: 105,
+            width: 180,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return Shimmer.fromColors(
+                  baseColor: Theme.of(context).cardTheme.color!,
+                  highlightColor: Colors.white,
+                  child: Container(
+                    height: 180,
+                    margin: const EdgeInsets.only(top: 10, left: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          height: 105,
+                          width: 180,
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(17),
+                              bottomLeft: Radius.circular(17),
+                              bottomRight: Radius.circular(17),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           noMoreItemsBuilder: const SizedBox.shrink(),
           scrollDirection: Axis.horizontal,
           pagingController: pagingFavoritosController,
           request: (page) async {
-            return await Modular.get<ICatalogoRepository>().getProdutosFavoritos(page);
+            var produtosFavoritos = await Modular.get<ICatalogoRepository>().getProdutosFavoritos(page);
+            _controller.isVisibleFavoritos = produtosFavoritos.total == 0;
+            return produtosFavoritos;
           },
           itemBuilder: (context, item, index) {
             _controller.isVisibleFavoritos = true;

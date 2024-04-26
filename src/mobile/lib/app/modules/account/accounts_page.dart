@@ -12,9 +12,11 @@ import 'package:mercadovila/app/utils/dto/account/account_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_account_repository.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/card_account_loading.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AccountsPage extends StatefulWidget {
   final String title;
@@ -115,6 +117,7 @@ class AccountsPageState extends State<AccountsPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<AccountDto>(
+        firstPageProgressIndicatorWidget: CardAccountLoading(),
         pagingController: pagingController,
         request: (page) async {
           return await Modular.get<IAccountRepository>().getAccounts(page, usernameFilter);
@@ -145,45 +148,42 @@ class AccountsPageState extends State<AccountsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                          color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        child: Text(
-                          item.id,
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
+                        color: themeStore.isDarkModeEnable ? const Color(0xFF373C58) : const Color(0xFFF2F5F8),
                       ),
-                      const Expanded(child: SizedBox()),
-                      Icon(
-                        !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
-                        size: 20,
-                        color: !item.isAtivo
-                            ? Colors.red
-                            : Modular.get<ThemeStore>().isDarkModeEnable
-                                ? Colors.greenAccent
-                                : Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      child: Text(
+                        item.id,
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          item.isAtivo ? "Ativo" : "Inativo",
-                          style: Theme.of(context).primaryTextTheme.displayMedium,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    Icon(
+                      !item.isAtivo ? MdiIcons.closeOctagon : MdiIcons.checkDecagram,
+                      size: 20,
+                      color: !item.isAtivo
+                          ? Colors.red
+                          : Modular.get<ThemeStore>().isDarkModeEnable
+                              ? Colors.greenAccent
+                              : Colors.green,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        item.isAtivo ? "Ativo" : "Inativo",
+                        style: Theme.of(context).primaryTextTheme.displayMedium,
+                      ),
+                    )
+                  ],
                 ),
                 ListTile(
                   visualDensity: const VisualDensity(vertical: -3, horizontal: -4),

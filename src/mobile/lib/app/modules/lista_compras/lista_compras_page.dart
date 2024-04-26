@@ -6,6 +6,7 @@ import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:mercadovila/app/utils/widgets/card_lista_compra.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ListaComprasPage extends StatefulWidget {
   final String title;
@@ -41,6 +42,33 @@ class ListaComprasPageState extends State<ListaComprasPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InfiniteList<ListaComprasDto>(
+          firstPageProgressIndicatorWidget: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Shimmer.fromColors(
+              baseColor: Theme.of(context).cardTheme.color!,
+              highlightColor: Colors.white,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                itemCount: 10,
+                itemBuilder: (_, __) => Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      height: 110,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           pagingController: pagingController,
           request: (page) async {
             return await Modular.get<IProdutosRepository>().getListaCompra(page);

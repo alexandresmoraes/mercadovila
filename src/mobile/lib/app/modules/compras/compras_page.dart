@@ -5,6 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mercadovila/app/utils/dto/compras/compra_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_compras_repository.dart';
 import 'package:mercadovila/app/utils/widgets/card_compra.dart';
+import 'package:mercadovila/app/utils/widgets/card_venda_loading.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
 class ComprasPage extends StatefulWidget {
@@ -55,6 +56,7 @@ class ComprasPageState extends State<ComprasPage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InfiniteList<CompraDto>(
+                  firstPageProgressIndicatorWidget: CardVendaLoading(),
                   pagingController: pagingController,
                   cast: CompraDto.fromJson,
                   noMoreItemsBuilder: const SizedBox.shrink(),

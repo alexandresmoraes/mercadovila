@@ -22,7 +22,7 @@ abstract class ProdutosDetailControllerBase with Store {
   bool isFavorito = false;
 
   @observable
-  bool isVisibleFavoritos = false;
+  bool isVisibleFavoritos = true;
 
   ProdutoDetailDto? produtoDetailDto;
 

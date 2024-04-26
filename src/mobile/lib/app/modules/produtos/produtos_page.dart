@@ -12,6 +12,7 @@ import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_reposit
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProdutosPage extends StatefulWidget {
   final String title;
@@ -110,6 +111,33 @@ class ProdutosPageState extends State<ProdutosPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<ProdutoDto>(
+        firstPageProgressIndicatorWidget: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Shimmer.fromColors(
+            baseColor: Theme.of(context).cardTheme.color!,
+            highlightColor: Colors.white,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0),
+              itemCount: 10,
+              itemBuilder: (_, __) => Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    height: 110,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         pagingController: pagingController,
         request: (page) async {
           return await Modular.get<IProdutosRepository>().getProdutos(page, nomeFilter);

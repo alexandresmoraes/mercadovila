@@ -13,9 +13,11 @@ import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/pagamentos/pagamentos_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
+import 'package:mercadovila/app/utils/widgets/card_account_loading.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PagamentosPage extends StatefulWidget {
   final String title;
@@ -119,6 +121,7 @@ class PagamentosPageState extends State<PagamentosPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InfiniteList<PagamentosDto>(
+        firstPageProgressIndicatorWidget: CardAccountLoading(),
         pagingController: pagingController,
         request: (page) async {
           return await Modular.get<IPagamentosRepository>().getPagamentos(page, usernameFilter);
