@@ -31,6 +31,9 @@ namespace Common.WebAPI.WebApi
           case SecurityTokenException e:
             response.StatusCode = (int)HttpStatusCode.Unauthorized;
             break;
+          case TaskCanceledException e:
+            response.StatusCode = 499;
+            break;
           default:
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
             break;
