@@ -16,7 +16,6 @@ import 'package:mercadovila/app/utils/widgets/card_account_loading.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AccountsPage extends StatefulWidget {
   final String title;

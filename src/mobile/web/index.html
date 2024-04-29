@@ -32,9 +32,8 @@
   <title>MercadoVila</title>
   <link rel="manifest" href="manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
+  <script>    
+    var serviceWorkerVersion = '1.0.1+1';
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -49,7 +48,7 @@
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
-        entrypointUrl: "/main.dart.js?v=" + '1.0.1',
+        entrypointUrl: "/main.dart.js?v=" + serviceWorkerVersion,
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
