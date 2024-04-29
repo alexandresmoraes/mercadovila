@@ -11,7 +11,6 @@ import 'package:mercadovila/app/modules/carrinho/carrinho_store.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/carrinho/carrinho_dto.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_carrinho.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';

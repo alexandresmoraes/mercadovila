@@ -3,7 +3,7 @@ description: Projeto Mercado Maluco para controle do mercadinho interno.
 
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.19.6 <3.13.1"
@@ -45,6 +45,7 @@ dependencies:
   mime: ^1.0.4
   http_parser: ^4.0.2
   shimmer: ^3.0.0
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

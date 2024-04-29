@@ -34,6 +34,9 @@ namespace Common.WebAPI.WebApi
           case TaskCanceledException e:
             response.StatusCode = 499;
             break;
+          case OperationCanceledException e:
+            response.StatusCode = 499;
+            break;
           default:
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
             break;

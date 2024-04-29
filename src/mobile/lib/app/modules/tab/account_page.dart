@@ -10,6 +10,7 @@ import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AccountPage extends StatefulWidget {
   final String title;
@@ -19,7 +20,21 @@ class AccountPage extends StatefulWidget {
 }
 
 class AccountPageState extends State<AccountPage> {
+  PackageInfo? packageInfo;
   final AccountStore accountStore = Modular.get<AccountStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      packageInfo = info;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -420,8 +435,22 @@ class AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 70,
-                )
+                  height: 20,
+                ),
+                ListTile(
+                  onTap: () {},
+                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  title: Center(
+                    child: Text(
+                      "v${packageInfo?.version}",
+                      style: Theme.of(context).primaryTextTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
