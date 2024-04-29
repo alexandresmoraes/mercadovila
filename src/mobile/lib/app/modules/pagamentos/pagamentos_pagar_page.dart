@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/modules/pagamentos/pagamentos_pagar_controller.dart';
@@ -60,14 +61,17 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 60,
-                            backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
+                            backgroundColor: Theme.of(context).dialogBackgroundColor,
                             child: Observer(builder: (_) {
                               if (_controller.isPagamentoDetalheSelected && !isNullorEmpty(_controller.pagamentoDetalheDto!.compradorFotoUrl)) {
                                 return CachedNetworkImage(
-                                  placeholder: (context, url) => CircularProgress(
-                                    color: Theme.of(context).primaryColorLight,
+                                  placeholder: (context, url) => Container(
                                     width: 100,
                                     height: 100,
+                                    alignment: Alignment.center,
+                                    child: SpinKitThreeBounce(
+                                      color: Theme.of(context).primaryColorLight,
+                                    ),
                                   ),
                                   errorWidget: (context, url, error) => const CircleAvatar(
                                     radius: 100,
@@ -175,8 +179,14 @@ class PagamentosPagarPageState extends State<PagamentosPagarPage> {
                               radius: 35,
                               backgroundColor: Modular.get<ThemeStore>().isDarkModeEnable ? Colors.white : Colors.black,
                               child: CachedNetworkImage(
-                                placeholder: (context, url) => CircularProgress(
-                                  color: Theme.of(context).primaryColor,
+                                placeholder: (context, url) => Container(
+                                  width: 50,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  child: SpinKitThreeBounce(
+                                    size: 20,
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
                                 ),
                                 errorWidget: (context, url, error) {
                                   return const CircleAvatar(

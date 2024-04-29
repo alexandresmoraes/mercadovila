@@ -46,6 +46,7 @@ dependencies:
   http_parser: ^4.0.2
   shimmer: ^3.0.0
   package_info_plus: ^4.2.0
+  flutter_spinkit: ^5.2.1
 
 dev_dependencies:
   flutter_test:

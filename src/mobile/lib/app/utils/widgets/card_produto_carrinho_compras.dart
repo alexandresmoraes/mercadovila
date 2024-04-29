@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/modules/compras/compras_carrinho_store.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/compras/carrinho_compras_dto.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_carrinho_compras_count.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoCarrinhoCompras extends StatefulWidget {
   final CarrinhoComprasItemDto item;
@@ -279,10 +279,13 @@ class CardProdutoCarrinhoComprasState extends State<CardProdutoCarrinhoCompras> 
             left: 0,
             top: -20,
             child: CachedNetworkImage(
-              placeholder: (context, url) => const SizedBox(
-                width: 120,
+              placeholder: (context, url) => Container(
+                alignment: Alignment.center,
                 height: 100,
-                child: CircularProgress(),
+                width: 120,
+                child: SpinKitThreeBounce(
+                  color: Theme.of(context).primaryColorLight,
+                ),
               ),
               errorWidget: (context, url, error) => const SizedBox(
                 width: 120,

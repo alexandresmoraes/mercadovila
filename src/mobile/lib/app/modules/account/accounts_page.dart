@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
@@ -13,7 +14,6 @@ import 'package:mercadovila/app/utils/repositories/interfaces/i_account_reposito
 import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_account_loading.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/future_triple.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
@@ -201,8 +201,12 @@ class AccountsPageState extends State<AccountsPage> {
                           radius: 35,
                           backgroundColor: Colors.white,
                           child: CachedNetworkImage(
-                            placeholder: (context, url) => CircularProgress(
-                              color: Theme.of(context).primaryColorLight,
+                            placeholder: (_, __) => Container(
+                              alignment: Alignment.center,
+                              child: SpinKitThreeBounce(
+                                size: 25,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
                             ),
                             errorWidget: (context, url, error) {
                               return const CircleAvatar(

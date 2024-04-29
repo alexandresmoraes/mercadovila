@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/vendas/venda_dto.dart';
 import 'package:mercadovila/app/utils/utils.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/venda_status.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -72,8 +72,12 @@ class CardVendaState extends State<CardVenda> {
                   radius: 35,
                   backgroundColor: Colors.white,
                   child: CachedNetworkImage(
-                    placeholder: (context, url) => CircularProgress(
-                      color: Theme.of(context).primaryColorLight,
+                    placeholder: (context, url) => Container(
+                      alignment: Alignment.center,
+                      child: SpinKitThreeBounce(
+                        size: 25,
+                        color: Theme.of(context).primaryColorLight,
+                      ),
                     ),
                     errorWidget: (context, url, error) {
                       return const CircleAvatar(
@@ -217,9 +221,9 @@ class CardVendaState extends State<CardVenda> {
                   child: CachedNetworkImage(
                     placeholder: (context, url) => Container(
                       alignment: Alignment.center,
-                      height: 120,
-                      width: 130,
-                      child: CircularProgress(
+                      height: 100,
+                      width: 120,
+                      child: SpinKitThreeBounce(
                         color: Theme.of(context).primaryColorLight,
                       ),
                     ),

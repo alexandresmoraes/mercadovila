@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/modules/compras/compras_carrinho_store.dart';
@@ -17,7 +18,6 @@ import 'package:mercadovila/app/utils/dto/produtos/produto_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_produtos_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_carrinho_compras.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CopmprasCarrinhoPage extends StatefulWidget {
@@ -607,10 +607,13 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                 child: Observer(builder: (_) {
                                   if (carrinhoComprasStore.isSelectedItem) {
                                     return CachedNetworkImage(
-                                      placeholder: (context, url) => CircularProgress(
-                                        color: Theme.of(context).primaryColorLight,
+                                      placeholder: (context, url) => Container(
                                         width: 215,
                                         height: 140,
+                                        alignment: Alignment.center,
+                                        child: SpinKitThreeBounce(
+                                          color: Theme.of(context).primaryColorLight,
+                                        ),
                                       ),
                                       errorWidget: (context, url, error) => const CircleAvatar(
                                         radius: 100,
@@ -743,10 +746,14 @@ class CarrinhoPageState extends State<CopmprasCarrinhoPage> {
                                   ),
                                 )
                               : CachedNetworkImage(
-                                  placeholder: (context, url) => CircularProgress(
-                                    color: Theme.of(context).primaryColorLight,
-                                    width: 215,
-                                    height: 140,
+                                  placeholder: (context, url) => Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: SpinKitThreeBounce(
+                                      size: 20,
+                                      color: Theme.of(context).primaryColorLight,
+                                    ),
                                   ),
                                   errorWidget: (context, url, error) => const SizedBox(
                                     width: 70,

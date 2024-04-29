@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mercadovila/app/modules/account/account_edit_controller.dart';
@@ -151,10 +152,13 @@ class AccountEditPageState extends State<AccountEditPage> {
                                 );
                               } else if (!isNullorEmpty(_controller.fotoUrl)) {
                                 return CachedNetworkImage(
-                                  placeholder: (context, url) => CircularProgress(
-                                    color: Theme.of(context).primaryColorLight,
-                                    width: 100,
+                                  placeholder: (_, __) => Container(
+                                    alignment: Alignment.center,
                                     height: 100,
+                                    width: 100,
+                                    child: SpinKitThreeBounce(
+                                      color: Theme.of(context).primaryColorLight,
+                                    ),
                                   ),
                                   errorWidget: (context, url, error) => const CircleAvatar(
                                     radius: 100,

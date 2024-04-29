@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/account_store.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/services/interfaces/i_auth_service.dart';
 import 'package:mercadovila/app/utils/utils.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AccountPage extends StatefulWidget {
@@ -74,9 +74,14 @@ class AccountPageState extends State<AccountPage> {
                     child: Observer(builder: (_) {
                       if (!isNullorEmpty(accountStore.account!.fotoUrl)) {
                         return CachedNetworkImage(
-                          placeholder: (context, url) => const CircularProgress(
-                            width: 60,
+                          placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
                             height: 60,
+                            width: 60,
+                            child: SpinKitThreeBounce(
+                              size: 30,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
                           ),
                           errorWidget: (context, url, error) => const CircleAvatar(
                             radius: 60,

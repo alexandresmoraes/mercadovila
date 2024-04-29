@@ -3,10 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/produtos/lista_compras_dto.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardListaCompra extends StatefulWidget {
   final ListaComprasDto item;
@@ -174,10 +174,13 @@ class CardListaCompraState extends State<CardListaCompra> {
               left: 0,
               top: -20,
               child: CachedNetworkImage(
-                placeholder: (context, url) => const SizedBox(
-                  width: 120,
-                  height: 100,
-                  child: CircularProgress(),
+                placeholder: (context, url) => Container(
+                  alignment: Alignment.center,
+                  height: 120,
+                  width: 130,
+                  child: SpinKitThreeBounce(
+                    color: Theme.of(context).primaryColorLight,
+                  ),
                 ),
                 errorWidget: (context, url, error) => const CircleAvatar(
                   radius: 100,

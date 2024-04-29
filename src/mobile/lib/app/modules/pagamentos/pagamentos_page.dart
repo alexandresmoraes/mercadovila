@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/modules/pagamentos/pagamentos_pagar_controller.dart';
@@ -14,7 +15,6 @@ import 'package:mercadovila/app/utils/dto/pagamentos/pagamentos_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_pagamentos_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_account_loading.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/global_snackbar.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 
@@ -224,8 +224,12 @@ class PagamentosPageState extends State<PagamentosPage> {
                           radius: 35,
                           backgroundColor: Colors.white,
                           child: CachedNetworkImage(
-                            placeholder: (context, url) => CircularProgress(
-                              color: Theme.of(context).primaryColorLight,
+                            placeholder: (context, url) => Container(
+                              alignment: Alignment.center,
+                              child: SpinKitThreeBounce(
+                                size: 20,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
                             ),
                             errorWidget: (context, url, error) {
                               return const CircleAvatar(
@@ -301,7 +305,7 @@ class PagamentosPageState extends State<PagamentosPage> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8),
+                        padding: const EdgeInsets.only(top: 5),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
