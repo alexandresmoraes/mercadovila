@@ -17,7 +17,7 @@ class MinhasComprasPage extends StatefulWidget {
 }
 
 class MinhasComprasPageState extends State<MinhasComprasPage> {
-  DateTime hoje = DateTime.now();
+  DateTime hoje = DateTime.now().toUtc();
   late DateTime hojeDataInicial;
   late DateTime hojeDataFinal;
   late DateTime semanaDataInicial;
@@ -26,7 +26,7 @@ class MinhasComprasPageState extends State<MinhasComprasPage> {
   MinhasComprasPageState() : super() {
     hojeDataInicial = DateTime(hoje.year, hoje.month, hoje.day).toUtc();
     hojeDataFinal = DateTime(hoje.year, hoje.month, hoje.day, 23, 59, 59, 999, 999).toUtc();
-    semanaDataInicial = hoje.subtract(Duration(days: hoje.weekday - 1)).toUtc();
+    semanaDataInicial = hojeDataInicial.subtract(Duration(days: hoje.weekday - 1)).toUtc();
     semanaDataFinal = semanaDataInicial.add(const Duration(days: 6)).toUtc();
   }
 
