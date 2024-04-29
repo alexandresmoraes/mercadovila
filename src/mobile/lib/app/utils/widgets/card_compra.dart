@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/compras/compra_dto.dart';
 import 'package:mercadovila/app/utils/utils.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CardCompra extends StatefulWidget {
@@ -68,8 +68,12 @@ class CardCompraState extends State<CardCompra> {
                   radius: 35,
                   backgroundColor: Colors.white,
                   child: CachedNetworkImage(
-                    placeholder: (context, url) => CircularProgress(
-                      color: Theme.of(context).primaryColorLight,
+                    placeholder: (context, url) => Container(
+                      alignment: Alignment.center,
+                      child: SpinKitThreeBounce(
+                        size: 20,
+                        color: Theme.of(context).primaryColorLight,
+                      ),
                     ),
                     errorWidget: (context, url, error) {
                       return const CircleAvatar(
@@ -134,10 +138,10 @@ class CardCompraState extends State<CardCompra> {
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: isProductsVisible ? 200 : 0,
+          height: isProductsVisible ? 250 : 0,
           child: SingleChildScrollView(
             child: SizedBox(
-              height: 200,
+              height: 250,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: _compraItens(widget.item.itens),
@@ -160,13 +164,13 @@ class CardCompraState extends State<CardCompra> {
       for (int i = 0; i < itens.length; i++) {
         widgetList.add(
           Container(
-            height: 200,
+            height: 220,
             margin: const EdgeInsets.only(top: 40, left: 10),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 SizedBox(
-                  height: 200,
+                  height: 220,
                   width: 145,
                   child: Container(
                     decoration: BoxDecoration(
@@ -234,7 +238,7 @@ class CardCompraState extends State<CardCompra> {
                       alignment: Alignment.center,
                       height: 120,
                       width: 130,
-                      child: CircularProgress(
+                      child: SpinKitThreeBounce(
                         color: Theme.of(context).primaryColorLight,
                       ),
                     ),

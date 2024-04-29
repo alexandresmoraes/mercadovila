@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -223,10 +224,13 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                         left: (MediaQuery.of(context).size.width - 231) / 2,
                         top: -35,
                         child: CachedNetworkImage(
-                          placeholder: (context, url) => CircularProgress(
-                            color: Theme.of(context).primaryColorLight,
-                            width: 215,
+                          placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
                             height: 140,
+                            width: 215,
+                            child: SpinKitThreeBounce(
+                              color: Theme.of(context).primaryColorLight,
+                            ),
                           ),
                           errorWidget: (context, url, error) => const CircleAvatar(
                             radius: 100,
@@ -457,7 +461,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                           alignment: Alignment.center,
                           height: 100,
                           width: 98,
-                          child: CircularProgress(
+                          child: SpinKitThreeBounce(
                             color: Theme.of(context).primaryColorLight,
                           ),
                         ),

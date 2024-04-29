@@ -6,6 +6,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/modules/tab/home_page_controller.dart';
 import 'package:mercadovila/app/stores/account_store.dart';
@@ -17,7 +18,6 @@ import 'package:mercadovila/app/utils/utils.dart';
 import 'package:mercadovila/app/utils/widgets/card_count_produto.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_color.dart';
 import 'package:mercadovila/app/utils/widgets/card_produto_color_loading.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 import 'package:mercadovila/app/utils/widgets/refresh_widget.dart';
 import 'package:shimmer/shimmer.dart';
@@ -89,8 +89,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             radius: 25,
                             backgroundColor: Theme.of(context).inputDecorationTheme.hintStyle!.color,
                             child: CachedNetworkImage(
-                              placeholder: (context, url) => CircularProgress(
-                                color: Theme.of(context).primaryColorLight,
+                              placeholder: (context, url) => Container(
+                                alignment: Alignment.center,
+                                height: 60,
+                                width: 60,
+                                child: SpinKitThreeBounce(
+                                  size: 25,
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
                               ),
                               errorWidget: (context, url, error) {
                                 return const CircleAvatar(
@@ -496,7 +502,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           alignment: Alignment.center,
                           height: 120,
                           width: 130,
-                          child: CircularProgress(
+                          child: SpinKitThreeBounce(
                             color: Theme.of(context).primaryColorLight,
                           ),
                         ),
@@ -712,7 +718,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           alignment: Alignment.center,
                           height: 100,
                           width: 98,
-                          child: CircularProgress(
+                          child: SpinKitThreeBounce(
                             color: Theme.of(context).primaryColorLight,
                           ),
                         ),

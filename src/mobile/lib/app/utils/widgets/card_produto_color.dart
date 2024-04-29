@@ -4,10 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/utils/dto/catalogo/catalogo_dto.dart';
 import 'package:mercadovila/app/utils/widgets/card_count_produto.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 
 class CardProdutoColor extends StatelessWidget {
   final CatalogoDto item;
@@ -121,11 +121,11 @@ class CardProdutoColor extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
+                  placeholder: (_, __) => Container(
                     alignment: Alignment.center,
                     height: 120,
                     width: 130,
-                    child: CircularProgress(
+                    child: SpinKitThreeBounce(
                       color: Theme.of(context).primaryColorLight,
                     ),
                   ),

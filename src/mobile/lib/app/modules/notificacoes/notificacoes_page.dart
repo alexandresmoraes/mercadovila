@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mercadovila/app/stores/account_store.dart';
@@ -9,7 +10,6 @@ import 'package:mercadovila/app/stores/theme_store.dart';
 import 'package:mercadovila/app/utils/dto/notificacoes/notificacao_dto.dart';
 import 'package:mercadovila/app/utils/repositories/interfaces/i_notificacoes_repository.dart';
 import 'package:mercadovila/app/utils/utils.dart';
-import 'package:mercadovila/app/utils/widgets/circular_progress.dart';
 import 'package:mercadovila/app/utils/widgets/infinite_list.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -160,10 +160,12 @@ class NotificacoesPageState extends State<NotificacoesPage> {
                           ),
                         )
                       : CachedNetworkImage(
-                          placeholder: (context, url) => SizedBox(
-                            height: 50,
+                          placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
                             width: 50,
-                            child: CircularProgress(
+                            height: 50,
+                            child: SpinKitThreeBounce(
+                              size: 15,
                               color: Theme.of(context).primaryColorLight,
                             ),
                           ),
