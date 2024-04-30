@@ -1,8 +1,8 @@
-﻿using Common.WebAPI.PostgreSql;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace Common.WebAPI.MongoDb
 {
@@ -39,6 +39,17 @@ namespace Common.WebAPI.MongoDb
         throw new ArgumentException("Default connectionString is empty");
 
       return checkBuilder.AddMongoDb(connectionString, name: "mongodb", tags: new[] { "infra" });
+    }
+
+    public static string DiacriticSensitiveRegex(string input)
+    {
+      string output = input;
+      output = Regex.Replace(output, "a", "[aáàäâ]", RegexOptions.IgnoreCase);
+      output = Regex.Replace(output, "e", "[eéëè]", RegexOptions.IgnoreCase);
+      output = Regex.Replace(output, "i", "[iíïì]", RegexOptions.IgnoreCase);
+      output = Regex.Replace(output, "o", "[oóöò]", RegexOptions.IgnoreCase);
+      output = Regex.Replace(output, "u", "[uüúù]", RegexOptions.IgnoreCase);
+      return output;
     }
   }
 }
