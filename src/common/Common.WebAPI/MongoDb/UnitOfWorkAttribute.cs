@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.WebAPI.MongoDb
 {
+  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
   public class UnitOfWorkAttribute : Attribute, IAsyncActionFilter
   {
     private readonly IUnitOfWork _uow;
@@ -54,6 +55,7 @@ namespace Common.WebAPI.MongoDb
     }
   }
 
+  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
   public class UnitOfWorkExceptionAttribute : Attribute, IAsyncActionFilter
   {
     private readonly IUnitOfWork _uow;

@@ -448,7 +448,7 @@ class AccountPageState extends State<AccountPage> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   title: Center(
                     child: Text(
-                      "v${packageInfo?.version}",
+                      !isNullorEmpty(packageInfo?.version) ? "v${packageInfo!.version}" : "",
                       style: Theme.of(context).primaryTextTheme.bodyLarge,
                     ),
                   ),

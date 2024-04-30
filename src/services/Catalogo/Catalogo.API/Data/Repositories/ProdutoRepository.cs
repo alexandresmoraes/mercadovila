@@ -106,7 +106,9 @@ namespace Catalogo.API.Data.Repositories
 
       if (!string.IsNullOrWhiteSpace(produtoQuery.nome))
       {
-        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(produtoQuery.nome, RegexOptions.IgnoreCase)));
+        var nomeRegex = MongoDbExtensions.DiacriticSensitiveRegex(produtoQuery.nome);
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(nomeRegex, RegexOptions.IgnoreCase)));
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Descricao, new BsonRegularExpression(new Regex(nomeRegex, RegexOptions.IgnoreCase)));
       }
 
       var start = (produtoQuery.page - 1) * produtoQuery.limit;
@@ -347,15 +349,16 @@ namespace Catalogo.API.Data.Repositories
 
       if (!string.IsNullOrEmpty(query.nome))
       {
-        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(query.nome!, RegexOptions.IgnoreCase)));
+        var nomeRegex = MongoDbExtensions.DiacriticSensitiveRegex(query.nome!);
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Nome, new BsonRegularExpression(new Regex(nomeRegex, RegexOptions.IgnoreCase)));
+        filtro &= Builders<Produto>.Filter.Regex(p => p.Descricao, new BsonRegularExpression(new Regex(nomeRegex, RegexOptions.IgnoreCase)));
       }
 
       var start = (query.page - 1) * query.limit;
 
       var catalogoPipeline = new BsonDocument[]
       {
-        new BsonDocument
-        {
+        new() {
           {
             "$match", filtro.RenderToBsonDocument()
           }

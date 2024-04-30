@@ -26,21 +26,13 @@ namespace Common.WebAPI.WebApi
         var response = context.Response;
         response.ContentType = "application/json";
 
-        switch (error)
+        response.StatusCode = error switch
         {
-          case SecurityTokenException e:
-            response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            break;
-          case TaskCanceledException e:
-            response.StatusCode = 499;
-            break;
-          case OperationCanceledException e:
-            response.StatusCode = 499;
-            break;
-          default:
-            response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            break;
-        }
+          SecurityTokenException => (int)HttpStatusCode.Unauthorized,
+          TaskCanceledException => 499,
+          OperationCanceledException => 499,
+          _ => (int)HttpStatusCode.InternalServerError,
+        };
 
         var result = JsonSerializer.Serialize(Result.Fail(error.Message));
         await response.WriteAsync(result);
