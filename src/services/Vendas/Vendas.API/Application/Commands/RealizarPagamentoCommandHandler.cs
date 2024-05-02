@@ -26,12 +26,12 @@ namespace Vendas.API.Application.Commands
     {
       cancellationToken.ThrowIfCancellationRequested();
 
-      var comprador = await _compradoresRepository.GetAsync(request.UserId);
+      var comprador = await _compradoresRepository.GetAsync(request.UserId!);
       if (comprador is null)
         return Result.Fail<RealizarPagamentoCommandResponse>($"Comprador {request.UserId} não encontrado.");
 
       var vendas = new List<Venda>();
-      foreach (var vendaId in request.VendasId)
+      foreach (var vendaId in request.VendasId!)
       {
         var venda = await _vendasRepository.GetAsync(vendaId);
 
@@ -47,7 +47,7 @@ namespace Vendas.API.Application.Commands
         vendas.Add(venda!);
       }
 
-      var pagamento = new Pagamento(comprador, vendas, request.MesReferencia, request.TipoPagamento, _authService.GetUserId(), _authService.GetUserName());
+      var pagamento = new Pagamento(comprador, vendas, (EnumMesReferencia)request.MesReferencia!, (EnumTipoPagamento)request.TipoPagamento!, _authService.GetUserId(), _authService.GetUserName());
 
       await _pagamentosRepository.AddAsync(pagamento);
 

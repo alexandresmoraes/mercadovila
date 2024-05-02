@@ -6,12 +6,12 @@ namespace Compras.API.Application.Commands
 {
   public record CriarCompraCommand : IRequest<Result<CriarCompraCommandResponse>>
   {
-    public string UsuarioNome { get; private init; }
+    public string? UsuarioNome { get; private init; }
     public string? UsuarioFotoUrl { get; private init; }
 
-    public IEnumerable<CriarComparItemCommand> CompraItens { get; private init; }
+    public IEnumerable<CriarComparItemCommand>? CompraItens { get; private init; }
 
-    public CriarCompraCommand(string usuarioNome, string? usuarioFotoUrl, IEnumerable<CriarComparItemCommand> compraItens)
+    public CriarCompraCommand(string? usuarioNome, string? usuarioFotoUrl, IEnumerable<CriarComparItemCommand>? compraItens)
     {
       UsuarioNome = usuarioNome;
       UsuarioFotoUrl = usuarioFotoUrl;
@@ -21,18 +21,18 @@ namespace Compras.API.Application.Commands
 
   public record CriarComparItemCommand
   {
-    public string ProdutoId { get; private set; } = null!;
-    public string Nome { get; private set; } = null!;
-    public string ImageUrl { get; private set; } = null!;
-    public string Descricao { get; private set; } = null!;
+    public string? ProdutoId { get; private set; }
+    public string? Nome { get; private set; }
+    public string? ImageUrl { get; private set; }
+    public string? Descricao { get; private set; }
     public int EstoqueAtual { get; set; }
     public decimal PrecoPago { get; private set; }
     public decimal PrecoSugerido { get; private set; }
     public bool IsPrecoMedioSugerido { get; private set; }
-    public int Quantidade { get; private set; }
-    public string UnidadeMedida { get; private set; } = null!;
+    public int? Quantidade { get; private set; }
+    public string? UnidadeMedida { get; private set; } = null!;
 
-    public CriarComparItemCommand(string produtoId, string nome, string imageUrl, string descricao, int estoqueAtual, decimal precoPago, decimal precoSugerido, bool isPrecoMedioSugerido, int quantidade, string unidadeMedida)
+    public CriarComparItemCommand(string? produtoId, string? nome, string? imageUrl, string? descricao, int estoqueAtual, decimal precoPago, decimal precoSugerido, bool isPrecoMedioSugerido, int? quantidade, string? unidadeMedida)
     {
       ProdutoId = produtoId;
       Nome = nome;

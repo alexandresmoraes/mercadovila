@@ -6,8 +6,11 @@ using Common.WebAPI.Results;
 using Common.WebAPI.Shared.Pipeline;
 using Common.WebAPI.Utils;
 using Common.WebAPI.WebApi;
+using Compras.API.Application.Validators;
 using Compras.Infra.Data;
+using FluentValidation;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -58,6 +61,9 @@ namespace Compras.API.Config
         opt.Filters.Add<DelayDebugAttribute>();
 #endif
       });
+
+      services.AddValidatorsFromAssemblyContaining<CriarCompraCommandValidator>(includeInternalTypes: true);
+      services.AddFluentValidationRulesToSwagger();
 
       return services;
     }

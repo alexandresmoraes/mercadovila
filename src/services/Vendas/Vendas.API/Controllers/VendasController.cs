@@ -34,7 +34,7 @@ namespace Vendas.API.Controllers
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Result<CriarVendaCommandResponse>> PostAsync([FromBody] CriarVendaCommand request, CancellationToken cancellationToken = default)
     {
-      request.UserId = _authService.GetUserId();
+      request.SetUserId(_authService.GetUserId());
 
       return await _mediator.Send(request, cancellationToken);
     }
