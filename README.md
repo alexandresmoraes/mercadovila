@@ -5,7 +5,7 @@
 # MercadoVila - Um aplicativo de referência de microsserviços desenvolvido com ASP.NET 6 & Flutter
 
 
-https://github.com/alexandresmoraes/mercadovila/assets/26805150/86ae31da-65e2-4c3f-8f6b-f69759724d51
+https://github.com/alexandresmoraes/mercadovila/assets/26805150/b61f3ca6-2a7c-486b-a57f-b5146bb0bd93
 
 
 O aplicativo é um projeto de código aberto desenvolvido com objetivo compartilhar as melhores práticas e abordagens para o desenvolvimento de aplicativos completos e complexos utilizando tecnologias .NET.
