@@ -32,12 +32,12 @@ namespace Compras.API.Application.Commands
       var comprador = await _compradoresRepository.GetAsync(usuarioId);
       if (comprador is null)
       {
-        comprador = new Comprador(usuarioId, request.UsuarioNome, usuarioUsername, _authService.GetUserEmail(), request.UsuarioFotoUrl);
+        comprador = new Comprador(usuarioId, request.UsuarioNome!, usuarioUsername, _authService.GetUserEmail(), request.UsuarioFotoUrl);
       }
       else
       {
         comprador.Atualizar(
-          nome: request.UsuarioNome,
+          nome: request.UsuarioNome!,
           username: usuarioUsername,
           email: usuarioEmail,
           fotoUrl: request.UsuarioFotoUrl
@@ -46,17 +46,17 @@ namespace Compras.API.Application.Commands
 
       var compra = new Compra(
         comprador: comprador,
-        compraItens: request.CompraItens.Select(item => new CompraItem(
-          item.ProdutoId,
-          item.Nome,
-          item.ImageUrl,
-          item.Descricao,
+        compraItens: request.CompraItens!.Select(item => new CompraItem(
+          item.ProdutoId!,
+          item.Nome!,
+          item.ImageUrl!,
+          item.Descricao!,
           item.EstoqueAtual,
           item.PrecoPago,
           item.PrecoSugerido,
           item.IsPrecoMedioSugerido,
-          item.Quantidade,
-          item.UnidadeMedida
+          item.Quantidade!.Value,
+          item.UnidadeMedida!
         )).ToList()
       );
 

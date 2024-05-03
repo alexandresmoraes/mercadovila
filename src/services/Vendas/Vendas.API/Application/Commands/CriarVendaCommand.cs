@@ -8,9 +8,11 @@ namespace Vendas.API.Application.Commands
   public record CriarVendaCommand : IRequest<Result<CriarVendaCommandResponse>>
   {
     [JsonIgnore]
-    public string? UserId { get; set; }
-    public string CompradorNome { get; init; } = null!;
+    public string? UserId { get; private set; }
+    public string? CompradorNome { get; init; }
     public string? CompradorFotoUrl { get; init; }
-    public short TipoPagamento { get; set; }
+    public int? TipoPagamento { get; init; } = null!;
+
+    public void SetUserId(string? userId) => UserId = userId;
   }
 }

@@ -6,10 +6,13 @@ using Common.WebAPI.Results;
 using Common.WebAPI.Shared.Pipeline;
 using Common.WebAPI.Utils;
 using Common.WebAPI.WebApi;
+using FluentValidation;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Vendas.API.Application.Validators;
 using Vendas.Domain.Aggregates;
 using Vendas.Infra.Data;
 using Vendas.Infra.Repositories;
@@ -64,6 +67,9 @@ namespace Vendas.API.Config
         opt.Filters.Add<DelayDebugAttribute>();
 #endif
       });
+
+      services.AddValidatorsFromAssemblyContaining<CriarVendaCommandValidator>(includeInternalTypes: true);
+      services.AddFluentValidationRulesToSwagger();
 
       return services;
     }

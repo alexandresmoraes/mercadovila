@@ -51,12 +51,12 @@ namespace Vendas.API.Application.Commands
       var comprador = await _compradorRepository.GetAsync(userId);
       if (comprador is null)
       {
-        comprador = new Comprador(userId, request.CompradorNome, _authService.GetUserEmail(), request.CompradorFotoUrl);
+        comprador = new Comprador(userId, request.CompradorNome!, _authService.GetUserEmail(), request.CompradorFotoUrl);
       }
       else
       {
         comprador.Atualizar(
-          nome: request.CompradorNome,
+          nome: request.CompradorNome!,
           email: _authService.GetUserEmail(),
           fotoUrl: request.CompradorFotoUrl
         );
@@ -77,7 +77,7 @@ namespace Vendas.API.Application.Commands
 
       await _vendaRepository.AddAsync(venda);
 
-      if ((EnumTipoPagamento)request.TipoPagamento == EnumTipoPagamento.Dinheiro)
+      if ((EnumTipoPagamento)request.TipoPagamento! == EnumTipoPagamento.Dinheiro)
       {
         var mesReferencia = (EnumMesReferencia)DateTimeOffset.UtcNow.Month;
 

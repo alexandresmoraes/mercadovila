@@ -24,22 +24,22 @@ namespace Common.WebAPI.Shared.Pipeline
     {
       var typeName = request.GetGenericTypeName();
 
-      _logger.LogInformation("----- Validating command {CommandType}", typeName);
+      _logger.LogInformation("----- Fail Fast Validations: Validating command {CommandType}", typeName);
 
       var errors = _validators
           .Select(v => v.Validate(request))
           .SelectMany(result => result.Errors)
-          .Where(error => error != null)
+          .Where(error => error is not null)
           .ToList();
 
       if (errors.Any())
       {
-        _logger.LogWarning("Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", typeName, request, errors);
+        _logger.LogWarning("----- Fail Fast Validations: Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", typeName, request, errors);
 
         return Errors(errors);
       }
 
-      _logger.LogInformation("----- Validated command {CommandType}", typeName);
+      _logger.LogInformation("----- Fail Fast Validations: Validated command {CommandType}", typeName);
 
       return await next();
     }
