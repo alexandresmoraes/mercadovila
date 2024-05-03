@@ -60,6 +60,7 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - Domain Validations
 - Integrations Events
 - CQRS
+- Fail Fast Validations
 - Retry Pattern
 - Circuit Breaker
 - Unit of Work
