@@ -2,6 +2,7 @@
 using MediatR;
 using System.Text.Json.Serialization;
 using Vendas.API.Application.Responses;
+using Vendas.Domain.Aggregates;
 
 namespace Vendas.API.Application.Commands
 {
@@ -11,7 +12,7 @@ namespace Vendas.API.Application.Commands
     public string? UserId { get; private set; }
     public string? CompradorNome { get; init; }
     public string? CompradorFotoUrl { get; init; }
-    public int? TipoPagamento { get; init; } = null!;
+    public EnumTipoPagamento? TipoPagamento { get; init; } = null!;
 
     public void SetUserId(string? userId) => UserId = userId;
   }

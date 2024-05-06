@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Common.WebAPI.Shared.OpenApi;
+using Microsoft.OpenApi.Models;
 
 namespace Vendas.API.Config
 {
@@ -43,6 +44,9 @@ namespace Vendas.API.Config
 
         var xmlPath = Path.Combine(AppContext.BaseDirectory, "Vendas.API.xml");
         c.IncludeXmlComments(xmlPath, true);
+
+        c.SchemaFilter<EnumDescriptionSchemaFilter>();
+        c.SchemaFilter<NullableEnumSchemaFilter>();
       });
 
       return services;
