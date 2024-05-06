@@ -51,7 +51,8 @@ namespace Compras.API.Config
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
       services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DispatchDomainEventsPipeline<,>));
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DispatchDomainEventsResultNotificationPipeline<,>));
+      services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DispatchDomainEventsResultPipeline<,>));
 
       services.AddSingleton(configuration.BindSettings<EventBusSettings>(nameof(EventBusSettings)));
 
