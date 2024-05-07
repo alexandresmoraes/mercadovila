@@ -84,8 +84,8 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 - (Win/Mac) Instale o Visual Studio Code. [Visual Studio Code](https://code.visualstudio.com/Download)
 - Instale o .NET Core 6. [.NET 6 SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/6.0)
 - Instale o Docker. [Docker](https://docs.docker.com/get-docker/)
-- Instale o Flutter (recomendo a versão 3.13.9). [Flutter](https://docs.flutter.dev/release/archive)
-- Instale o Git. [Flutter](https://git-scm.com/downloads)
+- Instale o Flutter (recomendo a versão 3.13.9). [Flutter Download](https://docs.flutter.dev/release/archive)
+- Instale o Git. [Git Download](https://git-scm.com/downloads)
 
 ### Rodando
 
