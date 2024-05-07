@@ -76,6 +76,152 @@ Se algo aqui foi útil para você, ficaríamos imensamente gratos se você nos d
 
 ---
 
+## Rodando localmente :rocket:
+
+### Pré-requisitos
+
+- (Somente Win) Instale o Visual Studio. [Visual Studio 2022](https://visualstudio.microsoft.com/vs/preview/) ou
+- (Win/Mac) Instale o Visual Studio Code. [Visual Studio Code](https://code.visualstudio.com/Download)
+- Instale o .NET Core 6. [.NET 6 SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/6.0)
+- Instale o Docker. [Docker](https://docs.docker.com/get-docker/)
+- Instale o Flutter (recomendo a versão 3.13.9). [Flutter](https://docs.flutter.dev/release/archive)
+- Instale o Git. [Flutter](https://git-scm.com/downloads)
+
+### Rodando
+
+### 1. Clone o repository: https://github.com/alexandresmoraes/mercadovila e acesse a pasta src
+```
+git clone https://github.com/alexandresmoraes/mercadovila
+cd .\mercadovila\src\
+```
+### 2. Copie e edite se necessário o arquivo sample.env para .env
+(macOS/Linux)
+```sh
+cp sample.env .env
+```
+(Win)
+```powershell
+copy sample.env .env
+```
+
+### 3. Rode os serviços necessários:
+
+> [!WARNING]
+> Confira se o Docker está inicializado.
+
+```
+docker-compose -f docker-compose.dev.yml up
+```
+
+### 4. Build & Run:
+**Opção 1:** (Somente Win) Rodando aplicação pelo Visual Studio:
+ - Abra o arquivo `mercadovila.sln` no Visual Studio
+ - Selecione os projetos para Startup, Auth.API, Catalogo.API, Compras.API e Vendas.API
+ - Pressione F5 para iniciar
+
+**Opção 2:** (Win/macOS/Linux) Rodando aplicação pelo Visual Studio Code: 
+ - Utilize o arquivo launch.json e tasks.json para uma melhor experiência [confira](https://code.visualstudio.com/docs/editor/debugging):
+ - Escolha seu device para rodar o flutter.
+ - Se optou pela opção 1, aqui não é necessário rodar "Start All" e selecionar apenas "Mercado Vila Mobile (debug mode)", senão "Start All".
+
+tasks.json
+```json
+{
+    "version": "2.0.0",
+    "tasks": [      
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/mercadovila.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
+```
+
+launch.json
+```json
+{    
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Mercado Vila Auth API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/services/Auth/Auth.API/bin/Debug/net6.0/Auth.API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/services/Auth/Auth.API",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Mercado Vila Catalogo API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/services/Catalogo/Catalogo.API/bin/Debug/net6.0/Catalogo.API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/services/Catalogo/Catalogo.API",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Mercado Vila Compras API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/services/Compras/Compras.API/bin/Debug/net6.0/Compras.API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/services/Compras/Compras.API",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Mercado Vila Vendas API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/services/Vendas/Vendas.API/bin/Debug/net6.0/Vendas.API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/services/Vendas/Vendas.API",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Mercado Vila Mobile (debug mode)",
+            "cwd": "${workspaceFolder}/src/mobile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": [
+                "--dart-define", "BASE_URL=http://<seu_ip>:8081"                
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Start all",
+            "configurations": [
+                "Mercado Vila Auth API",
+                "Mercado Vila Catalogo API",
+                "Mercado Vila Compras API",
+                "Mercado Vila Vendas API",
+                "Mercado Vila Mobile (debug mode)"                
+            ],
+            "stopAll": true
+        }
+    ]    
+}
+```
+
+
 ## Aviso Legal
 
 - Este repositório não pretende ser um modelo de referência para todas as aplicações .NET.
