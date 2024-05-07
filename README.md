@@ -114,12 +114,12 @@ docker-compose -f docker-compose.dev.yml up
 ```
 
 ### 4. Build & Run:
-**Opção 1:** (Somente Win) Rodando aplicação pelo Visual Studio:
+**Parte 1 (Opcional):** (Somente Win) Rodando aplicação pelo Visual Studio:
  - Abra o arquivo `mercadovila.sln` no Visual Studio
  - Selecione os projetos para Startup, Auth.API, Catalogo.API, Compras.API e Vendas.API
  - Pressione F5 para iniciar
 
-**Opção 2:** (Win/macOS/Linux) Rodando aplicação pelo Visual Studio Code: 
+**Parte 2 (Obrigatório):** (Win/macOS/Linux) Rodando aplicação pelo Visual Studio Code: 
  - Utilize o arquivo launch.json e tasks.json para uma melhor experiência [confira](https://code.visualstudio.com/docs/editor/debugging):
  - Escolha seu device para rodar o flutter.
  - Se optou pela opção 1, aqui não é necessário rodar "Start All" e selecionar apenas "Mercado Vila Mobile (debug mode)", senão "Start All".
