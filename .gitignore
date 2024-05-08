@@ -404,3 +404,4 @@ FodyWeavers.xsd
 
 /data
 /backup
+src/.env
