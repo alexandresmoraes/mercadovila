@@ -59,17 +59,29 @@ namespace Vendas.API.Application.Queries
             LEFT JOIN compradores c ON c.id = v.comprador_id          
       ";
 
+      var where = new List<string>();
+
       if (vendaQuery.dataInicial.HasValue && vendaQuery.dataFinal.HasValue)
       {
-        sql += " WHERE v.datahora BETWEEN @dataInicial AND @datafinal";
+        where.Add("v.datahora BETWEEN @dataInicial AND @dataFinal");
       }
       else if (vendaQuery.dataInicial.HasValue)
       {
-        sql += " WHERE v.datahora > @dataInicial";
+        where.Add("v.datahora > @dataInicial");
       }
       else if (vendaQuery.dataFinal.HasValue)
       {
-        sql += " WHERE v.datahora < @datafinal";
+        where.Add("v.datahora < @dataFinal");
+      }
+
+      if (!string.IsNullOrEmpty(vendaQuery.compradorNome))
+      {
+        where.Add("c.nome ILIKE @compradorNome");
+      }
+
+      if (where.Any())
+      {
+        sql += " WHERE " + string.Join(" AND ", where);
       }
 
       var start = (vendaQuery.page - 1) * vendaQuery.limit;
@@ -83,7 +95,8 @@ namespace Vendas.API.Application.Queries
         dataInicial = vendaQuery.dataInicial,
         datafinal = vendaQuery.dataFinal,
         limit = vendaQuery.limit,
-        offset = start
+        offset = start,
+        compradorNome = $"%{vendaQuery.compradorNome}%",
       });
 
 
