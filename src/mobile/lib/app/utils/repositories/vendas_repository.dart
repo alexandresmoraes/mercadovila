@@ -31,12 +31,13 @@ class VendasRepository implements IVendasRepository {
   }
 
   @override
-  Future<PagedResult<VendaDto>> getVendas(int page, DateTime? dataInicial, DateTime? dataFinal) async {
+  Future<PagedResult<VendaDto>> getVendas(int page, DateTime? dataInicial, DateTime? dataFinal, String? compradorNome) async {
     var response = await dio.get('/api/vendas', queryParameters: {
       "page": page,
       "limit": 10,
       "dataInicial": dataInicial,
       "dataFinal": dataFinal,
+      "compradorNome": compradorNome,
     });
 
     return PagedResult.fromJson(response.data);

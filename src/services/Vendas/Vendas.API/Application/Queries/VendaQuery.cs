@@ -5,6 +5,7 @@
     public int page { get; init; }
 
     public int limit { get; init; }
+    public string? compradorNome { get; set; }
 
     public DateTime? dataInicial { get; init; }
 

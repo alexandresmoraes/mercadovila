@@ -7,7 +7,7 @@ import 'package:mercadovila/app/utils/models/vendas/venda_model.dart';
 
 abstract class IVendasRepository implements Disposable {
   Future<Either<ResultFailModel, VendaResponseModel>> criarVenda(VendaModel vendaModel);
-  Future<PagedResult<VendaDto>> getVendas(int page, DateTime? dataInicial, DateTime? dataFinal);
+  Future<PagedResult<VendaDto>> getVendas(int page, DateTime? dataInicial, DateTime? dataFinal, String? compradorNome);
   Future<PagedResult<VendaDto>> getMinhasCompras(int page, DateTime? dataInicial, DateTime? dataFinal);
   Future<VendaDetalheDto> getVenda(int id);
   Future<Either<ResultFailModel, void>> cancelarVenda(int vendaId);

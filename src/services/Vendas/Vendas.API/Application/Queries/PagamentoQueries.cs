@@ -157,7 +157,7 @@ namespace Vendas.API.Application.Queries
 
       if (!string.IsNullOrWhiteSpace(query.username))
       {
-        sql += " WHERE c.nome ilike @username ";
+        sql += " WHERE c.nome ILIKE @username ";
       }
 
       sql += @" 
