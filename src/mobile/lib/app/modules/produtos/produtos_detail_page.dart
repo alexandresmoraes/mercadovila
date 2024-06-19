@@ -117,7 +117,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                             style: Theme.of(context).primaryTextTheme.displayMedium,
                                             children: [
                                               TextSpan(
-                                                text: snapshot.data!.preco.toString(),
+                                                text: UtilBrasilFields.obterReal(snapshot.data!.preco, moeda: false),
                                                 style: Theme.of(context).primaryTextTheme.bodyLarge,
                                               ),
                                               TextSpan(
@@ -435,7 +435,7 @@ class ProdutosDetailPageState extends State<ProdutosDetailPage> {
                                           style: Theme.of(context).primaryTextTheme.displayMedium,
                                         ),
                                         Text(
-                                          '${item.preco} ',
+                                          UtilBrasilFields.obterReal(item.preco.toDouble(), moeda: false),
                                           style: Theme.of(context).primaryTextTheme.headlineSmall,
                                         ),
                                       ],
