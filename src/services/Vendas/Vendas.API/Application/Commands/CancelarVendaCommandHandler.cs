@@ -26,8 +26,8 @@ namespace Vendas.API.Application.Commands
 
       if (venda is null) return Result.NotFound();
 
-      if (!await _vendasQueries.PagoEmDinheiro(venda.Id))
-        return Result.Fail($"Venda #{request.VendaId} não foi paga em dinheiro.");
+      if (venda.Status == EnumVendaStatus.Pago)
+        return Result.Fail($"Venda #{request.VendaId} encontra-se Pago.");
 
       if (venda.Status == EnumVendaStatus.Cancelada)
         return Result.Fail($"Venda #{request.VendaId} encontra-se Cancelada.");
