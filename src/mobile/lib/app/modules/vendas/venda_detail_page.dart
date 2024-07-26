@@ -126,10 +126,7 @@ class VendaDetailPageState extends State<VendaDetailPage> {
         },
       ),
       bottomNavigationBar: Observer(builder: (_) {
-        return isAdmin &&
-                _controller.vendaDetailDto != null &&
-                (_controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index ||
-                    _controller.vendaDetailDto!.status == EnumVendaStatus.pago.index)
+        return isAdmin && _controller.vendaDetailDto != null && (_controller.vendaDetailDto!.status == EnumVendaStatus.pendentePagamento.index)
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -292,18 +292,5 @@ namespace Vendas.API.Application.Queries
 
       return venda;
     }
-
-    public async Task<bool> PagoEmDinheiro(long vendaId, CancellationToken cancellationToken = default)
-    {
-      const string pagamentoQuery = @"
-        SELECT p.tipo
-        FROM pagamentos p
-        INNER JOIN vendas v ON p.id = v.pagamento_id
-        WHERE v.Id = @vendaId";
-
-      var tipoPagamento = await _dbConnection.QuerySingleOrDefaultAsync<EnumTipoPagamento>(pagamentoQuery, new { vendaId });
-
-      return tipoPagamento == EnumTipoPagamento.Dinheiro;
-    }
   }
 }
